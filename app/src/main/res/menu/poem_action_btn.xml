@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <item android:id="@+id/verse_share"
+        android:icon="@drawable/ic_share_black_24dp"
+        android:title="@string/share" />
+
+    <item android:id="@+id/verse_copy"
+        android:icon="@drawable/ic_content_copy_black_24dp"
+        android:title="@string/copy1" />
+
+    <item android:id="@+id/verse_select_all"
+        android:icon="@drawable/ic_select_all_black_24dp"
+        android:title="@string/select_all"
+         />
+
+    <item android:id="@+id/verse_un_select_all"
+        android:icon="@drawable/ic_remove_circle_outline_black_24dp"
+        android:title="@string/un_select_all"
+        />
+
+    <item
+        android:id="@+id/next_poem"
+        android:icon="@drawable/ic_chevron_right_black_24dp"
+        android:title="@string/next_poem" />
+
+    <item android:id="@+id/previous_poem"
+        android:icon="@drawable/ic_chevron_left_black_24dp"
+        android:title="@string/previous_poem" />
+
+    <item android:id="@+id/verse_declaim"
+        android:icon="@drawable/ic_record_voice_over_white_24dp"
+        android:title="@string/download_declaim" />
+</menu>

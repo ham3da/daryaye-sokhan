@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/custom_dialog2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:layout_weight="0"
+        android:padding="5dp">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/background"/>
+        <Button
+            android:id="@+id/yesBtn"
+            android:layout_marginTop="5dp"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            style="?android:borderlessButtonStyle"
+            android:layout_marginStart="10dp"
+            android:text="@string/yes"
+            android:textColor="@color/colorAccent"
+            />
+
+        <Button
+            android:id="@+id/noBtn"
+            android:layout_marginTop="5dp"
+            android:layout_width="120dp"
+            android:layout_toEndOf="@id/yesBtn"
+            android:layout_height="wrap_content"
+            style="?android:borderlessButtonStyle"
+            android:text="@string/no"
+            android:layout_marginStart="10dp"
+            />
+    </RelativeLayout>
+</LinearLayout>

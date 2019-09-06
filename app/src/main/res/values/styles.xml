@@ -1,0 +1,72 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:fontFamily">@font/iran_sans_mobile_light</item>
+
+        <!--<item name="android:windowContentTransitions">true</item>-->
+
+        <!--<item name="android:windowEnterTransition">@transition/explode</item>-->
+        <!--<item name="android:windowExitTransition">@transition/explode</item>-->
+
+        <!--<item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>-->
+
+        <!--<item name="android:windowContentTransitions">true</item>-->
+        <!--<item name="android:windowTranslucentStatus">true</item>-->
+
+    </style>
+
+    <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_out_right</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_in_left</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
+
+
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:fontFamily">@font/iran_sans_mobile_light</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:fontFamily">@font/iran_sans_mobile_light</item>
+    </style>
+
+    <!-- Theme without ActionBar shadow (inherits main theme) -->
+    <style name="AppTheme.NoShadow" parent="AppTheme">
+        <item name="android:windowContentOverlay">@color/colorPrimary</item>
+    </style>
+
+    <style name="AppTheme.PopupOverlay.NoShadow" parent="AppTheme.PopupOverlay">
+        <item name="android:windowContentOverlay">@color/colorPrimary</item>
+    </style>
+
+    <style name="TitleBarTextAppearance" parent="android:TextAppearance">
+        <item name="android:fontFamily">@font/iran_sans_mobile_light</item>
+    </style>
+
+
+    <style name="CollapsedTitleTextAppearance" parent="TitleBarTextAppearance">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="ExpandedTitleTextAppearance" parent="TitleBarTextAppearance">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="AppDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <!-- Customize your theme here. -->
+        <item name="windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+</resources>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/poets_liner"
+        android:background="?android:attr/selectableItemBackground"
+        android:focusable="true" >
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="8dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp">
+            <CheckBox
+                android:id="@+id/checkbox_poet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:scaleType="fitCenter"
+                android:layout_alignParentRight="true"
+                />
+
+
+            <TextView
+                android:id="@+id/poets_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/checkbox_poet"
+                android:layout_toRightOf="@+id/item_arrow"
+                android:gravity="center_vertical"
+                android:padding="4dp"
+                android:text="@string/poet"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <ImageView android:id="@+id/item_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_alignParentLeft="true"
+                android:src="@drawable/ic_arrow_drop_down_black_32dp"
+                android:visibility="visible" />
+
+        </RelativeLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/background"/>
+    </LinearLayout>
+
+
+</RelativeLayout>

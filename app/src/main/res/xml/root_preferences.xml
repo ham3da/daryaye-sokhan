@@ -1,0 +1,122 @@
+<!--
+  ~ Copyright 2018 The app Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<androidx.preference.PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:textSize="15sp"
+        app:title="@string/indexing">
+
+        <SwitchPreferenceCompat
+            app:icon="@drawable/ic_format_list_bulleted_gray_24dp"
+            app:key="PoetListIndexStatus"
+            app:defaultValue="false"
+            app:title="@string/poets_indexing" />
+
+        <SwitchPreferenceCompat
+            app:icon="@drawable/ic_format_list_bulleted_gray_24dp"
+            app:key="VerseListIndexStatus"
+            app:defaultValue="false"
+            app:title="@string/verse_indexing" />
+
+    </PreferenceCategory>
+
+
+<!--    <PreferenceCategory-->
+<!--        app:title="@string/random_poetry_scope">-->
+
+<!--        <Preference-->
+<!--            app:key="randomPoem"-->
+<!--            app:icon="@drawable/ic_dice_gray"-->
+<!--            app:title="@string/change_scope"-->
+<!--            app:summary="@string/change_scope_des"/>-->
+
+<!--    </PreferenceCategory>-->
+
+    <PreferenceCategory
+        app:title="@string/language">
+
+        <Preference
+        app:key="langSettingList"
+        app:icon="@drawable/ic_language_gray_24dp"
+        app:title="@string/select_language"
+        app:summary="@string/Language_des"/>
+
+
+
+<!--        <ListPreference-->
+<!--            app:icon="@drawable/ic_language_gray_24dp"-->
+<!--            app:title="@string/select_language"-->
+<!--            app:summary="@string/Language_des"-->
+<!--            app:key="langSettingList"-->
+<!--            app:defaultValue="0"-->
+<!--            app:entries="@array/language_list"-->
+<!--            app:entryValues="@array/language_list_values"-->
+<!--            app:negativeButtonText="@string/cancel"-->
+<!--            />-->
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:title="@string/general">
+
+        <EditTextPreference
+            app:icon="@drawable/ic_signature"
+            app:title="@string/signature"
+            app:summary="@string/signature_des"
+            app:key="signature"
+            app:negativeButtonText="@string/cancel"
+            app:positiveButtonText="@string/ok"
+            />
+
+        <!--<Preference-->
+            <!--app:key="backup"-->
+            <!--app:icon="@drawable/ic_save_gray_24dp"-->
+            <!--app:title="@string/backup"-->
+            <!--app:summary="@string/"/>-->
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
+        app:title="@string/Text_options">
+
+        <EditTextPreference
+            app:icon="@drawable/ic_title_gray_24dp"
+            app:title="@string/Text_size"
+            app:summary="@string/Text_size_des"
+            app:key="TextSize"
+            app:defaultValue="14"
+            app:negativeButtonText="@string/cancel"
+            app:positiveButtonText="@string/ok"
+            />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:title="@string/optimize">
+
+        <Preference
+            app:key="optimize_db"
+            app:icon="@drawable/ic_database_gray"
+            app:title="@string/optimize_db"
+            app:summary="@string/optimize_db_des"
+            />
+
+    </PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp">
+
+
+        <TextView
+            android:id="@+id/progress_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:background="@color/colorPrimary"
+            android:fontFamily="@font/iransans"
+            android:gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="@string/title"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:visibility="visible" />
+
+
+        <!-- Where the style can be changed to any kind of ProgressBar -->
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/progress_title"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:max="100"
+            android:progress="0"
+            android:progressTint="@color/colorPrimaryDark" />
+
+        <TextView
+            android:id="@+id/progress_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/progress_bar"
+            android:layout_marginTop="5dp"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:text="100%"
+            android:textColor="@color/feed_text_color"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/progress_text1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/progress_text"
+            android:layout_marginTop="5dp"
+            android:background="@android:color/transparent"
+            android:gravity="start"
+            android:text="Text1"
+            android:textColor="@color/feed_text_color"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/progress_text2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/progress_text1"
+            android:layout_marginTop="5dp"
+            android:background="@android:color/transparent"
+            android:gravity="start"
+            android:text="Text2"
+            android:textColor="@color/feed_text_color"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/cancel_layout"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:layout_weight="0"
+        android:paddingStart="10dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="5dp"
+        android:visibility="gone"
+        >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/background" />
+
+        <Button
+            android:id="@+id/cancel_actionBtn"
+            style="?android:borderlessButtonStyle"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+           android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:text="@string/cancel"
+            android:textColor="@color/colorAccent" />
+
+    </RelativeLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/botom_tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/transparent"
+    android:elevation="4dp">
+
+    <RelativeLayout
+        android:id="@+id/address_bar"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:background="@color/poem_bar">
+
+        <RelativeLayout
+            android:id="@+id/verse_more_option_layout"
+            android:layout_width="36dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@color/poem_bar_dark"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/verse_more_option"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentRight="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:contentDescription="@string/options"
+                android:focusable="true"
+                android:scaleType="center"
+                android:src="@drawable/ic_more_vert_white_24dp" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/poet_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/verse_more_option_layout"
+            android:gravity="center"
+            android:text="@string/poet"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/chevron_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/poet_name"
+            android:src="@drawable/ic_chevron_left_white_24dp" />
+
+        <TextView
+            android:id="@+id/book_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_toLeftOf="@id/chevron_left"
+            android:gravity="center"
+            android:text="@string/book"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/audio_player_bar"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_below="@+id/address_bar"
+        android:background="@color/white"
+        android:visibility="gone">
+        <ImageView
+            android:id="@+id/audio_close"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="@string/options"
+            android:focusable="true"
+            android:scaleType="center"
+            android:src="@drawable/ic_close_gray_24dp" />
+        <SeekBar
+            android:id="@+id/audio_seekbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/play_audio"
+            android:layout_toEndOf="@id/audio_close"
+            android:maxHeight="3dp"
+            android:minHeight="3dp"
+              android:progressDrawable="@drawable/seek_bar_ruler"
+            android:thumb="@drawable/seek_bar_slider" />
+
+        <ImageView
+            android:id="@+id/play_audio"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/audio_more_option"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="@string/options"
+            android:focusable="true"
+            android:scaleType="center"
+            android:src="@drawable/ic_play_arrow_black_24dp" />
+        <ImageView
+            android:id="@+id/audio_more_option"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="@string/options"
+            android:focusable="true"
+            android:scaleType="center"
+            android:src="@drawable/ic_more_vert_black_24dp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/background"
+            android:layout_alignParentBottom="true"
+            />
+
+    </RelativeLayout>
+</RelativeLayout>
