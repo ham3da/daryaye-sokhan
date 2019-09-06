@@ -14,6 +14,10 @@
 * [کافه‌بازار](https://cafebazaar.ir/app/ir.ham3da.darya)
 * [مایکت](https://myket.ir/app/ir.ham3da.darya)
 
+
+## Donation
+<b>Perfect Money:</b> U21873528
+
 ## Screenshots
 ![screenshot 1](screen-01.png)
 ![screenshot 2](screen-02.png)
