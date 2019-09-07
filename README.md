@@ -19,6 +19,7 @@
 <b>Perfect Money:</b> U21873528
 
 ## Screenshots
-![screenshot 1](screen-01.png)
-![screenshot 2](screen-02.png)
+
+![screenshot 1](screen-02.png)
 ![screenshot 2](screen-03.png)
+![screenshot 3](screen-04.png)
