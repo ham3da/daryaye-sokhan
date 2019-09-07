@@ -16,8 +16,8 @@
 
 
 ## Donation
-<b>Perfect Money:</b> U21873528
-<b>حمایت از ما در ایران:</b> [سامانه حمایت از پروژه دریای سخن](https://ham3da.ir/darya-donate/)
+* <b>Perfect Money:</b> U21873528
+* <b>حمایت از ما در ایران:</b> [سامانه حمایت از پروژه دریای سخن](https://ham3da.ir/darya-donate/)
 ## Screenshots
 
 ![screenshot 1](screen-02.png)
