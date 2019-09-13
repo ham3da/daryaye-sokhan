@@ -38,6 +38,7 @@ public class ActivityInfo2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info2);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_info);
         setSupportActionBar(toolbar);
 

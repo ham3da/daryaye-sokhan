@@ -248,7 +248,7 @@ public class ActivityCollection extends AppCompatActivity {
             try {
                 return DownloadFromUrl.downloadDataFromUrl(urls[0]);
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e("DownloadFromUrl", "doInBackground: "+e.getMessage());
                 return null;
             }
         }

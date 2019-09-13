@@ -149,4 +149,23 @@
     <string name="optimize_db">Optimize database</string>
     <string name="optimize_db_des">We recommend optimizing the database after removing one or more poets</string>
     <string name="please_wait2">Please wait. It may take a few minutes.</string>
+    <string name="share_as_img">Share as image</string>
+    <string name="label_brush">Brush</string>
+    <string name="label_emoji">Emoji</string>
+    <string name="label_sticker">Sticker</string>
+    <string name="label_eraser">Eraser</string>
+    <string name="label_text">Text</string>
+    <string name="label_filter">Filter</string>
+    <string name="label_adjust">Adjust</string>
+    <string name="select_picture">Select Picture</string>
+    <string name="saving">Saving&#8230;</string>
+    <string name="save">Save</string>
+    <string name="saved">Image Saved Successfully</string>
+    <string name="failed_save">Failed to save Image</string>
+    <string name="discard">Discard</string>
+    <string name="alret_save">Are you want to exit without saving image?</string>
+    <string name="opacity">Opacity</string>
+    <string name="rotation">Rotation</string>
+    <string name="error_occurred">Unfortunately, an unwanted error has occurred!</string>
+
 </resources>

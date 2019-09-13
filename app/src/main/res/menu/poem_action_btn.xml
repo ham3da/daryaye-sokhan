@@ -9,6 +9,10 @@
         android:icon="@drawable/ic_share_black_24dp"
         android:title="@string/share" />
 
+    <item android:id="@+id/verse_share_as_img"
+        android:icon="@drawable/ic_image_black_24dp"
+        android:title="@string/share_as_img" />
+
     <item android:id="@+id/verse_copy"
         android:icon="@drawable/ic_content_copy_black_24dp"
         android:title="@string/copy1" />

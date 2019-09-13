@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ActivityImageEdit">
+
+
+    <RelativeLayout
+        android:id="@+id/LinearLayoutMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:id="@+id/PhotoEditorView_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:paddingBottom="92dip">
+
+
+
+            <ja.burhanrashid52.photoeditor.PhotoEditorView
+                android:id="@+id/photoEditorView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:photo_src="@drawable/bg_a" />
+
+            <RelativeLayout
+                android:id="@+id/tool_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_alignParentBottom="true">
+
+                <ImageView
+                    android:id="@+id/imgUndo"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:background="#99000000"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_undo" />
+
+                <ImageView
+                    android:id="@+id/imgRedo"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/imgUndo"
+                    android:background="#99000000"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_redo" />
+
+                <ImageView
+                    android:id="@+id/imgGallery"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_toStartOf="@+id/imgCamera"
+                    android:background="#99000000"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_gallery" />
+
+                <ImageView
+                    android:id="@+id/imgCamera"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:background="#99000000"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_camera"
+
+                    />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center_horizontal|bottom">
+
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvConstraintTools"
+                android:layout_width="match_parent"
+                android:layout_height="92dp"
+                android:background="@color/tool_bg"
+                android:orientation="horizontal"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/row_editing_tools" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvFilterView"
+                android:layout_width="match_parent"
+                android:layout_height="92dp"
+                android:background="@color/tool_bg"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/row_filter_view" />
+
+
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

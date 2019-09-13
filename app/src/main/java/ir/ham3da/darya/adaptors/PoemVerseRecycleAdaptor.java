@@ -183,7 +183,7 @@ public class PoemVerseRecycleAdaptor extends RecyclerView.Adapter<PoemVerseRecyc
      *
      * @return List<String> List Of Verses
      */
-    private List<String> getListOfVerses() {
+    public List<String> getListOfVerses() {
         List<String> stringList = new ArrayList<>();
         if (checkAnyVerseIsSelected()) {
             for (GanjoorVerseB verseB : GanjoorVerseList1) {

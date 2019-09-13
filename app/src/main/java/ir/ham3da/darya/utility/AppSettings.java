@@ -40,7 +40,6 @@ public class AppSettings {
         if (PreferenceManager1 == null) {
             PreferenceManager1 = new PreferenceHelper(context);
         }
-
         if (_typeface == null) {
 
             Typeface font = ResourcesCompat.getFont(context, R.font.iran_sans_mobile_light);
@@ -49,6 +48,7 @@ public class AppSettings {
         }
 
     }
+
 
 
     public static String getXmlSting(Context context)
@@ -534,5 +534,23 @@ public class AppSettings {
      * فونت نمایش متن، رفرنسی از آن جهت تنظیم فونت کنترلهایی که بعدا اضافه می شوند نگهداری می شود
      */
     private static Typeface _typeface = null;
+
+
+    /**
+     * Folder to save image by Photo editor
+     * @return
+     */
+    public  static String getImageFolderPath()
+    {
+
+        String dirPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                + File.separator + "Darya";
+        File dir = new File(dirPath);
+        if (!dir.exists())
+        {
+            dir.mkdir();
+        }
+        return dirPath;
+    }
 
 }

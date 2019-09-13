@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -162,9 +163,9 @@ public class ActivityPoem extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_poem);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_poem);
+        Toolbar toolbar = findViewById(R.id.toolbar_poem);
         setSupportActionBar(toolbar);
-        fab = (FloatingActionButton) findViewById(R.id.fab_poem);
+        fab = findViewById(R.id.fab_poem);
 
         mContext = this;
 
@@ -212,10 +213,10 @@ public class ActivityPoem extends AppCompatActivity {
             if (actionBar != null) {
                 actionBar.setDisplayHomeAsUpEnabled(true);
             }
-            TextView category_title = (TextView) this.findViewById(R.id.category_title);
-            TextView poem_title = (TextView) this.findViewById(R.id.poem_title);
-            TextView poet_name = (TextView) this.findViewById(R.id.poet_name);
-            TextView book_name = (TextView) this.findViewById(R.id.book_name);
+            TextView category_title = this.findViewById(R.id.category_title);
+            TextView poem_title = this.findViewById(R.id.poem_title);
+            TextView poet_name = this.findViewById(R.id.poet_name);
+            TextView book_name = this.findViewById(R.id.book_name);
 
             category_title.setText(GanjoorCat1._Text);
             poem_title.setText(GanjoorPoem1._Title);
@@ -228,7 +229,7 @@ public class ActivityPoem extends AppCompatActivity {
 
             checkIsFavorite();
             indexingStatus = AppSettings.getVerseListIndexStatus();
-            recyclerView = (RecyclerView) findViewById(R.id.poem_recycler_view);
+            recyclerView = findViewById(R.id.poem_recycler_view);
             adapter = new PoemVerseRecycleAdaptor(verseArrangement, GanjoorPoet1, this, indexingStatus, findStr);
 
             recyclerView.setAdapter(adapter);
@@ -278,7 +279,7 @@ public class ActivityPoem extends AppCompatActivity {
     }
 
     private void activityCreate() {
-        final ImageView verse_more_option = (ImageView) findViewById(R.id.verse_more_option);
+        final ImageView verse_more_option = findViewById(R.id.verse_more_option);
 
         final PopupMenu popup = new PopupMenu(verse_more_option.getContext(), verse_more_option);
         popup.inflate(R.menu.poem_action_btn);
@@ -304,6 +305,12 @@ public class ActivityPoem extends AppCompatActivity {
                     case R.id.verse_share:
                         adapter.shareVerses();
                         break;
+
+                    case R.id.verse_share_as_img:
+                        sharePoemAsImage();
+                        break;
+
+
                     case R.id.verse_copy:
                         adapter.copyVerses();
                         break;
@@ -311,8 +318,7 @@ public class ActivityPoem extends AppCompatActivity {
                     case R.id.verse_declaim:
 
 
-                        if (MEDIA_IS_LOADED)
-                        {
+                        if (MEDIA_IS_LOADED) {
                             if (mPlayer.isPlaying()) {
                                 mPlayer.pause();
                                 mPlayer.stop();
@@ -341,6 +347,7 @@ public class ActivityPoem extends AppCompatActivity {
             }
         });
 
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -358,12 +365,12 @@ public class ActivityPoem extends AppCompatActivity {
             }
         });
 
-        audio_player_bar = (RelativeLayout) findViewById(R.id.audio_player_bar);
-        audio_close = (ImageView) findViewById(R.id.audio_close);
-        play_audio = (ImageView) findViewById(R.id.play_audio);
-        audio_seekbar = (SeekBar) findViewById(R.id.audio_seekbar);
+        audio_player_bar = findViewById(R.id.audio_player_bar);
+        audio_close = findViewById(R.id.audio_close);
+        play_audio = findViewById(R.id.play_audio);
+        audio_seekbar = findViewById(R.id.audio_seekbar);
 
-        audio_more_option = (ImageView) findViewById(R.id.audio_more_option);
+        audio_more_option = findViewById(R.id.audio_more_option);
 
         audio_close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -428,6 +435,23 @@ public class ActivityPoem extends AppCompatActivity {
 
     }
 
+    private void sharePoemAsImage() {
+        try {
+            List<String> stringList = adapter.getListOfVerses();
+            String stringLineSeparated = TextUtils.join(System.lineSeparator(), stringList);
+
+            Intent intent = new Intent(this, ActivityImageEdit.class);
+
+            intent.putExtra("poemText", stringLineSeparated);
+            intent.putExtra("poetName", "«" + GanjoorPoet1._Name + "»");
+            startActivity(intent);
+            Bungee.slideUp(this);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            Toast.makeText(this, getString(R.string.error_occurred), Toast.LENGTH_SHORT).show();
+        }
+
+    }
 
     private void PlayFirsAudio() {
         existAudioList = GanjoorDbBrowser1.getPoemAudios(poem_id);
@@ -594,8 +618,7 @@ public class ActivityPoem extends AppCompatActivity {
 
 
     private void checkIsFavorite() {
-        if (GanjoorPoem1._Faved)
-        {
+        if (GanjoorPoem1._Faved) {
             fab.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.mark_fav)));
 
         } else {
@@ -680,8 +703,7 @@ public class ActivityPoem extends AppCompatActivity {
     }
 
 
-    private void ShowAudioCollection()
-    {
+    private void ShowAudioCollection() {
 
         MyDialogs MyDialogs1 = new MyDialogs(mContext);
         final Dialog yesNoDialog = MyDialogs1.YesNoDialog(getString(R.string.no_donload_this_item), mContext.getDrawable(R.drawable.ic_cloud_download_white_24dp), true);

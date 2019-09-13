@@ -18,6 +18,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import android.os.Build;
 
+import android.os.StrictMode;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
@@ -51,7 +52,7 @@ import ir.ham3da.darya.R;
 
 public class UtilFunctions {
     private Context context1;
-    int Store = 2;
+    int Store = 0;
     private ClipboardManager myClipboard;
     private ClipData myClip;
 
@@ -106,12 +107,32 @@ public class UtilFunctions {
         }
     }
 
+
+
+    public static void shareImage(Context context, Uri imageUri) {
+        try {
+
+            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+            StrictMode.setVmPolicy(builder.build());
+
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("image/*");
+            intent.putExtra(Intent.EXTRA_STREAM, imageUri);
+            context.startActivity(Intent.createChooser(intent, context.getString(R.string.share)));
+
+        } catch (Exception e)
+        {
+            Log.e("shareImage", "shareImage: "+e.getMessage() );
+            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
     public void shareApp() {
         String link = getAppLink();
 
-        String app_name =   context1.getString(R.string.app_name);
+        String app_name = context1.getString(R.string.app_name);
 
-        String app_des =  String.format(Locale.getDefault(),  context1.getString(R.string.app_share_des), app_name) ;
+        String app_des = String.format(Locale.getDefault(), context1.getString(R.string.app_share_des), app_name);
 
         shareText(app_des + " " + System.lineSeparator() + link);
     }

@@ -164,8 +164,10 @@ public class ActivityAudioCollection extends AppCompatActivity {
 
             try {
                 return DownloadFromUrl.downloadDataFromUrl(urls[0]);
-            } catch (Exception ex) {
+            } catch (Exception ex)
+            {
                 ex.printStackTrace();
+                Log.e("xml_Dl", "doInBackground: "+ex.getMessage() );
                 return null;
             }
         }

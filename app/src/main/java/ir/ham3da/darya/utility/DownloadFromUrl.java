@@ -24,26 +24,26 @@ public class DownloadFromUrl
     public static String downloadDataFromUrl(String urlStr) throws IOException {
         InputStream inputStream1 = null;
 
-            URL url = new URL(urlStr);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(10000);
-            conn.setConnectTimeout(15000);
-            conn.setRequestMethod("GET");
-            conn.setDoInput(true);
+        URL url = new URL(urlStr);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setReadTimeout(10000);
+        conn.setConnectTimeout(15000);
+        conn.setRequestMethod("GET");
+        conn.setDoInput(true);
 
-            // Starts the query
-            conn.connect(); // calling the web address
+        // Starts the query
+        conn.connect(); // calling the web address
 
-            int response = conn.getResponseCode();
+        int response = conn.getResponseCode();
 
-            inputStream1 = conn.getInputStream();
-            // Convert the InputStream into a string
-            String contentAsString = readInputStream(inputStream1);
-            conn.disconnect();
-            return contentAsString;
+        inputStream1 = conn.getInputStream();
+        // Convert the InputStream into a string
+        String contentAsString = readInputStream(inputStream1);
+        conn.disconnect();
+        return contentAsString;
 
-            // Makes sure that the InputStream is closed after the app is
-            // finished using it.
+        // Makes sure that the InputStream is closed after the app is
+        // finished using it.
     }
 
     // Reads an InputStream and converts it to a String.

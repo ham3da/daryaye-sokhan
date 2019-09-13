@@ -7,17 +7,14 @@
     <string name="nav_header_subtitle">%d اثر از %d شاعر</string>
     <string name="nav_header_desc">سربرگ ناوبری</string>
     <string name="action_settings">تنظیمات</string>
-
     <string name="menu_home">خانه</string>
     <string name="menu_gallery">گالری</string>
     <string name="menu_slideshow">اسلایدها</string>
     <string name="menu_tools">گزینه‌ها</string>
     <string name="menu_share">اشتراک‌گذاری</string>
     <string name="menu_send">ارسال</string>
-
     <string name="collapsed">جمع شده: %s</string>
     <string name="expanded">باز شده: %s</string>
-
     <string name="warning">هشدار</string>
     <string name="warning_msg">پیام هشدار</string>
     <string name="ok">تائید</string>
@@ -26,7 +23,7 @@
     <string name="share">اشتراک‌گذاری</string>
     <string name="share_friend">اشتراک‌گذاری با دوستان</string>
     <string name="help">راهنما</string>
-    <string name="about">درباره نر‌افزار</string>
+    <string name="about">درباره نر‌م‌افزار</string>
     <string name="other_apps">نرم‌افزارهای ما</string>
     <string name="contact_us">تماس با ما</string>
     <string name="rate_this">نظر سنجی و امتیاز</string>
@@ -148,5 +145,22 @@
     <string name="optimize_db">بهینه‌سازی بانک اطلاعاتی</string>
     <string name="optimize_db_des">توصیه می‌کنیم بعد از حذف کردن یک یا چند شاعر بانک اطلاعاتی را بهینه‌سازی کنید</string>
     <string name="please_wait2">لطفاً صبر کنید. ممکن چند دقیقه طول بکشد.</string>
-
+    <string name="share_as_img">اشتراک گذاری عکس</string>
+    <string name="label_brush">قلم مو</string>
+    <string name="label_emoji">ایموجی</string>
+    <string name="label_sticker">استیکر</string>
+    <string name="label_eraser">پاک کن</string>
+    <string name="label_text">متن</string>
+    <string name="label_filter">فیلتر</string>
+    <string name="label_adjust">میزان کردن</string>
+    <string name="select_picture">یک عکس انتخاب کنید</string>
+    <string name="saving">در حال ذخیره</string>
+    <string name="save">ذخیره</string>
+    <string name="saved">عکس با موفقیت ذخیره شد</string>
+    <string name="failed_save">ذخیره عکس با شکست مواجه شد</string>
+    <string name="discard">نادیده گرفتن</string>
+    <string name="alret_save">آیا می‌خواهید بدون ذخیره عکس خارج شوید؟</string>
+    <string name="opacity">شفافیت</string>
+    <string name="rotation">چرخش</string>
+    <string name="error_occurred">متاسفانه، یک خطای ناخواسته رخ داده است!</string>
 </resources>
