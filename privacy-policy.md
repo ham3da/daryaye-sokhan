@@ -1,4 +1,4 @@
-<h3>Sea of Poetry App Privacy Policy</h3>
+<h3>Privacy Policy</h3>
 <p>This Privacy Policy is meant to help you understand what information we
     collect and why we collect it.</p>
 <h3>Information Collection and Use</h3>
