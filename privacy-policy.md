@@ -1,47 +1,3 @@
-<html dir="ltr">
-
-<head>
-    <meta http-equiv="Content-Language" content="en">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title> Privacy Policy</title>
-    <style type="text/css">
-a
-{
-   color: blue;
-   text-decoration: none;
-}
-.serif
-{
-   font-family: serif;
-}
-html
-{
-  color: black;
-  background-color: #FFFFFF;
-  font-family: serif;
-  font-size: $fontSize;
-}
-body
-{
- margin: 10px;
-}
-p
-{
-    font-family: serif;
-}
-h3
-{
-font-family: serif;
-
-}
-.ltr
-{
-    direction:ltr;
-}
-</style>
-</head>
-
-<body>
 <h3>Sea of Poetry App Privacy Policy</h3>
 <p>This Privacy Policy is meant to help you understand what information we
     collect and why we collect it.</p>
@@ -110,6 +66,3 @@ information for any other purpose.</li>
 <p>If you have any questions or suggestions about my Privacy Policy, do not
     hesitate to contact we at <a href="mailto:ham3da.j@gmail.com">ham3da.j@gmail.com</a>.</p>
 
-</body>
-
-</html>
