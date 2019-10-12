@@ -6,9 +6,14 @@
     provide us with certain personally identifiable information. The information
     that we request will be retained on your device and is not collected by me in
     any way.</p>
-<p>The app does use third party services that may collect information used to
-    identify you.<br>
-    Link to privacy policy of third party service providers used by the app</p>
+<p>The app does use third party services that may collect information used to identify you.</p>
+<p>The app does use third party services that may collect information used to identify you.</p>
+<p>
+    Link to privacy policy of third party service providers used by the app
+<ul>
+    <li><a href="https://firebase.google.com/policies/analytics" target="_blank">Firebase Analytics</a></li>
+</ul>
+</p>
 <h3>Log Data</h3>
 <p>I want to inform you that whenever you use my Service, in a case of an error
     in the app I collect data and information (through third party products) on your
