@@ -35,7 +35,7 @@
                     android:id="@+id/info_avatar1"
                     android:layout_width="96dp"
                     android:layout_height="96dp"
-                    android:src="@drawable/logo_inapp3"
+                    app:srcCompat="@drawable/logo_inapp3"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
                     android:paddingTop="4dp"

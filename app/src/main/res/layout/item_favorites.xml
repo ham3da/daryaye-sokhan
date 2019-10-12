@@ -14,7 +14,7 @@
         android:layout_margin="0px"
         android:elevation="0dp"
         android:clickable="true"
-        android:foreground="?android:attr/selectableItemBackground"
+        android:foreground="?attr/selectableItemBackground"
         android:focusable="true">
         <RelativeLayout
             android:layout_width="match_parent"
@@ -34,7 +34,7 @@
                 android:layout_marginTop="10dp"
                 android:tint="@color/darkBlueGrey"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_more_vert_black_24dp"
+                app:srcCompat="@drawable/ic_more_vert_black_24dp"
                 android:textAppearance="?android:textAppearanceLarge"
                 android:contentDescription="@string/options" />
 

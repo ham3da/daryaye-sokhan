@@ -11,13 +11,8 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.Uri;
-
-
 import androidx.core.content.res.ResourcesCompat;
-
-
 import android.os.Build;
-
 import android.os.StrictMode;
 import android.text.Html;
 import android.text.Spanned;
@@ -30,9 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -45,14 +38,13 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
 import ir.ham3da.darya.ganjoor.GanjoorVerse;
 import ir.ham3da.darya.ganjoor.GanjoorVerseB;
 import ir.ham3da.darya.R;
 
 public class UtilFunctions {
     private Context context1;
-    int Store = 0;
+    int Store = 3;
     private ClipboardManager myClipboard;
     private ClipData myClip;
 
@@ -89,6 +81,9 @@ public class UtilFunctions {
                 break;
             case 3:
                 store = "http://www.samsungapps.com/appquery/appDetail.as?appId=" + packageName; //samsung apps
+
+            case 4:
+                store = "https://iranapps.ir/app/" + packageName; //iranapps
         }
         return store;
     }
@@ -178,6 +173,10 @@ public class UtilFunctions {
                     intent.setData(Uri.parse("samsungapps://ProductDetail/" + packageName));
                     intent.setPackage("com.sec.android.app.samsungapps");
                     break;
+                case 4:
+                    intent.setData(Uri.parse("http://iranapps.ir/app/" + packageName));
+                    intent.setPackage("ir.tgbs.android.iranapp");
+                    break;
             }
             context1.startActivity(intent);
 
@@ -220,6 +219,12 @@ public class UtilFunctions {
                     intent.setData(Uri.parse("samsungapps://ProductDetail/" + packageName));
                     intent.setPackage("com.sec.android.app.samsungapps");
                     break;
+                case 4:
+                    intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse("iranapps://app/"+packageName+"?a=comment&r=5"));
+                    intent.setPackage("ir.tgbs.android.iranapp");
+                    break;
+
 
             }
             context1.startActivity(intent);
@@ -231,7 +236,9 @@ public class UtilFunctions {
 
     }
 
-    public void openUrl(String url) {
+    public void openUrl(String url)
+    {
+
         Intent intent1 = new Intent(Intent.ACTION_VIEW);
         intent1.setData(Uri.parse(url));
         context1.startActivity(intent1);
@@ -254,10 +261,10 @@ public class UtilFunctions {
 
         Typeface typeface = ResourcesCompat.getFont(context1, R.font.iran_sans_mobile_light);
         if (viewObject instanceof TextView) {
-            viewObject = (TextView) viewObject;
+            viewObject = viewObject;
             ((TextView) viewObject).setTypeface(typeface);
         } else if (viewObject instanceof Button) {
-            viewObject = (Button) viewObject;
+            viewObject = viewObject;
             ((Button) viewObject).setTypeface(typeface);
         }
 
@@ -267,10 +274,10 @@ public class UtilFunctions {
 
         Typeface typeface = ResourcesCompat.getFont(context1, font);
         if (viewObject instanceof TextView) {
-            viewObject = (TextView) viewObject;
+            viewObject = viewObject;
             ((TextView) viewObject).setTypeface(typeface);
         } else if (viewObject instanceof Button) {
-            viewObject = (Button) viewObject;
+            viewObject = viewObject;
             ((Button) viewObject).setTypeface(typeface);
         }
     }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
@@ -9,7 +10,7 @@
         android:layout_height="25dp"
         android:layout_gravity="top|start"
         android:elevation="1dp"
-        android:src="@drawable/ic_remove" />
+        app:srcCompat="@drawable/ic_remove" />
 
     <FrameLayout
         android:id="@+id/frmBorder"
@@ -27,7 +28,7 @@
             android:adjustViewBounds="true"
             android:contentDescription="@string/app_name"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_remove" />
+            app:srcCompat="@drawable/ic_remove" />
 
     </FrameLayout>
 

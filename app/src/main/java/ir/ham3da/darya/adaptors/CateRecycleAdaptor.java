@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import ir.ham3da.darya.utility.AppFontManager;
 import ir.ham3da.darya.utility.AppSettings;
 import ir.ham3da.darya.Bungee;
 import ir.ham3da.darya.ActivityCate;
@@ -27,12 +28,13 @@ public class CateRecycleAdaptor extends RecyclerView.Adapter<CateRecycleAdaptor.
     private List<GanjoorCat> GanjoorCatList;
     private Context context1;
     private float textSize;
-
+    int fontId;
     public CateRecycleAdaptor(List<GanjoorCat> GanjoorCatList, Context context) {
         this.GanjoorCatList = GanjoorCatList;
         this.context1 = context;
         AppSettings.Init(context);
         this.textSize = AppSettings.getTextSize();
+        fontId = AppSettings.getPoemsFont();
     }
 
     @NonNull
@@ -85,11 +87,13 @@ public class CateRecycleAdaptor extends RecyclerView.Adapter<CateRecycleAdaptor.
         {
             super(itemView);
 
-            item_text = (TextView) itemView.findViewById(R.id.item_text);
-            avatar_item = (ImageView) itemView.findViewById(R.id.avatar_item);
-            cateCardView = (CardView) itemView.findViewById(R.id.cateCardView);
+            item_text = itemView.findViewById(R.id.item_text);
+            avatar_item = itemView.findViewById(R.id.avatar_item);
+            cateCardView = itemView.findViewById(R.id.cateCardView);
 
             item_text.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+
+            AppFontManager.setFont(context1, item_text, fontId);
 
         }
     }

@@ -18,6 +18,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import ir.ham3da.darya.ActivityCollection;
+import ir.ham3da.darya.App;
 import ir.ham3da.darya.utility.AppSettings;
 import ir.ham3da.darya.ganjoor.GDBInfo;
 import ir.ham3da.darya.ganjoor.GDBList;
@@ -130,7 +131,7 @@ public class GDBListAdaptor extends RecyclerView.Adapter<GDBListAdaptor.ViewHold
 
         String ques = String.format(context1.getString(R.string.poet_delete_ques), "<b>" + this.gDBList._Items.get(position)._CatName + "</b>");
         final Dialog yesNoDialog = MyDialogs1.YesNoDialog(ques, context1.getDrawable(R.drawable.ic_delete_white_24dp), true);
-        Button noBtn = (Button) yesNoDialog.findViewById(R.id.noBtn);
+        Button noBtn = yesNoDialog.findViewById(R.id.noBtn);
         noBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -138,13 +139,16 @@ public class GDBListAdaptor extends RecyclerView.Adapter<GDBListAdaptor.ViewHold
             }
         });
 
-        Button yesBtn = (Button) yesNoDialog.findViewById(R.id.yesBtn);
+        Button yesBtn = yesNoDialog.findViewById(R.id.yesBtn);
         yesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
                     GanjoorPoet ganjoorPoet = GanjoorDbBrowser1.getPoet(poetId);
                     GanjoorDbBrowser1.DeletePoet(ganjoorPoet);
+
+                    App globalVariable = (App) context1.getApplicationContext();
+                    globalVariable.setUpdatePoetList(true);
 
                     gDBList._Items.get(position)._Exist = false;
 
@@ -189,11 +193,11 @@ public class GDBListAdaptor extends RecyclerView.Adapter<GDBListAdaptor.ViewHold
         public ViewHolder(View itemView) {
             super(itemView);
 
-            poet_name = (TextView) itemView.findViewById(R.id.poet_name);
-            imageButton_dl = (ImageButton) itemView.findViewById(R.id.imageButton_dl);
-            imageButton_update = (ImageButton) itemView.findViewById(R.id.imageButton_update);
+            poet_name = itemView.findViewById(R.id.poet_name);
+            imageButton_dl = itemView.findViewById(R.id.imageButton_dl);
+            imageButton_update = itemView.findViewById(R.id.imageButton_update);
 
-            collectionCardView = (CardView) itemView.findViewById(R.id.collectionCardView);
+            collectionCardView = itemView.findViewById(R.id.collectionCardView);
             poet_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
 
         }

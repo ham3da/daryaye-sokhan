@@ -56,19 +56,6 @@
         app:title="@string/select_language"
         app:summary="@string/Language_des"/>
 
-
-
-<!--        <ListPreference-->
-<!--            app:icon="@drawable/ic_language_gray_24dp"-->
-<!--            app:title="@string/select_language"-->
-<!--            app:summary="@string/Language_des"-->
-<!--            app:key="langSettingList"-->
-<!--            app:defaultValue="0"-->
-<!--            app:entries="@array/language_list"-->
-<!--            app:entryValues="@array/language_list_values"-->
-<!--            app:negativeButtonText="@string/cancel"-->
-<!--            />-->
-
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -95,6 +82,13 @@
     <PreferenceCategory
         app:title="@string/Text_options">
 
+        <Preference
+            app:key="setFont"
+            app:icon="@drawable/ic_title_gray_24dp"
+            app:title="@string/change_poem_font"
+            app:summary="@string/change_poem_font_des"
+            />
+
         <EditTextPreference
             app:icon="@drawable/ic_title_gray_24dp"
             app:title="@string/Text_size"
@@ -104,6 +98,8 @@
             app:negativeButtonText="@string/cancel"
             app:positiveButtonText="@string/ok"
             />
+
+
 
     </PreferenceCategory>
 

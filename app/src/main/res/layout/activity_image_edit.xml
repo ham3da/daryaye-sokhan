@@ -46,7 +46,7 @@
                     android:layout_alignParentStart="true"
                     android:background="#99000000"
                     android:padding="8dp"
-                    android:src="@drawable/ic_undo" />
+                    app:srcCompat="@drawable/ic_undo" />
 
                 <ImageView
                     android:id="@+id/imgRedo"
@@ -55,7 +55,7 @@
                     android:layout_toEndOf="@+id/imgUndo"
                     android:background="#99000000"
                     android:padding="8dp"
-                    android:src="@drawable/ic_redo" />
+                    app:srcCompat="@drawable/ic_redo" />
 
                 <ImageView
                     android:id="@+id/imgGallery"
@@ -64,7 +64,7 @@
                     android:layout_toStartOf="@+id/imgCamera"
                     android:background="#99000000"
                     android:padding="8dp"
-                    android:src="@drawable/ic_gallery" />
+                    app:srcCompat="@drawable/ic_gallery" />
 
                 <ImageView
                     android:id="@+id/imgCamera"
@@ -73,7 +73,7 @@
                     android:layout_alignParentEnd="true"
                     android:background="#99000000"
                     android:padding="8dp"
-                    android:src="@drawable/ic_camera"
+                    app:srcCompat="@drawable/ic_camera"
 
                     />
             </RelativeLayout>

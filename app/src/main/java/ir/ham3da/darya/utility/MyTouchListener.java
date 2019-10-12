@@ -19,10 +19,10 @@ public class MyTouchListener implements RecyclerView.OnItemTouchListener {
     private OnTouchActionListener mOnTouchActionListener;
     private GestureDetectorCompat mGestureDetector;
 
-    public static interface OnTouchActionListener {
-        public void onLeftSwipe(View view, int position);
-        public void onRightSwipe(View view, int position);
-        public void onClick(View view, int position);
+    public interface OnTouchActionListener {
+        void onLeftSwipe(View view, int position);
+        void onRightSwipe(View view, int position);
+        void onClick(View view, int position);
     }
 
     public MyTouchListener(Context context, final RecyclerView recyclerView,

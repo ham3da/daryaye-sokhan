@@ -42,9 +42,9 @@ public class CustomProgress {
         // no tile for the dialog
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mDialog.setContentView(R.layout.prograss_bar_dialog);
-        ProgressBar  mProgressBar = (ProgressBar) mDialog.findViewById(R.id.progress_bar);
-        TextView progressText = (TextView) mDialog.findViewById(R.id.progress_text);
-        TextView progress_title = (TextView) mDialog.findViewById(R.id.progress_title);
+        ProgressBar  mProgressBar = mDialog.findViewById(R.id.progress_bar);
+        TextView progressText = mDialog.findViewById(R.id.progress_text);
+        TextView progress_title = mDialog.findViewById(R.id.progress_title);
 
         progress_title.setText(title);
         progressText.setText(message);
@@ -71,18 +71,18 @@ public class CustomProgress {
 
     public void setProgress(int percent)
     {
-        TextView progressText = (TextView) mDialog.findViewById(R.id.progress_text);
+        TextView progressText = mDialog.findViewById(R.id.progress_text);
         String percentStr = String.format(Locale.getDefault(), "%d", percent)+ " %";
         progressText.setText(percentStr);
-        ProgressBar  mProgressBar = (ProgressBar) mDialog.findViewById(R.id.progress_bar);
+        ProgressBar  mProgressBar = mDialog.findViewById(R.id.progress_bar);
         mProgressBar.setProgress(percent);
     }
 
     public void setProgress(int percent, String Text1, String Text2 )
     {
-        TextView progressText = (TextView) mDialog.findViewById(R.id.progress_text);
-        TextView progressText1 = (TextView) mDialog.findViewById(R.id.progress_text1);
-        TextView progressText2 = (TextView) mDialog.findViewById(R.id.progress_text2);
+        TextView progressText = mDialog.findViewById(R.id.progress_text);
+        TextView progressText1 = mDialog.findViewById(R.id.progress_text1);
+        TextView progressText2 = mDialog.findViewById(R.id.progress_text2);
 
         String percentStr = String.format(Locale.getDefault(), "%d", percent)+ " %";
         progressText.setText(percentStr);
@@ -97,7 +97,7 @@ public class CustomProgress {
             progressText2.setText(Text2);
         }
 
-        ProgressBar  mProgressBar = (ProgressBar) mDialog.findViewById(R.id.progress_bar);
+        ProgressBar  mProgressBar = mDialog.findViewById(R.id.progress_bar);
         mProgressBar.setProgress(percent);
     }
 

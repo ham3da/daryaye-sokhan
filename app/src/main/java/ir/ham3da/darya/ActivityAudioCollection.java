@@ -98,14 +98,14 @@ public class ActivityAudioCollection extends AppCompatActivity {
         setTitle(R.string.download_declaim);
 
         _DbBrowser = new GanjoorDbBrowser(this);
-        recycler_audio = (RecyclerView) findViewById(R.id.recycler_audio);
-        no_item_textview = (TextView) findViewById(R.id.no_item_textview);
+        recycler_audio = findViewById(R.id.recycler_audio);
+        no_item_textview = findViewById(R.id.no_item_textview);
 
         AppSettings.Init(this);
 
         poem_id = getIntent().getIntExtra("poem_id", 0);
 
-        simpleSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.simpleSwipeRefreshLayout);
+        simpleSwipeRefreshLayout = findViewById(R.id.simpleSwipeRefreshLayout);
 
         simpleSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -283,6 +283,8 @@ private  boolean checkExistAudio(GanjoorAudioInfo ganjoorAudioInfo)
     public void ShowSuccessToast() {
         Toast.makeText(this, getString(R.string.download_success), Toast.LENGTH_SHORT).show();
     }
-
+    public void DownloadFailToast() {
+        Toast.makeText(this, getString(R.string.download_failed), Toast.LENGTH_SHORT).show();
+    }
 
 }

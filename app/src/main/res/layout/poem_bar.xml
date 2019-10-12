@@ -32,7 +32,7 @@
                 android:contentDescription="@string/options"
                 android:focusable="true"
                 android:scaleType="center"
-                android:src="@drawable/ic_more_vert_white_24dp" />
+                app:srcCompat="@drawable/ic_more_vert_white_24dp" />
         </RelativeLayout>
 
         <TextView
@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/poet_name"
-            android:src="@drawable/ic_chevron_left_white_24dp" />
+            app:srcCompat="@drawable/ic_chevron_left_white_24dp" />
 
         <TextView
             android:id="@+id/book_name"
@@ -88,7 +88,7 @@
             android:contentDescription="@string/options"
             android:focusable="true"
             android:scaleType="center"
-            android:src="@drawable/ic_close_gray_24dp" />
+            app:srcCompat="@drawable/ic_close_gray_24dp" />
         <SeekBar
             android:id="@+id/audio_seekbar"
             android:layout_width="match_parent"
@@ -112,7 +112,7 @@
             android:contentDescription="@string/options"
             android:focusable="true"
             android:scaleType="center"
-            android:src="@drawable/ic_play_arrow_black_24dp" />
+            app:srcCompat="@drawable/ic_play_arrow_black_24dp" />
         <ImageView
             android:id="@+id/audio_more_option"
             android:layout_width="32dp"
@@ -124,7 +124,7 @@
             android:contentDescription="@string/options"
             android:focusable="true"
             android:scaleType="center"
-            android:src="@drawable/ic_more_vert_black_24dp" />
+            app:srcCompat="@drawable/ic_more_vert_black_24dp" />
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"

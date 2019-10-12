@@ -99,7 +99,7 @@
     <string name="verse_indexing">Numbering lines of poems</string>
     <string name="language">Language</string>
     <string name="select_language">Select Language</string>
-    <string name="Language_des">This will change the language of the application interface.</string>
+    <string name="Language_des">It requires re-run the application.</string>
     <string name="Text_options">Text options</string>
     <string name="Text_size">Text size</string>
     <string name="Text_size_des">This size applies to the text of the list of poets, categories, poems and favorites.</string>
@@ -167,5 +167,18 @@
     <string name="opacity">Opacity</string>
     <string name="rotation">Rotation</string>
     <string name="error_occurred">Unfortunately, an unwanted error has occurred!</string>
+    <string name="iransans" translatable="false">قلم ایران سنس</string>
+    <string name="sahel" translatable="false">قلم ساحل</string>
+    <string name="shabnam" translatable="false">قلم شبنم</string>
+    <string name="tanha" translatable="false">قلم تنها</string>
+    <string name="vazir" translatable="false">قلم وزیر</string>
+    <string name="droid_naskh" translatable="false">قلم نسخ</string>
+    <string name="faraz" translatable="false">قلم تحریری فراز</string>
+    <string name="change_poem_font">Fonts of Poems</string>
+    <string name="change_poem_font_des">Change the font of the poems.</string>
+    <string name="poetry_collection">Poetry Collection</string>
+    <string name="open">Open</string>
+    <string name="short_introduction">Short introduction</string>
+    <string name="website">Website</string>
 
 </resources>

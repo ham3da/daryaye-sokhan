@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 public class DownloadFromUrl
 {
@@ -30,7 +31,7 @@ public class DownloadFromUrl
         conn.setConnectTimeout(15000);
         conn.setRequestMethod("GET");
         conn.setDoInput(true);
-
+        conn.setUseCaches(false);
         // Starts the query
         conn.connect(); // calling the web address
 
@@ -50,7 +51,7 @@ public class DownloadFromUrl
     public static String readInputStream(InputStream stream) throws IOException {
         int n = 0;
         char[] buffer = new char[1024 * 4];
-        InputStreamReader reader = new InputStreamReader(stream, "UTF8");
+        InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
         StringWriter writer = new StringWriter();
         while (-1 != (n = reader.read(buffer))) {
             writer.write(buffer, 0, n);

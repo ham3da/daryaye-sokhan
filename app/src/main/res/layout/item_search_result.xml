@@ -13,7 +13,7 @@
         android:layout_margin="0px"
         android:elevation="0dp"
         android:clickable="true"
-        android:foreground="?android:attr/selectableItemBackground"
+        android:foreground="?attr/selectableItemBackground"
         android:focusable="true">
         <RelativeLayout
             android:layout_width="match_parent"
@@ -26,13 +26,11 @@
                 android:id="@+id/src_verse"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-
-
+                android:fontFamily="@font/iran_sans_mobile_light_fa"
                 android:text="@string/verse"
                 android:textColor="@color/black"
                 android:textSize="14sp"
@@ -52,6 +50,7 @@
                 android:textSize="14sp"
                 android:singleLine="true"
                 android:ellipsize="end"
+                android:fontFamily="@font/iran_sans_mobile_light_fa"
                 android:textColor="@color/black"
                 android:textAlignment="gravity" />
         </RelativeLayout>

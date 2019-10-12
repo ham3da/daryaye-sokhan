@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
             android:background="@color/colorPrimary"
-            android:fontFamily="@font/iransans"
+            android:fontFamily="@font/iran_sans_mobile_light"
             android:gravity="center"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
@@ -87,7 +87,7 @@
     <RelativeLayout
         android:id="@+id/cancel_layout"
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
+        android:layout_height="?attr/actionBarSize"
         android:layout_weight="0"
         android:paddingStart="10dp"
         android:paddingTop="5dp"

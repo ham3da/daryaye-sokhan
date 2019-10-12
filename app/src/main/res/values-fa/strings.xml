@@ -95,7 +95,7 @@
     <string name="verse_indexing">شماره‌گذاری مصراع‌های اشعار</string>
     <string name="language">زبان</string>
     <string name="select_language">انتخاب زبان</string>
-    <string name="Language_des">با این کار زبان رابط کاربری برنامه تغییر خواهد کرد.</string>
+    <string name="Language_des">نیازمند اجرای مجدد نرم‌افزار</string>
     <string name="Text_options">گزینه‌های متن</string>
     <string name="Text_size">اندازه متن</string>
     <string name="Text_size_des">این اندازه روی متن  فهرست شاعران، دسته‌ها، اشعار و گزیده‌ها اعمال می گردد.</string>
@@ -163,4 +163,10 @@
     <string name="opacity">شفافیت</string>
     <string name="rotation">چرخش</string>
     <string name="error_occurred">متاسفانه، یک خطای ناخواسته رخ داده است!</string>
+    <string name="change_poem_font">فونت اشعار</string>
+    <string name="change_poem_font_des">قلم نمایش شعرها را تغییر دهید</string>
+    <string name="poetry_collection">مجموعه اشعار</string>
+    <string name="open">باز کردن</string>
+    <string name="short_introduction">معرفی کوتاه</string>
+    <string name="website">وب‌سایت</string>
 </resources>

@@ -1,6 +1,7 @@
 package ir.ham3da.darya;
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -31,6 +32,7 @@ import java.util.Locale;
 import ir.ham3da.darya.adaptors.AdapterSocialList;
 import ir.ham3da.darya.ganjoor.GanjoorDbBrowser;
 import ir.ham3da.darya.ganjoor.GanjoorPoet;
+import ir.ham3da.darya.utility.AppFontManager;
 import ir.ham3da.darya.utility.AppSettings;
 import ir.ham3da.darya.utility.CustomProgress;
 import ir.ham3da.darya.utility.LangSettingList;
@@ -40,10 +42,13 @@ import ir.ham3da.darya.utility.SetLanguage;
 public class ActivitySettings extends AppCompatActivity {
 
 
-    static Preference  pref_op_db;
+    static Preference  pref_op_db, pref_setFont;
+
+
 //    static Preference  pref_rand_poem;
     int currentLocalIndex;
     GanjoorDbBrowser GanjoorDbBrowser1;
+
 
     public void setRandomPoemText() {
 
@@ -85,6 +90,10 @@ public class ActivitySettings extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            SetLanguage.wrap(this);
+        }
+
         setContentView(R.layout.settings_activity);
 
         AppSettings.Init(this);
@@ -103,14 +112,9 @@ public class ActivitySettings extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         setTitle(R.string.action_settings);
-
-
     }
 
-
-
     public static class SettingsFragment extends PreferenceFragmentCompat {
-
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -118,7 +122,7 @@ public class ActivitySettings extends AppCompatActivity {
 
             GanjoorDbBrowser GanjoorDbBrowser1 = new GanjoorDbBrowser(getContext());
 
-            EditTextPreference prefTextSize = (EditTextPreference) findPreference("TextSize");
+            EditTextPreference prefTextSize = findPreference("TextSize");
 
             final float textSize = AppSettings.getTextSize();
 
@@ -137,13 +141,26 @@ public class ActivitySettings extends AppCompatActivity {
                         editText.selectAll();
                     }
                 });
+                prefTextSize.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                    @Override
+                    public boolean onPreferenceChange(Preference preference, Object newValue)
+                    {
+                        App globalVariable = (App) getContext().getApplicationContext();
+                        globalVariable.setUpdatePoetList(true);
+                        globalVariable.setUpdateFavList(true);
+                        String textSizeStr = String.format(Locale.getDefault(), "%.0f", Float.parseFloat( newValue.toString()) );
+                        prefTextSize.setTitle( getContext().getString(R.string.Text_size )+ " (" + textSizeStr + ")");
+                        return true;
+                    }
+                });
+
             }
 
             final ActivitySettings activitySettings = (ActivitySettings) getActivity();
 
             LangSettingList LangSettingList1 = AppSettings.getLangSettingList(getContext());
 
-            Preference preferenceLang = (Preference) findPreference("langSettingList");
+            Preference preferenceLang = findPreference("langSettingList");
 
             if (preferenceLang != null)
             {
@@ -161,24 +178,8 @@ public class ActivitySettings extends AppCompatActivity {
             }
 
 
-//            pref_rand_poem = (Preference) findPreference("randomPoem");
-//
-//            String des = getString(R.string.current_scope);
-//            des += " " + getRandomPoetsNameFromCat(GanjoorDbBrowser1) + "";
-//            pref_rand_poem.setSummary(des);
-//
-//            final RandomPoetDialog randomPoetDialog = new RandomPoetDialog(getContext());
-//
-//            pref_rand_poem.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-//                @Override
-//                public boolean onPreferenceClick(Preference preference) {
-//
-//                    randomPoetDialog.ShowLimitsDialog(true);
-//                    return true;
-//                }
-//            });
 
-            pref_op_db = (Preference) findPreference("optimize_db");
+            pref_op_db = findPreference("optimize_db");
             pref_op_db.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference)
@@ -188,9 +189,28 @@ public class ActivitySettings extends AppCompatActivity {
                 }
             });
 
+            pref_setFont = findPreference("setFont");
+
+            int fontId = AppSettings.getPoemsFont();
+
+           // ArrayList<LinkItem> fonts = activitySettings.getFontsList();
+
+            String fontName = AppFontManager.getFontName(getContext(), fontId);
+
+            pref_setFont.setTitle(pref_setFont.getTitle() + " (" + fontName + ")");
+
+            pref_setFont.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference)
+                {
+                    activitySettings.openFontDailog(preference);
+
+                    return true;
+                }
+            });
+
 
         }
-
 
     }
 
@@ -198,6 +218,67 @@ public class ActivitySettings extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+
+    protected  ArrayList<LinkItem> getFontsList()
+    {
+        ArrayList<LinkItem> links = AppFontManager.getFontsList(this);
+        return links;
+    }
+
+    protected void openFontDailog(Preference preference)
+    {
+
+       final Dialog dialog = new Dialog(preference.getContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_listview);
+
+        dialog.setCancelable(true);
+
+
+        TextView dlg_title = dialog.findViewById(R.id.dlg_title);
+        ImageView dialog_icon = dialog.findViewById(R.id.dialog_icon);
+
+        dlg_title.setText(getString(R.string.change_poem_font));
+
+        dialog_icon.setImageResource(R.drawable.ic_text);
+
+        ListView listView = dialog.findViewById(R.id.listView);
+
+        AdapterSocialList adapterSocialList = new AdapterSocialList(getFontsList(), this, R.color.transparent);
+        adapterSocialList.ChangeFont = true;
+
+        listView.setAdapter(adapterSocialList);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                dialog.dismiss();
+                AppSettings.setPoemsFont(position);
+                App globalVariable = (App) getApplicationContext();
+                globalVariable.setUpdatePoetList(true);
+                globalVariable.setUpdateFavList(true);
+
+                String fontName = AppFontManager.getFontName(getBaseContext(), position);
+
+                preference.setTitle(getString(R.string.change_poem_font)  + " (" + fontName + ")");
+
+            }
+        });
+
+        Button okBtn = dialog.findViewById(R.id.okBtn);
+
+        okBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
 
     }
 
@@ -216,13 +297,13 @@ public class ActivitySettings extends AppCompatActivity {
         dialog.setCancelable(true);
 
 
-        TextView dlg_title = (TextView) dialog.findViewById(R.id.dlg_title);
-        ImageView dialog_icon = (ImageView) dialog.findViewById(R.id.dialog_icon);
+        TextView dlg_title = dialog.findViewById(R.id.dlg_title);
+        ImageView dialog_icon = dialog.findViewById(R.id.dialog_icon);
 
         dlg_title.setText(getString(R.string.change_lang));
         dialog_icon.setImageResource(R.drawable.ic_language_black_24dp);
 
-        ListView listView = (ListView) dialog.findViewById(R.id.listView);
+        ListView listView = dialog.findViewById(R.id.listView);
 
         AdapterSocialList adapterSocialList = new AdapterSocialList(links, this, R.color.transparent);
 
@@ -242,7 +323,7 @@ public class ActivitySettings extends AppCompatActivity {
             }
         });
 
-        Button okBtn = (Button) dialog.findViewById(R.id.okBtn);
+        Button okBtn = dialog.findViewById(R.id.okBtn);
 
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -279,7 +360,6 @@ public class ActivitySettings extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         int id = item.getItemId();
-
         if (android.R.id.home == id) {
             finish();
             Bungee.slideDown(this);
@@ -291,7 +371,6 @@ public class ActivitySettings extends AppCompatActivity {
     {
         final CustomProgress customProgressDlg = new CustomProgress(this);
         customProgressDlg.showProgress(getString(R.string.optimize_db), getString(R.string.please_wait2) , false, false, true);
-
 
         new Thread(new Runnable() {
             public void run() {

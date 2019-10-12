@@ -19,6 +19,7 @@ import androidx.core.widget.ImageViewCompat;
 import java.util.ArrayList;
 
 import ir.ham3da.darya.R;
+import ir.ham3da.darya.utility.AppFontManager;
 import ir.ham3da.darya.utility.LinkItem;
 
 public class AdapterSocialList extends ArrayAdapter<LinkItem> implements View.OnClickListener{
@@ -26,6 +27,7 @@ public class AdapterSocialList extends ArrayAdapter<LinkItem> implements View.On
     private ArrayList<LinkItem> dataSet;
     Context mContext;
     Integer iconColor;
+    public  Boolean ChangeFont = false;
 
     // View lookup cache
     private static class ViewHolder {
@@ -68,8 +70,8 @@ public class AdapterSocialList extends ArrayAdapter<LinkItem> implements View.On
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.dialog_list_item, parent, false);
 
-            viewHolder.item_text = (TextView) convertView.findViewById(R.id.item_text);
-            viewHolder.icon_image = (ImageView) convertView.findViewById(R.id.icon_image);
+            viewHolder.item_text = convertView.findViewById(R.id.item_text);
+            viewHolder.icon_image = convertView.findViewById(R.id.icon_image);
 
 
             if(this.iconColor != null)
@@ -78,7 +80,7 @@ public class AdapterSocialList extends ArrayAdapter<LinkItem> implements View.On
             }
 
 
-            result=convertView;
+            result = convertView;
 
             convertView.setTag(viewHolder);
         } else {
@@ -90,9 +92,12 @@ public class AdapterSocialList extends ArrayAdapter<LinkItem> implements View.On
         lastPosition = position;
 
         viewHolder.item_text.setText(dataModel.Text);
+        if(ChangeFont)
+        {
+            AppFontManager.setFont(mContext, viewHolder.item_text, dataModel.ID);
+        }
+
         viewHolder.icon_image.setImageResource(dataModel.Icon);
-
-
 
         // Return the completed view to render on screen
         return convertView;

@@ -203,7 +203,7 @@ public class ActivityPoem extends AppCompatActivity {
             baseCategory = GanjoorDbBrowser1.getBaseCategory(GanjoorCat1._ID);
             verseList = GanjoorDbBrowser1.getVerses(poem_id);
             verseArrangement = UtilFunctions1.VerseArrangement(verseList);
-            appBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
+            appBarLayout = findViewById(R.id.app_bar);
             toolbarLayout = findViewById(R.id.poem_toolbar_layout);
             UtilFunctions1.setupToolbarLayout(toolbarLayout, true);
             toolbarLayout.setExpandedTitleColor(Color.TRANSPARENT);
@@ -218,14 +218,27 @@ public class ActivityPoem extends AppCompatActivity {
             TextView poet_name = this.findViewById(R.id.poet_name);
             TextView book_name = this.findViewById(R.id.book_name);
 
-            category_title.setText(GanjoorCat1._Text);
+            if(GanjoorPoet1._CatID == GanjoorPoem1._CatID)
+            {
+                category_title.setText(R.string.poetry_collection);
+                if (baseCategory != null)
+                {
+                    book_name.setText(R.string.poetry_collection);
+                }
+
+            }
+            else {
+                category_title.setText(GanjoorCat1._Text);
+                if (baseCategory != null)
+                {
+                    book_name.setText(baseCategory._Text);
+                }
+            }
+
             poem_title.setText(GanjoorPoem1._Title);
             toolbarLayout.setTitle(GanjoorPoem1._Title);
             poet_name.setText(GanjoorPoet1._Name);
 
-            if (baseCategory != null) {
-                book_name.setText(baseCategory._Text);
-            }
 
             checkIsFavorite();
             indexingStatus = AppSettings.getVerseListIndexStatus();
@@ -586,19 +599,25 @@ public class ActivityPoem extends AppCompatActivity {
 
             adapter.setGanjoorVerseList(verseArrangement);
 
-            TextView category_title = (TextView) this.findViewById(R.id.category_title);
-            TextView poem_title = (TextView) this.findViewById(R.id.poem_title);
+            TextView category_title = this.findViewById(R.id.category_title);
+            TextView poem_title = this.findViewById(R.id.poem_title);
 
-            TextView poet_name = (TextView) this.findViewById(R.id.poet_name);
-            TextView book_name = (TextView) this.findViewById(R.id.book_name);
+            TextView poet_name = this.findViewById(R.id.poet_name);
+            TextView book_name = this.findViewById(R.id.book_name);
 
-            category_title.setText(GanjoorCat1._Text);
+
+            if(GanjoorPoet1._CatID == GanjoorPoem1._CatID)
+            {
+                category_title.setText(R.string.poetry_collection);
+            }
+            else {
+                category_title.setText(GanjoorCat1._Text);
+            }
+
 
             toolbarLayout.setTitle(GanjoorPoem1._Title);
 
             poem_title.setText(GanjoorPoem1._Title);
-
-            category_title.setText(GanjoorCat1._Text);
 
             recyclerView.smoothScrollToPosition(0);
 
@@ -708,7 +727,7 @@ public class ActivityPoem extends AppCompatActivity {
         MyDialogs MyDialogs1 = new MyDialogs(mContext);
         final Dialog yesNoDialog = MyDialogs1.YesNoDialog(getString(R.string.no_donload_this_item), mContext.getDrawable(R.drawable.ic_cloud_download_white_24dp), true);
 
-        Button noBtn = (Button) yesNoDialog.findViewById(R.id.noBtn);
+        Button noBtn = yesNoDialog.findViewById(R.id.noBtn);
         noBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -716,7 +735,7 @@ public class ActivityPoem extends AppCompatActivity {
             }
         });
 
-        Button yesBtn = (Button) yesNoDialog.findViewById(R.id.yesBtn);
+        Button yesBtn = yesNoDialog.findViewById(R.id.yesBtn);
         yesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -776,7 +795,7 @@ public class ActivityPoem extends AppCompatActivity {
     AudioManager.OnAudioFocusChangeListener afChangeListener =
             new AudioManager.OnAudioFocusChangeListener() {
                 public void onAudioFocusChange(int focusChange) {
-                    Log.e(TAG, "onAudioFocusChange: " + focusChange);
+                    //Log.e(TAG, "onAudioFocusChange: " + focusChange);
                     switch (focusChange) {
                         case AudioManager.AUDIOFOCUS_LOSS:
                             pauseAudio();

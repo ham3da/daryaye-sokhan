@@ -24,6 +24,7 @@ import java.util.Locale;
 
 import ir.ham3da.darya.ActivityInfo2;
 import ir.ham3da.darya.ui.main.MainPoetsFragment;
+import ir.ham3da.darya.utility.AppFontManager;
 import ir.ham3da.darya.utility.AppSettings;
 import ir.ham3da.darya.Bungee;
 import ir.ham3da.darya.ActivityCate;
@@ -42,6 +43,7 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
 
     private float textSize;
     private MainPoetsFragment mainPoetsFragment;
+    int fontId;
 
     public AdapterPoetsExpand(Context context, MainPoetsFragment mainPoetsFragment1) {
         super(context);
@@ -51,7 +53,7 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
         this.textSize = AppSettings.getTextSize();
 
         mainPoetsFragment = mainPoetsFragment1;
-
+        fontId = AppSettings.getPoemsFont();
 
     }
 
@@ -61,7 +63,7 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
         public int ParentID;
         public int childCount;
         public int poetIndex;
-
+        public int listType; // 0: poet, 1: categories, 2: poems
 
         /**
          * Add poet
@@ -78,6 +80,7 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
             ParentID = 0;
             childCount = child_Count;
             poetIndex = poet_Index;
+            listType = 0;
 
         }
 
@@ -89,14 +92,16 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
          * @param child_Count
          * @param poet_Index
          * @param parent_id
+         * @param list_type   int 0: poet, 1: categories, 2: poems , 3: biographi
          */
-        public PoetsAndCateItem(String book, int id, int child_Count, int poet_Index, int parent_id) {
+        public PoetsAndCateItem(String book, int id, int child_Count, int poet_Index, int parent_id, int list_type) {
             super(TYPE_CHILD, id, child_Count, 0, parent_id);
             Text = book;
             ID = id;
             ParentID = parent_id;
             childCount = 0;
             poetIndex = 0;
+            listType = list_type;
         }
     }
 
@@ -112,14 +117,15 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
             super(view, (ImageView) view.findViewById(R.id.item_arrow));
 
 
-            poets_name = (TextView) view.findViewById(R.id.poets_name);
-            books_count = (TextView) view.findViewById(R.id.books_count);
-            avatar_poet = (ImageView) view.findViewById(R.id.avatar_poet);
-            poets_liner = (LinearLayout) view.findViewById(R.id.poets_liner);
+            poets_name = view.findViewById(R.id.poets_name);
+            books_count = view.findViewById(R.id.books_count);
+            avatar_poet = view.findViewById(R.id.avatar_poet);
+            poets_liner = view.findViewById(R.id.poets_liner);
 
-            moreOptions = (ImageButton) view.findViewById(R.id.moreOptions);
+            moreOptions = view.findViewById(R.id.moreOptions);
 
             poets_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+            AppFontManager.setFont(mContext, poets_name, fontId);
         }
 
         public void bind(final int position) {
@@ -207,7 +213,7 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
 
         final Dialog yesNoDialog = MyDialogs1.YesNoDialog(ques, mContext.getDrawable(R.drawable.ic_delete_white_24dp), true);
 
-        Button noBtn = (Button) yesNoDialog.findViewById(R.id.noBtn);
+        Button noBtn = yesNoDialog.findViewById(R.id.noBtn);
         noBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -215,7 +221,7 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
             }
         });
 
-        Button yesBtn = (Button) yesNoDialog.findViewById(R.id.yesBtn);
+        Button yesBtn = yesNoDialog.findViewById(R.id.yesBtn);
         yesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -260,11 +266,12 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
         public BooksViewHolder(View view) {
             super(view);
 
-            books_name = (TextView) view.findViewById(R.id.books_name);
-            avatar_book = (ImageView) view.findViewById(R.id.avatar_book);
-            books_liner = (LinearLayout) view.findViewById(R.id.books_liner);
+            books_name = view.findViewById(R.id.books_name);
+            avatar_book = view.findViewById(R.id.avatar_book);
+            books_liner = view.findViewById(R.id.books_liner);
 
             books_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+            AppFontManager.setFont(mContext, books_name, fontId);
         }
 
         private void showBiography(View view, int poet_id) {
@@ -274,7 +281,7 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
 
             Intent intent = new Intent(view.getContext(), ActivityInfo2.class);
 
-            intent.putExtra("title1", mContext.getString(R.string.biography));
+            intent.putExtra("title1", mContext.getString(R.string.short_introduction));
             intent.putExtra("title2", ganjoorPoet._Name);
             intent.putExtra("text", ganjoorPoet._Bio);
 
@@ -295,6 +302,7 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
 
             final int id = visibleItems.get(position).ID;
             final int poet_id = visibleItems.get(position).ParentID;
+            final int list_type = visibleItems.get(position).listType;
 
             final View books_liner_view = books_liner;
 
@@ -302,7 +310,7 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
                 @Override
                 public void onClick(View v) {
 
-                    if (id == 0) {
+                    if (list_type == 3) {
                         showBiography(v, poet_id);
                     } else {
 
@@ -357,6 +365,7 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
         }
     }
 
+
     /**
      * load Poets And their Categories(books)
      *
@@ -370,7 +379,6 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
         int poet_index = 0;
         int booksCount = 0;
 
-
         if (poets.size() > 0) {
             for (GanjoorPoet Poet : poets) {
 
@@ -379,12 +387,29 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
 
                 poet_index++;
 
-                items.add(new PoetsAndCateItem(Poet._Name, Poet._ID, categories.size(), poet_index));
-
-                items.add(new PoetsAndCateItem(mContext.getString(R.string.biography), 0, 0, 0, Poet._ID));
-                for (GanjoorCat SubCat : categories) {
-                    items.add(new PoetsAndCateItem(SubCat._Text, SubCat._ID, 0, 0, SubCat._ParentID));
+                if (categories.size() > 0) {
+                    items.add(new PoetsAndCateItem(Poet._Name, Poet._ID, categories.size(), poet_index));
+                    items.add(new PoetsAndCateItem(mContext.getString(R.string.short_introduction), 0, 0, 0, Poet._ID, 3));
+                    for (GanjoorCat SubCat : categories) {
+                        items.add(new PoetsAndCateItem(SubCat._Text, SubCat._ID, 0, 0, SubCat._ParentID, 1));
+                    }
                 }
+
+                int poemsCount = GanjoorDbBrowser1.getPoemsCount(Poet._CatID);
+                if (poemsCount > 0) {
+                    if (categories.size() == 0) {
+                        items.add(new PoetsAndCateItem(Poet._Name, Poet._ID, 1, poet_index));
+                        items.add(new PoetsAndCateItem(mContext.getString(R.string.short_introduction), 0, 0, 0, Poet._ID, 3));
+                    }
+                    items.add(new PoetsAndCateItem(mContext.getString(R.string.poetry_collection), Poet._CatID, 0, 0, Poet._ID, 2));
+                    booksCount++;
+                } else {
+                    if (categories.size() == 0) {
+                        items.add(new PoetsAndCateItem(Poet._Name, Poet._ID, 0, poet_index));
+                        items.add(new PoetsAndCateItem(mContext.getString(R.string.short_introduction), 0, 0, 0, Poet._ID, 3));
+                    }
+                }
+
 
             }
         }

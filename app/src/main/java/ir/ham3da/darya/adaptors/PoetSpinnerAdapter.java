@@ -41,7 +41,7 @@ public class PoetSpinnerAdapter extends BaseAdapter implements SpinnerAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = View.inflate(context, R.layout.poet_spiner_textview, null);
-        TextView textView = (TextView) view.findViewById(R.id.main);
+        TextView textView = view.findViewById(R.id.main);
         textView.setText(getItem(position)._Name);
         return textView;
     }
@@ -51,7 +51,7 @@ public class PoetSpinnerAdapter extends BaseAdapter implements SpinnerAdapter {
 
         View view;
         view = View.inflate(context, R.layout.poet_spiner_item, null);
-        final TextView textView = (TextView) view.findViewById(R.id.dropdown);
+        final TextView textView = view.findViewById(R.id.dropdown);
         textView.setText(getItem(position)._Name);
         return view;
     }

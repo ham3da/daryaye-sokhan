@@ -6,7 +6,6 @@ import android.os.Bundle;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -14,11 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.text.Layout;
-import android.view.Gravity;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -37,9 +36,10 @@ public class ActivityInfo2 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_info2);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_info);
+        Toolbar toolbar = findViewById(R.id.toolbar_info);
         setSupportActionBar(toolbar);
 
        ActionBar actionBar = getSupportActionBar();
@@ -51,14 +51,13 @@ public class ActivityInfo2 extends AppCompatActivity {
         textSize = AppSettings.getTextSize();
 
         UtilFunctions1 = new UtilFunctions(this);
-
         String title1 = getIntent().getStringExtra("title1");
         String title2 = getIntent().getStringExtra("title2");
         final String text = getIntent().getStringExtra("text");
 
-        TextView text_box_long = (TextView) this.findViewById(R.id.text);
+        TextView text_box_long = this.findViewById(R.id.text);
 
-        TextView title2_box1  = (TextView) this.findViewById(R.id.title2);
+        TextView title2_box1  = this.findViewById(R.id.title2);
         ImageView info_avatar1 =  this.findViewById(R.id.info_avatar1);
 
 
@@ -66,16 +65,11 @@ public class ActivityInfo2 extends AppCompatActivity {
             text_box_long.setJustificationMode(Layout.JUSTIFICATION_MODE_INTER_WORD);
         }
 
-        //text_box_long.setText(text);
         if (!text.isEmpty()) {
-            text_box_long.setText(UtilFunctions.fromHtml(text), TextView.BufferType.SPANNABLE);
+            text_box_long.setText( UtilFunctions.fromHtml(text), TextView.BufferType.SPANNABLE);
         }
 
-
         text_box_long.setTextSize(textSize);
-        //text_box_long.setGravity(Gravity.START|Gravity.END);
-
-
 
         if(title2.isEmpty())
         {
@@ -90,7 +84,7 @@ public class ActivityInfo2 extends AppCompatActivity {
             title2_box1.setText(title2);
         }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

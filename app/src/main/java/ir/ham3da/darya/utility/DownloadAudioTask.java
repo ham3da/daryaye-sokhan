@@ -108,7 +108,7 @@ public class DownloadAudioTask extends AsyncTask<String, Integer, Long>
             // Output stream
             OutputStream output = new FileOutputStream(dlPath + "/" + fileName);
 
-            byte dl_data[] = new byte[1024];
+            byte[] dl_data = new byte[1024];
             int mLength;
 
             int resCode = conection.getResponseCode();
@@ -189,6 +189,10 @@ public class DownloadAudioTask extends AsyncTask<String, Integer, Long>
                     activityAudioCollection.adaptorAudio.notifyNewDownloaded(scheduleAudio._Pos);
                     activityAudioCollection.ShowSuccessToast();
             }
+        }
+        else
+        {
+            activityAudioCollection.DownloadFailToast();
         }
 
         this.customProgressDlg.dismiss();

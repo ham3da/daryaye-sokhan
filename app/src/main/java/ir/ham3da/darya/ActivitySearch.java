@@ -69,17 +69,17 @@ public class ActivitySearch extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        progressBar_loader = (ProgressBar) findViewById(R.id.progressBar_loader);
+        progressBar_loader = findViewById(R.id.progressBar_loader);
 
         UtilFunctions1 = new UtilFunctions(this);
         GanjoorDbBrowser1 = new GanjoorDbBrowser(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        toolbarLayout = findViewById(R.id.toolbar_layout);
 
-        editTextSearch = (EditText) findViewById(R.id.editTextSearch);
+        editTextSearch = findViewById(R.id.editTextSearch);
 
         UtilFunctions1.setupToolbarLayout(toolbarLayout, false);
 
@@ -99,7 +99,7 @@ public class ActivitySearch extends AppCompatActivity {
 
 
         searchResults1 = new ArrayList<>();
-        search_recycler_view = (RecyclerView) findViewById(R.id.search_recycler_view);
+        search_recycler_view = findViewById(R.id.search_recycler_view);
 
         adapter = new SearchCustomAdapter(searchResults1, ActivitySearch.this);
 
@@ -154,7 +154,7 @@ public class ActivitySearch extends AppCompatActivity {
     }
 
     public void setSearchLimitsText() {
-        TextView search_limits_text = (TextView) findViewById(R.id.search_limits_text);
+        TextView search_limits_text = findViewById(R.id.search_limits_text);
         String poetName = getString(R.string.all_poets);
         String srcLimt = getString(R.string.search_in);
 

@@ -18,6 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.List;
 
+import ir.ham3da.darya.App;
 import ir.ham3da.darya.utility.AppSettings;
 import ir.ham3da.darya.utility.EndlessRecyclerViewScrollListener;
 import ir.ham3da.darya.ganjoor.FavoritesPoem;
@@ -26,8 +27,7 @@ import ir.ham3da.darya.MainActivityUtil;
 import ir.ham3da.darya.R;
 import ir.ham3da.darya.adaptors.FavoritesAdaptor;
 
-public class MainFavoritesFragment extends Fragment
-{
+public class MainFavoritesFragment extends Fragment {
 
     private RecyclerView fav_recycler;
     private FavoritesAdaptor adapter;
@@ -48,14 +48,16 @@ public class MainFavoritesFragment extends Fragment
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
 
-       if(resCount != GanjoorDbBrowser1.getFavoritesCount())
-       {
-           refreshFavorites();
-       }
+        App globalVariable = (App) mContext.getApplicationContext();
+        if (resCount != GanjoorDbBrowser1.getFavoritesCount() || globalVariable.getUpdateFavList()) {
+            refreshFavorites();
+            globalVariable.setUpdateFavList(false);
+        }
+
+
     }
 
     @Override
@@ -70,17 +72,17 @@ public class MainFavoritesFragment extends Fragment
 
 
         View root = inflater.inflate(R.layout.fragment_favorites, container, false);
-        fav_recycler = (RecyclerView) root.findViewById(R.id.fav_recycler);
+        fav_recycler = root.findViewById(R.id.fav_recycler);
         final FragmentActivity fragmentActivity = getActivity();
         mContext = getContext();
         AppSettings.Init(mContext);
 
-        String DB_PATH = AppSettings.getDatabasePath( mContext );
+        String DB_PATH = AppSettings.getDatabasePath(mContext);
         if (MainActivityUtil.checkExists(DB_PATH)) {
 
             GanjoorDbBrowser1 = new GanjoorDbBrowser(mContext);
 
-            swipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.simpleSwipeRefreshLayout);
+            swipeRefreshLayout = root.findViewById(R.id.simpleSwipeRefreshLayout);
 
             // mainActivityUtil1 = new MainActivityUtil(mContext);
 
@@ -117,15 +119,13 @@ public class MainFavoritesFragment extends Fragment
     }
 
 
-    public void refreshFavorites()
-    {
+    public void refreshFavorites() {
         offset = 0;
         favoritesPoemList = GanjoorDbBrowser1.getFavoritesPoems(false, offset, per_page, 0);
         resCount = GanjoorDbBrowser1.getFavoritesCount();
         adapter = new FavoritesAdaptor(favoritesPoemList, mContext);
         fav_recycler.setAdapter(adapter);
-        if( swipeRefreshLayout.isRefreshing())
-        {
+        if (swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);
         }
     }
@@ -133,15 +133,13 @@ public class MainFavoritesFragment extends Fragment
     /**
      * Load Poets And their Books in recycleview
      */
-    public void loadFavorites()
-    {
+    public void loadFavorites() {
         offset = favoritesPoemList.size();
         List<FavoritesPoem> favoritesPoemList2 = GanjoorDbBrowser1.getFavoritesPoems(false, offset, per_page, offset);
         favoritesPoemList.addAll(favoritesPoemList2);
         adapter.notifyItemRangeInserted(favoritesPoemList2.size(), favoritesPoemList2.size() - 1);
 
     }
-
 
 
 }

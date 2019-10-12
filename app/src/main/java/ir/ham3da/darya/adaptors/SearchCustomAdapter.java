@@ -61,7 +61,7 @@ public class SearchCustomAdapter extends RecyclerView.Adapter<SearchCustomAdapte
         if(!findStr.isEmpty())
         {
             String findStrHtml = "<font color=\"#f44336\">" + findStr + "</font>";
-            verseStr = verseStr.replace(findStr, findStrHtml);;
+            verseStr = verseStr.replace(findStr, findStrHtml);
         }
 
 //        if(indexingStatus)
@@ -106,9 +106,9 @@ public class SearchCustomAdapter extends RecyclerView.Adapter<SearchCustomAdapte
         public ViewHolder(View itemView) {
             super(itemView);
 
-            src_verse = (TextView) itemView.findViewById(R.id.src_verse);
-            src_verse_reference = (TextView) itemView.findViewById(R.id.src_verse_reference);
-            srcCardView = (CardView) itemView.findViewById(R.id.srcCardView);
+            src_verse = itemView.findViewById(R.id.src_verse);
+            src_verse_reference = itemView.findViewById(R.id.src_verse_reference);
+            srcCardView = itemView.findViewById(R.id.srcCardView);
         }
     }
 }

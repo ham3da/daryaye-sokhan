@@ -8,23 +8,26 @@ package ir.ham3da.darya.ganjoor;
  * @database-table cat
  * @summary Category info
  */
-public class GanjoorCat {
+public class GanjoorCat
+{
+
+
     /**
      * Default initialization: Creates an instance of a class with input values
      * @param ID
      * @param PoetID
      * @param Text
      * @param ParentID
-     * @param Url
+     * @param UrlAddress
      * @param StartPoem
      */
-    public GanjoorCat(int ID, int PoetID, String Text, int ParentID, String Url, int StartPoem)
+    public GanjoorCat(int ID, int PoetID, String Text, int ParentID, String UrlAddress, int StartPoem)
     {
         _ID = ID;
         _PoetID = PoetID;
         _Text = Text;
         _ParentID = ParentID;
-        _Url = Url;
+        _Url = UrlAddress;
         _StartPoem = StartPoem;
     }	
 

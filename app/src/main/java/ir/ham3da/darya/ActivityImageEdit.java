@@ -1,18 +1,7 @@
 package ir.ham3da.darya;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,11 +22,20 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -52,6 +50,7 @@ import ir.ham3da.darya.imageeditor.StickerBSFragment;
 import ir.ham3da.darya.imageeditor.TextEditorDialogFragment;
 import ir.ham3da.darya.tools.EditingToolsAdapter;
 import ir.ham3da.darya.tools.ToolType;
+import ir.ham3da.darya.utility.AppFontManager;
 import ir.ham3da.darya.utility.AppSettings;
 import ir.ham3da.darya.utility.CustomProgress;
 import ir.ham3da.darya.utility.SetLanguage;
@@ -71,7 +70,7 @@ public class ActivityImageEdit extends AppCompatActivity implements OnPhotoEdito
         StickerBSFragment.StickerListener, EditingToolsAdapter.OnItemSelected, FilterListener {
 
     String poemText;
-
+    int fontId;
 
     private static final String TAG = ActivityImageEdit.class.getSimpleName();
     public static final String EXTRA_IMAGE_PATHS = "extra_image_paths";
@@ -93,6 +92,7 @@ public class ActivityImageEdit extends AppCompatActivity implements OnPhotoEdito
     private ConstraintSet mConstraintSet = new ConstraintSet();
     private boolean mIsFilterVisible, shareRequest;
     private Uri imagSevePath;
+    private Typeface mTextIranSansTf;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -159,7 +159,9 @@ public class ActivityImageEdit extends AppCompatActivity implements OnPhotoEdito
 
         PhotoEditorView mPhotoEditorView = findViewById(R.id.photoEditorView);
 
-        Typeface mTextIranSansTf = ResourcesCompat.getFont(this, R.font.iran_sans_mobile_light);
+        fontId = AppSettings.getPoemsFont();
+
+        mTextIranSansTf = AppFontManager.getTypeface(this, fontId);
 
         initViews();
 
@@ -261,6 +263,7 @@ public class ActivityImageEdit extends AppCompatActivity implements OnPhotoEdito
             public void onDone(String inputText, int colorCode) {
                 final TextStyleBuilder styleBuilder = new TextStyleBuilder();
                 styleBuilder.withTextColor(colorCode);
+                styleBuilder.withTextFont(mTextIranSansTf);
 
                 mPhotoEditor.editText(rootView, inputText, styleBuilder);
                 // mTxtCurrentTool.setText(R.string.label_text);
@@ -473,9 +476,11 @@ public class ActivityImageEdit extends AppCompatActivity implements OnPhotoEdito
                 TextEditorDialogFragment textEditorDialogFragment = TextEditorDialogFragment.show(this);
                 textEditorDialogFragment.setOnTextEditorListener(new TextEditorDialogFragment.TextEditor() {
                     @Override
-                    public void onDone(String inputText, int colorCode) {
+                    public void onDone(String inputText, int colorCode)
+                    {
                         final TextStyleBuilder styleBuilder = new TextStyleBuilder();
                         styleBuilder.withTextColor(colorCode);
+                        styleBuilder.withTextFont(mTextIranSansTf);
 
                         mPhotoEditor.addText(inputText, styleBuilder);
                         //mTxtCurrentTool.setText(R.string.label_text);

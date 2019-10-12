@@ -115,7 +115,7 @@ public class AdaptorAudio extends RecyclerView.Adapter<AdaptorAudio.ViewHolder> 
 
         String ques = String.format(context1.getString(R.string.poet_delete_poem_au), "<b>" + audioInfo.audio_artist + "</b>");
         final Dialog yesNoDialog = MyDialogs1.YesNoDialog(ques, context1.getDrawable(R.drawable.ic_delete_white_24dp), true);
-        Button noBtn = (Button) yesNoDialog.findViewById(R.id.noBtn);
+        Button noBtn = yesNoDialog.findViewById(R.id.noBtn);
         noBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,7 +123,7 @@ public class AdaptorAudio extends RecyclerView.Adapter<AdaptorAudio.ViewHolder> 
             }
         });
 
-        Button yesBtn = (Button) yesNoDialog.findViewById(R.id.yesBtn);
+        Button yesBtn = yesNoDialog.findViewById(R.id.yesBtn);
         yesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -179,14 +179,14 @@ public class AdaptorAudio extends RecyclerView.Adapter<AdaptorAudio.ViewHolder> 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            circle_progress_bar = (ProgressBar) itemView.findViewById(R.id.circle_progress_bar);
-            audio_name = (TextView) itemView.findViewById(R.id.audio_name);
+            circle_progress_bar = itemView.findViewById(R.id.circle_progress_bar);
+            audio_name = itemView.findViewById(R.id.audio_name);
 
-            imageButton_dl = (ImageButton) itemView.findViewById(R.id.imageButton_dl);
-            imageButton_play = (ImageButton) itemView.findViewById(R.id.imageButton_play);
+            imageButton_dl = itemView.findViewById(R.id.imageButton_dl);
+            imageButton_play = itemView.findViewById(R.id.imageButton_play);
 
-            horizontal_progress_bar = (ProgressBar) itemView.findViewById(R.id.horizontal_progress_bar);
-            audioCardView = (CardView) itemView.findViewById(R.id.audioCardView);
+            horizontal_progress_bar = itemView.findViewById(R.id.horizontal_progress_bar);
+            audioCardView = itemView.findViewById(R.id.audioCardView);
 
             audio_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
 

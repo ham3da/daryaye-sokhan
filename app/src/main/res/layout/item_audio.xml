@@ -14,7 +14,7 @@
         android:clickable="true"
         android:elevation="0dp"
         android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground">
+        android:foreground="?attr/selectableItemBackground">
 
         <RelativeLayout
             android:id="@+id/src_layout"
@@ -31,7 +31,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_volume_down_black_24dp"
+                app:srcCompat="@drawable/ic_volume_down_black_24dp"
                 android:background="@drawable/circle"
                 />
 

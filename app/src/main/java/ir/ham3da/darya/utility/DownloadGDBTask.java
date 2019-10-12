@@ -18,6 +18,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import ir.ham3da.darya.ActivityCollection;
+import ir.ham3da.darya.App;
 import ir.ham3da.darya.ganjoor.GanjoorDbBrowser;
 import ir.ham3da.darya.R;
 import ir.ham3da.darya.adaptors.GDBListAdaptor;
@@ -30,6 +31,7 @@ public class DownloadGDBTask extends AsyncTask<String, Integer, Long>
     private Context mContext;
     private String dlPath;
     private String fileName;
+    String TAG = "DownloadGDBTask";
 
     ActivityCollection activityCollection;
 
@@ -108,7 +110,7 @@ public class DownloadGDBTask extends AsyncTask<String, Integer, Long>
             // Output stream
             OutputStream output = new FileOutputStream(dlPath + "/" + fileName);
 
-            byte dl_data[] = new byte[1024];
+            byte[] dl_data = new byte[1024];
             int mLength;
 
             int resCode = conection.getResponseCode();
@@ -195,12 +197,26 @@ public class DownloadGDBTask extends AsyncTask<String, Integer, Long>
                 }
                 boolean imported = GanjoorDbBrowser1.ImportGdb(dlPath + "/" + fileName, ScheduleGDB1._Update_info);
 
-                if (imported) {
+                if (imported)
+                {
                     activityCollection.GDBListAdaptor1.notifyNewImported(ScheduleGDB1._Pos, ScheduleGDB1._PoetID);
                     activityCollection.ShowSuccessToast();
-                    file.delete();
+                    try {
+                        file.delete();
+                    }
+                    catch (Exception ex){
+                        Log.e(TAG, "onPostExecute: "+ex.getMessage());
+                    }
+
+                    App globalVariable = (App) mContext.getApplicationContext();
+                    globalVariable.setUpdatePoetList(true);
+
                 }
             }
+        }
+        else
+        {
+            activityCollection.DownloadFailToast();
         }
 
         this.customProgressDlg.dismiss();

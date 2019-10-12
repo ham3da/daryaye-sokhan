@@ -16,7 +16,7 @@ public class LangSettingList
      */
     public LangSettingList(int id, String text, String tag)
     {
-        this.id = id;;
+        this.id = id;
         this.text = text;
         this.Tag = tag;
     }
@@ -30,7 +30,7 @@ public class LangSettingList
      */
     public LangSettingList(int id, String text, String tag, String country)
     {
-        this.id = id;;
+        this.id = id;
         this.text = text;
         this.Tag = tag;
         this.Country = country;

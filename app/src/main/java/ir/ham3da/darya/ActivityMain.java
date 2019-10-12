@@ -1,11 +1,21 @@
 package ir.ham3da.darya;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+
+import android.os.Build;
 import android.os.Bundle;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -16,19 +26,15 @@ import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Handler;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Locale;
 
 import ir.ham3da.darya.ganjoor.GanjoorDbBrowser;
@@ -38,6 +44,7 @@ import ir.ham3da.darya.utility.AppSettings;
 import ir.ham3da.darya.utility.CustomProgress;
 import ir.ham3da.darya.utility.LangSettingList;
 import ir.ham3da.darya.utility.MyDialogs;
+import ir.ham3da.darya.utility.PreferenceHelper;
 import ir.ham3da.darya.utility.SetLanguage;
 import ir.ham3da.darya.utility.UtilFunctions;
 
@@ -51,17 +58,23 @@ public class ActivityMain extends AppCompatActivity
     String TAG = "ActivityMain";
     DrawerLayout drawer;
     int currentLocalIndex;
+    private FirebaseAnalytics mFirebaseAnalytics;
+
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(SetLanguage.wrap(newBase));
-
+        Context newContext = SetLanguage.wrap(newBase);
+        super.attachBaseContext(newContext);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            SetLanguage.wrap(this);
+        }
         setContentView(R.layout.activity_main);
 
         AppSettings.Init(this);
@@ -86,7 +99,7 @@ public class ActivityMain extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         String DB_PATH = AppSettings.getDatabasePath(this);
-        Log.e(TAG, "DB_PATH: "+DB_PATH);
+        //Log.e(TAG, "DB_PATH: " + DB_PATH);
         boolean exist_db = MainActivityUtil.checkExists(DB_PATH);
 
         if (exist_db) {
@@ -94,6 +107,26 @@ public class ActivityMain extends AppCompatActivity
         } else {
             mainActivityUtil1.extractGangoorDB(DB_PATH);
         }
+
+        get_token();
+    }
+
+
+    private void get_token() {
+        //  Log.e("Instance ID ",FirebaseInstanceId.getInstance().getId());
+
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "getInstanceId failed", task.getException());
+                            return;
+                        }
+                        String token = task.getResult().getToken();
+                        Log.e("Token", token);
+                    }
+                });
     }
 
     public void LoadDBFirstTime(CustomProgress dlg1) {
@@ -108,6 +141,52 @@ public class ActivityMain extends AppCompatActivity
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
+
+        showNotify();
+
+    }
+
+    public void showNotify() {
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+        boolean notifyed = false;
+        String notify_title, notify_url, notify_url_text, notify_text;
+        PreferenceHelper preferenceHelper = new PreferenceHelper(getApplicationContext());
+        notify_text = preferenceHelper.getKey("notify_text", "");
+
+        if (!notify_text.isEmpty()) {
+
+            notify_title = preferenceHelper.getKey("notify_title", "");
+            notify_url = preferenceHelper.getKey("notify_url", "");
+            notify_url_text = preferenceHelper.getKey("MyUrlText", "");
+            notifyed = true;
+            MyDialogs1.showNotify(notify_text, notify_title, notify_url, notify_url_text);
+
+        }
+
+
+        if (!notifyed) {
+
+            if (getIntent().getExtras() != null) {
+
+                for (String key : getIntent().getExtras().keySet()) {
+                    Log.e(TAG, key+": "+getIntent().getExtras().get(key) );
+                }
+
+                if (getIntent().getExtras().containsKey("Package") && getIntent().getExtras().getString("Package", "").equals(getPackageName())) {
+
+                    notify_text = getIntent().getExtras().getString("Text", "");
+                    notify_title = getIntent().getExtras().getString("Title", "");
+                    notify_url = getIntent().getExtras().getString("MyUrl", "");
+                    notify_url_text = getIntent().getExtras().getString("MyUrlText", "");
+
+                    MyDialogs1.showNotify(notify_text, notify_title, notify_url, notify_url_text);
+
+                }
+            }
+
+        }
     }
 
     @Override
@@ -151,21 +230,17 @@ public class ActivityMain extends AppCompatActivity
 
                     GanjoorPoem poem = GanjoorDbBrowser1.getPoemRandom(randomSelectedCategories);
 
-                    if(poem != null) {
+                    if (poem != null) {
 
-                        intent = new Intent(this, ActivityPoem.class);
+                        intent = new Intent(ActivityMain.this, ActivityPoem.class);
                         intent.putExtra("poem_id", poem._ID);
                         startActivity(intent);
                         Bungee.spin(this);
-                    }
-                    else
-                    {
+                    } else {
                         Toast.makeText(this, R.string.nothing_found, Toast.LENGTH_SHORT).show();
                     }
-                }
-                catch (Exception ex)
-                {
-                    Log.e(TAG, "getPoemRandom: "+ex.getMessage() );
+                } catch (Exception ex) {
+                    Log.e(TAG, "getPoemRandom: " + ex.getMessage());
                 }
 
 
@@ -174,12 +249,10 @@ public class ActivityMain extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    public boolean DOWNLOADEDING_NEW_POET = false;
 
     public void ShowCollectionAct() {
 
         if (UtilFunctions.isNetworkConnected(this)) {
-            DOWNLOADEDING_NEW_POET = true;
             Intent intent = new Intent(this, ActivityCollection.class);
             this.startActivity(intent);
             Bungee.card(this);
@@ -273,7 +346,6 @@ public class ActivityMain extends AppCompatActivity
 
     }
 
-
     public void restartApp() {
         Intent intent = new Intent(getBaseContext(), ActivityMain.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -292,10 +364,10 @@ public class ActivityMain extends AppCompatActivity
             GanjoorDbBrowser GanjoorDbBrowser1 = new GanjoorDbBrowser(this);
             int getPoetsCount = GanjoorDbBrowser1.getPoetsCount();
             int getBooksCount = booksCount;
-            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            NavigationView navigationView = findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
             View hview = navigationView.getHeaderView(0);
-            TextView textView_all_count = (TextView) hview.findViewById(R.id.textView_all_count);
+            TextView textView_all_count = hview.findViewById(R.id.textView_all_count);
             String str_count_all_word = String.format(Locale.getDefault(), getString(R.string.nav_header_subtitle), getBooksCount, getPoetsCount);
             textView_all_count.setText(str_count_all_word);
 

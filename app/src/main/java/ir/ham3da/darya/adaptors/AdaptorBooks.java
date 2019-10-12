@@ -144,8 +144,8 @@ public class AdaptorBooks extends RecyclerView.Adapter<AdaptorBooks.ViewHolder> 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            book_name = (TextView) itemView.findViewById(R.id.book_name);
-            bookCardView = (CardView) itemView.findViewById(R.id.bookCardView);
+            book_name = itemView.findViewById(R.id.book_name);
+            bookCardView = itemView.findViewById(R.id.bookCardView);
 
         }
     }

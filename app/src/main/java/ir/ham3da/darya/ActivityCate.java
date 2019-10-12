@@ -20,10 +20,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ir.ham3da.darya.adaptors.CateRecycleAdaptor;
+import ir.ham3da.darya.adaptors.CategoryRecycleAdaptor;
 import ir.ham3da.darya.adaptors.PoemsRecycleAdaptor;
+import ir.ham3da.darya.ganjoor.CateWithPoem;
 import ir.ham3da.darya.ganjoor.GanjoorCat;
 import ir.ham3da.darya.ganjoor.GanjoorDbBrowser;
 import ir.ham3da.darya.ganjoor.GanjoorPoem;
@@ -39,13 +42,14 @@ public class ActivityCate extends AppCompatActivity {
     GanjoorDbBrowser GanjoorDbBrowser1;
     GanjoorCat GanjoorCat1;
     GanjoorPoet GanjoorPoet1;
-    GanjoorPoem GanjoorPoem1;
 
     RecyclerView recyclerView;
 
     RecyclerView.Adapter adapter;
     List<GanjoorCat> cateList;
     List<GanjoorPoem> poemList;
+
+    List<CateWithPoem> cateWithPoemList;
 
     CollapsingToolbarLayout toolbarLayout;
 
@@ -58,12 +62,12 @@ public class ActivityCate extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cate);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_cate);
+        Toolbar toolbar = findViewById(R.id.toolbar_cate);
         setSupportActionBar(toolbar);
 
         UtilFunctions1 = new UtilFunctions(this);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,26 +111,63 @@ public class ActivityCate extends AppCompatActivity {
         }
 
         GanjoorPoet1 = GanjoorDbBrowser1.getPoet(poet_id);
-        TextView poet_name = (TextView) this.findViewById(R.id.poet_name);
+        TextView poet_name = this.findViewById(R.id.poet_name);
         if(fromCate)
         {
             GanjoorCat parentCate = GanjoorDbBrowser1.getCat(GanjoorCat1._ParentID);
             poet_name.setText(parentCate._Text);
+            toolbarLayout.setTitle(GanjoorCat1._Text);
         }
         else
         {
             poet_name.setText(GanjoorPoet1._Name);
+            if(GanjoorPoet1._CatID == GanjoorCat1._ID)
+            {
+
+                toolbarLayout.setTitle(getString(R.string.poetry_collection));
+            }
+            else {
+                toolbarLayout.setTitle(GanjoorCat1._Text);
+            }
+
         }
 
-        toolbarLayout.setTitle(GanjoorCat1._Text);
-        recyclerView = (RecyclerView) findViewById(R.id.cate_recycler_view);
-        cateList = GanjoorDbBrowser1.getSubCats(cate_id);
-        if (cateList.size() > 0) {
-            adapter = new CateRecycleAdaptor(cateList, this);
-        } else {
+
+        recyclerView = findViewById(R.id.cate_recycler_view);
+        //
+        int subCatsCount = GanjoorDbBrowser1.getSubCatsCount(cate_id);
+
+
+        if (subCatsCount > 0)
+        {
+            cateList = GanjoorDbBrowser1.getSubCats(cate_id);
+            cateWithPoemList = new ArrayList<>();
+            if(GanjoorPoet1._CatID != GanjoorCat1._ID) {
+                for (GanjoorCat cate1 : cateList) {
+                    CateWithPoem cateWithPoem = new CateWithPoem(cate1._ID, cate1._PoetID, cate1._Text, cate1._ParentID, cate1._Url, 0, CateWithPoem.TYPE_CATEGORY, false);
+                    cateWithPoemList.add(cateWithPoem);
+                }
+            }
+
+            poemList = GanjoorDbBrowser1.getPoems(cate_id);
+            if(poemList.size() > 0)
+            {
+                for (GanjoorPoem poem1: poemList)
+                {
+                    CateWithPoem cateWithPoem = new CateWithPoem(poem1._ID, poet_id, poem1._Title, poem1._CatID, poem1._Url, 0, CateWithPoem.TYPE_POEM, poem1._Faved);
+                    cateWithPoemList.add(cateWithPoem);
+                }
+            }
+
+            adapter = new CategoryRecycleAdaptor(cateWithPoemList, this);
+
+        }
+        else
+        {
             poemList = GanjoorDbBrowser1.getPoems(cate_id);
             adapter = new PoemsRecycleAdaptor(poemList, this);
         }
+
         recyclerView.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);

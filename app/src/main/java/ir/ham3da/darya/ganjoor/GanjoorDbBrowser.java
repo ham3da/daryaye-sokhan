@@ -183,7 +183,7 @@ public class GanjoorDbBrowser {
             return false;
         }
 
-        sql = "CREATE TABLE [verse] ([poem_id] INTEGER  NULL,[vorder] INTEGER  NULL,[position] INTEGER  NULL,[text] TEXT  NULL);";
+        sql = "CREATE TABLE [verse] ([poem_id] INTEGER NULL,[vorder] INTEGER  NULL,[position] INTEGER  NULL,[text] TEXT  NULL);";
         try {
             newDb.execSQL(sql);
         } catch (SQLException exp) {
@@ -255,6 +255,31 @@ public class GanjoorDbBrowser {
     private static final int IDX_POET_CATID = 2;
     private static final int IDX_POET_BIO = 3;
     private static final int IDX_POET_UPDATE = 4;
+
+
+    /**
+     * get Count of Poems by cat id
+     * @return int
+     */
+    public int getPoemsCount(int cat_id) {
+       // Log.e(TAG, "cat_id: "+cat_id);
+        if (getIsConnected()) {
+            try {
+                String countQuery1 = "SELECT  Count(*) FROM poem Where cat_id='"+cat_id+"'";
+                Cursor cursor_count = _db.rawQuery(countQuery1, null);
+                cursor_count.moveToFirst();
+                int count = cursor_count.getInt(0);
+                cursor_count.close();
+                return count;
+            } catch (Exception ex) {
+                Log.e("getPoetsCount", "err: " + ex.getMessage());
+                return 0;
+            }
+        } else {
+            return 0;
+        }
+
+    }
 
     /**
      * get Count of Poets
@@ -475,6 +500,34 @@ public class GanjoorDbBrowser {
         }
         return cats;
     }
+
+    /**
+     * Get Sub Categories Count
+     * @param CatId int category id
+     * @return int
+     */
+    public int getSubCatsCount(int CatId)
+    {
+
+        if (getIsConnected()) {
+            try {
+
+                String countQuery1 = String.format(Locale.ENGLISH, "SELECT  Count(*) FROM cat Where parent_id=%d", CatId);
+                Cursor cursor_count = _db.rawQuery(countQuery1, null);
+                cursor_count.moveToFirst();
+                int count = cursor_count.getInt(0);
+                cursor_count.close();
+                return count;
+            } catch (Exception ex) {
+                Log.e("getPoetsCount", "err: " + ex.getMessage());
+                return 0;
+            }
+        } else {
+            return 0;
+        }
+
+    }
+
 
     private static final int IDX_POEM_ID = 0;
     private static final int IDX_POEM_CATID = 1;
@@ -1141,8 +1194,11 @@ public class GanjoorDbBrowser {
                 zipFile.close();
             } catch (ZipException e) {
 
+                Log.e(TAG, "ImportGdb: "+ e.getMessage());
+
                 return ImportDbFastUnsafe(fileName, updateInfo);
             } catch (IOException e) {
+                Log.e(TAG, "ImportGdb io: "+ e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -1161,7 +1217,8 @@ public class GanjoorDbBrowser {
                 return false;
             }
             GanjoorDbBrowser gdbOpener = new GanjoorDbBrowser(this.mContext, dbPath);
-            if (!gdbOpener.getIsConnected()) {
+            if (!gdbOpener.getIsConnected())
+            {
                 this._LastError = gdbOpener._LastError;
                 return false;
             }
@@ -1244,9 +1301,13 @@ public class GanjoorDbBrowser {
                 cursor.close();
 
                 _db.setTransactionSuccessful();
-            } catch (Exception expData) {
+            } catch (Exception expData)
+            {
+                Log.e(TAG, "ImportDbFastUnsafe: "+expData.getMessage() );
                 bResult = false;
-            } finally {
+            }
+            finally
+            {
                 _db.endTransaction();
             }
 
@@ -1254,7 +1315,8 @@ public class GanjoorDbBrowser {
             gdbOpener.CloseDatabase();
 
             return bResult;
-        } catch (Exception exp) {
+        } catch (Exception exp)
+        {
             exp.printStackTrace();
             return false;
         }
@@ -1269,7 +1331,6 @@ public class GanjoorDbBrowser {
     private void UpgradeOldDbs() {
         //اگر جدول poet سه تا فیلد داشته باشد یعنی فیلد
         //description را ندارد و باید آن را اضافه کنیم
-
         try {
             Cursor cursor = _db.rawQuery("PRAGMA table_info('poet')", null);
             int n = 0;
@@ -1284,13 +1345,17 @@ public class GanjoorDbBrowser {
 
                 _db.execSQL("ALTER TABLE poet ADD description TEXT");
 
-                _db.execSQL("DELETE FROM gver");
-                _db.execSQL("INSERT INTO gver (curver) VALUES (" + String.valueOf(DatabaseVersion) + ")");
+                if(tableExists("gver")) {
+                    _db.execSQL("DELETE FROM gver");
+                    _db.execSQL("INSERT INTO gver (curver) VALUES (" + DatabaseVersion + ")");
+                }
 
             } else if (n == 4) {
 
                 _db.execSQL("ALTER TABLE poet ADD update_info VARCHAR(50)");
-                _db.execSQL("INSERT INTO gver (curver) VALUES (" + String.valueOf(DatabaseVersion) + ")");
+                if(tableExists("gver")) {
+                    _db.execSQL("INSERT INTO gver (curver) VALUES (" + DatabaseVersion + ")");
+                }
 
             }
         } catch (Exception ex) {
@@ -1298,6 +1363,36 @@ public class GanjoorDbBrowser {
         }
 
 
+    }
+
+    /**
+     *
+     * @param db
+     * @param tableName String table Name
+     * @return
+     */
+    public boolean tableExists(String tableName)
+    {
+        if (getIsConnected())
+        {
+
+            if (tableName == null) {
+                return false;
+            }
+            Cursor cursor = _db.rawQuery("SELECT COUNT(*) FROM sqlite_master WHERE type = ? AND name = ?", new String[]{"table", tableName});
+            if (!cursor.moveToFirst()) {
+                cursor.close();
+                return false;
+            }
+            int count = cursor.getInt(0);
+            cursor.close();
+            return count > 0;
+        }
+        else
+        {
+            return false;
+
+        }
     }
 
     /**

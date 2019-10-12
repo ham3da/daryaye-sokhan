@@ -44,16 +44,12 @@ public class AppSettings {
 
             Typeface font = ResourcesCompat.getFont(context, R.font.iran_sans_mobile_light);
             Typeface.create(font, Typeface.NORMAL);
-
+            setApplicationTypeface(font);
         }
-
     }
 
-
-
-    public static String getXmlSting(Context context)
-    {
-        StringBuilder aBuffer = new StringBuilder("");
+    public static String getXmlSting(Context context) {
+        StringBuilder aBuffer = new StringBuilder();
 
         File XMLFile = new File(context.getApplicationInfo().dataDir
                 + "/shared_prefs/" + context.getPackageName() + "_preferences.xml");
@@ -65,22 +61,20 @@ public class AppSettings {
                 aBuffer.append(aDataRow);
             }
             myReader.close();
-        }catch (Exception ex)
-        {
-            Log.e("getXmlSting", "err: "+  ex.getMessage());
+        } catch (Exception ex) {
+            Log.e("getXmlSting", "err: " + ex.getMessage());
         }
 
         return aBuffer.toString();
     }
 
-        public static String getSignature()
-        {
-            if (PreferenceManager1 == null) {
-                return "";
-            }
-            return PreferenceManager1.getKey("signature", "");
-
+    public static String getSignature() {
+        if (PreferenceManager1 == null) {
+            return "";
         }
+        return PreferenceManager1.getKey("signature", "");
+
+    }
 
     public static String getDatabaseName() {
 
@@ -97,13 +91,12 @@ public class AppSettings {
 
         File db_file = new File(context.getExternalFilesDir("databases"), "ganjoor.s3db");
         String defaultDLDir = db_file.getAbsolutePath();
-        if (!db_file.exists())
-        {
+        if (!db_file.exists()) {
             File db_path = context.getExternalFilesDir("databases");
             db_path.mkdirs();
         }
 
-       //String DB_PATH = context.getDatabasePath("ganjoor.s3db").getAbsolutePath();
+        //String DB_PATH = context.getDatabasePath("ganjoor.s3db").getAbsolutePath();
 
         String DB_PATH = db_file.getAbsolutePath();
         if (PreferenceManager1 == null) {
@@ -135,6 +128,27 @@ public class AppSettings {
         return PreferenceManager1.getKey("lastpoemvisited", 0);
 
     }
+
+
+    public static void setPoemsFont(int Value) {
+        if (PreferenceManager1 == null) {
+            return;
+        }
+        PreferenceManager1.setKey("poemFont", Value);
+    }
+
+    /**
+     * Get Poems Font id
+     *
+     * @return int def is 0
+     */
+    public static int getPoemsFont() {
+        if (PreferenceManager1 == null) {
+            return 0;
+        }
+        return PreferenceManager1.getKey("poemFont", 0);
+    }
+
 
     /**
      * ذخیرۀ شناسۀ رکورد آخرین شعری که کاربر داشته آن را می دیده
@@ -222,7 +236,7 @@ public class AppSettings {
 
         if (!dir.exists()) {
             dir.mkdir();
-             setDownloadPath(defaultDLDir);
+            setDownloadPath(defaultDLDir);
         }
 
         return PreferenceManager1.getKey("dwnldpath", defaultDLDir);
@@ -368,7 +382,7 @@ public class AppSettings {
 
         langSettingList = LangSettingLists.get(langSetting);
 
-        //Log.e("Lang", "getText: "+langSettingList.getText());
+        Log.e("Lang", "Lang: " + langSettingList.getText());
 
         return langSettingList;
 
@@ -440,8 +454,8 @@ public class AppSettings {
         if (PreferenceManager1 == null) {
             return "24";
         }
-        return  "24";
-       // return PreferenceManager1.getKey("randomSelectedCat", "24"); برای آینده
+        return "24";
+        // return PreferenceManager1.getKey("randomSelectedCat", "24"); برای آینده
     }
 
 
@@ -538,16 +552,15 @@ public class AppSettings {
 
     /**
      * Folder to save image by Photo editor
+     *
      * @return
      */
-    public  static String getImageFolderPath()
-    {
+    public static String getImageFolderPath() {
 
         String dirPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
                 + File.separator + "Darya";
         File dir = new File(dirPath);
-        if (!dir.exists())
-        {
+        if (!dir.exists()) {
             dir.mkdir();
         }
         return dirPath;

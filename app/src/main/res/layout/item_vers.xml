@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:animateLayoutChanges="true"
-        android:foreground="?android:attr/selectableItemBackground"
+        android:foreground="?attr/selectableItemBackground"
         android:focusable="true">
         <RelativeLayout
             android:layout_width="match_parent"

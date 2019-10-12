@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import ir.ham3da.darya.App;
 import ir.ham3da.darya.adaptors.AdapterPoetsExpand;
 import ir.ham3da.darya.ganjoor.GanjoorDbBrowser;
 import ir.ham3da.darya.utility.AppSettings;
@@ -47,7 +48,7 @@ public class MainPoetsFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_poets_list, container, false);
 
-        recycler = (RecyclerView) root.findViewById(R.id.main_recycler);
+        recycler = root.findViewById(R.id.main_recycler);
 
         final FragmentActivity fragmentActivity = getActivity();
 
@@ -58,7 +59,7 @@ public class MainPoetsFragment extends Fragment {
         String DB_PATH = AppSettings.getDatabasePath(mContext);
 
 
-        swipeRefreshLayout1 = (SwipeRefreshLayout) root.findViewById(R.id.simpleSwipeRefreshLayout1);
+        swipeRefreshLayout1 = root.findViewById(R.id.simpleSwipeRefreshLayout1);
 
         // String DB_PATH = AppSettings.getDatabasePath( mContext );
         //  mainActivityUtil1 = new MainActivityUtil(mContext);
@@ -141,25 +142,19 @@ public class MainPoetsFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        ActivityMain activityMain = ((ActivityMain) getActivity());
-
-        if (activityMain!= null && activityMain.DOWNLOADEDING_NEW_POET) {
-            activityMain.DOWNLOADEDING_NEW_POET = false;
+        App globalVariable = (App) mContext.getApplicationContext();
+        if( globalVariable.getUpdatePoetList())
+        {
+            globalVariable.setUpdatePoetList(false);
             GanjoorDbBrowser1 = new GanjoorDbBrowser(mContext);
-            if (poetCounts != GanjoorDbBrowser1.getPoetsCount()) {
-
-                refreshList(0);
-            }
+            refreshList(0);
         }
-
-
     }
 
     @Override
     public void onPause() {
 
         super.onPause();
-
     }
 
 //

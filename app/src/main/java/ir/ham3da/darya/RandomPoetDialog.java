@@ -51,9 +51,9 @@ public class RandomPoetDialog {
             this.mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             this.mDialog.setContentView(R.layout.search_limits);
 
-            this.poetSpinner = (Spinner) this.mDialog.findViewById(R.id.poet_list_spinner);
-            Button okBtn = (Button) this.mDialog.findViewById(R.id.okBtn);
-            Button cancelBtn = (Button) this.mDialog.findViewById(R.id.cancelBtn);
+            this.poetSpinner = this.mDialog.findViewById(R.id.poet_list_spinner);
+            Button okBtn = this.mDialog.findViewById(R.id.okBtn);
+            Button cancelBtn = this.mDialog.findViewById(R.id.cancelBtn);
 
            TextView progress_title = this.mDialog.findViewById(R.id.progress_title);
             progress_title.setText(R.string.random_poetry_scope);

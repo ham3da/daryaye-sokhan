@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import ir.ham3da.darya.utility.AppFontManager;
 import ir.ham3da.darya.utility.AppSettings;
 import ir.ham3da.darya.ganjoor.GanjoorPoet;
 import ir.ham3da.darya.ganjoor.GanjoorVerseB;
@@ -38,6 +39,7 @@ public class PoemVerseRecycleAdaptor extends RecyclerView.Adapter<PoemVerseRecyc
     Boolean indexingStatus;
     float textSize;
     String signature;
+    int fontId;
 
     public PoemVerseRecycleAdaptor(List<GanjoorVerseB> GanjoorVerseList, GanjoorPoet poet, Context context, boolean IndexingStatus, String FindStr) {
         this.GanjoorVerseList1 = GanjoorVerseList;
@@ -50,6 +52,8 @@ public class PoemVerseRecycleAdaptor extends RecyclerView.Adapter<PoemVerseRecyc
         AppSettings.Init(context);
         this.textSize = AppSettings.getTextSize();
         signature =  AppSettings.getSignature();
+        fontId = AppSettings.getPoemsFont();
+
     }
 
     public int getFirstLineContainFindStr(int vorder) {
@@ -309,15 +313,19 @@ public class PoemVerseRecycleAdaptor extends RecyclerView.Adapter<PoemVerseRecyc
         public ViewHolder(View itemView) {
             super(itemView);
 
-            verse_text1 = (TextView) itemView.findViewById(R.id.verse_text1);
-            verse_text2 = (TextView) itemView.findViewById(R.id.verse_text2);
+            verse_text1 = itemView.findViewById(R.id.verse_text1);
+            verse_text2 = itemView.findViewById(R.id.verse_text2);
 
             verse_text1.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
             verse_text2.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
 
-            versCardView = (CardView) itemView.findViewById(R.id.versCardView);
+
+            AppFontManager.setFont(context1, verse_text1, fontId);
+            AppFontManager.setFont(context1, verse_text2, fontId);
+
+            versCardView = itemView.findViewById(R.id.versCardView);
             // CheckBox1 = (CheckBox) itemView.findViewById(R.id.verse_check_box);
-            verse_layout = (RelativeLayout) itemView.findViewById(R.id.verse_layout);
+            verse_layout = itemView.findViewById(R.id.verse_layout);
 
 
         }

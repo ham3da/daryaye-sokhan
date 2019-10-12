@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 import java.util.Locale;
 
+import ir.ham3da.darya.utility.AppFontManager;
 import ir.ham3da.darya.utility.AppSettings;
 import ir.ham3da.darya.Bungee;
 import ir.ham3da.darya.ganjoor.FavoritesPoem;
@@ -35,7 +36,7 @@ public class FavoritesAdaptor extends RecyclerView.Adapter<FavoritesAdaptor.View
     private Context context1;
     GanjoorDbBrowser GanjoorDbBrowser1;
     private float textSize;
-
+    int fontId;
     public FavoritesAdaptor(List<FavoritesPoem> favoriteList1, Context mCtx)
     {
         this.favoriteList = favoriteList1;
@@ -43,6 +44,7 @@ public class FavoritesAdaptor extends RecyclerView.Adapter<FavoritesAdaptor.View
        this.GanjoorDbBrowser1 = new GanjoorDbBrowser(this.context1);
         AppSettings.Init( this.context1 );
         this.textSize = AppSettings.getTextSize();
+        fontId = AppSettings.getPoemsFont();
     }
 
 
@@ -119,7 +121,7 @@ public class FavoritesAdaptor extends RecyclerView.Adapter<FavoritesAdaptor.View
 
         final Dialog yesNoDialog = MyDialogs1.YesNoDialog(ques , context1.getDrawable(R.drawable.ic_delete_white_24dp) , true);
 
-        Button noBtn = (Button) yesNoDialog.findViewById(R.id.noBtn);
+        Button noBtn = yesNoDialog.findViewById(R.id.noBtn);
         noBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -127,7 +129,7 @@ public class FavoritesAdaptor extends RecyclerView.Adapter<FavoritesAdaptor.View
             }
         });
 
-        Button yesBtn = (Button) yesNoDialog.findViewById(R.id.yesBtn);
+        Button yesBtn = yesNoDialog.findViewById(R.id.yesBtn);
         yesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -184,13 +186,16 @@ public class FavoritesAdaptor extends RecyclerView.Adapter<FavoritesAdaptor.View
         {
             super(itemView);
 
-            fav_title = (TextView) itemView.findViewById(R.id.fav_title);
-            fav_reference = (TextView) itemView.findViewById(R.id.fav_reference);
-            moreOptions = (ImageButton) itemView.findViewById(R.id.moreOptions);
-            favCardView = (CardView) itemView.findViewById(R.id.favCardView);
+            fav_title = itemView.findViewById(R.id.fav_title);
+            fav_reference = itemView.findViewById(R.id.fav_reference);
+            moreOptions = itemView.findViewById(R.id.moreOptions);
+            favCardView = itemView.findViewById(R.id.favCardView);
 
             fav_title.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
             fav_reference.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+
+            AppFontManager.setFont(context1, fav_title, fontId);
+            AppFontManager.setFont(context1, fav_reference, fontId);
         }
     }
 }

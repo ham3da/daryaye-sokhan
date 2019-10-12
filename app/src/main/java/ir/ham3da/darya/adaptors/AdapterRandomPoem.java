@@ -154,9 +154,9 @@ public class AdapterRandomPoem extends PoetAndBooksAdapter<AdapterRandomPoem.Poe
 
         private PoetsViewHolder(View view) {
             super(view, (ImageView) view.findViewById(R.id.item_arrow));
-            poets_name = (TextView) view.findViewById(R.id.poets_name);
-            checkbox_poet = (CheckBox) view.findViewById(R.id.checkbox_poet);
-            poets_liner = (LinearLayout) view.findViewById(R.id.poets_liner);
+            poets_name = view.findViewById(R.id.poets_name);
+            checkbox_poet = view.findViewById(R.id.checkbox_poet);
+            poets_liner = view.findViewById(R.id.poets_liner);
             poets_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
         }
 
@@ -208,9 +208,9 @@ public class AdapterRandomPoem extends PoetAndBooksAdapter<AdapterRandomPoem.Poe
         public BooksViewHolder(View view) {
             super(view);
 
-            books_name = (TextView) view.findViewById(R.id.books_name);
-            checkbox_book = (CheckBox) view.findViewById(R.id.checkbox_book);
-            books_liner = (LinearLayout) view.findViewById(R.id.books_liner);
+            books_name = view.findViewById(R.id.books_name);
+            checkbox_book = view.findViewById(R.id.checkbox_book);
+            books_liner = view.findViewById(R.id.books_liner);
 
             books_name.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
         }

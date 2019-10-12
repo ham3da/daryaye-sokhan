@@ -85,10 +85,10 @@ public class ActivityCollection extends AppCompatActivity {
 
         setTitle(R.string.collections);
 
-        recyclerViewCollection = (RecyclerView) findViewById(R.id.RecyclerViewCollection);
+        recyclerViewCollection = findViewById(R.id.RecyclerViewCollection);
         _DbBrowser = new GanjoorDbBrowser(this);
 
-        simpleSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.simpleSwipeRefreshLayout);
+        simpleSwipeRefreshLayout = findViewById(R.id.simpleSwipeRefreshLayout);
 
         simpleSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -269,6 +269,8 @@ public class ActivityCollection extends AppCompatActivity {
     public void ShowSuccessToast() {
         Toast.makeText(this, getString(R.string.success_add), Toast.LENGTH_SHORT).show();
     }
-
+    public void DownloadFailToast() {
+        Toast.makeText(this, getString(R.string.download_failed), Toast.LENGTH_SHORT).show();
+    }
 //Downloader
 }
