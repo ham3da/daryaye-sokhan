@@ -8,6 +8,9 @@
 ## Used repositories:
 * [ganjooroid](https://github.com/ganjoor/ganjooroid)
 * [ganjoor](https://github.com/ganjoor/ganjoor)
+* [PhotoEditor](https://github.com/burhanrashid52/PhotoEditor)
+* [Rastikerdar Fonts](https://rastikerdar.github.io/)
+
 
 ## APK Link
 * [Google Play](https://play.google.com/store/apps/details?id=ir.ham3da.darya)
