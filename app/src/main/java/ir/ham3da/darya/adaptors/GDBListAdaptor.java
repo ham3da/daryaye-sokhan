@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Locale;
+
 import ir.ham3da.darya.ActivityCollection;
 import ir.ham3da.darya.App;
 import ir.ham3da.darya.utility.AppSettings;
@@ -64,7 +66,10 @@ public class GDBListAdaptor extends RecyclerView.Adapter<GDBListAdaptor.ViewHold
         final int finalPosition = position;
 
 
-        String poetInfo = GDBInfo1._CatName +" - "+android.text.format.Formatter.formatShortFileSize(context1, GDBInfo1._FileSizeInByte) ;
+        String title =  String.format(Locale.getDefault(), "%d. ", GDBInfo1._Index) + GDBInfo1._CatName;
+        String poetInfo =  title +" - "+android.text.format.Formatter.formatShortFileSize(context1, GDBInfo1._FileSizeInByte) ;
+
+
         holder.poet_name.setText(poetInfo);
 
         final boolean poetInstalled = GDBInfo1._Exist;
@@ -99,8 +104,8 @@ public class GDBListAdaptor extends RecyclerView.Adapter<GDBListAdaptor.ViewHold
                 } else {
                     //install poet
                     String fileName = URLUtil.guessFileName(GDBInfo1._DownloadUrl, null, null);
-                    ScheduleGDB scheduleGDB = new ScheduleGDB(finalPosition, GDBInfo1._PoetID, GDBInfo1._DownloadUrl, fileName, GDBInfo1._PubDateString + "|" + GDBInfo1._FileSizeInByte, false);
-                    activityCollection.StartDownload(holder, scheduleGDB);
+                    ScheduleGDB scheduleGDB = new ScheduleGDB(finalPosition, GDBInfo1._PoetID, GDBInfo1._CatName, GDBInfo1._DownloadUrl, fileName, GDBInfo1._PubDateString + "|" + GDBInfo1._FileSizeInByte, false);
+                    activityCollection.StartDownload(holder, scheduleGDB, false);
                 }
             }
         });
@@ -110,18 +115,26 @@ public class GDBListAdaptor extends RecyclerView.Adapter<GDBListAdaptor.ViewHold
             public void onClick(View view) {
                 if (poetInstalled) {
                     String fileName = URLUtil.guessFileName(GDBInfo1._DownloadUrl, null, null);
-                    ScheduleGDB scheduleGDB = new ScheduleGDB(finalPosition, GDBInfo1._PoetID, GDBInfo1._DownloadUrl, fileName, GDBInfo1._PubDateString + "|" + GDBInfo1._FileSizeInByte, true);
-                    activityCollection.StartDownload(holder, scheduleGDB);
+                    ScheduleGDB scheduleGDB = new ScheduleGDB(finalPosition, GDBInfo1._PoetID, GDBInfo1._CatName, GDBInfo1._DownloadUrl, fileName, GDBInfo1._PubDateString + "|" + GDBInfo1._FileSizeInByte, true);
+                    activityCollection.StartDownload(holder, scheduleGDB, false);
                 }
             }
         });
     }
 
-    public void notifyNewImported(int position, int PoetID) {
+    public void notifyNewImported(int position, int PoetID, boolean DownloadAll) {
         if (GanjoorDbBrowser1.getPoet(PoetID) != null) {
             gDBList._Items.get(position)._Exist = true;
             gDBList._Items.get(position)._UpdateAvailable = false;
+
             notifyItemChanged(position);
+
+            if(DownloadAll)
+            {
+
+                activityCollection.DlIndex++;
+                activityCollection.StartDownloadALL();
+            }
         }
     }
 

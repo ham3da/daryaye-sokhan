@@ -43,8 +43,9 @@ public class DownloadGDBTask extends AsyncTask<String, Integer, Long>
     ScheduleGDB ScheduleGDB1;
 
     private boolean has_error;
+    private boolean DownloadAll;
 
-    public DownloadGDBTask(GDBListAdaptor.ViewHolder holder, Context context, ScheduleGDB scheduleGDB) {
+    public DownloadGDBTask(GDBListAdaptor.ViewHolder holder, Context context, ScheduleGDB scheduleGDB, boolean downloadAll) {
         gdbHolder = holder;
         dlPath = AppSettings.getDownloadPath(context);
         ScheduleGDB1 = scheduleGDB;
@@ -54,7 +55,7 @@ public class DownloadGDBTask extends AsyncTask<String, Integer, Long>
         GanjoorDbBrowser1 = new GanjoorDbBrowser(mContext);
         has_error = false;
         this.customProgressDlg = new CustomProgress(mContext);
-
+        DownloadAll = downloadAll;
     }
 
     /**
@@ -67,8 +68,9 @@ public class DownloadGDBTask extends AsyncTask<String, Integer, Long>
         super.onPreExecute();
         this.customProgressDlg.showProgress(this.mContext.getString(R.string.downloading), "0 %", false, false, false);
 
-        this.customProgressDlg.setProgress(0, mContext.getString(R.string.file_received), mContext.getString(R.string.file_size));
+        this.customProgressDlg.setProgress(0, mContext.getString(R.string.file_received), mContext.getString(R.string.file_size), ScheduleGDB1._CateName );
 
+        this.customProgressDlg.getView(R.id.progress_description).setVisibility(View.VISIBLE);
         this.customProgressDlg.getView(R.id.progress_text1).setVisibility(View.VISIBLE);
         this.customProgressDlg.getView(R.id.progress_text2).setVisibility(View.VISIBLE);
         this.customProgressDlg.getView(R.id.cancel_layout).setVisibility(View.VISIBLE);
@@ -199,8 +201,8 @@ public class DownloadGDBTask extends AsyncTask<String, Integer, Long>
 
                 if (imported)
                 {
-                    activityCollection.GDBListAdaptor1.notifyNewImported(ScheduleGDB1._Pos, ScheduleGDB1._PoetID);
-                    activityCollection.ShowSuccessToast();
+                    activityCollection.GDBListAdaptor1.notifyNewImported(ScheduleGDB1._Pos, ScheduleGDB1._PoetID, DownloadAll);
+                    activityCollection.ShowSuccessDownloadToast(DownloadAll);
                     try {
                         file.delete();
                     }

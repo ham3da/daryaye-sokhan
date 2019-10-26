@@ -3,6 +3,7 @@ package ir.ham3da.darya;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -10,12 +11,19 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Context;
 
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
 
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.webkit.URLUtil;
+import android.widget.SearchView;
+
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -31,6 +39,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
 
+import ir.ham3da.darya.ganjoor.GDBInfo;
 import ir.ham3da.darya.ganjoor.GDBList;
 import ir.ham3da.darya.ganjoor.GanjoorDbBrowser;
 import ir.ham3da.darya.utility.AppSettings;
@@ -38,6 +47,7 @@ import ir.ham3da.darya.utility.DownloadGDBTask;
 import ir.ham3da.darya.adaptors.GDBListAdaptor;
 import ir.ham3da.darya.adaptors.ScheduleGDB;
 import ir.ham3da.darya.utility.DownloadFromUrl;
+
 import ir.ham3da.darya.utility.MyDialogs;
 import ir.ham3da.darya.utility.SetLanguage;
 import ir.ham3da.darya.utility.UtilFunctions;
@@ -52,15 +62,97 @@ public class ActivityCollection extends AppCompatActivity {
     MyDialogs MyDialogs1;
     String dlPath;
 
+    SearchView searchView;
+    boolean searchViewHasFocus = false;
 
-    public void StartDownload(GDBListAdaptor.ViewHolder holder, ScheduleGDB ScheduleGDB1) {
+    String TAG = "ActivityCollection";
+
+    private GDBList _MixedList = null;
+
+
+    public int DlIndex = 0;
+    public void StartDownloadALL()
+    {
+
+        if (_MixedList != null)
+        {
+
+            if(_MixedList._Items.size() > DlIndex) {
+                GDBListAdaptor.ViewHolder viewHolder = (GDBListAdaptor.ViewHolder) recyclerViewCollection.findViewHolderForAdapterPosition(DlIndex);
+
+                GDBInfo GDBInfo1 =  _MixedList._Items.get(DlIndex);
+
+                 boolean poetInstalled = GDBInfo1._Exist;
+                 boolean updateAvailable = GDBInfo1._UpdateAvailable;
+
+                String fileName = URLUtil.guessFileName(GDBInfo1._DownloadUrl, null, null);
+                ScheduleGDB scheduleGDB;
+                if (poetInstalled)
+                {
+                    if(updateAvailable) {
+                        scheduleGDB = new ScheduleGDB(DlIndex, GDBInfo1._PoetID, GDBInfo1._CatName, GDBInfo1._DownloadUrl, fileName, GDBInfo1._PubDateString + "|" + GDBInfo1._FileSizeInByte, true);
+                        StartDownload(viewHolder, scheduleGDB, true);
+                    }
+                    else
+                    {
+                        DlIndex++;
+                        StartDownloadALL();
+                    }
+                }
+                else
+                {
+                    scheduleGDB = new ScheduleGDB(DlIndex, GDBInfo1._PoetID, GDBInfo1._CatName, GDBInfo1._DownloadUrl, fileName, GDBInfo1._PubDateString + "|" + GDBInfo1._FileSizeInByte, false);
+                    StartDownload(viewHolder, scheduleGDB, true);
+
+                }
+
+
+            }
+        }
+
+    }
+
+
+    public void StartDownload(GDBListAdaptor.ViewHolder holder, ScheduleGDB ScheduleGDB1, boolean downloadAll) {
 
         if (UtilFunctions.isNetworkConnected(this)) {
-            DownloadGDBTask downloadGDBTask = new DownloadGDBTask(holder, this, ScheduleGDB1);
+            DownloadGDBTask downloadGDBTask = new DownloadGDBTask(holder, this, ScheduleGDB1, downloadAll);
             downloadGDBTask.execute(ScheduleGDB1._URL);
 
         } else {
             MyDialogs1.ShowWarningMessage(getString(R.string.internet_failed));
+        }
+
+    }
+
+
+    private void reloadRecycleView() {
+        if (UtilFunctions.isNetworkConnected(this)) {
+            loadItems();
+        } else {
+            finish();
+            Toast.makeText(this, getString(R.string.internet_failed), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    private void searchInRecycleView(String findStr) {
+        if (!findStr.isEmpty()) {
+            if (_MixedList != null) {
+
+                GDBList _MixedListSearch = new GDBList(_MixedList);
+                _MixedListSearch._Items.clear();
+
+                int Index = 0;
+                for (GDBInfo gdbInfo : _MixedList._Items) {
+                    if (gdbInfo._CatName.contains(findStr)) {
+                        Index++;
+                        gdbInfo._Index = Index;
+                        _MixedListSearch._Items.add(gdbInfo);
+                    }
+                }
+                showGDBList(_MixedListSearch);
+            }
         }
 
     }
@@ -100,13 +192,7 @@ public class ActivityCollection extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerViewCollection.setLayoutManager(linearLayoutManager);
 
-        if (UtilFunctions.isNetworkConnected(this))
-        {
-            loadItems();
-        } else {
-            finish();
-            Toast.makeText(this, getString(R.string.internet_failed), Toast.LENGTH_SHORT).show();
-        }
+        reloadRecycleView();
 
         dlPath = AppSettings.getDownloadPath(this);
         MyDialogs1 = new MyDialogs(this);
@@ -115,27 +201,96 @@ public class ActivityCollection extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        Bungee.slideDown(this); //fire the slide left animation
+        if (searchViewHasFocus) {
+            searchView.setIconified(true);
+        } else {
+            super.onBackPressed();
+            Bungee.slideDown(this); //fire the slide left animation
+        }
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.collection_menu, menu);
+
+        MenuItem action_search = menu.findItem(R.id.action_search);
+
+        searchView = (SearchView) action_search.getActionView();
+
+        searchView.setQueryHint(getString(R.string.enter_poet_name));
+
+        try {
+            Typeface typeface = ResourcesCompat.getFont(this, R.font.iran_sans_mobile_light);
+            int id = searchView.getContext()
+                    .getResources()
+                    .getIdentifier("android:id/search_src_text", null, null);
+            TextView textView = (TextView) searchView.findViewById(id);
+            textView.setTypeface(typeface);
+        } catch (Exception ex) {
+            Log.e(TAG, "msg: " + ex.getMessage());
+        }
+
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Toast like print
+//                Toast.makeText(ActivityCollection.this, "SearchOnQueryTextSubmit: " + query, Toast.LENGTH_SHORT).show();
+//                if (!searchView.isIconified()) {
+//                    searchView.setIconified(true);
+//                }
+//                action_search.collapseActionView();
+
+                searchInRecycleView(query.trim());
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+
+        });
+
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                searchViewHasFocus = hasFocus;
+            }
+        });
+
+
+        return true;
     }
 
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
 
         int id = item.getItemId();
-        if (id == android.R.id.home) {
-            finish();
-            Bungee.slideDown(this);
+
+        switch (id) {
+            case android.R.id.home:
+                if (searchViewHasFocus) {
+                    searchView.setIconified(true);
+                } else {
+                    super.onBackPressed();
+                    Bungee.slideDown(this); //fire the slide left animation
+                }
+                break;
+            case R.id.download_all:
+                DlIndex = 0;
+                StartDownloadALL();
+                break;
+            case R.id.reload_all:
+                reloadRecycleView();
+                break;
+
+
         }
+
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -156,9 +311,6 @@ public class ActivityCollection extends AppCompatActivity {
             "newgdbs.xml",
             "programgdbs.xml"*/
     };
-
-
-    private GDBList _MixedList = null;
 
 
     private void SetLists(String XMLString) {
@@ -183,9 +335,7 @@ public class ActivityCollection extends AppCompatActivity {
 
                 Log.e("XmlPullParserException", "SetLists err: " + e.getMessage());
                 // e.printStackTrace();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Log.e("Exception", "SetLists err: " + ex.getMessage());
             }
 
@@ -210,12 +360,9 @@ public class ActivityCollection extends AppCompatActivity {
      */
     protected void showGDBList(GDBList list) {
 
-        if (GDBListAdaptor1 != null) {
-            GDBListAdaptor1.notifyDataSetChanged();
-        } else {
-            GDBListAdaptor1 = new GDBListAdaptor(list, this);
-            recyclerViewCollection.setAdapter(GDBListAdaptor1);
-        }
+
+        GDBListAdaptor1 = new GDBListAdaptor(list, this);
+        recyclerViewCollection.setAdapter(GDBListAdaptor1);
         recyclerViewCollection.scrollTo(0, 0);
     }
 
@@ -248,7 +395,7 @@ public class ActivityCollection extends AppCompatActivity {
             try {
                 return DownloadFromUrl.downloadDataFromUrl(urls[0]);
             } catch (Exception e) {
-                Log.e("DownloadFromUrl", "doInBackground: "+e.getMessage());
+                Log.e("DownloadFromUrl", "doInBackground: " + e.getMessage());
                 return null;
             }
         }
@@ -266,9 +413,20 @@ public class ActivityCollection extends AppCompatActivity {
     }
 
 
-    public void ShowSuccessToast() {
+    public void ShowSuccessDownloadToast(boolean DownloadAll)
+    {
+        if(DownloadAll){
+            if( DlIndex+1 == _MixedList._Items.size())
+            {
+                Toast.makeText(this, getString(R.string.all_collectons_added), Toast.LENGTH_SHORT).show();
+            }
+        }
+        else
+        {
         Toast.makeText(this, getString(R.string.success_add), Toast.LENGTH_SHORT).show();
+        }
     }
+
     public void DownloadFailToast() {
         Toast.makeText(this, getString(R.string.download_failed), Toast.LENGTH_SHORT).show();
     }

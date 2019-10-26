@@ -17,8 +17,9 @@ public class CateWithPoem
      * @param StartPoem
      * @param itemType
      * @param isFave
+     * @param FirstVerse
      */
-    public CateWithPoem(int ID, int PoetID, String Text, int ParentID, String UrlAddress, int StartPoem, int itemType, boolean isFave) {
+    public CateWithPoem(int ID, int PoetID, String Text, int ParentID, String UrlAddress, int StartPoem, int itemType, boolean isFave, String FirstVerse) {
         _ID = ID;
         _PoetID = PoetID;
         _Text = Text;
@@ -27,6 +28,7 @@ public class CateWithPoem
         _StartPoem = StartPoem;
         _Type = itemType;
         _Faved = isFave;
+        _FirstVerse = FirstVerse;
     }
 
 
@@ -45,6 +47,13 @@ public class CateWithPoem
      * @database-field text
      */
     public String _Text;
+
+
+    /**
+     * متن اولین خط یا مصرع شعر
+     */
+    public String _FirstVerse;
+
     /**
      * @summary شناسۀ رکورد بخش والد
      * id از رکورد دیگری از جدول cat

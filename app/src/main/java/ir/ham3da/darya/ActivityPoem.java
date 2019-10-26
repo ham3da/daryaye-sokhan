@@ -66,6 +66,8 @@ import ir.ham3da.darya.utility.UtilFunctions;
 public class ActivityPoem extends AppCompatActivity {
 
     int poem_id = 0;
+    int vOrder;
+
     String cate_url;
 
     MyDialogs MyDialogs1;
@@ -116,14 +118,24 @@ public class ActivityPoem extends AppCompatActivity {
 
     private Handler hdlr = new Handler();
 
+
     @Override
-    protected void onPause() {
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("poem_id", poem_id);
+
+    }
+
+    @Override
+    protected void onPause()
+    {
         super.onPause();
 
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
 
         if (AUDIO_DOWNLOAD_SHOW && poem_id > 0) {
@@ -169,27 +181,19 @@ public class ActivityPoem extends AppCompatActivity {
 
         mContext = this;
 
-        try {
-
-            audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-
-
-            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-
-            requestAudioFocus(afChangeListener, AudioManager.STREAM_VOICE_CALL, AudioManager.AUDIOFOCUS_GAIN);
-
-
-        } catch (Exception ex) {
-            Log.e(TAG, "onCreate: " + ex.getMessage());
-        }
-
 
         UtilFunctions1 = new UtilFunctions(this);
         GanjoorDbBrowser1 = new GanjoorDbBrowser(this);
         MyDialogs1 = new MyDialogs(this);
 
-        poem_id = getIntent().getIntExtra("poem_id", 0);
-        int vOrder = getIntent().getIntExtra("vOrder", 0);
+        if (savedInstanceState != null) {
+            poem_id = savedInstanceState.getInt("poem_id", 0);
+        }
+        else {
+            poem_id = getIntent().getIntExtra("poem_id", 0);
+        }
+
+        vOrder = getIntent().getIntExtra("vOrder", 0);
 
         from_search = getIntent().getBooleanExtra("from_search", false);
         findStr = getIntent().getStringExtra("findStr");
@@ -202,7 +206,9 @@ public class ActivityPoem extends AppCompatActivity {
             GanjoorPoet1 = GanjoorDbBrowser1.getPoet(GanjoorCat1._PoetID);
             baseCategory = GanjoorDbBrowser1.getBaseCategory(GanjoorCat1._ID);
             verseList = GanjoorDbBrowser1.getVerses(poem_id);
+
             verseArrangement = UtilFunctions1.VerseArrangement(verseList);
+
             appBarLayout = findViewById(R.id.app_bar);
             toolbarLayout = findViewById(R.id.poem_toolbar_layout);
             UtilFunctions1.setupToolbarLayout(toolbarLayout, true);
@@ -443,9 +449,6 @@ public class ActivityPoem extends AppCompatActivity {
             }
         });
 
-        mPlayer = new MediaPlayer();
-
-
     }
 
     private void sharePoemAsImage() {
@@ -483,12 +486,14 @@ public class ActivityPoem extends AppCompatActivity {
         }
     }
 
-
-    private void PlayAudio(PoemAudio poemAudio) {
+    private void PlayAudio(PoemAudio poemAudio)
+    {
+        SetupAudio();
 
         try {
 
-            if (MEDIA_IS_LOADED) {
+
+            if (MEDIA_IS_LOADED && mPlayer != null) {
                 mPlayer.stop();
             }
             mPlayer = new MediaPlayer();
@@ -525,7 +530,6 @@ public class ActivityPoem extends AppCompatActivity {
         }
     }
 
-
     private void showAudioList(View view) {
         existAudioList = GanjoorDbBrowser1.getPoemAudios(poem_id);
 
@@ -561,7 +565,6 @@ public class ActivityPoem extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(SetLanguage.wrap(newBase));
     }
-
 
     private void loadNextPreviousPoem(boolean next) {
 
@@ -635,7 +638,6 @@ public class ActivityPoem extends AppCompatActivity {
         }
     }
 
-
     private void checkIsFavorite() {
         if (GanjoorPoem1._Faved) {
             fab.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.mark_fav)));
@@ -687,7 +689,6 @@ public class ActivityPoem extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     private void showAudioBar() {
         if (audio_player_bar.getVisibility() != View.VISIBLE) {
@@ -774,10 +775,14 @@ public class ActivityPoem extends AppCompatActivity {
         }
     };
 
-    private void pauseAudio() {
+    private void pauseAudio()
+    {
 
-        if (MEDIA_IS_LOADED && mPlayer != null) {
-            if (mPlayer.isPlaying()) {
+        if (MEDIA_IS_LOADED && mPlayer != null)
+        {
+            if (mPlayer.isPlaying())
+            {
+                Log.e(TAG, "pauseAudio: true");
                 mPlayer.pause();
                 play_audio.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_black_24dp));
             }
@@ -792,10 +797,24 @@ public class ActivityPoem extends AppCompatActivity {
         }
     }
 
+    private  void SetupAudio()
+    {
+        try {
+
+            if(audioManager == null) {
+                audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+                requestAudioFocus(afChangeListener, AudioManager.STREAM_VOICE_CALL, AudioManager.AUDIOFOCUS_GAIN);
+            }
+
+        } catch (Exception ex) {
+            Log.e(TAG, "SetupAudio: " + ex.getMessage());
+        }
+    }
+
     AudioManager.OnAudioFocusChangeListener afChangeListener =
             new AudioManager.OnAudioFocusChangeListener() {
                 public void onAudioFocusChange(int focusChange) {
-                    //Log.e(TAG, "onAudioFocusChange: " + focusChange);
+                   Log.e(TAG, "onAudioFocusChange: " + focusChange);
                     switch (focusChange) {
                         case AudioManager.AUDIOFOCUS_LOSS:
                             pauseAudio();

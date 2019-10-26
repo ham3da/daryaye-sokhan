@@ -180,5 +180,9 @@
     <string name="open">Open</string>
     <string name="short_introduction">Short introduction</string>
     <string name="website">Website</string>
+    <string name="enter_poet_name">Enter poet name</string>
+    <string name="download_all">Download all</string>
+    <string name="reload">Reload</string>
+    <string name="all_collectons_added">All collections have been downloaded successfully.</string>
 
 </resources>

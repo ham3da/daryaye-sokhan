@@ -169,4 +169,8 @@
     <string name="open">باز کردن</string>
     <string name="short_introduction">معرفی کوتاه</string>
     <string name="website">وب‌سایت</string>
+    <string name="enter_poet_name">نام شاعر را وارد کنید</string>
+    <string name="download_all">دریافت همه</string>
+    <string name="reload">فراخوانی مجدد</string>
+    <string name="all_collectons_added">تمام مجموعه‌ها با موفقیت دریافت شدند.</string>
 </resources>

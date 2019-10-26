@@ -103,6 +103,7 @@ public class GDBList {
         XmlPullParser xpp = factory.newPullParser();
         xpp.setInput(inputStream, null);
         int eventType = xpp.getEventType();
+
         while (eventType != XmlPullParser.END_DOCUMENT) {
             if (eventType == XmlPullParser.START_TAG) {
                 String tagName = xpp.getName();
@@ -114,7 +115,7 @@ public class GDBList {
 
                         if (gdbInfo._Exist) {
 
-                            String dateAndSize = gdbInfo._PubDateString   + "|" + gdbInfo._FileSizeInByte;
+                            String dateAndSize = gdbInfo._PubDateString + "|" + gdbInfo._FileSizeInByte;
                             gdbInfo._UpdateAvailable = CheckUpdateAvailable(gdbInfo._PoetID, poets, dateAndSize);
                         }
                         // if(db.getPoet(gdbInfo._PoetID) == null){
@@ -138,24 +139,38 @@ public class GDBList {
      * @return مخلوط شده لیستهای ورودی با یکی کردن موارد تکراری
      */
     public static GDBList Mix(List<GDBList> lists) {
-        if (lists == null)
+        if (lists == null) {
             return null;
+        }
         if (lists.size() > 0) {
             GDBList result = new GDBList(lists.get(0));
-            for (int i = 1; i < lists.size(); i++) {
+            for (int i = 1; i < lists.size(); i++)
+            {
                 GDBList list = lists.get(i);
-                for (GDBInfo Item : list._Items) {
+                for (GDBInfo Item : list._Items)
+                {
                     int idx = result.FindSimilarIndex(Item);
-                    if (idx == -1) {
-                        result._Items.add(Item);
-                    } else {
-                        if (result._Items.get(idx)._PubDate.compareTo(Item._PubDate) < 0) {
+                    if (idx == -1)
+                    {
+                          result._Items.add(Item);
+                    }
+                    else
+                    {
+                        if (result._Items.get(idx)._PubDate.compareTo(Item._PubDate) < 0)
+                        {
+
                             GDBInfo repItem = new GDBInfo(Item);
                             result._Items.set(idx, repItem);
                         }
                     }
                 }
 
+            }
+            int Index = 0;
+            for ( GDBInfo Item: result._Items)
+            {
+                Index++;
+                Item._Index = Index;
             }
             return result;
         }

@@ -321,7 +321,8 @@ public class UtilFunctions {
         int position = 0;
         int index = 0;
         int setIndex = 0;
-        for (int i = 0; i < GanjoorVerseList.size(); i++) {
+        for (int i = 0; i < GanjoorVerseList.size(); i++)
+        {
             GanjoorVerse ganjoorVerse1 = GanjoorVerseList.get(i);
             GanjoorVerse ganjoorVerse2;
             GanjoorVerseB ganjoorVerseB1;
@@ -331,20 +332,24 @@ public class UtilFunctions {
             int vOrder1 = 0;
             int vOrder2 = 0;
 
-            switch (ganjoorVerse1._Position) {
+            switch (ganjoorVerse1._Position)
+            {
                 case GanjoorVerse.POSTION_RIGHT:
-
                     verse_text1 = ganjoorVerse1._Text;//Verse 1
                     vOrder1 = ganjoorVerse1._Order;
 
-                    if (GanjoorVerseList.size() - 1 >= i + 1) {
+                    if (GanjoorVerseList.size() - 1 >= i + 1)
+                    {
                         ganjoorVerse2 = GanjoorVerseList.get(i + 1);
+
                         verse_text2 = ganjoorVerse2._Text;//Verse 2
                         vOrder2 = ganjoorVerse2._Order;
 
                     } else {
                         verse_text2 = "";
                     }
+
+
                     position++;
                     if (!ganjoorVerse1._Text.trim().equals("□") && !ganjoorVerse1._Text.trim().isEmpty()) {
                         index++;
@@ -352,6 +357,7 @@ public class UtilFunctions {
                     } else {
                         setIndex = -1;
                     }
+
                     ganjoorVerseB1 = new GanjoorVerseB(ganjoorVerse1._PoemID, position, verse_text1, verse_text2, false, false, setIndex, vOrder1, vOrder2);
                     ganjoorVerseBList.add(ganjoorVerseB1);//Add verse to VerseList
                     break;
@@ -391,6 +397,7 @@ public class UtilFunctions {
                     break;
                 case GanjoorVerse.POSITION_SINGLE:
                 case GanjoorVerse.POSITION_PARAGRAPH:
+
                     verse_text2 = "";
                     vOrder1 = ganjoorVerse1._Order;
                     vOrder2 = 0;

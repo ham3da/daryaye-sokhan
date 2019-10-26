@@ -57,10 +57,24 @@
             android:visibility="visible" />
 
         <TextView
-            android:id="@+id/progress_text1"
+            android:id="@+id/progress_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/progress_text"
+            android:layout_marginTop="5dp"
+            android:background="@android:color/transparent"
+            android:textAlignment="textStart"
+            android:text="Text0"
+            android:textColor="@color/feed_text_color"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/progress_text1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/progress_description"
             android:layout_marginTop="5dp"
             android:background="@android:color/transparent"
             android:gravity="start"

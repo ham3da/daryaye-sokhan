@@ -128,10 +128,12 @@ public class PoemVerseRecycleAdaptor extends RecyclerView.Adapter<PoemVerseRecyc
         }
 
 
-        if (GanjoorVerse1._Centered) {
+        if (GanjoorVerse1._Centered)
+        {
             holder.verse_text1.setGravity(Gravity.CENTER_HORIZONTAL);
-        } else {
-            //
+        }
+        else
+        {
             if (GanjoorVerse1._Text1.equals("□")) {
                 holder.verse_text1.setGravity(Gravity.LEFT);
             } else {
@@ -139,7 +141,8 @@ public class PoemVerseRecycleAdaptor extends RecyclerView.Adapter<PoemVerseRecyc
             }
         }
 
-        if (!GanjoorVerse1._Text2.isEmpty()) {
+        if (!GanjoorVerse1._Text2.isEmpty())
+        {
             if (holder.verse_text2.getVisibility() == View.GONE) {
                 holder.verse_text2.setVisibility(View.VISIBLE);
             }

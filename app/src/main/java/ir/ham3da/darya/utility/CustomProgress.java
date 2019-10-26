@@ -78,6 +78,35 @@ public class CustomProgress {
         mProgressBar.setProgress(percent);
     }
 
+    public void setProgress(int percent, String Text1, String Text2, String Description )
+    {
+        TextView progressText = mDialog.findViewById(R.id.progress_text);
+        TextView progress_description = mDialog.findViewById(R.id.progress_description);
+        TextView progressText1 = mDialog.findViewById(R.id.progress_text1);
+        TextView progressText2 = mDialog.findViewById(R.id.progress_text2);
+
+        String percentStr = String.format(Locale.getDefault(), "%d", percent)+ " %";
+        progressText.setText(percentStr);
+
+        if(!Text1.isEmpty())
+        {
+            progressText1.setText(Text1);
+        }
+
+        if(!Text2.isEmpty())
+        {
+            progressText2.setText(Text2);
+        }
+
+        if(!Description.isEmpty())
+        {
+            progress_description.setText(Description);
+        }
+
+        ProgressBar  mProgressBar = mDialog.findViewById(R.id.progress_bar);
+        mProgressBar.setProgress(percent);
+    }
+
     public void setProgress(int percent, String Text1, String Text2 )
     {
         TextView progressText = mDialog.findViewById(R.id.progress_text);

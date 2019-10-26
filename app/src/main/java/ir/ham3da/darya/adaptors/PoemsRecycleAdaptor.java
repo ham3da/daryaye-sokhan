@@ -53,6 +53,15 @@ public class PoemsRecycleAdaptor extends RecyclerView.Adapter<PoemsRecycleAdapto
 
         final int poem_id = GanjoorPoem1._ID;
 
+        if( !GanjoorPoem1._FirstVerse.isEmpty()) {
+            holder.item_first_verse.setText(GanjoorPoem1._FirstVerse);
+            holder.item_first_verse.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            holder.item_first_verse.setVisibility(View.GONE);
+        }
+
         //Run Poem activity
         holder.cateCardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +86,7 @@ public class PoemsRecycleAdaptor extends RecyclerView.Adapter<PoemsRecycleAdapto
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView item_text;
+        public TextView item_first_verse;
         public ImageView avatar_item;
         public CardView cateCardView;
 
@@ -85,10 +95,15 @@ public class PoemsRecycleAdaptor extends RecyclerView.Adapter<PoemsRecycleAdapto
             super(itemView);
 
             item_text = itemView.findViewById(R.id.item_text);
+            item_first_verse = itemView.findViewById(R.id.item_first_verse);
             avatar_item = itemView.findViewById(R.id.avatar_item);
+
             cateCardView = itemView.findViewById(R.id.cateCardView);
 
             item_text.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+            item_first_verse.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+
+            AppFontManager.setFont(context1, item_first_verse, fontId);
             AppFontManager.setFont(context1, item_text, fontId);
 
         }

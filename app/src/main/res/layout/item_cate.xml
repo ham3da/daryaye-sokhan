@@ -23,18 +23,23 @@
 
             <ImageView
                 android:id="@+id/avatar_item"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/ic_book_36dp" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/avatar_item">
+
             <TextView
                 android:id="@+id/item_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/avatar_item"
                 android:gravity="center_vertical"
                 android:paddingEnd="4dp"
                 android:paddingStart="4dp"
@@ -46,6 +51,24 @@
                 android:ellipsize="end"
                 />
 
+            <TextView
+                android:id="@+id/item_first_verse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/item_text"
+                android:gravity="center_vertical"
+                android:paddingEnd="4dp"
+                android:paddingStart="4dp"
+                android:paddingBottom="4dp"
+                android:text="@string/verse"
+                android:textColor="@color/title_color"
+                android:textSize="14sp"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:visibility="gone"
+                />
+
+            </RelativeLayout>
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>

@@ -53,10 +53,21 @@ public class CategoryRecycleAdaptor extends RecyclerView.Adapter<CategoryRecycle
         CateWithPoem GanjoorCat1 = CateWithPoemList.get(position);
 
         holder.item_text.setText(GanjoorCat1._Text);
+
         final String text = GanjoorCat1._Text;
 
         final  int item_id = GanjoorCat1._ID;
         final  int item_type = GanjoorCat1._Type;
+
+        if(item_type != CateWithPoem.TYPE_CATEGORY &&  !GanjoorCat1._FirstVerse.isEmpty()) {
+            holder.item_first_verse.setText( GanjoorCat1._FirstVerse);
+            holder.item_first_verse.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            holder.item_first_verse.setVisibility(View.GONE);
+        }
+
 
         //holder.avatar_item.
         holder.cateCardView.setOnClickListener(new View.OnClickListener() {
@@ -92,21 +103,26 @@ public class CategoryRecycleAdaptor extends RecyclerView.Adapter<CategoryRecycle
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView item_text;
+        public TextView item_first_verse;
+
         public ImageView avatar_item;
         public CardView cateCardView;
+
 
         public ViewHolder(View itemView)
         {
             super(itemView);
 
             item_text = itemView.findViewById(R.id.item_text);
+            item_first_verse = itemView.findViewById(R.id.item_first_verse);
             avatar_item = itemView.findViewById(R.id.avatar_item);
             cateCardView = itemView.findViewById(R.id.cateCardView);
 
             item_text.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+            item_first_verse.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
 
             AppFontManager.setFont(context1, item_text, fontId);
-
+            AppFontManager.setFont(context1, item_first_verse, fontId);
         }
     }
 }

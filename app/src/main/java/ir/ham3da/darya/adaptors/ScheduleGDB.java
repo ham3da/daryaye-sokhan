@@ -8,8 +8,9 @@ public class ScheduleGDB
     public String _FileName;
     public String _Update_info;
     public boolean _DoUpdate;
+    public String _CateName;
 
-    public ScheduleGDB(int Pos, int PoetID, String URL, String FileName,  String Update_info, boolean DoUpdate)
+    public ScheduleGDB(int Pos, int PoetID, String CateName, String URL, String FileName,  String Update_info, boolean DoUpdate)
     {
         _Pos = Pos;
         _PoetID = PoetID;
@@ -17,6 +18,7 @@ public class ScheduleGDB
         _FileName = FileName;
         _Update_info = Update_info;
         _DoUpdate = DoUpdate;
+        _CateName = CateName;
     }
 
 }

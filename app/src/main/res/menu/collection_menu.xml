@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="ir.ham3da.darya.ActivityCollection">
+    <item
+        android:id="@+id/action_search"
+        android:orderInCategory="100"
+        android:title="@string/search"
+        android:icon="@drawable/ic_search_white_24dp"
+        app:showAsAction="ifRoom"
+        app:actionViewClass="android.widget.SearchView"
+        />
+
+    <item android:id="@+id/download_all"
+        android:icon="@drawable/ic_save"
+        app:showAsAction="collapseActionView"
+        android:title="@string/download_all" />
+
+    <item android:id="@+id/reload_all"
+        android:icon="@drawable/ic_refresh_white_24dp"
+        app:showAsAction="collapseActionView"
+        android:title="@string/reload" />
+</menu>

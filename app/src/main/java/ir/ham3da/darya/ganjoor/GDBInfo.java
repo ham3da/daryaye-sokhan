@@ -29,7 +29,8 @@ public class GDBInfo {
      * سازندۀ کپی کنندۀ ورودی
      * @param source ورودی
      */
-    public GDBInfo(GDBInfo source){
+    public GDBInfo(GDBInfo source)
+    {
         _CatName 			= source._CatName;
         _PoetID 			= source._PoetID;
         _CatID 			= source._CatID;
@@ -49,6 +50,7 @@ public class GDBInfo {
         _UpdateAvailable = source._UpdateAvailable;
         _Exist = source._Exist;
         _PubDateString = source._PubDateString;
+        _Index = source._Index;
 
     }
 
@@ -244,4 +246,7 @@ public class GDBInfo {
      * آیا آپدیت جدیدی برای اشعار این شاعر موجود است؟
      */
     public boolean _UpdateAvailable = false;
+
+    public int _Index;
+
 }

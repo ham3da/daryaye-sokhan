@@ -144,17 +144,17 @@ public class ActivityCate extends AppCompatActivity {
             cateWithPoemList = new ArrayList<>();
             if(GanjoorPoet1._CatID != GanjoorCat1._ID) {
                 for (GanjoorCat cate1 : cateList) {
-                    CateWithPoem cateWithPoem = new CateWithPoem(cate1._ID, cate1._PoetID, cate1._Text, cate1._ParentID, cate1._Url, 0, CateWithPoem.TYPE_CATEGORY, false);
+                    CateWithPoem cateWithPoem = new CateWithPoem(cate1._ID, cate1._PoetID, cate1._Text, cate1._ParentID, cate1._Url, 0, CateWithPoem.TYPE_CATEGORY, false, "");
                     cateWithPoemList.add(cateWithPoem);
                 }
             }
 
-            poemList = GanjoorDbBrowser1.getPoems(cate_id);
+            poemList = GanjoorDbBrowser1.getPoems(cate_id, true);
             if(poemList.size() > 0)
             {
                 for (GanjoorPoem poem1: poemList)
                 {
-                    CateWithPoem cateWithPoem = new CateWithPoem(poem1._ID, poet_id, poem1._Title, poem1._CatID, poem1._Url, 0, CateWithPoem.TYPE_POEM, poem1._Faved);
+                    CateWithPoem cateWithPoem = new CateWithPoem(poem1._ID, poet_id, poem1._Title, poem1._CatID, poem1._Url, 0, CateWithPoem.TYPE_POEM, poem1._Faved, poem1._FirstVerse);
                     cateWithPoemList.add(cateWithPoem);
                 }
             }
@@ -164,7 +164,7 @@ public class ActivityCate extends AppCompatActivity {
         }
         else
         {
-            poemList = GanjoorDbBrowser1.getPoems(cate_id);
+            poemList = GanjoorDbBrowser1.getPoems(cate_id, true);
             adapter = new PoemsRecycleAdaptor(poemList, this);
         }
 

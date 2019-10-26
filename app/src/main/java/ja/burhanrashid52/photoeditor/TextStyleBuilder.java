@@ -163,11 +163,7 @@ public class TextStyleBuilder {
     }
 
     protected void applyBackgroundDrawable(TextView textView, Drawable bg) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             textView.setBackground(bg);
-        } else {
-            textView.setBackgroundDrawable(bg);
-        }
     }
 
     protected void applyTextAppearance(TextView textView, int styleAppearance) {

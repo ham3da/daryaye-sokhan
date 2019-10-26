@@ -1450,8 +1450,7 @@ public class GanjoorDbBrowser {
         DeleteCat(getCat(Poet._CatID));
         String sql = String.format(Locale.ENGLISH, "DELETE FROM poet WHERE id=%d;", Poet._ID);
         _db.execSQL(sql);
-        // _db.execSQL("VACUUM"); This command will crash on Android
-    }
+     }
 
 
     /**
