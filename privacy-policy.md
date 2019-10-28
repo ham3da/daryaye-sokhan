@@ -67,7 +67,12 @@ information for any other purpose.</li>
 <p>We may update our Privacy Policy from time to time. Thus, you are advised to
     review this section after each update app for any changes. We will notify you of any changes
     by posting the new Privacy Policy on this section.</p>
+<h3>Developer</h3>
+<p>
+    Javad Ahshamian
+</p>
 <h3>Contact Us</h3>
 <p>If you have any questions or suggestions about my Privacy Policy, do not
-    hesitate to contact we at <a href="mailto:ham3da.j@gmail.com">ham3da.j@gmail.com</a>.</p>
+    hesitate to contact we at <a href="mailto:ham3da.j@gmail.com">ham3da.j@gmail.com</a>.
+</p>
 
