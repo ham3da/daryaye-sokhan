@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ImageDecoder;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -46,6 +47,7 @@ import ir.ham3da.darya.filters.FilterListener;
 import ir.ham3da.darya.filters.FilterViewAdapter;
 import ir.ham3da.darya.imageeditor.EmojiBSFragment;
 import ir.ham3da.darya.imageeditor.PropertiesBSFragment;
+import ir.ham3da.darya.imageeditor.ShadowColorDialogFragment;
 import ir.ham3da.darya.imageeditor.StickerBSFragment;
 import ir.ham3da.darya.imageeditor.TextEditorDialogFragment;
 import ir.ham3da.darya.tools.EditingToolsAdapter;
@@ -63,11 +65,15 @@ import ja.burhanrashid52.photoeditor.SaveSettings;
 import ja.burhanrashid52.photoeditor.TextStyleBuilder;
 import ja.burhanrashid52.photoeditor.ViewType;
 
-public class ActivityImageEdit extends AppCompatActivity implements OnPhotoEditorListener,
+public class ActivityImageEdit extends AppCompatActivity implements
+        OnPhotoEditorListener,
         View.OnClickListener,
         PropertiesBSFragment.Properties,
         EmojiBSFragment.EmojiListener,
-        StickerBSFragment.StickerListener, EditingToolsAdapter.OnItemSelected, FilterListener {
+        StickerBSFragment.StickerListener,
+        EditingToolsAdapter.OnItemSelected,
+        FilterListener
+{
 
     String poemText;
     int fontId;
@@ -187,7 +193,7 @@ public class ActivityImageEdit extends AppCompatActivity implements OnPhotoEdito
                 .build(); // build photo editor sdk
 
         TextStyleBuilder textStyleBuilder = new TextStyleBuilder();
-        textStyleBuilder.withTextColor(Color.WHITE);
+        textStyleBuilder.withTextColor(Color.rgb(0,0,0));
         textStyleBuilder.withTextFont(mTextIranSansTf);
 
 
@@ -212,7 +218,7 @@ public class ActivityImageEdit extends AppCompatActivity implements OnPhotoEdito
         ImageView imgCamera;
         ImageView imgGallery;
         //ImageView imgSave;
-        //ImageView imgClose;
+       // ImageView imgClose;
 
         mPhotoEditorView = findViewById(R.id.photoEditorView);
         //mTxtCurrentTool = findViewById(R.id.txtCurrentTool);
@@ -234,7 +240,7 @@ public class ActivityImageEdit extends AppCompatActivity implements OnPhotoEdito
 
         mRvFilters.setVisibility(View.GONE);
 
-        mPhotoEditorView.getSource().setImageDrawable(getDrawable(R.drawable.paper));
+        //mPhotoEditorView.getSource().setImageDrawable(getDrawable(R.drawable.paper));
 
     }
 
@@ -271,8 +277,26 @@ public class ActivityImageEdit extends AppCompatActivity implements OnPhotoEdito
         });
     }
 
+
     @Override
-    public void onAddViewListener(ViewType viewType, int numberOfAddedViews) {
+    public void onShadowColorChangeListener(View rootView, int colorCode, float shadowDx, float shadowDy, float shadowRadius) {
+        ShadowColorDialogFragment shadowColorDialogFragment =
+                ShadowColorDialogFragment.show(this, shadowDx, shadowDy, shadowRadius, colorCode);
+
+
+        shadowColorDialogFragment.setOnShadowColorListener(new ShadowColorDialogFragment.ShadowColor() {
+            @Override
+            public void onDone(float shadow_Dx, float shadow_Dy, float shadowRadius, int colorCode)
+            {
+                mPhotoEditor.setTextShadow(rootView, shadow_Dx, shadow_Dy, shadowRadius, colorCode );
+            }
+        });
+    }
+
+
+    @Override
+    public void onAddViewListener(ViewType viewType, int numberOfAddedViews, View rootView)
+    {
         Log.d(TAG, "onAddViewListener() called with: viewType = [" + viewType + "], numberOfAddedViews = [" + numberOfAddedViews + "]");
     }
 
@@ -391,7 +415,18 @@ public class ActivityImageEdit extends AppCompatActivity implements OnPhotoEdito
                     try {
                         //mPhotoEditor.clearAllViews();
                         Uri uri = data.getData();
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+
+
+                        Bitmap bitmap ;
+
+                        if(Build.VERSION.SDK_INT < 28) {
+                            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                        }
+                        else
+                        {
+                            ImageDecoder.Source source  = ImageDecoder.createSource(getContentResolver(), uri);
+                            bitmap = ImageDecoder.decodeBitmap(source);
+                        }
                         mPhotoEditorView.getSource().setImageBitmap(bitmap);
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -436,24 +471,18 @@ public class ActivityImageEdit extends AppCompatActivity implements OnPhotoEdito
     private void showSaveDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.alret_save);
-        builder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                saveImage(false);
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
+
+        builder.setPositiveButton(R.string.save,(dialog, which) -> {
+            saveImage(false);
         });
 
-        builder.setNeutralButton(R.string.discard, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
+
+        builder.setNegativeButton(R.string.cancel,(dialog, which) -> {
+            dialog.dismiss();
+        });
+
+        builder.setNeutralButton(R.string.discard,(dialog, which) -> {
+            finish();
         });
         builder.create().show();
 
@@ -474,17 +503,14 @@ public class ActivityImageEdit extends AppCompatActivity implements OnPhotoEdito
                 break;
             case TEXT:
                 TextEditorDialogFragment textEditorDialogFragment = TextEditorDialogFragment.show(this);
-                textEditorDialogFragment.setOnTextEditorListener(new TextEditorDialogFragment.TextEditor() {
-                    @Override
-                    public void onDone(String inputText, int colorCode)
-                    {
-                        final TextStyleBuilder styleBuilder = new TextStyleBuilder();
-                        styleBuilder.withTextColor(colorCode);
-                        styleBuilder.withTextFont(mTextIranSansTf);
 
-                        mPhotoEditor.addText(inputText, styleBuilder);
-                        //mTxtCurrentTool.setText(R.string.label_text);
-                    }
+                textEditorDialogFragment.setOnTextEditorListener((inputText, colorCode) -> {
+                    final TextStyleBuilder styleBuilder = new TextStyleBuilder();
+                    styleBuilder.withTextColor(colorCode);
+                    styleBuilder.withTextFont(mTextIranSansTf);
+
+                    mPhotoEditor.addText(inputText, styleBuilder);
+                    //mTxtCurrentTool.setText(R.string.label_text);
                 });
                 break;
             case ERASER:
@@ -501,6 +527,7 @@ public class ActivityImageEdit extends AppCompatActivity implements OnPhotoEdito
             case STICKER:
                 mStickerBSFragment.show(getSupportFragmentManager(), mStickerBSFragment.getTag());
                 break;
+
         }
     }
 
@@ -552,7 +579,7 @@ public class ActivityImageEdit extends AppCompatActivity implements OnPhotoEdito
                     //resume tasks needing this permission
                     saveImage(shareRequest);
                 } else {
-
+                    //
                 }
                 break;
 
@@ -563,7 +590,7 @@ public class ActivityImageEdit extends AppCompatActivity implements OnPhotoEdito
                     //resume tasks needing this permission
                     //SharePdfFile();
                 } else {
-
+                    //
                 }
                 break;
         }

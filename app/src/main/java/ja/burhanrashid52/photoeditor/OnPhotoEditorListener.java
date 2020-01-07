@@ -23,15 +23,26 @@ public interface OnPhotoEditorListener {
      */
     void onEditTextChangeListener(View rootView, String text, int colorCode);
 
+     /**
+     *
+     * @param rootView
+     * @param colorCode
+     * @param shadowDx
+     * @param shadowDy
+     * @param shadowRadius
+     */
+    void onShadowColorChangeListener(View rootView, int colorCode, float shadowDx, float shadowDy, float shadowRadius);
+
     /**
      * This is a callback when user adds any view on the {@link PhotoEditorView} it can be
      * brush,text or sticker i.e bitmap on parent view
      *
      * @param viewType           enum which define type of view is added
      * @param numberOfAddedViews number of views currently added
+     * @param rootView added view
      * @see ViewType
      */
-    void onAddViewListener(ViewType viewType, int numberOfAddedViews);
+    void onAddViewListener(ViewType viewType, int numberOfAddedViews, View rootView);
 
     /**
      * This is a callback when user remove any view on the {@link PhotoEditorView} it happens when usually

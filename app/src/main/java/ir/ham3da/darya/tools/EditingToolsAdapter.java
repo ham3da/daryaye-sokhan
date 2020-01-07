@@ -40,6 +40,7 @@ public class EditingToolsAdapter extends RecyclerView.Adapter<EditingToolsAdapte
         mToolList.add(new ToolModel(mContext.getString(R.string.label_filter), R.drawable.ic_photo_filter, ToolType.FILTER));
         mToolList.add(new ToolModel(mContext.getString(R.string.label_emoji), R.drawable.ic_insert_emoticon, ToolType.EMOJI));
         mToolList.add(new ToolModel(mContext.getString(R.string.label_sticker), R.drawable.ic_sticker, ToolType.STICKER));
+
     }
 
     public interface OnItemSelected {

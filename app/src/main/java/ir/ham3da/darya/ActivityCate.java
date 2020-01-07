@@ -56,6 +56,7 @@ public class ActivityCate extends AppCompatActivity {
     UtilFunctions UtilFunctions1;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -69,20 +70,19 @@ public class ActivityCate extends AppCompatActivity {
 
         FloatingActionButton fab = findViewById(R.id.fab);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        fab.setOnClickListener(v ->
+        {
 
-                if (!cate_url.isEmpty())
-                {
-                    UtilFunctions1.openUrl(cate_url);
-                }
-                else
-                {
-                    Toast.makeText(view.getContext(), R.string.url_empty, Toast.LENGTH_SHORT).show();
-                }
-            }
+        }
+        );
+
+
+        fab.setOnLongClickListener(v -> {
+            Toast.makeText(v.getContext(), R.string.dont_forget_poetry, Toast.LENGTH_SHORT).show();
+            return true;
         });
+
+
 
 
 
@@ -104,11 +104,11 @@ public class ActivityCate extends AppCompatActivity {
         poet_id = GanjoorCat1._PoetID;
         cate_url = GanjoorCat1._Url;
 
-        if (cate_url.isEmpty())
-        {
-            fab.setEnabled(false);
-
-        }
+//        if (cate_url.isEmpty())
+//        {
+//            fab.setEnabled(false);
+//
+//        }
 
         GanjoorPoet1 = GanjoorDbBrowser1.getPoet(poet_id);
         TextView poet_name = this.findViewById(R.id.poet_name);

@@ -221,9 +221,9 @@ public class MyDialogs {
             context.startActivity(intent);
             Bungee.card(context);
 
-            //ShowWebDialog(title, text, R.drawable.ic_help_24px);
 
-        } catch (Exception ex) {
+        } catch (Exception ex)
+        {
             ex.printStackTrace();
         }
     }
@@ -417,29 +417,24 @@ public class MyDialogs {
             Button noBtn = yesNoDialog.findViewById(R.id.noBtn);
             yesBtn.setText(notify_url_text);
             noBtn.setText(R.string.cancel);
-            yesBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
 
-                    preferenceHelper.setKey("notify_title", "");
-                    preferenceHelper.setKey("notify_url", "");
-                    preferenceHelper.setKey("notify_text", "");
-                    preferenceHelper.setKey("MyUrlText", "");
-                    yesNoDialog.dismiss();
-                    UtilFunctions1.openUrl(notify_url);
-                }
+            yesBtn.setOnClickListener(v -> {
+                preferenceHelper.setKey("notify_title", "");
+                preferenceHelper.setKey("notify_url", "");
+                preferenceHelper.setKey("notify_text", "");
+                preferenceHelper.setKey("MyUrlText", "");
+                yesNoDialog.dismiss();
+                UtilFunctions1.openUrl(notify_url);
             });
 
-            noBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    preferenceHelper.setKey("notify_title", "");
-                    preferenceHelper.setKey("notify_url", "");
-                    preferenceHelper.setKey("notify_text", "");
-                    preferenceHelper.setKey("MyUrlText", "");
-                    yesNoDialog.dismiss();
-                }
+            noBtn.setOnClickListener(v -> {
+                preferenceHelper.setKey("notify_title", "");
+                preferenceHelper.setKey("notify_url", "");
+                preferenceHelper.setKey("notify_text", "");
+                preferenceHelper.setKey("MyUrlText", "");
+                yesNoDialog.dismiss();
             });
+
             yesNoDialog.show();
         }
 

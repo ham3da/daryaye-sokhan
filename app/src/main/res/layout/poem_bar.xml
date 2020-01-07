@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/botom_tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -98,7 +97,7 @@
             android:layout_toEndOf="@id/audio_close"
             android:maxHeight="3dp"
             android:minHeight="3dp"
-              android:progressDrawable="@drawable/seek_bar_ruler"
+            android:progressDrawable="@drawable/seek_bar_ruler"
             android:thumb="@drawable/seek_bar_slider" />
 
         <ImageView

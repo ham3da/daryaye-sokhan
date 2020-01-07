@@ -78,7 +78,8 @@ public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.
 
         LayerDrawable layerDrawable = new LayerDrawable(drawables);
 
-        view.setBackgroundDrawable(layerDrawable);
+        view.setBackground(layerDrawable);
+                //setBackgroundDrawable(layerDrawable);
     }
 
     public void setOnColorPickerClickListener(OnColorPickerClickListener onColorPickerClickListener) {

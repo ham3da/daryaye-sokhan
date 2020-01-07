@@ -242,6 +242,23 @@ public class GanjoorDbBrowser {
         return f.exists();
     }
 
+    public List<Integer> getAllSubCategory(int parentCate)
+    {
+        List<Integer>  res = new ArrayList<>();
+        List<GanjoorCat>  getSubCats =   getSubCats(parentCate);
+
+        if(getSubCats.size() > 0) {
+            for (GanjoorCat cate : getSubCats) {
+                res.add(cate._ID);
+                
+            }
+        }
+
+
+
+        return  res;
+    }
+
     /**
      * Are we connected to the database or not?
      * @return true if yes
@@ -1152,7 +1169,7 @@ public class GanjoorDbBrowser {
      * @param out
      * @throws IOException
      */
-    private static final void copyInputStream(InputStream in, OutputStream out)
+    private static void copyInputStream(InputStream in, OutputStream out)
             throws IOException {
         byte[] buffer = new byte[1024];
         int len;
@@ -1367,9 +1384,8 @@ public class GanjoorDbBrowser {
 
     /**
      *
-     * @param db
      * @param tableName String table Name
-     * @return
+     * @return boolean
      */
     public boolean tableExists(String tableName)
     {
@@ -1455,7 +1471,8 @@ public class GanjoorDbBrowser {
 
     /**
      * Get Top Category(Book) of this category
-     * @param cate_id
+     * @param int cate_id
+     * @return GanjoorCat
      */
     public GanjoorCat getBaseCategory(int cate_id) {
 
@@ -1502,7 +1519,7 @@ public class GanjoorDbBrowser {
         ActivitySearch activitySearch = (ActivitySearch) mContext;
 
         List<SearchResult> findedVerse = new ArrayList<>();
-        String srcQuery = "";
+        String srcQuery ;
 
         String limitStr = String.format(Locale.ENGLISH, "Limit %d, %d", offset, limit);
         srcQuery = "SELECT v.poem_id, v.vorder, v.position, v.text, pm.title, c2.poet_id, pm.cat_id, pt.name AS poetName, (with parent_tree AS (" +

@@ -15,6 +15,11 @@
 
     <group android:checkableBehavior="none">
 
+<!--        <item-->
+<!--            android:id="@+id/nav_poem_game"-->
+<!--            android:icon="@drawable/ic_extension_white_24dp"-->
+<!--            android:title="@string/dont_forget_poetry" />-->
+
         <item
             android:id="@+id/nav_last_read"
             android:icon="@drawable/ic_desk_lamp"
@@ -24,6 +29,11 @@
             android:id="@+id/nav_social_networks"
             android:icon="@drawable/ic_group"
             android:title="@string/social_networks" />
+
+        <item
+            android:id="@+id/nav_donate"
+            android:icon="@drawable/ic_gift_box_24dp"
+            android:title="@string/donate" />
 
         <item
             android:id="@+id/nav_about"

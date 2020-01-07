@@ -22,8 +22,6 @@ public class ActivityWeb extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SetLanguage.wrap(this);
-
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             SetLanguage.wrap(this);
         }
@@ -38,7 +36,7 @@ public class ActivityWeb extends AppCompatActivity {
         String title1 = getIntent().getStringExtra("title");
         String text = getIntent().getStringExtra("text");
         setTitle(title1);
-        webView2.loadDataWithBaseURL("file:///android_asset/", text, "text/html", "UTF-8", null);
+        webView2.loadDataWithBaseURL("file:///android_res/", text, "text/html", "UTF-8", null);
 
     }
 

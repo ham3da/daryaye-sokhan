@@ -157,6 +157,7 @@
     <string name="label_text">Text</string>
     <string name="label_filter">Filter</string>
     <string name="label_adjust">Adjust</string>
+    <string name="label_shadow">Shadow</string>
     <string name="select_picture">Select Picture</string>
     <string name="saving">Saving&#8230;</string>
     <string name="save">Save</string>
@@ -184,5 +185,12 @@
     <string name="download_all">Download all</string>
     <string name="reload">Reload</string>
     <string name="all_collectons_added">All collections have been downloaded successfully.</string>
+    <string name="sample_text">Sample text</string>
+    <string name="shadow_radius">Shadow radius</string>
+    <string name="horizontal_offset">Horizontal offset</string>
+    <string name="vertical_offset">Vertical offset</string>
+    <string name="dont_forget_poetry">Don\'t forget poetry</string>
+    <string name="donate">Donate</string>
+    <string name="nocategory">بدون دسته‌بندی</string>
 
 </resources>

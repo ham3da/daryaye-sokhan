@@ -37,7 +37,7 @@ public class App extends Application
 
     @Override
     public void onCreate() {
-        SetLanguage.wrap(this);
+       // SetLanguage.wrap(this);
         super.onCreate();
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 

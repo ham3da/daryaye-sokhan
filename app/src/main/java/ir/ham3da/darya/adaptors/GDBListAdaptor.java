@@ -2,6 +2,7 @@ package ir.ham3da.darya.adaptors;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.opengl.Visibility;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -66,8 +67,8 @@ public class GDBListAdaptor extends RecyclerView.Adapter<GDBListAdaptor.ViewHold
         final int finalPosition = position;
 
 
-        String title =  String.format(Locale.getDefault(), "%d. ", GDBInfo1._Index) + GDBInfo1._CatName;
-        String poetInfo =  title +" - "+android.text.format.Formatter.formatShortFileSize(context1, GDBInfo1._FileSizeInByte) ;
+        String title = String.format(Locale.getDefault(), "%d. ", GDBInfo1._Index) + GDBInfo1._CatName;
+        String poetInfo = title + " - " + android.text.format.Formatter.formatShortFileSize(context1, GDBInfo1._FileSizeInByte);
 
 
         holder.poet_name.setText(poetInfo);
@@ -75,15 +76,13 @@ public class GDBListAdaptor extends RecyclerView.Adapter<GDBListAdaptor.ViewHold
         final boolean poetInstalled = GDBInfo1._Exist;
         final boolean updateAvailable = GDBInfo1._UpdateAvailable;
 
-        if (poetInstalled)
-        {
+
+        if (poetInstalled) {
             holder.imageButton_dl.setImageResource(R.drawable.ic_check_square_outlined_01);
 
             if (updateAvailable) {
                 holder.imageButton_update.setVisibility(View.VISIBLE);
-            }
-            else
-            {
+            } else {
                 holder.imageButton_update.setVisibility(View.GONE);
             }
 
@@ -93,32 +92,47 @@ public class GDBListAdaptor extends RecyclerView.Adapter<GDBListAdaptor.ViewHold
             holder.imageButton_update.setVisibility(View.GONE);
         }
 
-        holder.imageButton_dl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        holder.imageButton_dl.setOnClickListener(v -> {
+            if (poetInstalled) {
+                //delete poet
+                deleteItem(GDBInfo1._PoetID, finalPosition);
 
-                if (poetInstalled) {
-                    //delete poet
-                    deleteItem(GDBInfo1._PoetID, finalPosition);
+            } else {
+                //install poet
+                String fileName = URLUtil.guessFileName(GDBInfo1._DownloadUrl, null, null);
+                ScheduleGDB scheduleGDB = new ScheduleGDB(finalPosition, GDBInfo1._PoetID, GDBInfo1._CatName, GDBInfo1._DownloadUrl, fileName, GDBInfo1._PubDateString + "|" + GDBInfo1._FileSizeInByte, false);
+                activityCollection.StartDownload(holder, scheduleGDB, false);
+            }
 
-                } else {
+        });
+
+        holder.imageButton_update.setOnClickListener(v -> {
+                    if (poetInstalled) {
+                        String fileName = URLUtil.guessFileName(GDBInfo1._DownloadUrl, null, null);
+                        ScheduleGDB scheduleGDB = new ScheduleGDB(finalPosition, GDBInfo1._PoetID, GDBInfo1._CatName, GDBInfo1._DownloadUrl, fileName, GDBInfo1._PubDateString + "|" + GDBInfo1._FileSizeInByte, true);
+                        activityCollection.StartDownload(holder, scheduleGDB, false);
+                    }
+                }
+        );
+
+
+        holder.collectionCardView.setOnClickListener(v ->
+        {
+            if(holder.imageButton_update.getVisibility() == View.VISIBLE)
+            {
+                holder.imageButton_update.performClick();
+            }
+            else
+            {
+                if (!poetInstalled) {
                     //install poet
                     String fileName = URLUtil.guessFileName(GDBInfo1._DownloadUrl, null, null);
                     ScheduleGDB scheduleGDB = new ScheduleGDB(finalPosition, GDBInfo1._PoetID, GDBInfo1._CatName, GDBInfo1._DownloadUrl, fileName, GDBInfo1._PubDateString + "|" + GDBInfo1._FileSizeInByte, false);
                     activityCollection.StartDownload(holder, scheduleGDB, false);
                 }
             }
-        });
 
-        holder.imageButton_update.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (poetInstalled) {
-                    String fileName = URLUtil.guessFileName(GDBInfo1._DownloadUrl, null, null);
-                    ScheduleGDB scheduleGDB = new ScheduleGDB(finalPosition, GDBInfo1._PoetID, GDBInfo1._CatName, GDBInfo1._DownloadUrl, fileName, GDBInfo1._PubDateString + "|" + GDBInfo1._FileSizeInByte, true);
-                    activityCollection.StartDownload(holder, scheduleGDB, false);
-                }
-            }
+
         });
     }
 
@@ -129,8 +143,7 @@ public class GDBListAdaptor extends RecyclerView.Adapter<GDBListAdaptor.ViewHold
 
             notifyItemChanged(position);
 
-            if(DownloadAll)
-            {
+            if (DownloadAll) {
 
                 activityCollection.DlIndex++;
                 activityCollection.StartDownloadALL();

@@ -401,7 +401,7 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
                         items.add(new PoetsAndCateItem(Poet._Name, Poet._ID, 1, poet_index));
                         items.add(new PoetsAndCateItem(mContext.getString(R.string.short_introduction), 0, 0, 0, Poet._ID, 3));
                     }
-                    items.add(new PoetsAndCateItem(mContext.getString(R.string.poetry_collection), Poet._CatID, 0, 0, Poet._ID, 2));
+                    items.add(new PoetsAndCateItem(mContext.getString(R.string.nocategory), Poet._CatID, 0, 0, Poet._ID, 2));
                     booksCount++;
                 } else {
                     if (categories.size() == 0) {

@@ -25,8 +25,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Environment;
 import android.os.Handler;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -108,6 +110,11 @@ public class ActivityMain extends AppCompatActivity
             mainActivityUtil1.extractGangoorDB(DB_PATH);
         }
 
+        if(UtilFunctions.getAppStoreCode() == 1) {
+            MenuItem mi = navigationView.getMenu().findItem(R.id.nav_donate);
+            mi.setVisible(false);
+        }
+
         get_token();
     }
 
@@ -141,9 +148,7 @@ public class ActivityMain extends AppCompatActivity
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
-
         showNotify();
-
     }
 
     public void showNotify() {
@@ -331,6 +336,13 @@ public class ActivityMain extends AppCompatActivity
 
                         MyDialogs1.showPolicy();
                         break;
+
+                    case R.id.nav_donate:
+
+                        UtilFunctions1.openUrl("https://ham3da.ir/darya-donate/");
+                        break;
+
+
                 }
             }
         }, 300);

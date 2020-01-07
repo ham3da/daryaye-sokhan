@@ -153,6 +153,7 @@
     <string name="label_text">متن</string>
     <string name="label_filter">فیلتر</string>
     <string name="label_adjust">میزان کردن</string>
+    <string name="label_shadow">سایه</string>
     <string name="select_picture">یک عکس انتخاب کنید</string>
     <string name="saving">در حال ذخیره</string>
     <string name="save">ذخیره</string>
@@ -173,4 +174,11 @@
     <string name="download_all">دریافت همه</string>
     <string name="reload">فراخوانی مجدد</string>
     <string name="all_collectons_added">تمام مجموعه‌ها با موفقیت دریافت شدند.</string>
+    <string name="sample_text">متن نمونه</string>
+    <string name="shadow_radius">شعاع سایه</string>
+    <string name="horizontal_offset">انحراف افقی</string>
+    <string name="vertical_offset">انحراف عمودی</string>
+    <string name="dont_forget_poetry">شعر یادت نره</string>
+    <string name="donate">حمایت کردن</string>
+    <string name="nocategory">بدون دسته‌بندی</string>
 </resources>

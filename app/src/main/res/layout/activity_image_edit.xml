@@ -30,13 +30,12 @@
                 android:id="@+id/photoEditorView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:photo_src="@drawable/bg_a" />
+                app:photo_src="@drawable/floral" />
 
             <RelativeLayout
                 android:id="@+id/tool_buttons"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:layout_alignParentBottom="true">
 
                 <ImageView

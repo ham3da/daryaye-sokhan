@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -557,8 +558,8 @@ public class AppSettings {
      */
     public static String getImageFolderPath() {
 
-        String dirPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                + File.separator + "Darya";
+        String dirPath = MediaStore.Images.Media.EXTERNAL_CONTENT_URI.getPath() + File.separator + "Darya";
+
         File dir = new File(dirPath);
         if (!dir.exists()) {
             dir.mkdir();

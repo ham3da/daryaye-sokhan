@@ -44,7 +44,7 @@ import ir.ham3da.darya.R;
 
 public class UtilFunctions {
     private Context context1;
-    int Store = 3;
+
     private ClipboardManager myClipboard;
     private ClipData myClip;
 
@@ -66,26 +66,39 @@ public class UtilFunctions {
         }
     }
 
+
+    private static int Store = 0;
+
+    /**
+     * get AppStore Code
+     * @return int 0 => google play, 1 => cafebazaar, 2 => myket, 3 => samsungapps, 4 => iranapps
+     */
+    public static int getAppStoreCode()
+    {
+        return  Store;
+    }
+
     public String getAppLink() {
         String packageName = context1.getPackageName();
-        String store = "https://play.google.com/store/apps/details?id=" + packageName;//google play
-        switch (this.Store) {
+        String app_link = "https://play.google.com/store/apps/details?id=" + packageName;//google play
+        switch (Store) {
             case 0:
-                store = "https://play.google.com/store/apps/details?id=" + packageName;//google play
+                app_link = "https://play.google.com/store/apps/details?id=" + packageName;//google play
                 break;
             case 1:
-                store = "https://cafebazaar.ir/app/" + packageName + "/";//cafebazaar
+                app_link = "https://cafebazaar.ir/app/" + packageName + "/";//cafebazaar
                 break;
             case 2:
-                store = "https://myket.ir/app/" + packageName + "/";//myket
+                app_link = "https://myket.ir/app/" + packageName + "/";//myket
                 break;
             case 3:
-                store = "http://www.samsungapps.com/appquery/appDetail.as?appId=" + packageName; //samsung apps
-
+                app_link = "http://www.samsungapps.com/appquery/appDetail.as?appId=" + packageName; //samsung apps
+                break;
             case 4:
-                store = "https://iranapps.ir/app/" + packageName; //iranapps
+                app_link = "https://iranapps.ir/app/" + packageName; //iranapps
+                break;
         }
-        return store;
+        return app_link;
     }
 
     public void openWhatsApp() {
@@ -151,7 +164,7 @@ public class UtilFunctions {
         try {
             String packageName = context1.getPackageName();
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            switch (this.Store) {
+            switch (Store) {
                 case 0:
                     Uri.Builder uriBuilder = Uri.parse("https://play.google.com/store/apps/details")
                             .buildUpon()
@@ -369,10 +382,11 @@ public class UtilFunctions {
                     verse_text1 = ganjoorVerse1._Text;//Verse 1
                     vOrder1 = ganjoorVerse1._Order;
 
-                    if (GanjoorVerseList.size() - 1 >= position + 1) {
+                    if (GanjoorVerseList.size() - 1 >= i + 1) {
 
-                        ganjoorVerse2 = GanjoorVerseList.get(position + 1);
-                        if (ganjoorVerse2._Position == GanjoorVerse.POSITION_CENTEREDVERSE2) {
+                        ganjoorVerse2 = GanjoorVerseList.get(i + 1);
+                        if (ganjoorVerse2._Position == GanjoorVerse.POSITION_CENTEREDVERSE2)
+                        {
                             verse_text2 = ganjoorVerse2._Text;//Verse 2
                             vOrder2 = ganjoorVerse2._Order;
                         } else {
@@ -394,6 +408,7 @@ public class UtilFunctions {
                     break;
                 case GanjoorVerse.POSITION_CENTEREDVERSE2:
                     //IGNORE
+
                     break;
                 case GanjoorVerse.POSITION_SINGLE:
                 case GanjoorVerse.POSITION_PARAGRAPH:
