@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -730,6 +731,22 @@ public class PhotoEditor implements BrushViewChangeListener {
         saveAsFile(imagePath, new SaveSettings.Builder().build(), onSaveListener);
     }
 
+
+    public static Bitmap getBitmapFromView(View view) {
+        Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(returnedBitmap);
+        Drawable bgDrawable =view.getBackground();
+        if (bgDrawable!=null) {
+            bgDrawable.draw(canvas);
+        }
+        else {
+            canvas.drawColor(Color.WHITE);
+        }
+        view.draw(canvas);
+        return returnedBitmap;
+    }
+
+
     /**
      * Save the edited image on given path
      *
@@ -753,7 +770,7 @@ public class PhotoEditor implements BrushViewChangeListener {
                     protected void onPreExecute() {
                         super.onPreExecute();
                         clearHelperBox();
-                        //parentView.setDrawingCacheEnabled(false);
+                        parentView.setDrawingCacheEnabled(false);
                     }
 
                     @SuppressLint("MissingPermission")
@@ -762,18 +779,15 @@ public class PhotoEditor implements BrushViewChangeListener {
                         // Create a media file name
                         File file = new File(imagePath);
                         try {
+
+                            Log.e(TAG, "imagePath: "+imagePath );
                             FileOutputStream out = new FileOutputStream(file, false);
                             if (parentView != null) {
 
-                                Bitmap drawingCache = Bitmap.createBitmap(parentView.getMeasuredWidth(),
-                                        parentView.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+                                parentView.setDrawingCacheEnabled(true);
 
-                                Canvas canvas = new Canvas(drawingCache);
-                                Drawable background = parentView.getBackground();
-                                if (background != null) {
-                                    background.draw(canvas);
-                                }
-                                parentView.draw(canvas);
+                                Bitmap drawingCache = getBitmapFromView(parentView);
+                                        //saveSettings.isTransparencyEnabled() ? BitmapUtil.removeTransparency(parentView.getDrawingCache()) : parentView.getDrawingCache();
 
 
                                 drawingCache.compress(saveSettings.getCompressFormat(), saveSettings.getCompressQuality(), out);
@@ -840,26 +854,16 @@ public class PhotoEditor implements BrushViewChangeListener {
                     protected void onPreExecute() {
                         super.onPreExecute();
                         clearHelperBox();
-                        //parentView.setDrawingCacheEnabled(false);
+                        parentView.setDrawingCacheEnabled(false);
                     }
 
                     @Override
                     protected Bitmap doInBackground(String... strings) {
                         if (parentView != null) {
-                            //parentView.setDrawingCacheEnabled(true);
-                            Bitmap drawingCache = Bitmap.createBitmap(parentView.getMeasuredWidth(),
-                                    parentView.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
-
-                            Canvas canvas = new Canvas(drawingCache);
-                            Drawable background = parentView.getBackground();
-                            if (background != null) {
-                                background.draw(canvas);
-                            }
-                            parentView.draw(canvas);
-
-                            return saveSettings.isTransparencyEnabled() ? BitmapUtil.removeTransparency(drawingCache) : drawingCache;
-
-
+                            parentView.setDrawingCacheEnabled(true);
+                            return saveSettings.isTransparencyEnabled() ?
+                                    BitmapUtil.removeTransparency(parentView.getDrawingCache())
+                                    : parentView.getDrawingCache();
                         } else {
                             return null;
                         }

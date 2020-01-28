@@ -15,10 +15,10 @@
 
     <group android:checkableBehavior="none">
 
-<!--        <item-->
-<!--            android:id="@+id/nav_poem_game"-->
-<!--            android:icon="@drawable/ic_extension_white_24dp"-->
-<!--            android:title="@string/dont_forget_poetry" />-->
+        <item
+            android:id="@+id/nav_poem_game"
+            android:icon="@drawable/ic_extension_white_24dp"
+            android:title="@string/dont_forget_poetry" />
 
         <item
             android:id="@+id/nav_last_read"

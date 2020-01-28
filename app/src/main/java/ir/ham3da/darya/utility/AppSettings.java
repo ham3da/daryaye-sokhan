@@ -513,6 +513,27 @@ public class AppSettings {
         return PreferenceManager1.getKey("searchBooks", "");
     }
 
+
+    /**
+     * get Game Sound Status
+     *
+     * @return boolean
+     */
+    public static boolean getGameSoundMute() {
+        if (PreferenceManager1 == null) {
+            return true;
+        }
+        return PreferenceManager1.getKey("GameSoundMute", false);
+    }
+
+
+    public static void setGameSoundMute(boolean status) {
+        if (PreferenceManager1 != null) {
+           PreferenceManager1.setKey("GameSoundMute", status);
+        }
+    }
+
+
     /**
      * Get Book ids that selected in search limits dialog from
      *
@@ -558,13 +579,15 @@ public class AppSettings {
      */
     public static String getImageFolderPath() {
 
-        String dirPath = MediaStore.Images.Media.EXTERNAL_CONTENT_URI.getPath() + File.separator + "Darya";
+        ///String dirPath = MediaStore.Images.Media.EXTERNAL_CONTENT_URI.getPath() + File.separator + "Darya";
 
-        File dir = new File(dirPath);
+        File dir =         new File( Environment.getExternalStoragePublicDirectory( Environment.DIRECTORY_PICTURES),  "Darya" );
+       // Log.e("getImageFolderPath", "dir: "+dir.getAbsolutePath() );
+
         if (!dir.exists()) {
             dir.mkdir();
         }
-        return dirPath;
+        return dir.getAbsolutePath();
     }
 
 }

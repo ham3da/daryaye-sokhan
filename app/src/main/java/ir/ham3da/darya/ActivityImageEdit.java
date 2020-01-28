@@ -147,6 +147,9 @@ public class ActivityImageEdit extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_edit);
 
+
+
+
         AppSettings.Init(this);
 
         String signature = AppSettings.getSignature();
@@ -185,6 +188,7 @@ public class ActivityImageEdit extends AppCompatActivity implements
         LinearLayoutManager llmFilters = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mRvFilters.setLayoutManager(llmFilters);
         mRvFilters.setAdapter(mFilterViewAdapter);
+       // mPhotoEditorView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
         mPhotoEditor = new PhotoEditor.Builder(this, mPhotoEditorView)
                 .setPinchTextScalable(true) // set flag to make text scalable when pinch
@@ -208,6 +212,7 @@ public class ActivityImageEdit extends AppCompatActivity implements
         //   mPhotoEditor.addText(signature, textStyleBuilder);
 
         mPhotoEditor.setOnPhotoEditorListener(this);
+
 
 
     }
@@ -377,7 +382,10 @@ public class ActivityImageEdit extends AppCompatActivity implements
                 }
 
                 @Override
-                public void onFailure(@NonNull Exception exception) {
+                public void onFailure(@NonNull Exception exception)
+                {
+                    Log.e(TAG, "saveImage: " +exception.getMessage());
+                    exception.printStackTrace();
                     showSnackbar(getString(R.string.failed_save));
                     customProgressDlg.dismiss();
                 }
@@ -414,19 +422,23 @@ public class ActivityImageEdit extends AppCompatActivity implements
                 case PICK_REQUEST:
                     try {
                         //mPhotoEditor.clearAllViews();
-                        Uri uri = data.getData();
-
+                         Uri selectedImageURI = data.getData();
 
                         Bitmap bitmap ;
 
-                        if(Build.VERSION.SDK_INT < 28) {
-                            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                        }
-                        else
-                        {
-                            ImageDecoder.Source source  = ImageDecoder.createSource(getContentResolver(), uri);
-                            bitmap = ImageDecoder.decodeBitmap(source);
-                        }
+//                        if(Build.VERSION.SDK_INT >= 28) {
+//                              *** It doesn't work properly and causes an error while saving.***
+//                            ImageDecoder.Source source  = ImageDecoder.createSource(getContentResolver(), selectedImageURI);
+//                            Drawable drawable = ImageDecoder.decodeDrawable(source);
+//                            bitmap = ((BitmapDrawable) drawable).getBitmap();
+//
+//                        }
+//                        else
+//                        {
+//                            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageURI);
+//                        }
+
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageURI);
                         mPhotoEditorView.getSource().setImageBitmap(bitmap);
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -598,14 +610,14 @@ public class ActivityImageEdit extends AppCompatActivity implements
 
     public boolean isReadStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
-            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
                 Log.v(TAG, "Permission is granted1");
                 return true;
             } else {
 
                 Log.v(TAG, "Permission is revoked1");
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 3);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
                 return false;
             }
         } else { //permission is automatically granted on sdk<23 upon installation

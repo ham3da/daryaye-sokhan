@@ -29,6 +29,7 @@ import android.os.Environment;
 import android.os.Handler;
 
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,6 +38,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import ir.ham3da.darya.ganjoor.GanjoorDbBrowser;
@@ -110,13 +113,14 @@ public class ActivityMain extends AppCompatActivity
             mainActivityUtil1.extractGangoorDB(DB_PATH);
         }
 
-        if(UtilFunctions.getAppStoreCode() == 1) {
+        if(UtilFunctions.getAppStoreCode() != 0) {
             MenuItem mi = navigationView.getMenu().findItem(R.id.nav_donate);
             mi.setVisible(false);
         }
 
-        get_token();
-    }
+        //get_token();
+
+      }
 
 
     private void get_token() {
@@ -340,6 +344,14 @@ public class ActivityMain extends AppCompatActivity
                     case R.id.nav_donate:
 
                         UtilFunctions1.openUrl("https://ham3da.ir/darya-donate/");
+                        break;
+
+
+                    case R.id.nav_poem_game:
+                        intent = new Intent(ActivityMain.this, ActivityPuzzle.class);
+                        intent.putExtra("parentCate", 0);
+                        startActivity(intent);
+                        Bungee.card(ActivityMain.this);
                         break;
 
 

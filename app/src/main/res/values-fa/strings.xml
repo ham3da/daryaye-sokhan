@@ -181,4 +181,12 @@
     <string name="dont_forget_poetry">شعر یادت نره</string>
     <string name="donate">حمایت کردن</string>
     <string name="nocategory">بدون دسته‌بندی</string>
+    <string name="enter_missing">کلمه جا افتاده را اینجا وارد کن.</string>
+    <string name="correct_answer">پاسخ صحیح:</string>
+    <string name="check_answer">بررسی پاسخ</string>
+    <string name="new1">جدید</string>
+    <string name="source">منبع</string>
+    <string name="is_correct">آفرین، درست پاسخ دادید.</string>
+    <string name="is_incorrect">متأسفانه پاسخ شما نادرست است.</string>
+    <string name="loadingVers">در حال فراخوانی شعر</string>
 </resources>

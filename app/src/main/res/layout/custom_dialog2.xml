@@ -19,6 +19,7 @@
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:contentDescription="@string/about"
+            android:tint="@color/white"
             app:srcCompat="@drawable/ic_error_outline_white_24dp" />
 
         <!--<TextView-->

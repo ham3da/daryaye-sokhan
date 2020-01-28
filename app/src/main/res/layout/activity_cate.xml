@@ -28,7 +28,6 @@
         app:layout_anchorGravity="bottom|left"
         app:srcCompat="@drawable/ic_extension_white_24dp"
         app:maxImageSize="32dp"
-        android:visibility="gone"
         />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

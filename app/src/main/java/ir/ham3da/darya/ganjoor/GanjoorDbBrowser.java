@@ -20,6 +20,7 @@ import java.util.zip.ZipFile;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -30,6 +31,7 @@ import android.util.Log;
 import ir.ham3da.darya.ActivitySearch;
 import ir.ham3da.darya.utility.AppSettings;
 import ir.ham3da.darya.utility.PoemAudio;
+import ir.ham3da.darya.utility.RateType;
 
 /**
  * @author Hamid Reza
@@ -195,6 +197,83 @@ public class GanjoorDbBrowser {
         return true;
     }
 
+
+    public boolean createRateTable() {
+        if (getIsConnected()) {
+            String sql = "CREATE TABLE IF NOT EXISTS [Points] ([id] INTEGER Primary Key AUTOINCREMENT," +
+                    "[plus_rate] INTEGER DEFAULT 0,[negative_rate] INTEGER  DEFAULT 0,[poem_id] INTEGER  DEFAULT 0, [verse_order] INTEGER  DEFAULT 0);";
+            try {
+                _db.execSQL(sql);
+                return true;
+            } catch (SQLException exp) {
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+    }
+
+    public boolean checkRateExist(int id) {
+        if (getIsConnected()) {
+            try {
+                String countQuery1 = "SELECT  Count(*) FROM Points";
+                Cursor cursor_count = _db.rawQuery(countQuery1, null);
+                cursor_count.moveToFirst();
+                int count = cursor_count.getInt(0);
+                cursor_count.close();
+                return count == 0;
+            } catch (Exception ex) {
+                Log.e("checkRateExist", "err: " + ex.getMessage());
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+    }
+
+
+    public void saveRate(int rate, String rateType,int poem_id, int verse_id) {
+
+        if (getIsConnected()) {
+
+            try {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(rateType, rate);
+                contentValues.put("poem_id", poem_id);
+                contentValues.put("verse_order", verse_id);
+                _db.insert("Points", null, contentValues);
+
+            } catch (Exception ex) {
+                Log.e("saveRate", "err: " + ex.getMessage());
+            }
+        }
+
+    }
+
+
+    public RateType getRates()
+    {
+        if (getIsConnected()) {
+            try {
+                String countQuery1 = "SELECT  Sum(plus_rate), Sum(negative_rate) FROM Points";
+                Cursor cursor_count = _db.rawQuery(countQuery1, null);
+                cursor_count.moveToFirst();
+                int plus_rate = cursor_count.getInt(0);
+                int negative_rate = cursor_count.getInt(1);
+                cursor_count.close();
+                return new RateType(plus_rate, negative_rate);
+            } catch (Exception ex) {
+                Log.e("getRates", "err: " + ex.getMessage());
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+
     /**
      * Create indexes
      * @param db Input database
@@ -231,6 +310,7 @@ public class GanjoorDbBrowser {
         return true;
     }
 
+
     /**
      * @return Is the database file exists on the specified path?
      */
@@ -242,21 +322,165 @@ public class GanjoorDbBrowser {
         return f.exists();
     }
 
-    public List<Integer> getAllSubCategory(int parentCate)
-    {
-        List<Integer>  res = new ArrayList<>();
-        List<GanjoorCat>  getSubCats =   getSubCats(parentCate);
 
-        if(getSubCats.size() > 0) {
+    private List<Integer> allSubCategory;
+
+//    public GanjoorVerse getVerseRandom()
+//    {
+//        if (getIsConnected()) {
+//
+//            Cursor cursor = _db.rawQuery("SELECT p.id, p.cat_id, p.title, p.url,  p.url as urlFake, " +
+//                    "(SELECT  Count(*) FROM fav Where poem_id=p.id) AS favCount FROM poem p " +
+//                    "WHERE  ORDER BY RANDOM() Limit 1", null);
+//            if (cursor.moveToFirst()) {
+//                GanjoorPoem GanjoorPoem1 = new GanjoorPoem(
+//                        cursor.getInt(IDX_POEM_ID),
+//                        cursor.getInt(IDX_POEM_CATID),
+//                        cursor.getString(IDX_POEM_TITLE),
+//                        cursor.getString(IDX_POEM_URL),
+//                        cursor.getInt(IDX_POEM_FAV) != 0,
+//                        ""
+//                );
+//                cursor.close();
+//                return GanjoorPoem1;
+//            }
+//            cursor.close();
+//        }
+//        return null;
+//
+//
+//    }
+
+
+    public List<GanjoorVerse> getRandomPoemPuzzle() {
+
+        List<GanjoorVerse> ganjoorVerseList = new ArrayList<>();
+
+        if (getIsConnected()) {
+
+            Cursor cursor = _db.rawQuery(
+                    "SELECT  v.poem_id, v.vorder, v.position, v.text, (Select Count(*) From verse Where poem_id=v.poem_id ) As verseCount From [verse] v " +
+                            "WHERE (v.position != -1) AND (length(trim(v.text)) > 1) AND((v.vorder % 2) == 1) AND (verseCount > v.vorder ) " +
+                            "ORDER BY RANDOM() Limit 1",
+                    null);
+            if (cursor.moveToFirst()) {
+                GanjoorVerse GanjoorVerse1 = new GanjoorVerse(
+                        cursor.getInt(IDX_VERSE_POEMID),
+                        cursor.getInt(IDX_VERSE_ORDER),
+                        cursor.getInt(IDX_VERSE_POSITION),
+                        cursor.getString(IDX_VERSE_TEXT)
+                );
+                cursor.close();
+
+                //boolean isEven = ( GanjoorVerse1._Order % 2 ) == 0; // Zoj ?
+
+                ganjoorVerseList.add(GanjoorVerse1);
+                GanjoorVerse GanjoorVerse2 = getNextVerse(GanjoorVerse1._PoemID, GanjoorVerse1._Order);
+                if (GanjoorVerse2 != null) {
+                    ganjoorVerseList.add(GanjoorVerse2);
+                }
+
+            }
+            cursor.close();
+
+            return ganjoorVerseList;
+        }
+        return null;
+    }
+
+
+
+
+
+    public List<GanjoorVerse> getRandomVersePuzzle(int poem_id) {
+        List<GanjoorVerse> ganjoorVerseList = new ArrayList<>();
+        if (getIsConnected()) {
+
+            Cursor cursor = _db.rawQuery(
+                    "SELECT v.poem_id, v.vorder, v.position, v.text, (Select Count(*) From verse Where poem_id=v.poem_id ) As verseCount From [verse] v " +
+                            "INNER JOIN [poem] p ON v.poem_id = p.id " +
+                            "INNER JOIN [cat] c ON c.id = p.cat_id " +
+                            "WHERE (v.position != -1) AND (length(trim(v.text)) > 1) AND ((v.vorder % 2) == 1) AND (verseCount > v.vorder ) AND (v.poem_id=" + poem_id + ") ORDER BY RANDOM() Limit 1",
+                    null);
+            if (cursor.moveToFirst()) {
+                GanjoorVerse GanjoorVerse1 = new GanjoorVerse(
+                        cursor.getInt(IDX_VERSE_POEMID),
+                        cursor.getInt(IDX_VERSE_ORDER),
+                        cursor.getInt(IDX_VERSE_POSITION),
+                        cursor.getString(IDX_VERSE_TEXT)
+                );
+                cursor.close();
+
+                ganjoorVerseList.add(GanjoorVerse1);
+
+                GanjoorVerse GanjoorVerse2 = getNextVerse(GanjoorVerse1._PoemID, GanjoorVerse1._Order);
+                if (GanjoorVerse2 != null) {
+                    ganjoorVerseList.add(GanjoorVerse2);
+
+                    if(GanjoorVerse1._Position == GanjoorVerse.POSITION_SINGLE)
+                    {
+                        GanjoorVerse GanjoorVerse3 = getNextVerse(GanjoorVerse1._PoemID, GanjoorVerse2._Order);
+                        if (GanjoorVerse3 != null) {
+                            ganjoorVerseList.add(GanjoorVerse3);
+
+                            GanjoorVerse GanjoorVerse4 = getNextVerse(GanjoorVerse1._PoemID, GanjoorVerse3._Order);
+                            if (GanjoorVerse4 != null) {
+                                ganjoorVerseList.add(GanjoorVerse4);
+
+
+                            }
+                        }
+                    }
+
+                }
+                return ganjoorVerseList;
+            }
+            cursor.close();
+        }
+        return null;
+    }
+
+
+    /**
+     *
+     * @param parentCate parent category id
+     * @return List<GanjoorVerse>
+     */
+    public List<GanjoorVerse> getRandomPoemPuzzle(int parentCate) {
+
+        List<GanjoorVerse> ganjoorVerseList = new ArrayList<>();
+        List<Integer> cateList = getAllSubCategories(parentCate);
+        cateList.add(parentCate);
+
+        if (allSubCategory.size() > 0) {
+            cateList.addAll(allSubCategory);
+        }
+        String CommaSpIds = TextUtils.join(",", allSubCategory);
+
+        GanjoorPoem poem = getPoemRandom(CommaSpIds);
+
+        ganjoorVerseList = getRandomVersePuzzle(poem._ID);
+
+
+        return ganjoorVerseList;
+    }
+
+
+    public List<Integer> getAllSubCategories(int parentCate) {
+        allSubCategory = new ArrayList<>();
+        getAllSubCategory(parentCate);
+        return allSubCategory;
+    }
+
+    private void getAllSubCategory(int parentCate) {
+        List<GanjoorCat> getSubCats = getSubCats(parentCate);
+
+        if (getSubCats.size() > 0) {
             for (GanjoorCat cate : getSubCats) {
-                res.add(cate._ID);
-                
+                allSubCategory.add(cate._ID);
+                getAllSubCategory(cate._ID);
             }
         }
-
-
-
-        return  res;
     }
 
     /**
@@ -279,10 +503,10 @@ public class GanjoorDbBrowser {
      * @return int
      */
     public int getPoemsCount(int cat_id) {
-       // Log.e(TAG, "cat_id: "+cat_id);
+        // Log.e(TAG, "cat_id: "+cat_id);
         if (getIsConnected()) {
             try {
-                String countQuery1 = "SELECT  Count(*) FROM poem Where cat_id='"+cat_id+"'";
+                String countQuery1 = "SELECT  Count(*) FROM poem Where cat_id='" + cat_id + "'";
                 Cursor cursor_count = _db.rawQuery(countQuery1, null);
                 cursor_count.moveToFirst();
                 int count = cursor_count.getInt(0);
@@ -523,8 +747,7 @@ public class GanjoorDbBrowser {
      * @param CatId int category id
      * @return int
      */
-    public int getSubCatsCount(int CatId)
-    {
+    public int getSubCatsCount(int CatId) {
 
         if (getIsConnected()) {
             try {
@@ -571,6 +794,56 @@ public class GanjoorDbBrowser {
             return 0;
         }
 
+    }
+
+    public GanjoorPoet getRandomPoet() {
+        if (getIsConnected()) {
+            Cursor cursor = _db.rawQuery("Select id, name, cat_id, description From poet ORDER BY RANDOM()", null);
+            if (cursor.moveToFirst()) {
+                GanjoorPoet GanjoorPoet1 = new GanjoorPoet(
+                        cursor.getInt(IDX_POET_ID),
+                        cursor.getString(IDX_POET_NAME),
+                        cursor.getInt(IDX_POET_CATID),
+                        cursor.getString(IDX_POET_BIO),
+                        ""
+                );
+
+                cursor.close();
+                return GanjoorPoet1;
+            }
+            cursor.close();
+        }
+        return null;
+    }
+
+    public String getPoemTree(int poem_id) {
+
+        if (getIsConnected()) {
+            Cursor cursor;
+
+            cursor = _db.rawQuery("SELECT pm.id, pm.cat_id, pm.title, pt.name AS poetName, (with parent_tree AS (" +
+                            "Select id, parent_id, text " +
+                            "From cat " +
+                            "Where id = pm.cat_id " +
+                            "union All " +
+                            "Select c.id, c.parent_id, c.text " +
+                            "From cat c " +
+                            "JOIN parent_tree parent ON c.id = parent.parent_id " +
+                            "AND c.id != c.parent_id " +
+                            ")" +
+                            "Select group_concat(cate_tree.text, ' > ') AS commaTree From (SELECT * From parent_tree ORDER BY id ASC) cate_tree) cate_tree " +
+                            "From poem pm " +
+                            "INNER JOIN [cat] c2 ON c2.id = pm.cat_id " +
+                            "INNER JOIN [poet] pt ON pt.id = c2.poet_id " +
+                            "Where pm.id=" + poem_id
+                    , null);
+
+            if (cursor.moveToFirst()) {
+                String cate_tree = cursor.getString(4);
+                return cate_tree;
+            }
+        }
+        return null;
     }
 
     public List<FavoritesPoem> getFavoritesPoems(Boolean IncludeFirstVerse, int offset, int limit, int startIndex) {
@@ -963,7 +1236,7 @@ public class GanjoorDbBrowser {
      * Get the Next Verse of current verse
      * @param PoemId Poem ID
      * @param VerseOrder Verse Order
-     * @return GanjoorVerse Verse
+     * @return GanjoorVerse Verse or null
      */
     public GanjoorVerse getNextVerse(int PoemId, int VerseOrder) {
         if (getIsConnected()) {
@@ -1211,11 +1484,11 @@ public class GanjoorDbBrowser {
                 zipFile.close();
             } catch (ZipException e) {
 
-                Log.e(TAG, "ImportGdb: "+ e.getMessage());
+                Log.e(TAG, "ImportGdb: " + e.getMessage());
 
                 return ImportDbFastUnsafe(fileName, updateInfo);
             } catch (IOException e) {
-                Log.e(TAG, "ImportGdb io: "+ e.getMessage());
+                Log.e(TAG, "ImportGdb io: " + e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -1234,8 +1507,7 @@ public class GanjoorDbBrowser {
                 return false;
             }
             GanjoorDbBrowser gdbOpener = new GanjoorDbBrowser(this.mContext, dbPath);
-            if (!gdbOpener.getIsConnected())
-            {
+            if (!gdbOpener.getIsConnected()) {
                 this._LastError = gdbOpener._LastError;
                 return false;
             }
@@ -1318,13 +1590,10 @@ public class GanjoorDbBrowser {
                 cursor.close();
 
                 _db.setTransactionSuccessful();
-            } catch (Exception expData)
-            {
-                Log.e(TAG, "ImportDbFastUnsafe: "+expData.getMessage() );
+            } catch (Exception expData) {
+                Log.e(TAG, "ImportDbFastUnsafe: " + expData.getMessage());
                 bResult = false;
-            }
-            finally
-            {
+            } finally {
                 _db.endTransaction();
             }
 
@@ -1332,8 +1601,7 @@ public class GanjoorDbBrowser {
             gdbOpener.CloseDatabase();
 
             return bResult;
-        } catch (Exception exp)
-        {
+        } catch (Exception exp) {
             exp.printStackTrace();
             return false;
         }
@@ -1362,7 +1630,7 @@ public class GanjoorDbBrowser {
 
                 _db.execSQL("ALTER TABLE poet ADD description TEXT");
 
-                if(tableExists("gver")) {
+                if (tableExists("gver")) {
                     _db.execSQL("DELETE FROM gver");
                     _db.execSQL("INSERT INTO gver (curver) VALUES (" + DatabaseVersion + ")");
                 }
@@ -1370,7 +1638,7 @@ public class GanjoorDbBrowser {
             } else if (n == 4) {
 
                 _db.execSQL("ALTER TABLE poet ADD update_info VARCHAR(50)");
-                if(tableExists("gver")) {
+                if (tableExists("gver")) {
                     _db.execSQL("INSERT INTO gver (curver) VALUES (" + DatabaseVersion + ")");
                 }
 
@@ -1387,10 +1655,8 @@ public class GanjoorDbBrowser {
      * @param tableName String table Name
      * @return boolean
      */
-    public boolean tableExists(String tableName)
-    {
-        if (getIsConnected())
-        {
+    public boolean tableExists(String tableName) {
+        if (getIsConnected()) {
 
             if (tableName == null) {
                 return false;
@@ -1403,9 +1669,7 @@ public class GanjoorDbBrowser {
             int count = cursor.getInt(0);
             cursor.close();
             return count > 0;
-        }
-        else
-        {
+        } else {
             return false;
 
         }
@@ -1446,8 +1710,7 @@ public class GanjoorDbBrowser {
     /**
      * VACUUM database (optimize database)
      */
-    public void Vacum()
-    {
+    public void Vacum() {
         if (getIsConnected()) {
             _db.execSQL("VACUUM");
         }
@@ -1455,23 +1718,21 @@ public class GanjoorDbBrowser {
     }
 
 
-
     /**
      * آثار شاعر را از دیتابیس حذف می کند
      * @param poet_id poet id
      */
-    public void DeletePoet(int poet_id)
-    {
+    public void DeletePoet(int poet_id) {
         GanjoorPoet Poet = getPoet(poet_id);
         DeleteCat(getCat(Poet._CatID));
         String sql = String.format(Locale.ENGLISH, "DELETE FROM poet WHERE id=%d;", Poet._ID);
         _db.execSQL(sql);
-     }
+    }
 
 
     /**
      * Get Top Category(Book) of this category
-     * @param int cate_id
+     * @param cate_id int
      * @return GanjoorCat
      */
     public GanjoorCat getBaseCategory(int cate_id) {
@@ -1499,7 +1760,6 @@ public class GanjoorDbBrowser {
     }
 
 
-
     /**
      * Search in Verses
      * @param phrase phrase for
@@ -1519,7 +1779,7 @@ public class GanjoorDbBrowser {
         ActivitySearch activitySearch = (ActivitySearch) mContext;
 
         List<SearchResult> findedVerse = new ArrayList<>();
-        String srcQuery ;
+        String srcQuery;
 
         String limitStr = String.format(Locale.ENGLISH, "Limit %d, %d", offset, limit);
         srcQuery = "SELECT v.poem_id, v.vorder, v.position, v.text, pm.title, c2.poet_id, pm.cat_id, pt.name AS poetName, (with parent_tree AS (" +
@@ -1555,11 +1815,11 @@ public class GanjoorDbBrowser {
             srcQuery += limitStr;
         }
 
-       // Cursor cursor_count = _db.rawQuery(countQuery1, null);
-       // cursor_count.moveToFirst();
+        // Cursor cursor_count = _db.rawQuery(countQuery1, null);
+        // cursor_count.moveToFirst();
 
-       // activitySearch.resCount = cursor_count.getInt(0);
-       // cursor_count.close();
+        // activitySearch.resCount = cursor_count.getInt(0);
+        // cursor_count.close();
 
         Cursor cursor = _db.rawQuery(srcQuery, null);
 
@@ -1601,7 +1861,7 @@ public class GanjoorDbBrowser {
      * @return List<SearchResult> List of SearchResult class
      */
     public List<SearchResult> searchForPhrase2(String phrase, int poet_id, String book_ids,
-                                              int offset, int limit, int startIndex) {
+                                               int offset, int limit, int startIndex) {
 
 
         List<Integer> newBookIds = new ArrayList<>();
@@ -1614,7 +1874,6 @@ public class GanjoorDbBrowser {
         String srcQuery = "";
 
 
-
         String limitStr = String.format(Locale.ENGLISH, "Limit %d, %d", offset, limit);
 
         String countQuery1 = "Select Count(v.poem_id) AS resCount From [verse] v "
@@ -1623,31 +1882,30 @@ public class GanjoorDbBrowser {
                 + "INNER JOIN [poet] pt ON pt.id = c2.poet_id "
                 + "Where v.text like '%" + phrase + "%' ";
 
-        if (poet_id <= 0)
-        {
+        if (poet_id <= 0) {
 
-
-            srcQuery = "SELECT * FROM verse " +
-                       "INNER JOIN [poem] pm ON verse.poem_id = pm.id " +
-                       "INNER JOIN [cat] c2 ON c2.id = pm.cat_id " +
-                       "INNER JOIN [poet] pt ON pt.id = c2.poet_id " +
-                       "WHERE verse.text Like '%" + phrase + "%' ";
-
-            srcQuery += limitStr;
-
-        } else {
-
-           // String srcQueryPoet = String.format(Locale.ENGLISH, "AND (c2.poet_id = %d) ", poet_id);
 
             srcQuery = "SELECT * FROM verse " +
                     "INNER JOIN [poem] pm ON verse.poem_id = pm.id " +
                     "INNER JOIN [cat] c2 ON c2.id = pm.cat_id " +
                     "INNER JOIN [poet] pt ON pt.id = c2.poet_id " +
-                    "WHERE (verse.text Like '%" + phrase + "%') AND (c2.poet_id="+poet_id+") ";
+                    "WHERE verse.text Like '%" + phrase + "%' ";
+
+            srcQuery += limitStr;
+
+        } else {
+
+            // String srcQueryPoet = String.format(Locale.ENGLISH, "AND (c2.poet_id = %d) ", poet_id);
+
+            srcQuery = "SELECT * FROM verse " +
+                    "INNER JOIN [poem] pm ON verse.poem_id = pm.id " +
+                    "INNER JOIN [cat] c2 ON c2.id = pm.cat_id " +
+                    "INNER JOIN [poet] pt ON pt.id = c2.poet_id " +
+                    "WHERE (verse.text Like '%" + phrase + "%') AND (c2.poet_id=" + poet_id + ") ";
 
 
             srcQuery += limitStr;
-            countQuery1 += " AND (c2.poet_id="+poet_id+")";
+            countQuery1 += " AND (c2.poet_id=" + poet_id + ")";
         }
 
         Cursor cursor_count = _db.rawQuery(countQuery1, null);
@@ -1663,7 +1921,7 @@ public class GanjoorDbBrowser {
         if (cursor.moveToFirst()) {
             do {
 
-               int poem_id = cursor.getInt(IDX_VERSE_POEMID);
+                int poem_id = cursor.getInt(IDX_VERSE_POEMID);
 
                 index++;
                 findedVerse.add(

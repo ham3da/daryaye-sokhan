@@ -135,17 +135,14 @@ public class ActivitySearch extends AppCompatActivity {
                 }
             }
         }
-
-        editTextSearch.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    onClickFindBtn(v);
-                    return true;
-                }
-                return false;
+        editTextSearch.setOnKeyListener((v, keyCode, event) -> {
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                onClickFindBtn(v);
+                return true;
             }
+            return false;
         });
+
     }
 
     @Override
@@ -156,7 +153,7 @@ public class ActivitySearch extends AppCompatActivity {
     public void setSearchLimitsText() {
         TextView search_limits_text = findViewById(R.id.search_limits_text);
         String poetName = getString(R.string.all_poets);
-        String srcLimt = getString(R.string.search_in);
+        String srcLimit = getString(R.string.search_in);
 
         int searchSelectedPoetId = AppSettings.getSearchSelectedPoet();
         if (searchSelectedPoetId > 0) {
@@ -166,7 +163,7 @@ public class ActivitySearch extends AppCompatActivity {
             }
         }
 
-        String text = srcLimt + "&nbsp;&nbsp;<b><font color=\"#FFFF00\">" + poetName + "</font></b>";
+        String text = srcLimit + "&nbsp;&nbsp;<b><font color=\"#FFFF00\">" + poetName + "</font></b>";
 
         search_limits_text.setText(UtilFunctions.fromHtml(text), TextView.BufferType.NORMAL);
     }

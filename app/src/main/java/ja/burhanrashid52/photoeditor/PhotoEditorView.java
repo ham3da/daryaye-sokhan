@@ -10,6 +10,7 @@ import android.os.Build;
 
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -63,6 +64,7 @@ public class PhotoEditorView extends RelativeLayout {
 
     @SuppressLint("Recycle")
     private void init(@Nullable AttributeSet attrs) {
+
         //Setup image attributes
         mImgSource = new FilterImageView(getContext());
         mImgSource.setId(imgSrcId);
@@ -119,6 +121,8 @@ public class PhotoEditorView extends RelativeLayout {
 
         //Add brush view
         addView(mBrushDrawingView, brushParam);
+
+
 
     }
 

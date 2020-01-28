@@ -37,12 +37,12 @@ public class FavoritesAdaptor extends RecyclerView.Adapter<FavoritesAdaptor.View
     GanjoorDbBrowser GanjoorDbBrowser1;
     private float textSize;
     int fontId;
-    public FavoritesAdaptor(List<FavoritesPoem> favoriteList1, Context mCtx)
-    {
+
+    public FavoritesAdaptor(List<FavoritesPoem> favoriteList1, Context mCtx) {
         this.favoriteList = favoriteList1;
         this.context1 = mCtx;
-       this.GanjoorDbBrowser1 = new GanjoorDbBrowser(this.context1);
-        AppSettings.Init( this.context1 );
+        this.GanjoorDbBrowser1 = new GanjoorDbBrowser(this.context1);
+        AppSettings.Init(this.context1);
         this.textSize = AppSettings.getTextSize();
         fontId = AppSettings.getPoemsFont();
     }
@@ -63,45 +63,35 @@ public class FavoritesAdaptor extends RecyclerView.Adapter<FavoritesAdaptor.View
         final FavoritesPoem favoriteList1 = favoriteList.get(position);
         final int finalPosition = position;
 
-        String title =  String.format(Locale.getDefault(), "%d. ", favoriteList1._Index) + favoriteList1._Title;
+        String title = String.format(Locale.getDefault(), "%d. ", favoriteList1._Index) + favoriteList1._Title;
 
         holder.fav_title.setText(title);
 
-        String referenceText  =  favoriteList1._CatTree;
+        String referenceText = favoriteList1._CatTree;
         holder.fav_reference.setText(referenceText);
 
-        holder.favCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                browsePoem(view.getContext(),favoriteList1._ID );
-            }
+        holder.favCardView.setOnClickListener(v -> {
+            browsePoem(v.getContext(), favoriteList1._ID);
         });
 
-        holder.moreOptions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showMenu(view, favoriteList1._ID, finalPosition );
-
-            }
+        holder.moreOptions.setOnClickListener(v -> {
+            showMenu(v, favoriteList1._ID, finalPosition);
         });
     }
 
-    public void browsePoem(Context context, int poemId)
-    {
+    public void browsePoem(Context context, int poemId) {
         Intent intent = new Intent(context, ActivityPoem.class);
         intent.putExtra("poem_id", poemId);
         context1.startActivity(intent);
         Bungee.card(context1);
     }
 
-    public void reIndexItems()
-    {
+    public void reIndexItems() {
         int index = 0;
 
-        for (FavoritesPoem favoritesPoem :favoriteList)
-        {
+        for (FavoritesPoem favoritesPoem : favoriteList) {
             index++;
-            favoritesPoem._Index =index;
+            favoritesPoem._Index = index;
         }
     }
 
@@ -111,70 +101,59 @@ public class FavoritesAdaptor extends RecyclerView.Adapter<FavoritesAdaptor.View
         return favoriteList.size();
     }
 
-    private void deleteItem(final int favPoemId, final int position)
-    {
+    private void deleteItem(final int favPoemId, final int position) {
 
         MyDialogs MyDialogs1 = new MyDialogs(context1);
 
         FavoritesPoem favoriteList1 = favoriteList.get(position);
-        String ques = String.format(context1.getString(R.string.fav_delete_ques), "<b>"+favoriteList1._Title+"</b>");
+        String ques = String.format(context1.getString(R.string.fav_delete_ques), "<b>" + favoriteList1._Title + "</b>");
 
-        final Dialog yesNoDialog = MyDialogs1.YesNoDialog(ques , context1.getDrawable(R.drawable.ic_delete_white_24dp) , true);
+        final Dialog yesNoDialog = MyDialogs1.YesNoDialog(ques, context1.getDrawable(R.drawable.ic_delete_white_24dp), true);
 
         Button noBtn = yesNoDialog.findViewById(R.id.noBtn);
-        noBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                yesNoDialog.dismiss();
-            }
+        noBtn.setOnClickListener(v -> {
+            yesNoDialog.dismiss();
+
         });
 
         Button yesBtn = yesNoDialog.findViewById(R.id.yesBtn);
-        yesBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                yesNoDialog.dismiss();
-                GanjoorDbBrowser1.removeFromFavorites(favPoemId);
-                favoriteList.remove(position);
-                reIndexItems();
-                notifyDataSetChanged();
+        yesBtn.setOnClickListener(v -> {
 
-            }
+            yesNoDialog.dismiss();
+            GanjoorDbBrowser1.removeFromFavorites(favPoemId);
+            favoriteList.remove(position);
+            reIndexItems();
+            notifyDataSetChanged();
         });
         yesNoDialog.show();
     }
 
-    public void showMenu(final View view, final int favPoemId, final int position)
-    {
+    public void showMenu(final View view, final int favPoemId, final int position) {
         //creating a popup menu
         PopupMenu popup = new PopupMenu(view.getContext(), view);
         //inflating menu from xml resource
         popup.inflate(R.menu.favorite_option_menu);
 
         //adding click listener
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
+        popup.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
 
-                    case R.id.fav_delete:
-                        //handle menu2 click
-                        deleteItem(favPoemId, position);
-                        break;
-                    case R.id.fav_view:
-                        browsePoem(view.getContext(), favPoemId);
-                        break;
-                }
-                return false;
+                case R.id.fav_delete:
+                    //handle menu2 click
+                    deleteItem(favPoemId, position);
+                    break;
+                case R.id.fav_view:
+                    browsePoem(view.getContext(), favPoemId);
+                    break;
             }
+            return false;
         });
 
         //displaying the popup
         popup.show();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder
-    {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView fav_title;
         public TextView fav_reference;
@@ -182,8 +161,7 @@ public class FavoritesAdaptor extends RecyclerView.Adapter<FavoritesAdaptor.View
         public CardView favCardView;
 
 
-        public ViewHolder(View itemView)
-        {
+        public ViewHolder(View itemView) {
             super(itemView);
 
             fav_title = itemView.findViewById(R.id.fav_title);

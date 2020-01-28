@@ -95,12 +95,9 @@ public class MyDialogs {
 
 
         Button okBtn = dialog.findViewById(R.id.okBtn);
-        okBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        okBtn.setOnClickListener(v ->  {
 
                 dialog.dismiss();
-            }
         });
 
         ListView listView = dialog.findViewById(R.id.listView);
@@ -110,17 +107,10 @@ public class MyDialogs {
 
         listView.setAdapter(adapterSocialList);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
+        listView.setOnItemClickListener((parent, view, position, id) ->  {
                 LinkItem link = links.get(position);
-
                 utilFunctions.openUrl(link.URL);
                 dialog.dismiss();
-
-            }
         });
         dialog.show();
 
@@ -157,12 +147,8 @@ public class MyDialogs {
 
 
         Button okBtn = dialog.findViewById(R.id.okBtn);
-        okBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
+        okBtn.setOnClickListener(v ->  {
                 dialog.dismiss();
-            }
         });
 
         ListView listView = dialog.findViewById(R.id.listView);
@@ -329,11 +315,8 @@ public class MyDialogs {
         webView.loadDataWithBaseURL("file:///android_asset/", text, "text/html", "UTF-8", null);
         dialog.show();
 
-        okBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        okBtn.setOnClickListener(v ->  {
                 dialog.dismiss();
-            }
         });
 
     }
@@ -355,11 +338,8 @@ public class MyDialogs {
         dialog_text.setText(UtilFunctions.fromHtml(message), TextView.BufferType.SPANNABLE);
 
         Button okBtn = mDialog.findViewById(R.id.okBtn);
-        okBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mDialog.dismiss();
-            }
+        okBtn.setOnClickListener(v ->  {
+               mDialog.dismiss();
         });
 
         mDialog.setCancelable(true);

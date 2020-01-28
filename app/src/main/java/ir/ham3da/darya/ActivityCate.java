@@ -72,7 +72,10 @@ public class ActivityCate extends AppCompatActivity {
 
         fab.setOnClickListener(v ->
         {
-
+            Intent  intent = new Intent(this, ActivityPuzzle.class);
+            intent.putExtra("parentCate", cate_id);
+            startActivity(intent);
+            Bungee.card(this);
         }
         );
 

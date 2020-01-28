@@ -38,6 +38,8 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
+
 import ir.ham3da.darya.ganjoor.GanjoorVerse;
 import ir.ham3da.darya.ganjoor.GanjoorVerseB;
 import ir.ham3da.darya.R;
@@ -204,7 +206,7 @@ public class UtilFunctions {
         try {
             String packageName = context1.getPackageName();
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            switch (this.Store) {
+            switch (Store) {
                 case 0:
                     intent = new Intent(Intent.ACTION_VIEW);
                     Uri.Builder uriBuilder = Uri.parse("https://play.google.com/store/apps/details")
@@ -597,6 +599,15 @@ public class UtilFunctions {
         }
     }
 
+    public static int getRandomNumberInRange(int min, int max) {
+
+        if (min >= max) {
+            throw new IllegalArgumentException("max must be greater than min");
+        }
+
+        Random r = new Random();
+        return r.nextInt((max - min) + 1) + min;
+    }
 
     public static int spToPx(float sp, Context context) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, context.getResources().getDisplayMetrics());
