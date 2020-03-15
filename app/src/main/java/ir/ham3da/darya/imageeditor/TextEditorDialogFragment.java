@@ -95,12 +95,9 @@ public class TextEditorDialogFragment extends DialogFragment {
         addTextColorPickerRecyclerView.setHasFixedSize(true);
         ColorPickerAdapter colorPickerAdapter = new ColorPickerAdapter(getActivity());
         //This listener will change the text color when clicked on any color from picker
-        colorPickerAdapter.setOnColorPickerClickListener(new ColorPickerAdapter.OnColorPickerClickListener() {
-            @Override
-            public void onColorPickerClickListener(int colorCode) {
-                mColorCode = colorCode;
-                mAddTextEditText.setTextColor(colorCode);
-            }
+        colorPickerAdapter.setOnColorPickerClickListener(colorCode -> {
+            mColorCode = colorCode;
+            mAddTextEditText.setTextColor(colorCode);
         });
         addTextColorPickerRecyclerView.setAdapter(colorPickerAdapter);
         mAddTextEditText.setText(getArguments().getString(EXTRA_INPUT_TEXT));
@@ -109,15 +106,12 @@ public class TextEditorDialogFragment extends DialogFragment {
         mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
         //Make a callback on activity when user is done with text editing
-        mAddTextDoneTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mInputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                dismiss();
-                String inputText = mAddTextEditText.getText().toString();
-                if (!TextUtils.isEmpty(inputText) && mTextEditor != null) {
-                    mTextEditor.onDone(inputText, mColorCode);
-                }
+        mAddTextDoneTextView.setOnClickListener(view1 -> {
+            mInputMethodManager.hideSoftInputFromWindow(view1.getWindowToken(), 0);
+            dismiss();
+            String inputText = mAddTextEditText.getText().toString();
+            if (!TextUtils.isEmpty(inputText) && mTextEditor != null) {
+                mTextEditor.onDone(inputText, mColorCode);
             }
         });
 

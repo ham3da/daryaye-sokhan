@@ -411,9 +411,7 @@ public class PhotoEditor implements BrushViewChangeListener {
             final View finalRootView = rootView;
 
             if (imgClose != null) {
-                imgClose.setOnClickListener(v -> {
-                    viewUndo(finalRootView, viewType);
-                });
+                imgClose.setOnClickListener(v -> viewUndo(finalRootView, viewType));
             }
 
             if (imgEdit != null) {

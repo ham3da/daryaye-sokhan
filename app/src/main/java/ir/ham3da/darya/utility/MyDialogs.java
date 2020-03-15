@@ -51,11 +51,8 @@ public class MyDialogs {
         alertDialog.setTitle(title);
         alertDialog.setIcon(this.Icon);
         alertDialog.setMessage(message);
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, this.context.getText(R.string.ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, this.context.getText(R.string.ok), (dialogInterface, i) -> {
 
-            }
         });
         alertDialog.show();
 
@@ -95,10 +92,7 @@ public class MyDialogs {
 
 
         Button okBtn = dialog.findViewById(R.id.okBtn);
-        okBtn.setOnClickListener(v ->  {
-
-                dialog.dismiss();
-        });
+        okBtn.setOnClickListener(v -> dialog.dismiss());
 
         ListView listView = dialog.findViewById(R.id.listView);
 
@@ -147,9 +141,7 @@ public class MyDialogs {
 
 
         Button okBtn = dialog.findViewById(R.id.okBtn);
-        okBtn.setOnClickListener(v ->  {
-                dialog.dismiss();
-        });
+        okBtn.setOnClickListener(v -> dialog.dismiss());
 
         ListView listView = dialog.findViewById(R.id.listView);
 
@@ -157,27 +149,24 @@ public class MyDialogs {
 
         listView.setAdapter(adapterSocialList);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        listView.setOnItemClickListener((parent, view, position, id) -> {
 
-                switch (position) {
-                    case 0:
-                        utilFunctions.openWhatsApp();
-                        break;
-                    case 1:
-                        utilFunctions.openMyTelegram();
-                        break;
-                    case 2:
-                        utilFunctions.openEmail();
-                        break;
-                    case 3:
-                        utilFunctions.openUrl(links.get(position).URL);
-                        break;
-                }
-                dialog.dismiss();
-
+            switch (position) {
+                case 0:
+                    utilFunctions.openWhatsApp();
+                    break;
+                case 1:
+                    utilFunctions.openMyTelegram();
+                    break;
+                case 2:
+                    utilFunctions.openEmail();
+                    break;
+                case 3:
+                    utilFunctions.openUrl(links.get(position).URL);
+                    break;
             }
+            dialog.dismiss();
+
         });
         dialog.show();
     }
@@ -315,9 +304,7 @@ public class MyDialogs {
         webView.loadDataWithBaseURL("file:///android_asset/", text, "text/html", "UTF-8", null);
         dialog.show();
 
-        okBtn.setOnClickListener(v ->  {
-                dialog.dismiss();
-        });
+        okBtn.setOnClickListener(v -> dialog.dismiss());
 
     }
 
@@ -338,9 +325,7 @@ public class MyDialogs {
         dialog_text.setText(UtilFunctions.fromHtml(message), TextView.BufferType.SPANNABLE);
 
         Button okBtn = mDialog.findViewById(R.id.okBtn);
-        okBtn.setOnClickListener(v ->  {
-               mDialog.dismiss();
-        });
+        okBtn.setOnClickListener(v -> mDialog.dismiss());
 
         mDialog.setCancelable(true);
         mDialog.setCanceledOnTouchOutside(true);

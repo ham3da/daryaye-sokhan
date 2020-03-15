@@ -76,22 +76,14 @@ public class SearchLimitsDialog {
         mDialog.show();
 
 
-        okBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //save settings and exit
-                AppSettings.setSearchSelectedPoet(selectedPoetID);
-                activitySearch.setSearchLimitsText();
-                dismiss();
-            }
+        okBtn.setOnClickListener(view -> {
+            //save settings and exit
+            AppSettings.setSearchSelectedPoet(selectedPoetID);
+            activitySearch.setSearchLimitsText();
+            dismiss();
         });
 
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dismiss();
-            }
-        });
+        cancelBtn.setOnClickListener(view -> dismiss());
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mainContext);
 

@@ -127,13 +127,10 @@ public class ShadowColorDialogFragment extends DialogFragment
         addTextColorPickerRecyclerView.setHasFixedSize(true);
         ColorPickerAdapter colorPickerAdapter = new ColorPickerAdapter(getActivity());
         //This listener will change the text color when clicked on any color from picker
-        colorPickerAdapter.setOnColorPickerClickListener(new ColorPickerAdapter.OnColorPickerClickListener() {
-            @Override
-            public void onColorPickerClickListener(int colorCode) {
-                mColorCode = colorCode;
-                mTextView.setShadowLayer(mShadowRadius, mShadowDx, mShadowDy, mColorCode);
+        colorPickerAdapter.setOnColorPickerClickListener(colorCode -> {
+            mColorCode = colorCode;
+            mTextView.setShadowLayer(mShadowRadius, mShadowDx, mShadowDy, mColorCode);
 
-            }
         });
         addTextColorPickerRecyclerView.setAdapter(colorPickerAdapter);
 
@@ -210,14 +207,11 @@ public class ShadowColorDialogFragment extends DialogFragment
 
         setSeekBarsValue();
         //Make a callback on activity when user is done with text editing
-        mAddTextDoneTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dismiss();
-                if (mTextView != null) {
-                    mShadowColor.onDone(mShadowDx, mShadowDy, mShadowRadius, mColorCode);
-                  }
-            }
+        mAddTextDoneTextView.setOnClickListener(view1 -> {
+            dismiss();
+            if (mTextView != null) {
+                mShadowColor.onDone(mShadowDx, mShadowDy, mShadowRadius, mColorCode);
+              }
         });
 
     }

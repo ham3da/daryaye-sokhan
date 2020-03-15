@@ -127,16 +127,13 @@ public class ActivityMain extends AppCompatActivity
         //  Log.e("Instance ID ",FirebaseInstanceId.getInstance().getId());
 
         FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "getInstanceId failed", task.getException());
-                            return;
-                        }
-                        String token = task.getResult().getToken();
-                        Log.e("Token", token);
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w(TAG, "getInstanceId failed", task.getException());
+                        return;
                     }
+                    String token = task.getResult().getToken();
+                    Log.e("Token", token);
                 });
     }
 
@@ -278,84 +275,81 @@ public class ActivityMain extends AppCompatActivity
 
 
         final int id = menuItem.getItemId();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent;
-                switch (id) {
-                    case R.id.collections:
-                        ShowCollectionAct();
-                        break;
+        new Handler().postDelayed(() -> {
+            Intent intent;
+            switch (id) {
+                case R.id.collections:
+                    ShowCollectionAct();
+                    break;
 
-                    case R.id.nav_last_read:
+                case R.id.nav_last_read:
 
-                        int getLastPoemIdVisited = AppSettings.getLastPoemIdVisited();
-                        if (getLastPoemIdVisited > 0) {
-                            intent = new Intent(ActivityMain.this, ActivityPoem.class);
-                            intent.putExtra("poem_id", getLastPoemIdVisited);
-                            startActivity(intent);
-                            Bungee.card(ActivityMain.this);
-                        } else {
-                            Toast.makeText(ActivityMain.this, R.string.nothing_found, Toast.LENGTH_LONG).show();
-                        }
-
-                        break;
-
-                    case R.id.nav_social_networks:
-                        MyDialogs1.socialNetworks();
-                        break;
-
-
-                    case R.id.nav_help:
-                        MyDialogs1.showHelp();
-                        break;
-
-                    case R.id.nav_setting:
-
-                        intent = new Intent(ActivityMain.this, ActivitySettings.class);
+                    int getLastPoemIdVisited = AppSettings.getLastPoemIdVisited();
+                    if (getLastPoemIdVisited > 0) {
+                        intent = new Intent(ActivityMain.this, ActivityPoem.class);
+                        intent.putExtra("poem_id", getLastPoemIdVisited);
                         startActivity(intent);
                         Bungee.card(ActivityMain.this);
+                    } else {
+                        Toast.makeText(ActivityMain.this, R.string.nothing_found, Toast.LENGTH_LONG).show();
+                    }
 
-                        break;
-                    case R.id.nav_about:
+                    break;
 
-                        MyDialogs1.showAbout();
-
-                        break;
-                    case R.id.nav_rating:
-                        UtilFunctions1.gotoRateing();
-
-                        break;
-                    case R.id.nav_contact_us:
-
-                        MyDialogs1.ShowContactUs();
-
-                        break;
-                    case R.id.nav_share:
-
-                        UtilFunctions1.shareApp();
-
-                        break;
-                    case R.id.nav_policy:
-
-                        MyDialogs1.showPolicy();
-                        break;
-
-                    case R.id.nav_donate:
-
-                        UtilFunctions1.openUrl("https://ham3da.ir/darya-donate/");
-                        break;
+                case R.id.nav_social_networks:
+                    MyDialogs1.socialNetworks();
+                    break;
 
 
-                    case R.id.nav_poem_game:
-                        intent = new Intent(ActivityMain.this, ActivityPuzzle.class);
-                        intent.putExtra("parentCate", 0);
-                        startActivity(intent);
-                        Bungee.card(ActivityMain.this);
-                        break;
+                case R.id.nav_help:
+                    MyDialogs1.showHelp();
+                    break;
+
+                case R.id.nav_setting:
+
+                    intent = new Intent(ActivityMain.this, ActivitySettings.class);
+                    startActivity(intent);
+                    Bungee.card(ActivityMain.this);
+
+                    break;
+                case R.id.nav_about:
+
+                    MyDialogs1.showAbout();
+
+                    break;
+                case R.id.nav_rating:
+                    UtilFunctions1.gotoRateing();
+
+                    break;
+                case R.id.nav_contact_us:
+
+                    MyDialogs1.ShowContactUs();
+
+                    break;
+                case R.id.nav_share:
+
+                    UtilFunctions1.shareApp();
+
+                    break;
+                case R.id.nav_policy:
+
+                    MyDialogs1.showPolicy();
+                    break;
+
+                case R.id.nav_donate:
+
+                    UtilFunctions1.openUrl("https://ham3da.ir/darya-donate/");
+                    break;
 
 
-                }
+                case R.id.nav_poem_game:
+                    intent = new Intent(ActivityMain.this, ActivityPuzzle.class);
+                    intent.putExtra("parentCate", 0);
+                    startActivity(intent);
+                    Bungee.card(ActivityMain.this);
+                    break;
+
+
             }
         }, 300);
 

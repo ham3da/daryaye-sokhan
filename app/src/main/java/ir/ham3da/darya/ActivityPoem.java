@@ -303,85 +303,76 @@ public class ActivityPoem extends AppCompatActivity {
         final PopupMenu popup = new PopupMenu(verse_more_option.getContext(), verse_more_option);
         popup.inflate(R.menu.poem_action_btn);
 
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Intent intent;
-                switch (item.getItemId()) {
+        popup.setOnMenuItemClickListener(item -> {
+            Intent intent;
+            switch (item.getItemId()) {
 
-                    case R.id.next_poem:
-                        loadNextPreviousPoem(true);
-                        break;
-                    case R.id.previous_poem:
-                        loadNextPreviousPoem(false);
-                        break;
-                    case R.id.verse_select_all:
-                        adapter.selectAllItem(true);
-                        break;
-                    case R.id.verse_un_select_all:
-                        adapter.selectAllItem(false);
-                        break;
-                    case R.id.verse_share:
-                        adapter.shareVerses();
-                        break;
+                case R.id.next_poem:
+                    loadNextPreviousPoem(true);
+                    break;
+                case R.id.previous_poem:
+                    loadNextPreviousPoem(false);
+                    break;
+                case R.id.verse_select_all:
+                    adapter.selectAllItem(true);
+                    break;
+                case R.id.verse_un_select_all:
+                    adapter.selectAllItem(false);
+                    break;
+                case R.id.verse_share:
+                    adapter.shareVerses();
+                    break;
 
-                    case R.id.verse_share_as_img:
-                        sharePoemAsImage();
-                        break;
+                case R.id.verse_share_as_img:
+                    sharePoemAsImage();
+                    break;
 
 
-                    case R.id.verse_copy:
-                        adapter.copyVerses();
-                        break;
+                case R.id.verse_copy:
+                    adapter.copyVerses();
+                    break;
 
-                    case R.id.verse_declaim:
+                case R.id.verse_declaim:
 
 
-                        if (MEDIA_IS_LOADED) {
-                            if (mPlayer.isPlaying()) {
-                                mPlayer.pause();
-                                mPlayer.stop();
-                                MEDIA_IS_LOADED = false;
+                    if (MEDIA_IS_LOADED) {
+                        if (mPlayer.isPlaying()) {
+                            mPlayer.pause();
+                            mPlayer.stop();
+                            MEDIA_IS_LOADED = false;
 
-                                play_audio.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_black_24dp));
-                            }
+                            play_audio.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_black_24dp));
                         }
-                        AUDIO_DOWNLOAD_SHOW = true;
-                        intent = new Intent(mContext, ActivityAudioCollection.class);
-                        intent.putExtra("poem_id", poem_id);
-                        startActivity(intent);
-                        Bungee.slideUp(mContext);
-                        break;
-                }
-                return false;
+                    }
+                    AUDIO_DOWNLOAD_SHOW = true;
+                    intent = new Intent(mContext, ActivityAudioCollection.class);
+                    intent.putExtra("poem_id", poem_id);
+                    startActivity(intent);
+                    Bungee.slideUp(mContext);
+                    break;
             }
+            return false;
         });
 
 
-        verse_more_option.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //displaying the popup
-                popup.show();
-            }
+        verse_more_option.setOnClickListener(v -> {
+            //displaying the popup
+            popup.show();
         });
 
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FloatingActionButton fabObj = (FloatingActionButton) view;
+        fab.setOnClickListener(view -> {
+            FloatingActionButton fabObj = (FloatingActionButton) view;
 
-                if (GanjoorPoem1._Faved) {
-                    GanjoorDbBrowser1.removeFromFavorites(poem_id);
-                    GanjoorPoem1._Faved = false;
-                } else {
-                    GanjoorDbBrowser1.addToFavorites(poem_id);
-                    GanjoorPoem1._Faved = true;
-                }
-                checkIsFavorite();
-
+            if (GanjoorPoem1._Faved) {
+                GanjoorDbBrowser1.removeFromFavorites(poem_id);
+                GanjoorPoem1._Faved = false;
+            } else {
+                GanjoorDbBrowser1.addToFavorites(poem_id);
+                GanjoorPoem1._Faved = true;
             }
+            checkIsFavorite();
+
         });
 
         audio_player_bar = findViewById(R.id.audio_player_bar);
@@ -391,41 +382,30 @@ public class ActivityPoem extends AppCompatActivity {
 
         audio_more_option = findViewById(R.id.audio_more_option);
 
-        audio_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                audio_player_bar.setVisibility(View.GONE);
-                pauseAudio();
+        audio_close.setOnClickListener(view -> {
+            audio_player_bar.setVisibility(View.GONE);
+            pauseAudio();
 
-            }
         });
 
 
-        audio_more_option.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showAudioList(view);
-            }
-        });
+        audio_more_option.setOnClickListener(this::showAudioList);
 
-        play_audio.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        play_audio.setOnClickListener(view -> {
 
 
-                if (MEDIA_IS_LOADED) {
-                    if (mPlayer.isPlaying()) {
-                        mPlayer.pause();
-                        play_audio.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_black_24dp));
-                    } else {
-                        mPlayer.start();
-                        play_audio.setImageDrawable(getDrawable(R.drawable.ic_pause_black_24dp));
-                    }
+            if (MEDIA_IS_LOADED) {
+                if (mPlayer.isPlaying()) {
+                    mPlayer.pause();
+                    play_audio.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_black_24dp));
                 } else {
-                    PlayFirsAudio();
+                    mPlayer.start();
+                    play_audio.setImageDrawable(getDrawable(R.drawable.ic_pause_black_24dp));
                 }
-
+            } else {
+                PlayFirsAudio();
             }
+
         });
 
         // Set a change listener for seek bar
@@ -474,12 +454,7 @@ public class ActivityPoem extends AppCompatActivity {
         if (existAudioList.size() > 0) {
             PoemAudio poemAudio = existAudioList.get(0);
             mPlayer = new MediaPlayer();
-            mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mediaPlayer) {
-                    play_audio.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_black_24dp));
-                }
-            });
+            mPlayer.setOnCompletionListener(mediaPlayer -> play_audio.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_black_24dp)));
             PlayAudio(poemAudio);
         } else {
             ShowAudioCollection();
@@ -498,12 +473,7 @@ public class ActivityPoem extends AppCompatActivity {
             }
             mPlayer = new MediaPlayer();
 
-            mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mediaPlayer) {
-                    play_audio.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_black_24dp));
-                }
-            });
+            mPlayer.setOnCompletionListener(mediaPlayer -> play_audio.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_black_24dp)));
 
             oTime = 0;
             mPlayer.setDataSource(poemAudio.filePath);
@@ -544,13 +514,10 @@ public class ActivityPoem extends AppCompatActivity {
             }
 
             builder.setIcon(R.drawable.ic_playlist_play_gray_24dp);
-            builder.setItems(items, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    PoemAudio poemAudio = existAudioList.get(which);
-                    PlayAudio(poemAudio);
+            builder.setItems(items, (dialog, which) -> {
+                PoemAudio poemAudio = existAudioList.get(which);
+                PlayAudio(poemAudio);
 
-                }
             });
 
 // create and show the alert dialog
@@ -699,12 +666,7 @@ public class ActivityPoem extends AppCompatActivity {
 
                     PoemAudio poemAudio = existAudioList.get(0);
                     mPlayer = new MediaPlayer();
-                    mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                        @Override
-                        public void onCompletion(MediaPlayer mediaPlayer) {
-                            play_audio.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_black_24dp));
-                        }
-                    });
+                    mPlayer.setOnCompletionListener(mediaPlayer -> play_audio.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_black_24dp)));
 
                     PlayAudio(poemAudio);
                     audio_player_bar.setVisibility(View.VISIBLE);
@@ -729,25 +691,17 @@ public class ActivityPoem extends AppCompatActivity {
         final Dialog yesNoDialog = MyDialogs1.YesNoDialog(getString(R.string.no_donload_this_item), mContext.getDrawable(R.drawable.ic_cloud_download_white_24dp), true);
 
         Button noBtn = yesNoDialog.findViewById(R.id.noBtn);
-        noBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                yesNoDialog.dismiss();
-            }
-        });
+        noBtn.setOnClickListener(view -> yesNoDialog.dismiss());
 
         Button yesBtn = yesNoDialog.findViewById(R.id.yesBtn);
-        yesBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AUDIO_DOWNLOAD_SHOW = true;
-                yesNoDialog.dismiss();
-                pauseAudio();
-                Intent intent = new Intent(mContext, ActivityAudioCollection.class);
-                intent.putExtra("poem_id", poem_id);
-                startActivity(intent);
-                Bungee.slideUp(mContext);
-            }
+        yesBtn.setOnClickListener(view -> {
+            AUDIO_DOWNLOAD_SHOW = true;
+            yesNoDialog.dismiss();
+            pauseAudio();
+            Intent intent = new Intent(mContext, ActivityAudioCollection.class);
+            intent.putExtra("poem_id", poem_id);
+            startActivity(intent);
+            Bungee.slideUp(mContext);
         });
         yesNoDialog.show();
     }
@@ -812,27 +766,25 @@ public class ActivityPoem extends AppCompatActivity {
     }
 
     AudioManager.OnAudioFocusChangeListener afChangeListener =
-            new AudioManager.OnAudioFocusChangeListener() {
-                public void onAudioFocusChange(int focusChange) {
-                   Log.e(TAG, "onAudioFocusChange: " + focusChange);
-                    switch (focusChange) {
-                        case AudioManager.AUDIOFOCUS_LOSS:
-                            pauseAudio();
-                            break;
+            focusChange -> {
+               Log.e(TAG, "onAudioFocusChange: " + focusChange);
+                switch (focusChange) {
+                    case AudioManager.AUDIOFOCUS_LOSS:
+                        pauseAudio();
+                        break;
 
-                        case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                            pauseAudio();
-                            break;
-                        case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-                            // Lower the volume, keep playing
-                            break;
-                        case AudioManager.AUDIOFOCUS_GAIN:
-                            // Your app has been granted audio focus again
-                            // Raise volume to normal, restart playback if necessary
-                            break;
-                    }
-
+                    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                        pauseAudio();
+                        break;
+                    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                        // Lower the volume, keep playing
+                        break;
+                    case AudioManager.AUDIOFOCUS_GAIN:
+                        // Your app has been granted audio focus again
+                        // Raise volume to normal, restart playback if necessary
+                        break;
                 }
+
             };
 
 

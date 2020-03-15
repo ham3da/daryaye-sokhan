@@ -64,12 +64,9 @@ public class MainPoetsFragment extends Fragment {
         // String DB_PATH = AppSettings.getDatabasePath( mContext );
         //  mainActivityUtil1 = new MainActivityUtil(mContext);
 
-        swipeRefreshLayout1.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                loadPoetsAndBooks();
-                swipeRefreshLayout1.setRefreshing(false);
-            }
+        swipeRefreshLayout1.setOnRefreshListener(() -> {
+            loadPoetsAndBooks();
+            swipeRefreshLayout1.setRefreshing(false);
         });
 
 
@@ -115,12 +112,7 @@ public class MainPoetsFragment extends Fragment {
         try {
             swipeRefreshLayout1.setRefreshing(true);
 
-            swipeRefreshLayout1.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    reloadRecycleViewData(position);
-                }
-            }, 1000);
+            swipeRefreshLayout1.postDelayed(() -> reloadRecycleViewData(position), 1000);
 
 
         } catch (Exception ex) {

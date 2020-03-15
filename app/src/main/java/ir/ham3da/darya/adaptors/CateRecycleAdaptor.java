@@ -56,16 +56,13 @@ public class CateRecycleAdaptor extends RecyclerView.Adapter<CateRecycleAdaptor.
         final  int cate_id = GanjoorCat1._ID;
 
         //holder.avatar_item.
-        holder.cateCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        holder.cateCardView.setOnClickListener(v -> {
 
-                Intent intent = new Intent(v.getContext(), ActivityCate.class);
-                intent.putExtra("cate_id", cate_id);
-                intent.putExtra("fromCate", true);
-                context1.startActivity(intent);
-                Bungee.card(context1);
-            }
+            Intent intent = new Intent(v.getContext(), ActivityCate.class);
+            intent.putExtra("cate_id", cate_id);
+            intent.putExtra("fromCate", true);
+            context1.startActivity(intent);
+            Bungee.card(context1);
         });
     }
 

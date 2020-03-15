@@ -46,22 +46,19 @@ public class AdaptorBooks extends RecyclerView.Adapter<AdaptorBooks.ViewHolder> 
         finalHolder.bookCardView.setSelected(GanjoorCat1._Selected);
 
 
-        holder.bookCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        holder.bookCardView.setOnClickListener(v -> {
 
-                if (finalHolder.bookCardView.isSelected()) {
-                    GanjoorCat1._Selected = false;
-                    finalHolder.bookCardView.setSelected(false);
-                    GanjoorCatList.get(position)._Selected = false;
+            if (finalHolder.bookCardView.isSelected()) {
+                GanjoorCat1._Selected = false;
+                finalHolder.bookCardView.setSelected(false);
+                GanjoorCatList.get(position)._Selected = false;
 
-                } else {
-                    GanjoorCat1._Selected = true;
+            } else {
+                GanjoorCat1._Selected = true;
 
-                    GanjoorCatList.get(position)._Selected = true;
+                GanjoorCatList.get(position)._Selected = true;
 
-                    finalHolder.bookCardView.setSelected(true);
-                }
+                finalHolder.bookCardView.setSelected(true);
             }
         });
 

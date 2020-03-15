@@ -103,13 +103,10 @@ public class PhotoEditorView extends RelativeLayout {
         imgFilterParam.addRule(RelativeLayout.ALIGN_TOP, imgSrcId);
         imgFilterParam.addRule(RelativeLayout.ALIGN_BOTTOM, imgSrcId);
 
-        mImgSource.setOnImageChangedListener(new FilterImageView.OnImageChangedListener() {
-            @Override
-            public void onBitmapLoaded(@Nullable Bitmap sourceBitmap) {
-                mImageFilterView.setFilterEffect(PhotoFilter.NONE);
-                mImageFilterView.setSourceBitmap(sourceBitmap);
-                Log.d(TAG, "onBitmapLoaded() called with: sourceBitmap = [" + sourceBitmap + "]");
-            }
+        mImgSource.setOnImageChangedListener(sourceBitmap -> {
+            mImageFilterView.setFilterEffect(PhotoFilter.NONE);
+            mImageFilterView.setSourceBitmap(sourceBitmap);
+            Log.d(TAG, "onBitmapLoaded() called with: sourceBitmap = [" + sourceBitmap + "]");
         });
 
 

@@ -73,19 +73,16 @@ public class SearchCustomAdapter extends RecyclerView.Adapter<SearchCustomAdapte
         String referenceText  =  srcResult._CatTree+  " > " +srcResult._PoemTitle;
         holder.src_verse_reference.setText(referenceText);
 
-        holder.srcCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), ActivityPoem.class);
-                intent.putExtra("poem_id", srcResult._PoemID);
-                intent.putExtra("from_search", true);
-                intent.putExtra("findStr", findStr);
+        holder.srcCardView.setOnClickListener(view -> {
+            Intent intent = new Intent(view.getContext(), ActivityPoem.class);
+            intent.putExtra("poem_id", srcResult._PoemID);
+            intent.putExtra("from_search", true);
+            intent.putExtra("findStr", findStr);
 
-                intent.putExtra("vOrder", srcResult._Order);
+            intent.putExtra("vOrder", srcResult._Order);
 
-                context1.startActivity(intent);
-                Bungee.card(context1);
-            }
+            context1.startActivity(intent);
+            Bungee.card(context1);
         });
     }
 

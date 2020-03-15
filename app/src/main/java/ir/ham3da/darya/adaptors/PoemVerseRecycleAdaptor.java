@@ -169,18 +169,15 @@ public class PoemVerseRecycleAdaptor extends RecyclerView.Adapter<PoemVerseRecyc
         finalHolder.versCardView.setSelected(GanjoorVerse1._Selected);
 
 
-        holder.versCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        holder.versCardView.setOnClickListener(v -> {
 
-                if (finalHolder.versCardView.isSelected()) {
-                    GanjoorVerse1._Selected = false;
-                    finalHolder.versCardView.setSelected(false);
+            if (finalHolder.versCardView.isSelected()) {
+                GanjoorVerse1._Selected = false;
+                finalHolder.versCardView.setSelected(false);
 
-                } else {
-                    GanjoorVerse1._Selected = true;
-                    finalHolder.versCardView.setSelected(true);
-                }
+            } else {
+                GanjoorVerse1._Selected = true;
+                finalHolder.versCardView.setSelected(true);
             }
         });
     }

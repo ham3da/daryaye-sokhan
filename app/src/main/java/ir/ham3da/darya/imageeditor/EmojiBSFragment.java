@@ -106,14 +106,11 @@ public class EmojiBSFragment extends BottomSheetDialogFragment {
                 super(itemView);
                 txtEmoji = itemView.findViewById(R.id.txtEmoji);
 
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (mEmojiListener != null) {
-                            mEmojiListener.onEmojiClick(emojisList.get(getLayoutPosition()));
-                        }
-                        dismiss();
+                itemView.setOnClickListener(v -> {
+                    if (mEmojiListener != null) {
+                        mEmojiListener.onEmojiClick(emojisList.get(getLayoutPosition()));
                     }
+                    dismiss();
                 });
             }
         }

@@ -133,25 +133,18 @@ public class ActivitySettings extends AppCompatActivity {
 
                 prefTextSize.setTitle(prefTextSize.getTitle() + " (" + textSizeStr + ")");
 
-                prefTextSize.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
-                    @Override
-                    public void onBindEditText(@NonNull EditText editText) {
-                        editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                        editText.setTextDirection(View.TEXT_DIRECTION_LTR);
-                        editText.selectAll();
-                    }
+                prefTextSize.setOnBindEditTextListener(editText -> {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                    editText.setTextDirection(View.TEXT_DIRECTION_LTR);
+                    editText.selectAll();
                 });
-                prefTextSize.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(Preference preference, Object newValue)
-                    {
-                        App globalVariable = (App) getContext().getApplicationContext();
-                        globalVariable.setUpdatePoetList(true);
-                        globalVariable.setUpdateFavList(true);
-                        String textSizeStr = String.format(Locale.getDefault(), "%.0f", Float.parseFloat( newValue.toString()) );
-                        prefTextSize.setTitle( getContext().getString(R.string.Text_size )+ " (" + textSizeStr + ")");
-                        return true;
-                    }
+                prefTextSize.setOnPreferenceChangeListener((preference, newValue) -> {
+                    App globalVariable = (App) getContext().getApplicationContext();
+                    globalVariable.setUpdatePoetList(true);
+                    globalVariable.setUpdateFavList(true);
+                    String textSizeStr1 = String.format(Locale.getDefault(), "%.0f", Float.parseFloat( newValue.toString()) );
+                    prefTextSize.setTitle( getContext().getString(R.string.Text_size )+ " (" + textSizeStr1 + ")");
+                    return true;
                 });
 
             }
@@ -166,13 +159,10 @@ public class ActivitySettings extends AppCompatActivity {
             {
                 preferenceLang.setTitle(preferenceLang.getTitle() + " (" + LangSettingList1.getText() + ")");
 
-                preferenceLang.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
+                preferenceLang.setOnPreferenceClickListener(preference -> {
 
-                        activitySettings.openLangDailog(preference);
-                        return false;
-                    }
+                    activitySettings.openLangDailog(preference);
+                    return false;
                 });
 
             }
@@ -180,13 +170,9 @@ public class ActivitySettings extends AppCompatActivity {
 
 
             pref_op_db = findPreference("optimize_db");
-            pref_op_db.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference)
-                {
-                    activitySettings.optimizeDatabase();
-                    return true;
-                }
+            pref_op_db.setOnPreferenceClickListener(preference -> {
+                activitySettings.optimizeDatabase();
+                return true;
             });
 
             pref_setFont = findPreference("setFont");
@@ -199,14 +185,10 @@ public class ActivitySettings extends AppCompatActivity {
 
             pref_setFont.setTitle(pref_setFont.getTitle() + " (" + fontName + ")");
 
-            pref_setFont.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference)
-                {
-                    activitySettings.openFontDailog(preference);
+            pref_setFont.setOnPreferenceClickListener(preference -> {
+                activitySettings.openFontDailog(preference);
 
-                    return true;
-                }
+                return true;
             });
 
 
@@ -251,32 +233,23 @@ public class ActivitySettings extends AppCompatActivity {
 
         listView.setAdapter(adapterSocialList);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        listView.setOnItemClickListener((parent, view, position, id) -> {
 
-                dialog.dismiss();
-                AppSettings.setPoemsFont(position);
-                App globalVariable = (App) getApplicationContext();
-                globalVariable.setUpdatePoetList(true);
-                globalVariable.setUpdateFavList(true);
+            dialog.dismiss();
+            AppSettings.setPoemsFont(position);
+            App globalVariable = (App) getApplicationContext();
+            globalVariable.setUpdatePoetList(true);
+            globalVariable.setUpdateFavList(true);
 
-                String fontName = AppFontManager.getFontName(getBaseContext(), position);
+            String fontName = AppFontManager.getFontName(getBaseContext(), position);
 
-                preference.setTitle(getString(R.string.change_poem_font)  + " (" + fontName + ")");
+            preference.setTitle(getString(R.string.change_poem_font)  + " (" + fontName + ")");
 
-            }
         });
 
         Button okBtn = dialog.findViewById(R.id.okBtn);
 
-        okBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                dialog.dismiss();
-            }
-        });
+        okBtn.setOnClickListener(v -> dialog.dismiss());
 
         dialog.show();
 
@@ -309,29 +282,20 @@ public class ActivitySettings extends AppCompatActivity {
 
         listView.setAdapter(adapterSocialList);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        listView.setOnItemClickListener((parent, view, position, id) -> {
 
-                dialog.dismiss();
-                AppSettings.saveLanguageSettings(position);
-                if (currentLocalIndex != position) {
-                    currentLocalIndex = position;
+            dialog.dismiss();
+            AppSettings.saveLanguageSettings(position);
+            if (currentLocalIndex != position) {
+                currentLocalIndex = position;
 
-                    recreate();
-                }
+                recreate();
             }
         });
 
         Button okBtn = dialog.findViewById(R.id.okBtn);
 
-        okBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                dialog.dismiss();
-            }
-        });
+        okBtn.setOnClickListener(v -> dialog.dismiss());
 
        dialog.show();
 
@@ -372,16 +336,14 @@ public class ActivitySettings extends AppCompatActivity {
         final CustomProgress customProgressDlg = new CustomProgress(this);
         customProgressDlg.showProgress(getString(R.string.optimize_db), getString(R.string.please_wait2) , false, false, true);
 
-        new Thread(new Runnable() {
-            public void run() {
-                try
-                {
-                    GanjoorDbBrowser1.Vacum();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                customProgressDlg.dismiss();
+        new Thread(() -> {
+            try
+            {
+                GanjoorDbBrowser1.Vacum();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            customProgressDlg.dismiss();
         }).start();
     }
 

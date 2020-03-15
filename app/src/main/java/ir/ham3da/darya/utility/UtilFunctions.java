@@ -515,14 +515,11 @@ public class UtilFunctions {
     }
 
     public void showKeyboard(final EditText editText) {
-        editText.post(new Runnable() {
-            @Override
-            public void run() {
-                editText.requestFocus();
-                InputMethodManager imm = (InputMethodManager) editText.getContext()
-                        .getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
-            }
+        editText.post(() -> {
+            editText.requestFocus();
+            InputMethodManager imm = (InputMethodManager) editText.getContext()
+                    .getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
         });
     }
 

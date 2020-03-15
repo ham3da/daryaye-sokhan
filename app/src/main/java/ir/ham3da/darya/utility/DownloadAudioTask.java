@@ -75,12 +75,9 @@ public class DownloadAudioTask extends AsyncTask<String, Integer, Long>
 
         Button cancel_actionBtn = (Button) this.customProgressDlg.getView(R.id.cancel_actionBtn);
 
-        cancel_actionBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cancel(true);
-                customProgressDlg.dismiss();
-            }
+        cancel_actionBtn.setOnClickListener(view -> {
+            cancel(true);
+            customProgressDlg.dismiss();
         });
     }
 
