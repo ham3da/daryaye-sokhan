@@ -42,7 +42,7 @@ public class SaveSettings {
     public static class Builder {
         private boolean isTransparencyEnabled = true;
         private boolean isClearViewsEnabled = true;
-        private Bitmap.CompressFormat compressFormat = Bitmap.CompressFormat.PNG;
+        private Bitmap.CompressFormat compressFormat = Bitmap.CompressFormat.JPEG;
         private int compressQuality = 100;
 
         /**

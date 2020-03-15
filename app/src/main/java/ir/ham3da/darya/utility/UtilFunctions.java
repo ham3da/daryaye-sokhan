@@ -49,6 +49,7 @@ public class UtilFunctions {
 
     private ClipboardManager myClipboard;
     private ClipData myClip;
+    private static int Store = 0;
 
     public UtilFunctions(Context mCtx) {
 
@@ -68,12 +69,9 @@ public class UtilFunctions {
         }
     }
 
-
-    private static int Store = 0;
-
     /**
      * get AppStore Code
-     * @return int 0 => google play, 1 => cafebazaar, 2 => myket, 3 => samsungapps, 4 => iranapps
+     * @return int 0 => google play, 1 => cafebazaar, 2 => myket, 3 => charkhoneh, 4 => iranapps, 5 => avvalmarket, 6=> cando
      */
     public static int getAppStoreCode()
     {
@@ -94,10 +92,16 @@ public class UtilFunctions {
                 app_link = "https://myket.ir/app/" + packageName + "/";//myket
                 break;
             case 3:
-                app_link = "http://www.samsungapps.com/appquery/appDetail.as?appId=" + packageName; //samsung apps
+                app_link = "http://play.google.com/store/apps/details?id=" + packageName;//charkhoneh
                 break;
             case 4:
                 app_link = "https://iranapps.ir/app/" + packageName; //iranapps
+                break;
+            case 5:
+                app_link = "https://avvalmarket.ir/apps/" + packageName; //avvalmarket
+                break;
+            case 6:
+                app_link = "http://cando.asr24.com/app.jsp?package="+ packageName; // cando
                 break;
         }
         return app_link;
@@ -185,13 +189,20 @@ public class UtilFunctions {
                     intent.setPackage("ir.mservices.market");
                     break;
                 case 3:
-                    intent.setData(Uri.parse("samsungapps://ProductDetail/" + packageName));
-                    intent.setPackage("com.sec.android.app.samsungapps");
+                    intent.setData(Uri.parse("jhoobin://search?q=" + packageName));
                     break;
                 case 4:
                     intent.setData(Uri.parse("http://iranapps.ir/app/" + packageName));
                     intent.setPackage("ir.tgbs.android.iranapp");
                     break;
+                case  5:
+                    intent.setData(Uri.parse("market://details?id=" + packageName));
+                    intent.setPackage("com.hrm.android.market");
+                    break;
+                case  6:
+                    intent.setData(Uri.parse(getAppLink()));
+                    break;
+
             }
             context1.startActivity(intent);
 
@@ -230,16 +241,25 @@ public class UtilFunctions {
                     intent.setPackage("ir.mservices.market");
                     break;
                 case 3:
+
                     intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse("samsungapps://ProductDetail/" + packageName));
-                    intent.setPackage("com.sec.android.app.samsungapps");
+                    intent.setData(Uri.parse("jhoobin://comment?q=" + packageName));
                     break;
                 case 4:
                     intent = new Intent(Intent.ACTION_VIEW);
                     intent.setData(Uri.parse("iranapps://app/"+packageName+"?a=comment&r=5"));
                     intent.setPackage("ir.tgbs.android.iranapp");
                     break;
+                case  5:
+                    intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse("market://details?id=" + packageName));
+                    intent.setPackage("com.hrm.android.market");
+                    break;
 
+                case  6:
+                    intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse("cando://leave-review?id=" + packageName));
+                    break;
 
             }
             context1.startActivity(intent);
@@ -275,11 +295,9 @@ public class UtilFunctions {
     public void changeFont(View viewObject) {
 
         Typeface typeface = ResourcesCompat.getFont(context1, R.font.iran_sans_mobile_light);
-        if (viewObject instanceof TextView) {
-            viewObject = viewObject;
+        if (viewObject.getClass() == TextView.class) {
             ((TextView) viewObject).setTypeface(typeface);
-        } else if (viewObject instanceof Button) {
-            viewObject = viewObject;
+        } else if (viewObject.getClass() == Button.class) {
             ((Button) viewObject).setTypeface(typeface);
         }
 
@@ -288,11 +306,9 @@ public class UtilFunctions {
     public void changeFont(View viewObject, int font) {
 
         Typeface typeface = ResourcesCompat.getFont(context1, font);
-        if (viewObject instanceof TextView) {
-            viewObject = viewObject;
+        if (viewObject.getClass() == TextView.class) {
             ((TextView) viewObject).setTypeface(typeface);
-        } else if (viewObject instanceof Button) {
-            viewObject = viewObject;
+        } else if (viewObject.getClass() == Button.class) {
             ((Button) viewObject).setTypeface(typeface);
         }
     }

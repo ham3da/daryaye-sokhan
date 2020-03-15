@@ -346,7 +346,7 @@ public class ActivityImageEdit extends AppCompatActivity implements
 
         String saveDir = AppSettings.getImageFolderPath();
 
-        File file = new File(saveDir + File.separator + "" + System.currentTimeMillis() + ".png");
+        File file = new File(saveDir + File.separator + "" + System.currentTimeMillis() + ".jpg");
         try {
             file.createNewFile();
 
