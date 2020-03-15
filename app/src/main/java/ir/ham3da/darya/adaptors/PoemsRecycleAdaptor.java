@@ -63,15 +63,12 @@ public class PoemsRecycleAdaptor extends RecyclerView.Adapter<PoemsRecycleAdapto
         }
 
         //Run Poem activity
-        holder.cateCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        holder.cateCardView.setOnClickListener(v -> {
 
-                Intent intent = new Intent(v.getContext(), ActivityPoem.class);
-                intent.putExtra("poem_id", poem_id);
-                context1.startActivity(intent);
-                Bungee.card(context1);
-            }
+            Intent intent = new Intent(v.getContext(), ActivityPoem.class);
+            intent.putExtra("poem_id", poem_id);
+            context1.startActivity(intent);
+            Bungee.card(context1);
         });
     }
 

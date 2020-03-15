@@ -177,23 +177,14 @@ public class AdapterRandomPoem extends PoetAndBooksAdapter<AdapterRandomPoem.Poe
 
             checkbox_poet.setChecked(visibleItems.get(position).selected);
 
-            checkbox_poet.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    visibleItems.get(position).selected = b;
-                    selectAllChildItem(poetId, b);
+            checkbox_poet.setOnCheckedChangeListener((compoundButton, b) -> {
+                visibleItems.get(position).selected = b;
+                selectAllChildItem(poetId, b);
 
-                }
             });
 
 
-            poets_liner.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    handleClick();
-
-                }
-            });
+            poets_liner.setOnClickListener(v -> handleClick());
 
         }
 
@@ -231,24 +222,16 @@ public class AdapterRandomPoem extends PoetAndBooksAdapter<AdapterRandomPoem.Poe
 
             checkbox_book.setChecked(visibleItems.get(position).selected);
 
-            checkbox_book.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    visibleItems.get(position).selected = b;
-                }
-            });
+            checkbox_book.setOnCheckedChangeListener((compoundButton, b) -> visibleItems.get(position).selected = b);
 
 
-            books_liner.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            books_liner.setOnClickListener(v -> {
 
-                    if (id == 0) {
-                        //load biography
-                    } else {
+                if (id == 0) {
+                    //load biography
+                } else {
 
 
-                    }
                 }
             });
 

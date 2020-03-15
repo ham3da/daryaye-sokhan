@@ -150,20 +150,9 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
 
             books_count.setText(childCountStr);
 
-            poets_liner.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    handleClick();
-                }
-            });
+            poets_liner.setOnClickListener(v -> handleClick());
 
-            moreOptions.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    showMenu(view, poetId, position, poets_liner);
-                }
-            });
+            moreOptions.setOnClickListener(view -> showMenu(view, poetId, position, poets_liner));
 
         }
 
@@ -183,19 +172,16 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
         popup.inflate(R.menu.poet_option_menu);
 
         //adding click listener
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.poem_delete:
-                        deleteItem(poetId, position);
-                        break;
-                    case R.id.poet_open:
-                        parentLayer.performClick();
-                        break;
-                }
-                return false;
+        popup.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.poem_delete:
+                    deleteItem(poetId, position);
+                    break;
+                case R.id.poet_open:
+                    parentLayer.performClick();
+                    break;
             }
+            return false;
         });
 
         //displaying the popup
@@ -214,32 +200,24 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
         final Dialog yesNoDialog = MyDialogs1.YesNoDialog(ques, mContext.getDrawable(R.drawable.ic_delete_white_24dp), true);
 
         Button noBtn = yesNoDialog.findViewById(R.id.noBtn);
-        noBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                yesNoDialog.dismiss();
-            }
-        });
+        noBtn.setOnClickListener(view -> yesNoDialog.dismiss());
 
         Button yesBtn = yesNoDialog.findViewById(R.id.yesBtn);
-        yesBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        yesBtn.setOnClickListener(view -> {
 
-                GanjoorDbBrowser GanjoorDbBrowser1 = new GanjoorDbBrowser(mContext);
-                if (isExpanded(position)) {
-                    collapseItems(position, false);
-                }
-                yesNoDialog.dismiss();
-
-                GanjoorPoet ganjoorPoet = GanjoorDbBrowser1.getPoet(poetId);
-
-                GanjoorDbBrowser1.DeletePoet(ganjoorPoet);
-
-                mainPoetsFragment.refreshList(position);
-
-
+            GanjoorDbBrowser GanjoorDbBrowser1 = new GanjoorDbBrowser(mContext);
+            if (isExpanded(position)) {
+                collapseItems(position, false);
             }
+            yesNoDialog.dismiss();
+
+            GanjoorPoet ganjoorPoet = GanjoorDbBrowser1.getPoet(poetId);
+
+            GanjoorDbBrowser1.DeletePoet(ganjoorPoet);
+
+            mainPoetsFragment.refreshList(position);
+
+
         });
         yesNoDialog.show();
     }
@@ -306,21 +284,18 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
 
             final View books_liner_view = books_liner;
 
-            books_liner.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            books_liner.setOnClickListener(v -> {
 
-                    if (list_type == 3) {
-                        showBiography(v, poet_id);
-                    } else {
+                if (list_type == 3) {
+                    showBiography(v, poet_id);
+                } else {
 
-                        Intent intent = new Intent(v.getContext(), ActivityCate.class);
-                        intent.putExtra("cate_id", id);
-                        intent.putExtra("fromCate", false);
+                    Intent intent = new Intent(v.getContext(), ActivityCate.class);
+                    intent.putExtra("cate_id", id);
+                    intent.putExtra("fromCate", false);
 
-                        mContext.startActivity(intent);
-                        Bungee.card(mContext);
-                    }
+                    mContext.startActivity(intent);
+                    Bungee.card(mContext);
                 }
             });
 

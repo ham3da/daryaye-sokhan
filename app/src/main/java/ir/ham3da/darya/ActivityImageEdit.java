@@ -269,16 +269,13 @@ public class ActivityImageEdit extends AppCompatActivity implements
     public void onEditTextChangeListener(final View rootView, String text, int colorCode) {
         TextEditorDialogFragment textEditorDialogFragment =
                 TextEditorDialogFragment.show(this, text, colorCode);
-        textEditorDialogFragment.setOnTextEditorListener(new TextEditorDialogFragment.TextEditor() {
-            @Override
-            public void onDone(String inputText, int colorCode) {
-                final TextStyleBuilder styleBuilder = new TextStyleBuilder();
-                styleBuilder.withTextColor(colorCode);
-                styleBuilder.withTextFont(mTextIranSansTf);
+        textEditorDialogFragment.setOnTextEditorListener((inputText, colorCode1) -> {
+            final TextStyleBuilder styleBuilder = new TextStyleBuilder();
+            styleBuilder.withTextColor(colorCode1);
+            styleBuilder.withTextFont(mTextIranSansTf);
 
-                mPhotoEditor.editText(rootView, inputText, styleBuilder);
-                // mTxtCurrentTool.setText(R.string.label_text);
-            }
+            mPhotoEditor.editText(rootView, inputText, styleBuilder);
+            // mTxtCurrentTool.setText(R.string.label_text);
         });
     }
 
@@ -289,13 +286,7 @@ public class ActivityImageEdit extends AppCompatActivity implements
                 ShadowColorDialogFragment.show(this, shadowDx, shadowDy, shadowRadius, colorCode);
 
 
-        shadowColorDialogFragment.setOnShadowColorListener(new ShadowColorDialogFragment.ShadowColor() {
-            @Override
-            public void onDone(float shadow_Dx, float shadow_Dy, float shadowRadius, int colorCode)
-            {
-                mPhotoEditor.setTextShadow(rootView, shadow_Dx, shadow_Dy, shadowRadius, colorCode );
-            }
-        });
+        shadowColorDialogFragment.setOnShadowColorListener((shadow_Dx, shadow_Dy, shadowRadius1, colorCode1) -> mPhotoEditor.setTextShadow(rootView, shadow_Dx, shadow_Dy, shadowRadius1, colorCode1));
     }
 
 
@@ -484,18 +475,12 @@ public class ActivityImageEdit extends AppCompatActivity implements
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.alret_save);
 
-        builder.setPositiveButton(R.string.save,(dialog, which) -> {
-            saveImage(false);
-        });
+        builder.setPositiveButton(R.string.save,(dialog, which) -> saveImage(false));
 
 
-        builder.setNegativeButton(R.string.cancel,(dialog, which) -> {
-            dialog.dismiss();
-        });
+        builder.setNegativeButton(R.string.cancel,(dialog, which) -> dialog.dismiss());
 
-        builder.setNeutralButton(R.string.discard,(dialog, which) -> {
-            finish();
-        });
+        builder.setNeutralButton(R.string.discard,(dialog, which) -> finish());
         builder.create().show();
 
     }

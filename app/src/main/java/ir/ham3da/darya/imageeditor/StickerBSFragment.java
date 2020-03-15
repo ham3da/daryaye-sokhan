@@ -124,16 +124,13 @@ public class StickerBSFragment extends BottomSheetDialogFragment {
                 super(itemView);
                 imgSticker = itemView.findViewById(R.id.imgSticker);
 
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (mStickerListener != null) {
-                            mStickerListener.onStickerClick(
-                                    BitmapFactory.decodeResource(getResources(),
-                                            stickerList[getLayoutPosition()]));
-                        }
-                        dismiss();
+                itemView.setOnClickListener(v -> {
+                    if (mStickerListener != null) {
+                        mStickerListener.onStickerClick(
+                                BitmapFactory.decodeResource(getResources(),
+                                        stickerList[getLayoutPosition()]));
                     }
+                    dismiss();
                 });
             }
         }

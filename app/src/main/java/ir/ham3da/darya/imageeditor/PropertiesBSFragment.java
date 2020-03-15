@@ -56,13 +56,10 @@ public class PropertiesBSFragment extends BottomSheetDialogFragment implements S
         rvColor.setLayoutManager(layoutManager);
         rvColor.setHasFixedSize(true);
         ColorPickerAdapter colorPickerAdapter = new ColorPickerAdapter(getActivity());
-        colorPickerAdapter.setOnColorPickerClickListener(new ColorPickerAdapter.OnColorPickerClickListener() {
-            @Override
-            public void onColorPickerClickListener(int colorCode) {
-                if (mProperties != null) {
-                    dismiss();
-                    mProperties.onColorChanged(colorCode);
-                }
+        colorPickerAdapter.setOnColorPickerClickListener(colorCode -> {
+            if (mProperties != null) {
+                dismiss();
+                mProperties.onColorChanged(colorCode);
             }
         });
         rvColor.setAdapter(colorPickerAdapter);

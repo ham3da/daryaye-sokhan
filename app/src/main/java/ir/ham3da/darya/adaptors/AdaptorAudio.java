@@ -79,21 +79,18 @@ public class AdaptorAudio extends RecyclerView.Adapter<AdaptorAudio.ViewHolder> 
             // holder.imageButton_play.setVisibility(View.GONE);
         }
 
-        holder.imageButton_dl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        holder.imageButton_dl.setOnClickListener(view -> {
 
-                if (audioInfo.exist) {
-                    //delete audio
-                    deleteItem(audioInfo, position);
-                } else {
-                    //download audio
-                    String fileName = audioInfo.audio_fchecksum+".mp3";  //URLUtil.guessFileName(dl_url, null, null);
+            if (audioInfo.exist) {
+                //delete audio
+                deleteItem(audioInfo, position);
+            } else {
+                //download audio
+                String fileName = audioInfo.audio_fchecksum+".mp3";  //URLUtil.guessFileName(dl_url, null, null);
 
-                    ScheduleAudio scheduleAudio = new ScheduleAudio(position, audioInfo.audio_post_ID, audioInfo.audio_mp3, fileName);
-                    activityAudioCollection.StartDownload(holder, scheduleAudio);
+                ScheduleAudio scheduleAudio = new ScheduleAudio(position, audioInfo.audio_post_ID, audioInfo.audio_mp3, fileName);
+                activityAudioCollection.StartDownload(holder, scheduleAudio);
 
-                }
             }
         });
 
@@ -116,34 +113,26 @@ public class AdaptorAudio extends RecyclerView.Adapter<AdaptorAudio.ViewHolder> 
         String ques = String.format(context1.getString(R.string.poet_delete_poem_au), "<b>" + audioInfo.audio_artist + "</b>");
         final Dialog yesNoDialog = MyDialogs1.YesNoDialog(ques, context1.getDrawable(R.drawable.ic_delete_white_24dp), true);
         Button noBtn = yesNoDialog.findViewById(R.id.noBtn);
-        noBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                yesNoDialog.dismiss();
-            }
-        });
+        noBtn.setOnClickListener(view -> yesNoDialog.dismiss());
 
         Button yesBtn = yesNoDialog.findViewById(R.id.yesBtn);
-        yesBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        yesBtn.setOnClickListener(view -> {
 
-                try {
-                    String dl_path = AppSettings.getAudioDownloadPath(context1);
-                    File auFile = new File(audioInfo.audio_mp3);
-                    if (auFile.exists()) {
-                        auFile.delete();
-                    }
-
-                    GanjoorDbBrowser1.deleteSound(audioInfo.audio_post_ID, audioInfo.audio_order);
-                    mainAudioList.get(position).exist = false;
-                    notifyItemChanged(position);
-                } catch (Exception ex) {
-                    Log.e("deleteAudio", "err: " + ex.getMessage());
+            try {
+                String dl_path = AppSettings.getAudioDownloadPath(context1);
+                File auFile = new File(audioInfo.audio_mp3);
+                if (auFile.exists()) {
+                    auFile.delete();
                 }
-                yesNoDialog.dismiss();
 
+                GanjoorDbBrowser1.deleteSound(audioInfo.audio_post_ID, audioInfo.audio_order);
+                mainAudioList.get(position).exist = false;
+                notifyItemChanged(position);
+            } catch (Exception ex) {
+                Log.e("deleteAudio", "err: " + ex.getMessage());
             }
+            yesNoDialog.dismiss();
+
         });
         yesNoDialog.show();
 

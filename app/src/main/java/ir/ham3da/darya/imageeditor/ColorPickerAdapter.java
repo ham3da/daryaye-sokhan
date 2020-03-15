@@ -92,12 +92,9 @@ public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.
         public ViewHolder(View itemView) {
             super(itemView);
             colorPickerView = itemView.findViewById(R.id.color_picker_view);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (onColorPickerClickListener != null)
-                        onColorPickerClickListener.onColorPickerClickListener(colorPickerColors.get(getAdapterPosition()));
-                }
+            itemView.setOnClickListener(v -> {
+                if (onColorPickerClickListener != null)
+                    onColorPickerClickListener.onColorPickerClickListener(colorPickerColors.get(getAdapterPosition()));
             });
         }
     }

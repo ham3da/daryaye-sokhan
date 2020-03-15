@@ -182,12 +182,7 @@ public class ActivityCollection extends AppCompatActivity {
 
         simpleSwipeRefreshLayout = findViewById(R.id.simpleSwipeRefreshLayout);
 
-        simpleSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                loadItems();
-            }
-        });
+        simpleSwipeRefreshLayout.setOnRefreshListener(this::loadItems);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerViewCollection.setLayoutManager(linearLayoutManager);
@@ -253,12 +248,7 @@ public class ActivityCollection extends AppCompatActivity {
 
         });
 
-        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                searchViewHasFocus = hasFocus;
-            }
-        });
+        searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> searchViewHasFocus = hasFocus);
 
 
         return true;
@@ -319,7 +309,7 @@ public class ActivityCollection extends AppCompatActivity {
 
             InputStream InputStream1 = new ByteArrayInputStream(XMLString.getBytes(StandardCharsets.UTF_8));
 
-            List<GDBList> lists = new LinkedList<GDBList>();
+            List<GDBList> lists = new LinkedList<>();
 
             GDBList list = null;
             try {

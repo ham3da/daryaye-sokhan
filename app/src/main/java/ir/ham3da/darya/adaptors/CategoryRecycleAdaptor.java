@@ -70,25 +70,21 @@ public class CategoryRecycleAdaptor extends RecyclerView.Adapter<CategoryRecycle
 
 
         //holder.avatar_item.
-        holder.cateCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
+        holder.cateCardView.setOnClickListener(v -> {
 
-                Intent intent;
+            Intent intent;
 
-                if(item_type == CateWithPoem.TYPE_CATEGORY) {
-                    intent = new Intent(context1, ActivityCate.class);
-                    intent.putExtra("cate_id", item_id);
-                    intent.putExtra("fromCate", true);
-                }
-                else{
-                    intent = new Intent(context1, ActivityPoem.class);
-                    intent.putExtra("poem_id", item_id);
-                }
-                context1.startActivity(intent);
-                Bungee.card(context1);
+            if(item_type == CateWithPoem.TYPE_CATEGORY) {
+                intent = new Intent(context1, ActivityCate.class);
+                intent.putExtra("cate_id", item_id);
+                intent.putExtra("fromCate", true);
             }
+            else{
+                intent = new Intent(context1, ActivityPoem.class);
+                intent.putExtra("poem_id", item_id);
+            }
+            context1.startActivity(intent);
+            Bungee.card(context1);
         });
     }
 

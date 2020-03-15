@@ -72,22 +72,14 @@ public class RandomPoetDialog {
             mDialog.show();
 
 
-            okBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //save settings and exit
-                    AppSettings.setRandomSelectedCategories(String.valueOf(selectedPoetCatID));
-                    activitySettings.setRandomPoetText();
-                    dismiss();
-                }
+            okBtn.setOnClickListener(view -> {
+                //save settings and exit
+                AppSettings.setRandomSelectedCategories(String.valueOf(selectedPoetCatID));
+                activitySettings.setRandomPoetText();
+                dismiss();
             });
 
-            cancelBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dismiss();
-                }
-            });
+            cancelBtn.setOnClickListener(view -> dismiss());
 
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mainContext);
 

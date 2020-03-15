@@ -107,12 +107,7 @@ public class ActivityAudioCollection extends AppCompatActivity {
 
         simpleSwipeRefreshLayout = findViewById(R.id.simpleSwipeRefreshLayout);
 
-        simpleSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                loadItems();
-            }
-        });
+        simpleSwipeRefreshLayout.setOnRefreshListener(this::loadItems);
 
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);

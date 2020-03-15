@@ -107,12 +107,7 @@ public class MainFavoritesFragment extends Fragment {
             };
 
             fav_recycler.addOnScrollListener(scrollListener);
-            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    refreshFavorites();
-                }
-            });
+            swipeRefreshLayout.setOnRefreshListener(this::refreshFavorites);
         }
 
         return root;

@@ -45,27 +45,21 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
         this.groupList = groupsList;
         groupStatus = new int[groupsList.size()];
 
-        listView.setOnGroupExpandListener(new OnGroupExpandListener() {
+        listView.setOnGroupExpandListener(groupPosition -> {
+            ExpandRPItem group = mainGroup.get(groupPosition);
+            if (groupList.get(group).size() > 0)
+                groupStatus[groupPosition] = 1;
 
-            public void onGroupExpand(int groupPosition) {
-                ExpandRPItem group = mainGroup.get(groupPosition);
-                if (groupList.get(group).size() > 0)
-                    groupStatus[groupPosition] = 1;
-
-            }
         });
 
-        listView.setOnGroupCollapseListener(new OnGroupCollapseListener() {
+        listView.setOnGroupCollapseListener(groupPosition -> {
+            ExpandRPItem group = mainGroup.get(groupPosition);
+            if (groupList.get(group).size() > 0)
+                groupStatus[groupPosition] = 0;
 
-            public void onGroupCollapse(int groupPosition) {
-                ExpandRPItem group = mainGroup.get(groupPosition);
-                if (groupList.get(group).size() > 0)
-                    groupStatus[groupPosition] = 0;
-
-            }
         });
 
-        mainGroup = new ArrayList<ExpandRPItem>();
+        mainGroup = new ArrayList<>();
         for (Map.Entry<ExpandRPItem, ArrayList<ExpandRPItem>> mapEntry : groupList.entrySet()) {
             mainGroup.add(mapEntry.getKey());
         }
@@ -102,58 +96,54 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 
         final ExpandRPItem child = getChild(groupPosition, childPosition);
 
-        holder.cb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+        holder.cb.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            ExpandRPItem parentGroup = getGroup(groupPosition);
+            child.isChecked = isChecked;
 
-            public void onCheckedChanged(CompoundButton buttonView,
-                                         boolean isChecked) {
-                ExpandRPItem parentGroup = getGroup(groupPosition);
-                child.isChecked = isChecked;
+            //if the CHILD is checked
+            //TODO: Here add/remove from list
 
-                //if the CHILD is checked
-                //TODO: Here add/remove from list
+            if (isChecked) {
+                ArrayList<ExpandRPItem> childList = getChild(parentGroup);
+                int childIndex = childList.indexOf(child);
+                boolean isAllChildClicked = true;
+                for (int i = 0; i < childList.size(); i++) {
+                    if (i != childIndex) {
+                        ExpandRPItem siblings = childList.get(i);
+                        if (!siblings.isChecked) {
+                            isAllChildClicked = false;
 
-                if (isChecked) {
-                    ArrayList<ExpandRPItem> childList = getChild(parentGroup);
-                    int childIndex = childList.indexOf(child);
-                    boolean isAllChildClicked = true;
-                    for (int i = 0; i < childList.size(); i++) {
-                        if (i != childIndex) {
-                            ExpandRPItem siblings = childList.get(i);
-                            if (!siblings.isChecked) {
-                                isAllChildClicked = false;
-
-                                DataHolder.checkedChilds.put(child.cat_id, parentGroup.cat_id);
-
-                                break;
-                            }
-                        }
-                    }
-
-                    //All the children are checked
-                    if (isAllChildClicked) {
-                        Log.i("All should be checked", "Each child is Clicked!!");
-                        parentGroup.isChecked = true;
-
-                        if (!(DataHolder.checkedChilds.containsKey(child.cat_id))) {
                             DataHolder.checkedChilds.put(child.cat_id, parentGroup.cat_id);
+
+                            break;
                         }
-                        checkAll = false;
                     }
                 }
-                //not all of the children are checked
-                else {
-                    if (parentGroup.isChecked) {
-                        parentGroup.isChecked = false;
-                        checkAll = false;
-                        DataHolder.checkedChilds.remove(child.cat_id);
-                    } else {
-                        checkAll = true;
-                        DataHolder.checkedChilds.remove(child.cat_id);
+
+                //All the children are checked
+                if (isAllChildClicked) {
+                    Log.i("All should be checked", "Each child is Clicked!!");
+                    parentGroup.isChecked = true;
+
+                    if (!(DataHolder.checkedChilds.containsKey(child.cat_id))) {
+                        DataHolder.checkedChilds.put(child.cat_id, parentGroup.cat_id);
                     }
-                    // child.isChecked =false;
+                    checkAll = false;
                 }
-                notifyDataSetChanged();
             }
+            //not all of the children are checked
+            else {
+                if (parentGroup.isChecked) {
+                    parentGroup.isChecked = false;
+                    checkAll = false;
+                    DataHolder.checkedChilds.remove(child.cat_id);
+                } else {
+                    checkAll = true;
+                    DataHolder.checkedChilds.remove(child.cat_id);
+                }
+                // child.isChecked =false;
+            }
+            notifyDataSetChanged();
         });
         holder.cb.setChecked(child.isChecked);
         holder.title.setText(child.name);
@@ -203,30 +193,24 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 
         holder.title.setText(groupItem.name);
 
-        holder.cb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                CheckBox cb2 = (CheckBox) view;
-                if (checkAll) {
+        holder.cb.setOnClickListener(view -> {
+            CheckBox cb2 = (CheckBox) view;
+            if (checkAll) {
 
-                    ArrayList<ExpandRPItem> childItem = getChild(groupItem);
-                    for (ExpandRPItem children : childItem) {
-                        children.isChecked = cb2.isChecked();
-                    }
+                ArrayList<ExpandRPItem> childItem = getChild(groupItem);
+                for (ExpandRPItem children : childItem) {
+                    children.isChecked = cb2.isChecked();
                 }
-                groupItem.isChecked = cb2.isChecked();
-
-                notifyDataSetChanged();
-
-                new Handler().postDelayed(new Runnable() {
-
-                    public void run() {
-                        if (!checkAll)
-                            checkAll = true;
-                    }
-                }, 50);
-
             }
+            groupItem.isChecked = cb2.isChecked();
+
+            notifyDataSetChanged();
+
+            new Handler().postDelayed(() -> {
+                if (!checkAll)
+                    checkAll = true;
+            }, 50);
+
         });
 
 

@@ -70,13 +70,9 @@ public class FavoritesAdaptor extends RecyclerView.Adapter<FavoritesAdaptor.View
         String referenceText = favoriteList1._CatTree;
         holder.fav_reference.setText(referenceText);
 
-        holder.favCardView.setOnClickListener(v -> {
-            browsePoem(v.getContext(), favoriteList1._ID);
-        });
+        holder.favCardView.setOnClickListener(v -> browsePoem(v.getContext(), favoriteList1._ID));
 
-        holder.moreOptions.setOnClickListener(v -> {
-            showMenu(v, favoriteList1._ID, finalPosition);
-        });
+        holder.moreOptions.setOnClickListener(v -> showMenu(v, favoriteList1._ID, finalPosition));
     }
 
     public void browsePoem(Context context, int poemId) {
@@ -111,10 +107,7 @@ public class FavoritesAdaptor extends RecyclerView.Adapter<FavoritesAdaptor.View
         final Dialog yesNoDialog = MyDialogs1.YesNoDialog(ques, context1.getDrawable(R.drawable.ic_delete_white_24dp), true);
 
         Button noBtn = yesNoDialog.findViewById(R.id.noBtn);
-        noBtn.setOnClickListener(v -> {
-            yesNoDialog.dismiss();
-
-        });
+        noBtn.setOnClickListener(v -> yesNoDialog.dismiss());
 
         Button yesBtn = yesNoDialog.findViewById(R.id.yesBtn);
         yesBtn.setOnClickListener(v -> {

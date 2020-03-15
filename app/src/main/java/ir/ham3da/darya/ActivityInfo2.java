@@ -86,9 +86,7 @@ public class ActivityInfo2 extends AppCompatActivity {
 
         FloatingActionButton fab = findViewById(R.id.fab);
 
-        fab.setOnClickListener(v -> {
-            UtilFunctions1.shareText(text);
-        });
+        fab.setOnClickListener(v -> UtilFunctions1.shareText(text));
 
         toolbarLayout = findViewById(R.id.toolbar_layout);
         UtilFunctions1.setupToolbarLayout(toolbarLayout, false);

@@ -580,7 +580,7 @@ public class GanjoorDbBrowser {
      * @return List<GanjoorPoet> list of Poets
      */
     public List<GanjoorPoet> getPoetsFromCat(String CommaSpIds) {
-        LinkedList<GanjoorPoet> poets = new LinkedList<GanjoorPoet>();
+        LinkedList<GanjoorPoet> poets = new LinkedList<>();
         if (getIsConnected()) {
             String query = "Select poet.id,  poet.name, poet.cat_id, poet.description, poet.update_info From cat " +
                     "INNER JOIN poet ON cat.poet_id = poet.id Where cat.id IN(" + CommaSpIds + ") Group By poet.id Order By poet.name";
@@ -610,7 +610,7 @@ public class GanjoorDbBrowser {
      * @return List<GanjoorPoet> list of Poets
      */
     public List<GanjoorPoet> getPoets(String CommaSpIds) {
-        LinkedList<GanjoorPoet> poets = new LinkedList<GanjoorPoet>();
+        LinkedList<GanjoorPoet> poets = new LinkedList<>();
         if (getIsConnected()) {
             String query = "SELECT id, name, cat_id, description, update_info FROM poet WHERE id IN (" + CommaSpIds + ") Order By name";
             Cursor cursor = _db.rawQuery(query, null);
@@ -639,7 +639,7 @@ public class GanjoorDbBrowser {
      * @return List<GanjoorPoet> list of Poets
      */
     public List<GanjoorPoet> getPoets() {
-        LinkedList<GanjoorPoet> poets = new LinkedList<GanjoorPoet>();
+        LinkedList<GanjoorPoet> poets = new LinkedList<>();
         if (getIsConnected()) {
             Cursor cursor = _db.query("poet", new String[]{"id", "name", "cat_id", "description", "update_info"}, null, null, null, null, "name");
             if (cursor.moveToFirst()) {
@@ -720,7 +720,7 @@ public class GanjoorDbBrowser {
      * @return در صورت عدم اتصال به دیتابیس یک لیست خالی باز می گردد
      */
     public List<GanjoorCat> getSubCats(int CatId) {
-        LinkedList<GanjoorCat> cats = new LinkedList<GanjoorCat>();
+        LinkedList<GanjoorCat> cats = new LinkedList<>();
         if (getIsConnected()) {
             Cursor cursor = _db.query("cat", new String[]{"id", "poet_id", "text", "parent_id", "url"}, "parent_id = " + CatId, null, null, null, "id");
             if (cursor.moveToFirst()) {
@@ -848,7 +848,7 @@ public class GanjoorDbBrowser {
 
     public List<FavoritesPoem> getFavoritesPoems(Boolean IncludeFirstVerse, int offset, int limit, int startIndex) {
 
-        LinkedList<FavoritesPoem> poems = new LinkedList<FavoritesPoem>();
+        LinkedList<FavoritesPoem> poems = new LinkedList<>();
         if (getIsConnected()) {
             Cursor cursor;
 
@@ -968,7 +968,7 @@ public class GanjoorDbBrowser {
      * @return
      */
     public List<GanjoorPoem> getPoems(int CatId, Boolean IncludeFirstVerse) {
-        LinkedList<GanjoorPoem> poems = new LinkedList<GanjoorPoem>();
+        LinkedList<GanjoorPoem> poems = new LinkedList<>();
         if (getIsConnected()) {
             Cursor cursor;
             if (IncludeFirstVerse) {
@@ -1200,7 +1200,7 @@ public class GanjoorDbBrowser {
      * @return List<GanjoorVerse> List of Verses
      */
     public List<GanjoorVerse> getVerses(int PoemId) {
-        LinkedList<GanjoorVerse> verses = new LinkedList<GanjoorVerse>();
+        LinkedList<GanjoorVerse> verses = new LinkedList<>();
         if (getIsConnected()) {
             Cursor cursor = _db.query("verse", new String[]{"poem_id", "vorder", "position", "text"}, "poem_id = " + PoemId, null, null, null, "vorder");
             if (cursor.moveToFirst()) {

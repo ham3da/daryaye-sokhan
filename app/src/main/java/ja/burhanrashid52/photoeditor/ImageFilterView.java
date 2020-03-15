@@ -105,12 +105,7 @@ class ImageFilterView extends GLSurfaceView implements GLSurfaceView.Renderer {
             Log.e(TAG, "onDrawFrame: " + mFilterBitmap);
             isSaveImage = false;
             if (mOnSaveBitmap != null) {
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mOnSaveBitmap.onBitmapReady(mFilterBitmap);
-                    }
-                });
+                new Handler(Looper.getMainLooper()).post(() -> mOnSaveBitmap.onBitmapReady(mFilterBitmap));
             }
         }
     }

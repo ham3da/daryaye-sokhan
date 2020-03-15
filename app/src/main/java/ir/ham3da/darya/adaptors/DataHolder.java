@@ -4,5 +4,5 @@ import java.util.HashMap;
 
 public class DataHolder
 {
-    public static HashMap<Integer, Integer> checkedChilds = new HashMap<Integer, Integer>();
+    public static HashMap<Integer, Integer> checkedChilds = new HashMap<>();
 }

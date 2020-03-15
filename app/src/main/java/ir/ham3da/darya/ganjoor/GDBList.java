@@ -27,7 +27,7 @@ public class GDBList {
      * برگردانیم
      */
     private GDBList() {
-        _Items = new LinkedList<GDBInfo>();
+        _Items = new LinkedList<>();
     }
 
     /**
@@ -36,7 +36,7 @@ public class GDBList {
      */
     public GDBList(GDBList source) {
         this._ListUrl = source._ListUrl;
-        _Items = new LinkedList<GDBInfo>();
+        _Items = new LinkedList<>();
         for (GDBInfo Item : source._Items) {
             _Items.add(new GDBInfo(Item));
         }
