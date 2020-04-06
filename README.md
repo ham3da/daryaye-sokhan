@@ -2,7 +2,7 @@
  The Sea of Poetry is a valuable library of poetry of Persian great poets.
  
 ## Useful information:
-* IDE: Android Studio 3.5.1
+* IDE: Android Studio 3.6+
 * Programming language: Java
 
 ## Used repositories:
