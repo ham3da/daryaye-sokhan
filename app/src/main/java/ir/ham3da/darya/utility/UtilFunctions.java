@@ -49,7 +49,7 @@ public class UtilFunctions {
 
     private ClipboardManager myClipboard;
     private ClipData myClip;
-    private static int Store = 0;
+    private static int Store = 5;
 
     public UtilFunctions(Context mCtx) {
 
@@ -71,7 +71,8 @@ public class UtilFunctions {
 
     /**
      * get AppStore Code
-     * @return int 0 => google play, 1 => cafebazaar, 2 => myket, 3 => charkhoneh, 4 => iranapps, 5 => avvalmarket, 6=> cando
+     * @return int 0 => google play, 1 => cafebazaar, 2 => myket,
+     * 3 => charkhoneh, 4 => iranapps, 5 => avvalmarket, 6=> cando
      */
     public static int getAppStoreCode()
     {
@@ -123,23 +124,6 @@ public class UtilFunctions {
 
 
 
-    public static void shareImage(Context context, Uri imageUri) {
-        try {
-
-            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-            StrictMode.setVmPolicy(builder.build());
-
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.setType("image/*");
-            intent.putExtra(Intent.EXTRA_STREAM, imageUri);
-            context.startActivity(Intent.createChooser(intent, context.getString(R.string.share)));
-
-        } catch (Exception e)
-        {
-            Log.e("shareImage", "shareImage: "+e.getMessage() );
-            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
 
     public void shareApp() {
         String link = getAppLink();

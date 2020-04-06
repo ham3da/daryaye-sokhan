@@ -65,11 +65,13 @@ public class ActivityInfo2 extends AppCompatActivity {
             text_box_long.setJustificationMode(Layout.JUSTIFICATION_MODE_INTER_WORD);
         }
 
+
         if (!text.isEmpty()) {
             text_box_long.setText( UtilFunctions.fromHtml(text), TextView.BufferType.SPANNABLE);
         }
 
         text_box_long.setTextSize(textSize);
+
 
         if(title2.isEmpty())
         {

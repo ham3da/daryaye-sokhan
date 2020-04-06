@@ -234,7 +234,7 @@ public class GanjoorDbBrowser {
     }
 
 
-    public void saveRate(int rate, String rateType,int poem_id, int verse_id) {
+    public void saveRate(int rate, String rateType, int poem_id, int verse_id) {
 
         if (getIsConnected()) {
 
@@ -253,8 +253,7 @@ public class GanjoorDbBrowser {
     }
 
 
-    public RateType getRates()
-    {
+    public RateType getRates() {
         if (getIsConnected()) {
             try {
                 String countQuery1 = "SELECT  Sum(plus_rate), Sum(negative_rate) FROM Points";
@@ -389,9 +388,6 @@ public class GanjoorDbBrowser {
     }
 
 
-
-
-
     public List<GanjoorVerse> getRandomVersePuzzle(int poem_id) {
         List<GanjoorVerse> ganjoorVerseList = new ArrayList<>();
         if (getIsConnected()) {
@@ -417,8 +413,7 @@ public class GanjoorDbBrowser {
                 if (GanjoorVerse2 != null) {
                     ganjoorVerseList.add(GanjoorVerse2);
 
-                    if(GanjoorVerse1._Position == GanjoorVerse.POSITION_SINGLE)
-                    {
+                    if (GanjoorVerse1._Position == GanjoorVerse.POSITION_SINGLE) {
                         GanjoorVerse GanjoorVerse3 = getNextVerse(GanjoorVerse1._PoemID, GanjoorVerse2._Order);
                         if (GanjoorVerse3 != null) {
                             ganjoorVerseList.add(GanjoorVerse3);
@@ -552,10 +547,21 @@ public class GanjoorDbBrowser {
      */
     public GanjoorPoem getPoemRandom(String CommaSpIds) {
         if (getIsConnected()) {
+            String sqlQuery;
 
-            Cursor cursor = _db.rawQuery("SELECT p.id, p.cat_id, p.title, p.url,  p.url as urlFake, " +
-                    "(SELECT  Count(*) FROM fav Where poem_id=p.id) AS favCount FROM poem p " +
-                    "WHERE cat_id IN(" + CommaSpIds + ") ORDER BY RANDOM() Limit 1", null);
+            if (CommaSpIds.length() > 0 && !CommaSpIds.equals("0")) {
+                sqlQuery = "SELECT p.id, p.cat_id, p.title, p.url,  p.url as urlFake, " +
+                        "(SELECT  Count(*) FROM fav Where poem_id=p.id) AS favCount FROM poem p " +
+                        "WHERE cat_id IN(" + CommaSpIds + ") ORDER BY RANDOM() Limit 1";
+            } else {
+                sqlQuery = "SELECT p.id, p.cat_id, p.title, p.url,  p.url as urlFake, " +
+                        "(SELECT  Count(*) FROM fav Where poem_id=p.id) AS favCount FROM poem p " +
+                        "ORDER BY RANDOM() Limit 1";
+            }
+
+            Cursor cursor = _db.rawQuery(sqlQuery, null);
+
+
             if (cursor.moveToFirst()) {
                 GanjoorPoem GanjoorPoem1 = new GanjoorPoem(
                         cursor.getInt(IDX_POEM_ID),

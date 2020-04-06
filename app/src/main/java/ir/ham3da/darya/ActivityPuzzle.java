@@ -333,7 +333,10 @@ public class ActivityPuzzle extends AppCompatActivity {
         protected void onPostExecute(Void result) {
 
             progress_bar.setVisibility(View.INVISIBLE);
-            textViewVerse.setText(UtilFunctions.fromHtml(vreseStringWithLine), TextView.BufferType.SPANNABLE);
+
+            if(vreseStringWithLine != null) {
+                textViewVerse.setText(UtilFunctions.fromHtml(vreseStringWithLine), TextView.BufferType.SPANNABLE);
+            }
 
             isAnswered = false;
             editText_response.setEnabled(true);

@@ -9,7 +9,7 @@
         android:orderInCategory="3"
         android:title="@string/search"
         android:icon="@drawable/ic_search_white_24dp"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         />
 
 
@@ -18,7 +18,7 @@
         android:orderInCategory="2"
         android:title="@string/add_new_collection"
         android:icon="@drawable/ic_add_white_24dp"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         />
 
     <item
@@ -26,7 +26,7 @@
         android:orderInCategory="1"
         android:title="@string/random_poetry"
         android:icon="@drawable/ic_shuffle_white_24dp"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         />
 
 </menu>

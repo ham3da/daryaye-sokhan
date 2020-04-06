@@ -68,7 +68,7 @@
             android:layout_height="?attr/actionBarSize"
             app:layout_collapseMode="pin"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="@string/poem"></androidx.appcompat.widget.Toolbar>
+            app:title="@string/poem" />
 
     </com.google.android.material.appbar.CollapsingToolbarLayout>
 </com.google.android.material.appbar.AppBarLayout>

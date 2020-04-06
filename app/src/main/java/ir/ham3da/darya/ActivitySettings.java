@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -25,6 +26,7 @@ import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -148,6 +150,29 @@ public class ActivitySettings extends AppCompatActivity {
                 });
 
             }
+
+
+            ListPreference listPreference = findPreference("randomSelectedCat");
+            if(listPreference != null)
+            {
+                String listPreference_title = getString(R.string.please_select);
+
+                listPreference.setTitle(listPreference_title + " (" + listPreference.getEntry() + ")");
+                listPreference.setOnPreferenceChangeListener((preference, newValue) ->
+                {
+
+
+                    int i = ((ListPreference)preference).findIndexOfValue(newValue.toString());
+                    CharSequence[] entries = ((ListPreference)preference).getEntries();
+
+
+
+                    listPreference.setTitle(listPreference_title + " (" + entries[i] + ")");
+                    return true;
+                });
+
+            }
+
 
             final ActivitySettings activitySettings = (ActivitySettings) getActivity();
 

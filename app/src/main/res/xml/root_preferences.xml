@@ -59,6 +59,21 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        app:title="@string/random_poetry_scope">
+
+        <ListPreference
+            app:key="randomSelectedCat"
+            app:title="@string/please_select"
+            app:entries="@array/randomSelectedCatString"
+            app:defaultValue="24"
+            app:entryValues="@array/randomSelectedCatValues"
+            app:icon="@drawable/ic_shuffle_gray_24dp"
+
+            />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         app:title="@string/general">
 
         <EditTextPreference

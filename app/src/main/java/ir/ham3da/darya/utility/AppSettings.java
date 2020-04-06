@@ -455,8 +455,7 @@ public class AppSettings {
         if (PreferenceManager1 == null) {
             return "24";
         }
-        return "24";
-        // return PreferenceManager1.getKey("randomSelectedCat", "24"); برای آینده
+        return PreferenceManager1.getKey("randomSelectedCat", "24");
     }
 
 

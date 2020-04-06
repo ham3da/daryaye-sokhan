@@ -114,6 +114,8 @@
     <string name="file_received">Received:</string>
     <string name="file_size">File Size:</string>
     <string name="random_poetry_scope">Divination Scope</string>
+    <string name="divination">Divination</string>
+
     <string name="random_poetry">Divination</string>
     <string name="select_poetry_scope">Select Poet and Poetry Collection:</string>
     <string name="change_scope">Change scope</string>
@@ -130,6 +132,7 @@
     <string name="notice">Notice</string>
     <string name="download_success">File download successful.</string>
     <string name="select_an_item">Please select an item:</string>
+    <string name="please_select">Please select</string>
     <string name="no_audio_this_item">No audio files have been added for this item so far!</string>
     <string name="no_donload_this_item">No audio files downloaded yet Do you want to download?</string>
     <string name="last_read">Last read</string>

@@ -109,7 +109,8 @@
     <string name="success_add">مجموعه جدید با موفقیت افزوده شد.</string>
     <string name="file_received">دریافت شده:</string>
     <string name="file_size">اندازه فایل:</string>
-    <string name="random_poetry_scope">محدوده فال</string>
+    <string name="random_poetry_scope">محدوده تفأل</string>
+    <string name="divination">تفأل</string>
     <string name="select_poetry_scope">انتخاب شاعر و مجموعه شعر:</string>
     <string name="change_scope">تغییر محدوده</string>
     <string name="change_scope_des">در این بخش می‌توانید محدوده انتخاب شعر تصادفی رو تغییر دهید.</string>
@@ -126,6 +127,7 @@
     <string name="notice">توجه</string>
     <string name="download_success">دریافت فایل با موفقیت انجام شد.</string>
     <string name="select_an_item">لطفاً یک مرود را انتخاب نمایید:</string>
+    <string name="please_select">لطفاً انتخاب کنید</string>
     <string name="no_audio_this_item">تاکنون خوانشی برای این مورد افزوده نشده است!</string>
     <string name="no_donload_this_item">تاکنون هیچ خوانشی برای این مورد دریافت نشده است آیا می خواهید دریافت کنید؟</string>
     <string name="last_read">آخرین مطالعه</string>

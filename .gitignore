@@ -11,3 +11,5 @@
 /build
 /captures
 .externalNativeBuild
+ssh_keys_github
+ssh_keys_github.pub
