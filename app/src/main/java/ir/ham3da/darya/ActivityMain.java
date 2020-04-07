@@ -1,50 +1,39 @@
 package ir.ham3da.darya;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-
 import android.os.Build;
 import android.os.Bundle;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Environment;
 import android.os.Handler;
-
-import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
+
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.iid.FirebaseInstanceId;
+
 import java.util.Locale;
 
 import ir.ham3da.darya.ganjoor.GanjoorDbBrowser;
 import ir.ham3da.darya.ganjoor.GanjoorPoem;
-import ir.ham3da.darya.ui.main.SectionsPagerAdapter;
+import ir.ham3da.darya.ui.main.MainFavoritesFragment;
+import ir.ham3da.darya.ui.main.MainPoetsFragment;
 import ir.ham3da.darya.utility.AppSettings;
 import ir.ham3da.darya.utility.CustomProgress;
 import ir.ham3da.darya.utility.LangSettingList;
@@ -113,14 +102,14 @@ public class ActivityMain extends AppCompatActivity
             mainActivityUtil1.extractGangoorDB(DB_PATH);
         }
 
-        if(UtilFunctions.getAppStoreCode() != 0) {
+        if (UtilFunctions.getAppStoreCode() != 0) {
             MenuItem mi = navigationView.getMenu().findItem(R.id.nav_donate);
             mi.setVisible(false);
         }
 
         //get_token();
 
-      }
+    }
 
 
     private void get_token() {
@@ -143,12 +132,32 @@ public class ActivityMain extends AppCompatActivity
         loadPager();
     }
 
+    @StringRes
+    private static final int[] TAB_TITLES = new int[]{R.string.tab_poets, R.string.tab_favorites};
+
     public void loadPager() {
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
-        ViewPager viewPager = findViewById(R.id.view_pager);
-        viewPager.setAdapter(sectionsPagerAdapter);
-        TabLayout tabs = findViewById(R.id.tabs);
-        tabs.setupWithViewPager(viewPager);
+        ViewPager2 viewPager = findViewById(R.id.view_pager);
+        viewPager.setAdapter(new FragmentStateAdapter(this) {
+            @Override
+            public int getItemCount() {
+                return TAB_TITLES.length;
+            }
+
+            @NonNull
+            @Override
+            public Fragment createFragment(int position) {
+                switch (position) {
+                    case 0:
+                        return new MainPoetsFragment();
+                    default:
+                    case 1:
+                        return new MainFavoritesFragment();
+                }
+            }
+        });
+        new TabLayoutMediator(findViewById(R.id.tabs), viewPager,
+                (tab, position) -> tab.setText(getString(TAB_TITLES[position]))).attach();
+
         showNotify();
     }
 
@@ -177,7 +186,7 @@ public class ActivityMain extends AppCompatActivity
             if (getIntent().getExtras() != null) {
 
                 for (String key : getIntent().getExtras().keySet()) {
-                    Log.e(TAG, key+": "+getIntent().getExtras().get(key) );
+                    Log.e(TAG, key + ": " + getIntent().getExtras().get(key));
                 }
 
                 if (getIntent().getExtras().containsKey("Package") && getIntent().getExtras().getString("Package", "").equals(getPackageName())) {
