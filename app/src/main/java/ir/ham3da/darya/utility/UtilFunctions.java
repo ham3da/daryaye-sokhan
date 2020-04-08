@@ -122,7 +122,23 @@ public class UtilFunctions {
         }
     }
 
+    public static void shareImage(Context context, Uri imageUri) {
+        try {
 
+            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+            StrictMode.setVmPolicy(builder.build());
+
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("image/*");
+            intent.putExtra(Intent.EXTRA_STREAM, imageUri);
+            context.startActivity(Intent.createChooser(intent, context.getString(R.string.share)));
+
+        } catch (Exception e)
+        {
+            Log.e("shareImage", "shareImage: "+e.getMessage() );
+            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
 
 
     public void shareApp() {
