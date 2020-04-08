@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "848431671364",
+    "firebase_url": "https://sea-of-poetry.firebaseio.com",
+    "project_id": "sea-of-poetry",
+    "storage_bucket": "sea-of-poetry.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:848431671364:android:015e23e1b787ac9d3d3411",
+        "android_client_info": {
+          "package_name": "ir.ham3da.darya"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "848431671364-r8thu49b490uppmn46il991a5mul3vkq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ir.ham3da.darya",
+            "certificate_hash": "b2e718d0521aa41236b4d1a99634428f5ad6dca7"
+          }
+        },
+        {
+          "client_id": "848431671364-kto0mntl237f6lkbrcfta2gvnh6hnnjm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ir.ham3da.darya",
+            "certificate_hash": "5a29ca6be6dad849bda12064acb3a60fc15fb530"
+          }
+        },
+        {
+          "client_id": "848431671364-t4ss0m0agka3ch6i6q2n3cf6uj9t5t5j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAA6PfACSO4OJSf9ad3VraXtMrGtofk9Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "848431671364-t4ss0m0agka3ch6i6q2n3cf6uj9t5t5j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
