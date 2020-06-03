@@ -19,7 +19,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.webkit.URLUtil;
 import android.widget.SearchView;
 
@@ -220,7 +219,7 @@ public class ActivityCollection extends AppCompatActivity {
             int id = searchView.getContext()
                     .getResources()
                     .getIdentifier("android:id/search_src_text", null, null);
-            TextView textView = (TextView) searchView.findViewById(id);
+            TextView textView = searchView.findViewById(id);
             textView.setTypeface(typeface);
         } catch (Exception ex) {
             Log.e(TAG, "msg: " + ex.getMessage());

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import java.util.ArrayList;

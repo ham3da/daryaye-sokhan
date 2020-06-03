@@ -6,7 +6,6 @@ import android.os.Bundle;
 
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +23,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-import ir.ham3da.darya.adaptors.CateRecycleAdaptor;
 import ir.ham3da.darya.adaptors.CategoryRecycleAdaptor;
 import ir.ham3da.darya.adaptors.PoemsRecycleAdaptor;
 import ir.ham3da.darya.ganjoor.CateWithPoem;

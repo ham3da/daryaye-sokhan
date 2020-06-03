@@ -11,7 +11,6 @@ import android.graphics.drawable.Icon;
 import android.net.Uri;
 
 import android.util.AttributeSet;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
