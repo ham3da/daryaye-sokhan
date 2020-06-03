@@ -7,22 +7,15 @@ import android.view.Window;
 
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.widget.AdapterView.OnItemSelectedListener;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import ir.ham3da.darya.adaptors.AdaptorBooks;
 import ir.ham3da.darya.adaptors.PoetSpinnerAdapter;
-import ir.ham3da.darya.ganjoor.GanjoorCat;
 import ir.ham3da.darya.ganjoor.GanjoorDbBrowser;
 import ir.ham3da.darya.ganjoor.GanjoorPoet;
 import ir.ham3da.darya.utility.AppSettings;

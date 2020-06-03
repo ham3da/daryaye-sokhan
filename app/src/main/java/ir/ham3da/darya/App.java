@@ -1,12 +1,9 @@
 package ir.ham3da.darya;
 
 import android.app.Application;
-import android.content.Context;
 
 
 import com.google.firebase.analytics.FirebaseAnalytics;
-
-import ir.ham3da.darya.utility.SetLanguage;
 
 public class App extends Application
 {

@@ -3,7 +3,6 @@ package ir.ham3da.darya;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.content.Context;
 import android.media.MediaPlayer;
@@ -11,7 +10,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.text.method.ArrowKeyMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,22 +23,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
-import ir.ham3da.darya.ganjoor.GanjoorCat;
 import ir.ham3da.darya.ganjoor.GanjoorDbBrowser;
-import ir.ham3da.darya.ganjoor.GanjoorPoem;
 import ir.ham3da.darya.ganjoor.GanjoorPoet;
 import ir.ham3da.darya.ganjoor.GanjoorVerse;
 import ir.ham3da.darya.utility.AppFontManager;
 import ir.ham3da.darya.utility.AppSettings;
-import ir.ham3da.darya.utility.DownloadFromUrl;
 import ir.ham3da.darya.utility.MyDialogs;
 import ir.ham3da.darya.utility.RateType;
 import ir.ham3da.darya.utility.SetLanguage;
