@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
@@ -136,7 +137,7 @@ public class AdaptorBooks extends RecyclerView.Adapter<AdaptorBooks.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView book_name;
-        public CardView bookCardView;
+        public LinearLayout bookCardView;
 
         public ViewHolder(View itemView) {
             super(itemView);

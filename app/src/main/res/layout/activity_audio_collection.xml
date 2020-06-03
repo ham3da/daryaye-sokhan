@@ -41,7 +41,8 @@
                 android:clipToPadding="true"
                 android:paddingBottom="5dip"
                 android:scrollbars="vertical"
-                tools:listitem="@layout/item_audio" />
+                tools:listitem="@layout/item_audio"
+                android:background="?attr/colorPrimaryBG"/>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </LinearLayout>

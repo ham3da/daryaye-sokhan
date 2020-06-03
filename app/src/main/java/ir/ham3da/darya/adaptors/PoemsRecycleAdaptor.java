@@ -1,35 +1,38 @@
 
 package ir.ham3da.darya.adaptors;
 
-        import android.content.Context;
-        import android.content.Intent;
-        import android.util.TypedValue;
-        import android.view.LayoutInflater;
-        import android.view.View;
-        import android.view.ViewGroup;
-        import android.widget.ImageView;
-        import android.widget.TextView;
+import android.content.Context;
+import android.content.Intent;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-        import androidx.cardview.widget.CardView;
-        import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 
-        import java.util.List;
+import java.util.List;
 
-        import ir.ham3da.darya.utility.AppFontManager;
-        import ir.ham3da.darya.utility.AppSettings;
-        import ir.ham3da.darya.Bungee;
-        import ir.ham3da.darya.ganjoor.GanjoorPoem;
-        import ir.ham3da.darya.ActivityPoem;
-        import ir.ham3da.darya.R;
+import ir.ham3da.darya.utility.AppFontManager;
+import ir.ham3da.darya.utility.AppSettings;
+import ir.ham3da.darya.Bungee;
+import ir.ham3da.darya.ganjoor.GanjoorPoem;
+import ir.ham3da.darya.ActivityPoem;
+import ir.ham3da.darya.R;
 
-public class PoemsRecycleAdaptor extends RecyclerView.Adapter<PoemsRecycleAdaptor.ViewHolder> {
+public class PoemsRecycleAdaptor extends RecyclerView.Adapter<PoemsRecycleAdaptor.ViewHolder>
+{
 
     private List<GanjoorPoem> GanjoorPoemList;
     private Context context1;
 
     private float textSize;
     int fontId;
-    public PoemsRecycleAdaptor(List<GanjoorPoem> GanjoorPoemList, Context context) {
+
+    public PoemsRecycleAdaptor(List<GanjoorPoem> GanjoorPoemList, Context context)
+    {
         this.GanjoorPoemList = GanjoorPoemList;
         this.context1 = context;
         AppSettings.Init(context);
@@ -53,7 +56,8 @@ public class PoemsRecycleAdaptor extends RecyclerView.Adapter<PoemsRecycleAdapto
 
         final int poem_id = GanjoorPoem1._ID;
 
-        if( !GanjoorPoem1._FirstVerse.isEmpty()) {
+        if (!GanjoorPoem1._FirstVerse.isEmpty())
+        {
             holder.item_first_verse.setText(GanjoorPoem1._FirstVerse);
             holder.item_first_verse.setVisibility(View.VISIBLE);
         }
@@ -80,12 +84,13 @@ public class PoemsRecycleAdaptor extends RecyclerView.Adapter<PoemsRecycleAdapto
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder
+    {
 
         public TextView item_text;
         public TextView item_first_verse;
         public ImageView avatar_item;
-        public CardView cateCardView;
+        public LinearLayout cateCardView;
 
         public ViewHolder(View itemView)
         {

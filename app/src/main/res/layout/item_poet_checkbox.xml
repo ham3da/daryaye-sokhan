@@ -34,13 +34,14 @@
                 android:id="@+id/poets_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="0dp"
                 android:layout_toLeftOf="@+id/checkbox_poet"
                 android:layout_toRightOf="@+id/item_arrow"
                 android:gravity="center_vertical"
                 android:padding="4dp"
                 android:text="@string/poet"
-                android:textColor="@color/black"
+                android:textColor="?attr/ListTextColor"
                 android:textSize="14sp" />
 
             <ImageView android:id="@+id/item_arrow"
@@ -57,7 +58,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background"/>
+            android:background="?attr/ListDivider"/>
     </LinearLayout>
 
 

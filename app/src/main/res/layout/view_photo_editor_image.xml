@@ -6,11 +6,13 @@
 
     <ImageView
         android:id="@+id/imgPhotoEditorClose"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
         android:layout_gravity="top|start"
         android:elevation="1dp"
-        app:srcCompat="@drawable/ic_remove" />
+        app:srcCompat="@drawable/ic_clear_my_black_24dp"
+        android:tint="@color/black"
+        android:background="@drawable/border_img_toolbar" />
 
     <FrameLayout
         android:id="@+id/frmBorder"
@@ -28,7 +30,7 @@
             android:adjustViewBounds="true"
             android:contentDescription="@string/app_name"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/ic_remove" />
+            app:srcCompat="@drawable/ic_bird" />
 
     </FrameLayout>
 

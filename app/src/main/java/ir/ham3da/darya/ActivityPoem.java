@@ -173,6 +173,7 @@ public class ActivityPoem extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        UtilFunctions.changeTheme(this);
         setContentView(R.layout.activity_poem);
 
         Toolbar toolbar = findViewById(R.id.toolbar_poem);

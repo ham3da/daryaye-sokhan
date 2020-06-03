@@ -16,6 +16,7 @@
             android:layout_height="match_parent"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="8dp"
-            tools:listitem="@layout/item_collection" />
+            tools:listitem="@layout/item_collection"
+            android:background="?attr/colorPrimaryBG"/>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

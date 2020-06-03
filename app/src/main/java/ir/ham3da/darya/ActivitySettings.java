@@ -1,6 +1,8 @@
 package ir.ham3da.darya;
+
 import android.app.Dialog;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
@@ -25,6 +27,8 @@ import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.SwitchPreference;
+import androidx.preference.SwitchPreferenceCompat;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -40,29 +44,35 @@ import ir.ham3da.darya.utility.CustomProgress;
 import ir.ham3da.darya.utility.LangSettingList;
 import ir.ham3da.darya.utility.LinkItem;
 import ir.ham3da.darya.utility.SetLanguage;
+import ir.ham3da.darya.utility.UtilFunctions;
 
-public class ActivitySettings extends AppCompatActivity {
+public class ActivitySettings extends AppCompatActivity
+{
 
 
-    static Preference  pref_op_db, pref_setFont;
+    static Preference pref_op_db, pref_setFont;
+   static boolean nightTheme ;
 
-
-//    static Preference  pref_rand_poem;
+    //    static Preference  pref_rand_poem;
     int currentLocalIndex;
     GanjoorDbBrowser GanjoorDbBrowser1;
 
 
-    public void setRandomPoemText() {
+
+    public void setRandomPoemText()
+    {
 
     }
 
 
-    public static String getRandomPoetsName(GanjoorDbBrowser GanjoorDbBrowser1) {
+    public static String getRandomPoetsName(GanjoorDbBrowser GanjoorDbBrowser1)
+    {
         List<String> names = new ArrayList<>();
         String randomSelectedPoets = AppSettings.getRandomSelectedPoets();
 
         List<GanjoorPoet> poets = GanjoorDbBrowser1.getPoets(randomSelectedPoets);
-        for (GanjoorPoet poet : poets) {
+        for (GanjoorPoet poet : poets)
+        {
             names.add(poet._Name);
         }
         String names2 = TextUtils.join(" - ", names);
@@ -70,12 +80,14 @@ public class ActivitySettings extends AppCompatActivity {
     }
 
 
-    public static String getRandomPoetsNameFromCat(GanjoorDbBrowser GanjoorDbBrowser1) {
+    public static String getRandomPoetsNameFromCat(GanjoorDbBrowser GanjoorDbBrowser1)
+    {
         List<String> names = new ArrayList<>();
         String randomSelectedCategories = AppSettings.getRandomSelectedCategories();
 
         List<GanjoorPoet> poets = GanjoorDbBrowser1.getPoetsFromCat(randomSelectedCategories);
-        for (GanjoorPoet poet : poets) {
+        for (GanjoorPoet poet : poets)
+        {
             names.add(poet._Name);
         }
         String names2 = TextUtils.join(" - ", names);
@@ -84,15 +96,33 @@ public class ActivitySettings extends AppCompatActivity {
 
 
     @Override
-    protected void attachBaseContext(Context newBase) {
+    protected void attachBaseContext(Context newBase)
+    {
         super.attachBaseContext(SetLanguage.wrap(newBase));
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void applyOverrideConfiguration(Configuration overrideConfiguration)
+    {
+        if (overrideConfiguration != null) {
+            int uiMode = overrideConfiguration.uiMode;
+            overrideConfiguration.setTo(getBaseContext().getResources().getConfiguration());
+            overrideConfiguration.uiMode = uiMode;
+        }
+        super.applyOverrideConfiguration(overrideConfiguration);
+    }
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+       UtilFunctions.changeTheme(this, true);
+        AppSettings.Init(this);
+        nightTheme = AppSettings.checkThemeIsDark();
+
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+        {
             SetLanguage.wrap(this);
         }
 
@@ -110,26 +140,31 @@ public class ActivitySettings extends AppCompatActivity {
 
 
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
+        if (actionBar != null)
+        {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         setTitle(R.string.action_settings);
     }
 
-    public static class SettingsFragment extends PreferenceFragmentCompat {
+    public static class SettingsFragment extends PreferenceFragmentCompat
+    {
 
         @Override
-        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey)
+        {
+            final ActivitySettings activitySettings = (ActivitySettings) getActivity();
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
-
             GanjoorDbBrowser GanjoorDbBrowser1 = new GanjoorDbBrowser(getContext());
 
             EditTextPreference prefTextSize = findPreference("TextSize");
 
+
             final float textSize = AppSettings.getTextSize();
 
 
-            if (prefTextSize != null) {
+            if (prefTextSize != null)
+            {
 
                 String textSizeStr = String.format(Locale.getDefault(), "%.0f", textSize);
 
@@ -144,54 +179,53 @@ public class ActivitySettings extends AppCompatActivity {
                     App globalVariable = (App) getContext().getApplicationContext();
                     globalVariable.setUpdatePoetList(true);
                     globalVariable.setUpdateFavList(true);
-                    String textSizeStr1 = String.format(Locale.getDefault(), "%.0f", Float.parseFloat( newValue.toString()) );
-                    prefTextSize.setTitle( getContext().getString(R.string.Text_size )+ " (" + textSizeStr1 + ")");
+                    String textSizeStr1 = String.format(Locale.getDefault(), "%.0f", Float.parseFloat(newValue.toString()));
+                    prefTextSize.setTitle(getContext().getString(R.string.Text_size) + " (" + textSizeStr1 + ")");
                     return true;
                 });
 
             }
 
+            SwitchPreferenceCompat night_theme = findPreference("night_theme");
+            if (night_theme != null)
+            {
+                night_theme.setOnPreferenceChangeListener((preference, newValue) -> {
+
+                    if(nightTheme != (boolean)newValue)
+                    {
+                         activitySettings.recreate();
+                    }
+                    return true;
+                });
+            }
 
             ListPreference listPreference = findPreference("randomSelectedCat");
-            if(listPreference != null)
+            if (listPreference != null)
             {
                 String listPreference_title = getString(R.string.please_select);
 
                 listPreference.setTitle(listPreference_title + " (" + listPreference.getEntry() + ")");
                 listPreference.setOnPreferenceChangeListener((preference, newValue) ->
                 {
-
-
-                    int i = ((ListPreference)preference).findIndexOfValue(newValue.toString());
-                    CharSequence[] entries = ((ListPreference)preference).getEntries();
-
-
-
+                    int i = ((ListPreference) preference).findIndexOfValue(newValue.toString());
+                    CharSequence[] entries = ((ListPreference) preference).getEntries();
                     listPreference.setTitle(listPreference_title + " (" + entries[i] + ")");
                     return true;
                 });
 
             }
 
-
-            final ActivitySettings activitySettings = (ActivitySettings) getActivity();
-
             LangSettingList LangSettingList1 = AppSettings.getLangSettingList(getContext());
-
             Preference preferenceLang = findPreference("langSettingList");
-
             if (preferenceLang != null)
             {
                 preferenceLang.setTitle(preferenceLang.getTitle() + " (" + LangSettingList1.getText() + ")");
-
                 preferenceLang.setOnPreferenceClickListener(preference -> {
-
                     activitySettings.openLangDailog(preference);
                     return false;
                 });
 
             }
-
 
 
             pref_op_db = findPreference("optimize_db");
@@ -204,12 +238,9 @@ public class ActivitySettings extends AppCompatActivity {
 
             int fontId = AppSettings.getPoemsFont();
 
-           // ArrayList<LinkItem> fonts = activitySettings.getFontsList();
-
+            // ArrayList<LinkItem> fonts = activitySettings.getFontsList();
             String fontName = AppFontManager.getFontName(getContext(), fontId);
-
             pref_setFont.setTitle(pref_setFont.getTitle() + " (" + fontName + ")");
-
             pref_setFont.setOnPreferenceClickListener(preference -> {
                 activitySettings.openFontDailog(preference);
 
@@ -223,12 +254,13 @@ public class ActivitySettings extends AppCompatActivity {
 
 
     @Override
-    protected void onPause() {
+    protected void onPause()
+    {
         super.onPause();
     }
 
 
-    protected  ArrayList<LinkItem> getFontsList()
+    protected ArrayList<LinkItem> getFontsList()
     {
         ArrayList<LinkItem> links = AppFontManager.getFontsList(this);
         return links;
@@ -237,7 +269,7 @@ public class ActivitySettings extends AppCompatActivity {
     protected void openFontDailog(Preference preference)
     {
 
-       final Dialog dialog = new Dialog(preference.getContext());
+        final Dialog dialog = new Dialog(preference.getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_listview);
 
@@ -268,7 +300,7 @@ public class ActivitySettings extends AppCompatActivity {
 
             String fontName = AppFontManager.getFontName(getBaseContext(), position);
 
-            preference.setTitle(getString(R.string.change_poem_font)  + " (" + fontName + ")");
+            preference.setTitle(getString(R.string.change_poem_font) + " (" + fontName + ")");
 
         });
 
@@ -311,7 +343,8 @@ public class ActivitySettings extends AppCompatActivity {
 
             dialog.dismiss();
             AppSettings.saveLanguageSettings(position);
-            if (currentLocalIndex != position) {
+            if (currentLocalIndex != position)
+            {
                 currentLocalIndex = position;
 
                 recreate();
@@ -322,34 +355,39 @@ public class ActivitySettings extends AppCompatActivity {
 
         okBtn.setOnClickListener(v -> dialog.dismiss());
 
-       dialog.show();
+        dialog.show();
 
     }
 
 
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
 
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed()
+    {
         super.onBackPressed();
         Bungee.slideDown(this);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         getMenuInflater().inflate(R.menu.setting_menu, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item)
+    {
 
         int id = item.getItemId();
-        if (android.R.id.home == id) {
+        if (android.R.id.home == id)
+        {
             finish();
             Bungee.slideDown(this);
         }
@@ -359,13 +397,14 @@ public class ActivitySettings extends AppCompatActivity {
     protected void optimizeDatabase()
     {
         final CustomProgress customProgressDlg = new CustomProgress(this);
-        customProgressDlg.showProgress(getString(R.string.optimize_db), getString(R.string.please_wait2) , false, false, true);
+        customProgressDlg.showProgress(getString(R.string.optimize_db), getString(R.string.please_wait2), false, false, true);
 
         new Thread(() -> {
             try
             {
                 GanjoorDbBrowser1.Vacum();
-            } catch (Exception e) {
+            } catch (Exception e)
+            {
                 e.printStackTrace();
             }
             customProgressDlg.dismiss();

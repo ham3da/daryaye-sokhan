@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#51a2d5</color>
-    <color name="colorPrimaryDark">#31537b</color>
-    <color name="colorAccent">#d58451</color>
+    <color name="colorPrimary">#232d36</color>
+    <color name="colorPrimaryDark">#101d25</color>
+    <color name="colorAccent">#00af9c</color>
+
     <color name="lightGray">#e0e0e0</color>
     <color name="white">#ffffff</color>
     <color name="dark">#5e5656</color>
     <color name="hint">#666262</color>
     <color name="black">#000000</color>
-    <color name="divider">#c9cbcd</color>
     <color name="disable">#f5f5f5</color>
     <color name="background">#C9CBCD</color>
     <color name="background_detail">#d2c3c7</color>
@@ -30,7 +30,7 @@
 
     <color name="indigo">#3f51b5</color>
     <color name="blue">#2196f3</color>
-    <color name="poet_title_color">#304FFE</color>
+    <color name="poet_title_color">#fff</color>
 
     <color name="deepPurple">#673ab7</color>
     <color name="purple">#9c27b0</color>
@@ -47,7 +47,6 @@
     <color name="cyan">#0288d1</color>
     <color name="disabledText">#9e9e9e</color>
     <color name="disabledfub">#D8D8D8</color>
-
     <color name="spark_primary_color">#FFFFC107</color>
     <color name="spark_secondary_color">#FFFF5722</color>
     <color name="spark_image_tint">#f44336</color>
@@ -68,34 +67,35 @@
     <color name="tool_bg">#151414</color>
     <color name="green">#00FF00</color>
 
-    <color name="iconsTintColor">#4a5158</color>
-    <color name="colorPrimaryBG">#fff</color>
-    <color name="playerBGColor">#fff</color>
-    <color name="SearchIconsTintColor">#a3a7aa</color>
-    <color name="ListPoetIconBGColor">#fff</color>
-    <color name="addressBarMore">#EAEFF3</color>
-    <color name="ListCircleColor">#EAF0F3</color>
+    <color name="colorPrimaryBG">#101d24</color>
+    <color name="playerBGColor">#222e35</color>
+    <color name="divider">#2b373d</color>
+    <color name="iconsTintColor">#979ca0</color>
+    <color name="SearchIconsTintColor">#000</color>
+    <color name="ListPoetIconBGColor">#EAEFF3</color>
+    <color name="addressBarMore">#2D3943</color>
+    <color name="ListCircleColor">#00bfa5</color>
     <color name="ListCircleTextColor">#000</color>
 
     <color name="InputGB">#2c373d</color>
-    <color name="progressBackgroundTint">#dbdbdb</color>
-    <color name="moreColor">#455A64</color>
+    <color name="progressBackgroundTint">#2c373d</color>
+    <color name="moreColor">#EAEFF3</color>
 
-    <color name="windowBackground">#fff</color>
-    <color name="colorBackground">#fff</color>
-    <color name="ListPoetIconBorderColor">#C9CBCD</color>
-    <color name="PuzzleIncorrectColor">#f44336</color>
-    <color name="listBackgroundColor">#fff</color>
-    <color name="verse_drawable">#fff</color>
-    <color name="verse_selected">#b3e5fb</color>
-    <color name="verse_pressed">#b3e5fb</color>
-    <color name="poem_bar">#0288d1</color>
-    <color name="poem_bar_dark">#016FAA</color>
-    <color name="SearchListSecondBackgroundColor">#e0e0e0</color>
-    <color name="SearchIconBackgroundColor">#000</color>
-    <color name="SearchInputGB">#fff</color>
-    <color name="textColor">#000</color>
-    <color name="itemBackground">#fff</color>
+    <color name="windowBackground">#101d24</color>
+    <color name="colorBackground">#101d24</color>
+    <color name="ListPoetIconBorderColor">#000</color>
+    <color name="PuzzleIncorrectColor">#ff0000</color>
+    <color name="listBackgroundColor">#101d24</color>
+    <color name="verse_drawable">#101d24</color>
 
+    <color name="verse_selected">#232d36</color>
+    <color name="verse_pressed">#2b373d</color>
 
- </resources>
+    <color name="poem_bar">#232d36</color>
+    <color name="poem_bar_dark">#2D3943</color>
+    <color name="SearchListSecondBackgroundColor">#2D3943</color>
+    <color name="SearchIconBackgroundColor">#979ca0</color>
+    <color name="SearchInputGB" >#2c373d</color>
+    <color name="textColor">#fff</color>
+    <color name="itemBackground">#232d36</color>
+</resources>

@@ -11,14 +11,14 @@
         android:id="@+id/address_bar"
         android:layout_width="match_parent"
         android:layout_height="36dp"
-        android:background="@color/poem_bar">
+        android:background="?attr/addressBarBGColor">
 
         <RelativeLayout
             android:id="@+id/verse_more_option_layout"
             android:layout_width="36dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:background="@color/poem_bar_dark"
+            android:background="?attr/addressBarMoreBGColor"
             android:gravity="center">
 
             <ImageView
@@ -74,7 +74,7 @@
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:layout_below="@+id/address_bar"
-        android:background="@color/white"
+        android:background="?attr/playerBGColor"
         android:visibility="gone">
         <ImageView
             android:id="@+id/audio_close"

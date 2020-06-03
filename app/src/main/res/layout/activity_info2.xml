@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".ActivityInfo2">
+    tools:context=".ActivityInfo2"
+    android:background="?attr/listBackgroundColor"
+    >
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"

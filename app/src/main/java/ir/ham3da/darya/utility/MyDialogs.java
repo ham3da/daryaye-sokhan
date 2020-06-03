@@ -175,6 +175,18 @@ public class MyDialogs {
     public void showHelp() {
         try {
             float textSize = AppSettings.getTextSize();
+            String background_color = "#ffffff";
+            String text_color = "#000";
+            String link_color = "blue";
+
+
+            if(AppSettings.checkThemeIsDark())
+            {
+                background_color = "#101d24";
+                text_color = "#fff";
+                link_color = "#FFC107";
+            }
+
             String title = this.context.getString(R.string.help);
 
             String CurrentLang = Locale.getDefault().getLanguage();
@@ -189,6 +201,9 @@ public class MyDialogs {
             String text = new String(buffer);
 
             text = text.replace("$fontSize", textSize + "px");
+            text = text.replace("$background_color", background_color);
+            text = text.replace("$text_color", text_color );
+            text = text.replace("$link_color", link_color );
 
             Intent intent = new Intent(context, ActivityWeb.class);
             intent.putExtra("title", title);
@@ -208,6 +223,17 @@ public class MyDialogs {
         try {
             float textSize = AppSettings.getTextSize();
             String title = this.context.getString(R.string.about);
+            String background_color = "#ffffff";
+            String text_color = "#000";
+            String link_color = "blue";
+
+
+            if(AppSettings.checkThemeIsDark())
+            {
+                background_color = "#101d24";
+                text_color = "#fff";
+                link_color = "#FFC107";
+            }
 
             String CurrentLang = Locale.getDefault().getLanguage();
             String file_name = "pr_po_" + CurrentLang + ".htm";
@@ -224,6 +250,9 @@ public class MyDialogs {
             text = text.replace("$name", context.getString(R.string.app_name));
 
             text = text.replace("$fontSize", textSize + "px");
+            text = text.replace("$background_color", background_color);
+            text = text.replace("$text_color", text_color );
+            text = text.replace("$link_color", link_color );
 
             Intent intent = new Intent(context, ActivityWeb.class);
             intent.putExtra("title", title);
@@ -245,6 +274,17 @@ public class MyDialogs {
         try {
             float textSize = AppSettings.getTextSize();
             String title = this.context.getString(R.string.about);
+            String background_color = "#ffffff";
+            String text_color = "#000";
+            String link_color = "blue";
+
+
+            if(AppSettings.checkThemeIsDark())
+            {
+                background_color = "#101d24";
+                text_color = "#fff";
+                link_color = "#FFC107";
+            }
 
             String CurrentLang = Locale.getDefault().getLanguage();
 
@@ -262,6 +302,9 @@ public class MyDialogs {
             text = text.replace("$name", context.getString(R.string.app_name));
 
             text = text.replace("$fontSize", textSize + "px");
+            text = text.replace("$background_color", background_color);
+            text = text.replace("$text_color", text_color );
+            text = text.replace("$link_color", link_color );
 
             Intent intent = new Intent(context, ActivityWeb.class);
             intent.putExtra("title", title);

@@ -18,22 +18,37 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ActivityPuzzle"/>
-        <activity android:name=".ActivityWeb" />
-        <activity android:name=".ActivityImageEdit" />
+        <activity
+            android:name=".ActivityPuzzle"
+            android:theme="@style/AppTheme.ActionBar"
+            android:label="@string/dont_forget_poetry"
+            />
+        <activity android:name=".ActivityWeb"
+            android:theme="@style/AppTheme.ActionBar"
+            android:label="@string/about"
+            />
+        <activity android:name=".ActivityImageEdit"
+            android:label="@string/share_as_img"
+            android:theme="@style/AppTheme.ActionBar"
+            />
         <activity
             android:name=".ActivityInfo2"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ActivityAudioCollection"
-            android:label="@string/download_declaim" />
+            android:label="@string/download_declaim"
+            android:theme="@style/AppTheme.ActionBar"
+            />
         <activity
             android:name=".ActivityCollection"
+            android:theme="@style/AppTheme.ActionBar"
             android:label="@string/collections" />
         <activity
             android:name=".ActivitySettings"
+              android:theme="@style/AppTheme.ActionBar"
             android:label="@string/action_settings" />
         <activity
             android:name=".ActivityMain"
@@ -60,7 +75,8 @@
         <activity
             android:name=".ActivityPoem"
             android:label="@string/poem"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            />
         <activity
             android:name=".ActivityCate"
             android:label="@string/category"

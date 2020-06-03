@@ -66,7 +66,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginStart="36dp"
                         android:layout_marginEnd="36dp"
-                        android:background="@color/white"
+                        android:background="?attr/SearchInputGB"
                         android:gravity="start|center"
                         android:hint="@string/search_hint"
                         android:imeOptions="actionSearch"
@@ -75,7 +75,7 @@
                         android:paddingEnd="10dp"
                         android:paddingBottom="5dp"
                         android:singleLine="true"
-                        android:textColor="@color/title_color"
+                        android:textColor="?attr/ListTextColor"
                         android:textColorHint="@android:color/darker_gray" />
 
                     <ImageButton
@@ -141,7 +141,8 @@
         android:layout_height="match_parent"
         android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:listitem="@layout/item_search_result"></androidx.recyclerview.widget.RecyclerView>
+        tools:listitem="@layout/item_search_result"
+        android:background="?attr/colorPrimaryBG" />
 
     <ProgressBar
         android:id="@+id/progressBar_loader"

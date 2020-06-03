@@ -67,8 +67,8 @@ public class ActivitySearch extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UtilFunctions.changeTheme(this);
         setContentView(R.layout.activity_search);
-
         progressBar_loader = findViewById(R.id.progressBar_loader);
 
         UtilFunctions1 = new UtilFunctions(this);

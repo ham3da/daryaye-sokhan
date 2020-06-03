@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="0px"
     android:id="@+id/main_layer"
-    android:orientation="vertical">
-    <androidx.cardview.widget.CardView
+    android:orientation="vertical"
+    android:background="?attr/listBackgroundColor">
+    <LinearLayout
         android:id="@+id/versCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:animateLayoutChanges="true"
-        android:foreground="?attr/selectableItemBackground"
+        android:background="?attr/selectableItemBackground"
+        android:orientation="vertical"
         android:focusable="true">
         <RelativeLayout
             android:layout_width="match_parent"
@@ -34,7 +36,7 @@
                 android:paddingStart="2dp"
                 android:paddingBottom="3dp"
                 android:text="@string/first_verse"
-                android:textColor="@color/title_color"
+                android:textColor="?attr/ListTextColor"
                 android:textSize="14sp"
                 android:textAlignment="gravity" />
             <TextView
@@ -45,10 +47,10 @@
                 android:paddingStart="2dp"
                 android:paddingBottom="3dp"
                 android:text="@string/second_verse"
-                android:textColor="@color/title_color"
+                android:textColor="?attr/ListTextColor"
                 android:textSize="14sp"
                 android:layout_below="@id/verse_text1"
                 android:textAlignment="gravity" />
         </RelativeLayout>
-    </androidx.cardview.widget.CardView>
-</LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

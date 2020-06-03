@@ -66,6 +66,7 @@ public class ActivityPuzzle extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UtilFunctions.changeTheme(this, true);
         setContentView(R.layout.activity_puzzle);
 
         AppSettings.Init(this);

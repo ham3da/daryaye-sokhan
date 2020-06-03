@@ -1,18 +1,39 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <!-- Customize your theme here. -->
+        <item name="fontFamily">@font/iran_sans_mobile_light</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="fontFamily">@font/iran_sans_mobile_light</item>
-    </style>
+        <item name="ListTextColor">@color/textColor</item>
+        <item name="ListBookTextColor">@color/poet_title_color</item>
+        <item name="ListCircleColor">@color/ListCircleColor</item>
+        <item name="ListCircleTextColor">@color/ListCircleTextColor</item>
+        <item name="ListMoreBtnBGColor">@color/moreColor</item>
+        <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="ListPoetIconBGColor">@color/ListPoetIconBGColor</item>
+        <item name="ListPoetIconBorderColor">@color/ListPoetIconBorderColor</item>
+        <item name="PuzzleIncorrectColor">@color/PuzzleIncorrectColor</item>
+        <item name="iconsTintColor">@color/iconsTintColor</item>
+        <item name="listBackgroundColor">@color/listBackgroundColor</item>
+        <item name="verse_drawable">@color/verse_drawable</item>
+        <item name="verse_selected">@color/verse_selected</item>
+        <item name="verse_pressed">@color/verse_pressed</item>
+        <item name="addressBarBGColor">@color/poem_bar</item>
+        <item name="addressBarMoreBGColor">@color/poem_bar_dark</item>
+        <item name="SearchListSecondBackgroundColor" >@color/SearchListSecondBackgroundColor</item>
+        <item name="SearchIconBackgroundColor" >@color/SearchIconBackgroundColor</item>
+        <item name="SearchInputGB">@color/SearchInputGB</item>
+        <item name="playerBGColor">@color/playerBGColor</item>
+        <item name="android:progressBackgroundTint">@color/progressBackgroundTint</item>
+        <item name="android:progressTint">@color/colorAccent</item>
+        <item name="android:thumbTint">@color/colorAccent</item>
+        <item name="ListDivider">@color/divider</item>
+        <item name="android:itemBackground">@color/itemBackground</item>
 
-    <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">
-        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
-        <item name="android:activityOpenExitAnimation">@anim/slide_out_right</item>
-        <item name="android:activityCloseEnterAnimation">@anim/slide_in_left</item>
-        <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
+        <item name="colorPrimaryBG">@color/colorPrimaryBG</item>
 
     </style>
 
@@ -20,21 +41,99 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="fontFamily">@font/iran_sans_mobile_light</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="ListTextColor">@color/textColor</item>
+        <item name="ListBookTextColor">@color/poet_title_color</item>
+        <item name="ListCircleColor">@color/ListCircleColor</item>
+        <item name="ListCircleTextColor">@color/ListCircleTextColor</item>
+        <item name="ListMoreBtnBGColor">@color/moreColor</item>
+        <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="ListPoetIconBGColor">@color/ListPoetIconBGColor</item>
+        <item name="ListPoetIconBorderColor">@color/ListPoetIconBorderColor</item>
+        <item name="PuzzleIncorrectColor">@color/PuzzleIncorrectColor</item>
+        <item name="iconsTintColor">@color/iconsTintColor</item>
+        <item name="listBackgroundColor">@color/listBackgroundColor</item>
+        <item name="verse_drawable">@color/verse_drawable</item>
+        <item name="verse_selected">@color/verse_selected</item>
+        <item name="verse_pressed">@color/verse_pressed</item>
+        <item name="addressBarBGColor">@color/poem_bar</item>
+        <item name="addressBarMoreBGColor">@color/poem_bar_dark</item>
+        <item name="SearchListSecondBackgroundColor" >@color/SearchListSecondBackgroundColor</item>
+        <item name="SearchIconBackgroundColor" >@color/SearchIconBackgroundColor</item>
+        <item name="SearchInputGB">@color/SearchInputGB</item>
+        <item name="playerBGColor">@color/playerBGColor</item>
+        <item name="android:progressBackgroundTint">@color/progressBackgroundTint</item>
+        <item name="android:progressTint">@color/colorAccent</item>
+        <item name="android:thumbTint">@color/colorAccent</item>
+        <item name="ListDivider">@color/divider</item>
+        <item name="android:itemBackground">@color/itemBackground</item>
+
+        <item name="colorPrimaryBG">@color/colorPrimaryBG</item>
+    </style>
+
+    <style name="AppTheme.ActionBar">
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">false</item>
+        <item name="fontFamily">@font/iran_sans_mobile_light</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="ListTextColor">@color/textColor</item>
+        <item name="ListBookTextColor">@color/poet_title_color</item>
+        <item name="ListCircleColor">@color/ListCircleColor</item>
+        <item name="ListCircleTextColor">@color/ListCircleTextColor</item>
+        <item name="ListMoreBtnBGColor">@color/moreColor</item>
+        <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="ListPoetIconBGColor">@color/ListPoetIconBGColor</item>
+        <item name="ListPoetIconBorderColor">@color/ListPoetIconBorderColor</item>
+        <item name="PuzzleIncorrectColor">@color/PuzzleIncorrectColor</item>
+        <item name="iconsTintColor">@color/iconsTintColor</item>
+        <item name="listBackgroundColor">@color/listBackgroundColor</item>
+        <item name="verse_drawable">@color/verse_drawable</item>
+        <item name="verse_selected">@color/verse_selected</item>
+        <item name="verse_pressed">@color/verse_pressed</item>
+        <item name="addressBarBGColor">@color/poem_bar</item>
+        <item name="addressBarMoreBGColor">@color/poem_bar_dark</item>
+        <item name="SearchListSecondBackgroundColor" >@color/SearchListSecondBackgroundColor</item>
+        <item name="SearchIconBackgroundColor" >@color/SearchIconBackgroundColor</item>
+        <item name="SearchInputGB">@color/SearchInputGB</item>
+        <item name="playerBGColor">@color/playerBGColor</item>
+        <item name="android:progressBackgroundTint">@color/progressBackgroundTint</item>
+        <item name="android:progressTint">@color/colorAccent</item>
+        <item name="android:thumbTint">@color/colorAccent</item>
+        <item name="ListDivider">@color/divider</item>
+        <item name="android:itemBackground">@color/itemBackground</item>
+
+        <item name="colorPrimaryBG">@color/colorPrimaryBG</item>
+    </style>
+
+
+
+
+
+    <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_out_right</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_in_left</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
         <item name="fontFamily">@font/iran_sans_mobile_light</item>
     </style>
 
     <!-- Theme without ActionBar shadow (inherits main theme) -->
     <style name="AppTheme.NoShadow" parent="AppTheme">
-        <item name="android:windowContentOverlay">@color/colorPrimary</item>
+        <item name="android:windowContentOverlay">?attr/colorPrimary</item>
     </style>
 
     <style name="AppTheme.PopupOverlay.NoShadow" parent="AppTheme.PopupOverlay">
-        <item name="android:windowContentOverlay">@color/colorPrimary</item>
+        <item name="android:windowContentOverlay">?attr/colorPrimary</item>
     </style>
 
     <style name="TitleBarTextAppearance" parent="android:TextAppearance">
@@ -50,7 +149,7 @@
         <item name="android:textSize">24sp</item>
     </style>
 
-    <style name="AppDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+    <style name="AppDialogTheme" parent="Theme.AppCompat.DayNight.Dialog">
         <!-- Customize your theme here. -->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

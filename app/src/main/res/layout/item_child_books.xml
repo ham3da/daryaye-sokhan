@@ -6,7 +6,8 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="?attr/listBackgroundColor">
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="wrap_content"
@@ -14,8 +15,7 @@
         android:id="@+id/books_liner"
         android:clickable="true"
         android:background="?attr/selectableItemBackground"
-        android:focusable="true"
-        >
+        android:focusable="true">
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -43,13 +43,13 @@
                 android:paddingStart="4dp"
                 android:paddingBottom="8dp"
                 android:text="@string/book"
-                android:textColor="@color/poet_title_color"
+                android:textColor="?attr/ListBookTextColor"
                 android:textSize="14sp" />
         </RelativeLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background"/>
+            android:background="?attr/ListDivider"/>
     </LinearLayout>
 </RelativeLayout>

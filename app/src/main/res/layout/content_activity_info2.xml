@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".ActivityInfo2"
-    tools:showIn="@layout/activity_info2">
+    tools:showIn="@layout/activity_info2"
+
+    >
 
     <TextView
         android:id="@+id/text"
@@ -19,6 +21,6 @@
         android:autoLink="web|email"
         android:linksClickable="true"
         android:text="@string/text"
-        android:textColor="@color/black" />
+        android:textColor="?attr/ListTextColor" />
 
 </androidx.core.widget.NestedScrollView>

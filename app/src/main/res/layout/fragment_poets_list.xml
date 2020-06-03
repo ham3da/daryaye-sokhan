@@ -19,6 +19,8 @@
             android:fadeScrollbars="true"
             android:layoutAnimation="@anim/layout_animation_fall_down"
             android:scrollbars="vertical"
-            tools:listitem="@layout/item_poet" />
+            tools:listitem="@layout/item_poet"
+            android:background="?attr/colorPrimaryBG"
+            />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

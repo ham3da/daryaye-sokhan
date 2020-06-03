@@ -145,10 +145,8 @@ public class ActivityImageEdit extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        UtilFunctions.changeTheme(this, true);
         setContentView(R.layout.activity_image_edit);
-
-
-
 
         AppSettings.Init(this);
 
@@ -165,15 +163,10 @@ public class ActivityImageEdit extends AppCompatActivity implements
 
         poemText = getIntent().getStringExtra("poemText");
         String poetName = getIntent().getStringExtra("poetName");
-
         PhotoEditorView mPhotoEditorView = findViewById(R.id.photoEditorView);
-
         fontId = AppSettings.getPoemsFont();
-
         mTextIranSansTf = AppFontManager.getTypeface(this, fontId);
-
         initViews();
-
         mPropertiesBSFragment = new PropertiesBSFragment();
         mEmojiBSFragment = new EmojiBSFragment();
         mStickerBSFragment = new StickerBSFragment();
@@ -208,12 +201,8 @@ public class ActivityImageEdit extends AppCompatActivity implements
         }
 
         mPhotoEditor.addText(poemText, textStyleBuilder);
-
         //   mPhotoEditor.addText(signature, textStyleBuilder);
-
         mPhotoEditor.setOnPhotoEditorListener(this);
-
-
 
     }
 

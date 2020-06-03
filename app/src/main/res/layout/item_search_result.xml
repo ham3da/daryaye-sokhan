@@ -32,8 +32,9 @@
                 android:paddingEnd="10dp"
                 android:fontFamily="@font/iran_sans_mobile_light_fa"
                 android:text="@string/verse"
-                android:textColor="@color/black"
+                android:textColor="?attr/ListTextColor"
                 android:textSize="14sp"
+                android:background="?attr/listBackgroundColor"
                 android:textAlignment="gravity" />
 
             <TextView
@@ -46,14 +47,18 @@
                 android:paddingTop="2dp"
                 android:paddingBottom="2dp"
                 android:text="@string/reference"
-                android:background="@color/lightGray"
+                android:background="?attr/listBackgroundColor"
                 android:textSize="14sp"
                 android:singleLine="true"
                 android:ellipsize="end"
                 android:fontFamily="@font/iran_sans_mobile_light_fa"
-                android:textColor="@color/black"
+                android:textColor="?attr/ListTextColor"
                 android:textAlignment="gravity" />
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?attr/ListDivider" />
 </LinearLayout>

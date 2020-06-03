@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -304,7 +305,7 @@ public class PoemVerseRecycleAdaptor extends RecyclerView.Adapter<PoemVerseRecyc
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public CardView versCardView;
+        public LinearLayout versCardView;
         public RelativeLayout verse_layout;
         public TextView verse_text1, verse_text2;
         // public CheckBox CheckBox1;

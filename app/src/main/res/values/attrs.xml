@@ -3,4 +3,32 @@
     <declare-styleable name="PhotoEditorView">
         <attr name="photo_src" format="integer" />
     </declare-styleable>
+
+    <attr name="ListDivider" format="color" />
+    <attr name="colorPrimaryBG" format="color" />
+    <attr name="listBackgroundColor" format="color" />
+    <attr name="ListTextColor" format="color" />
+    <attr name="ListBookTextColor" format="color" />
+    <attr name="metaTextColor" format="color" />
+    <attr name="ListCircleColor" format="color" />
+    <attr name="ListCircleTextColor" format="color" />
+    <attr name="ListMoreBtnBGColor" format="color" />
+    <attr name="ListPoetIconBGColor" format="color" />
+    <attr name="ListPoetIconBorderColor" format="color" />
+    <attr name="PuzzleIncorrectColor" format="color" />
+    <attr name="iconsTintColor" format="color" />
+    <attr name="addressBarBGColor" format="color" />
+    <attr name="addressBarMoreBGColor" format="color" />
+    <attr name="SearchListSecondBackgroundColor" format="color" />
+
+    <attr name="SearchIconBackgroundColor" format="color" />
+    <attr name="SearchInputGB" format="color" />
+    <attr name="playerBGColor" format="color" />
+
+
+    <attr name="verse_drawable" format="reference|color" />
+    <attr name="verse_selected" format="reference|color" />
+    <attr name="verse_pressed" format="reference|color" />
+
+
 </resources>

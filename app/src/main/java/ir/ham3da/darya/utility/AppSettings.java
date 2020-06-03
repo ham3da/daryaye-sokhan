@@ -514,6 +514,20 @@ public class AppSettings {
 
 
     /**
+     * check Theme Is Dark
+     *
+     * @return boolean
+     */
+    public static boolean checkThemeIsDark() {
+        if (PreferenceManager1 == null) {
+            return false;
+        }
+       boolean res = PreferenceManager1.getKey("night_theme", false);
+
+        return res;
+    }
+
+    /**
      * get Game Sound Status
      *
      * @return boolean

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/src_item_main_layer"
+    android:background="?attr/listBackgroundColor"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
@@ -21,19 +22,15 @@
             android:background="@drawable/selector_attentions_list_item"
             android:layout_height="wrap_content"
             android:id="@+id/src_layout">
-
-
-
             <ImageButton
                 android:id="@+id/moreOptions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
+                android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="10dp"
-                android:tint="@color/darkBlueGrey"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                  android:background="?attr/selectableItemBackgroundBorderless"
                 app:srcCompat="@drawable/ic_more_vert_black_24dp"
                 android:textAppearance="?android:textAppearanceLarge"
                 android:contentDescription="@string/options" />
@@ -48,34 +45,31 @@
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:text="@string/title"
-                android:textColor="@color/black"
+                android:textColor="?attr/ListTextColor"
                 android:textSize="14sp"
                 android:textAlignment="gravity" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:id="@+id/fav_divider"
-                android:layout_below="@id/fav_title"
-                android:background="?android:attr/listDivider"/>
 
             <TextView
                 android:id="@+id/fav_reference"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/fav_divider"
+                android:layout_below="@id/fav_title"
                 android:paddingEnd="10dp"
                 android:paddingStart="10dp"
+                android:layout_marginLeft="29dp"
                 android:paddingTop="2dp"
                 android:paddingBottom="2dp"
                 android:text="@string/reference"
                 android:textSize="14sp"
                 android:singleLine="true"
-                android:background="@color/lightGray"
+                android:textColor="?attr/ListTextColor"
                 android:ellipsize="end"
-                android:textColor="@color/black"
                 android:textAlignment="gravity" />
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?attr/ListDivider" />
 </LinearLayout>

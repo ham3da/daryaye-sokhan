@@ -86,7 +86,7 @@
                 android:paddingBottom="10dp"
                 android:text="@string/poet"
                 android:textAlignment="gravity"
-                android:textColor="@color/black"
+                android:textColor="?attr/ListTextColor"
                 android:textSize="14sp" />
         </RelativeLayout>
 

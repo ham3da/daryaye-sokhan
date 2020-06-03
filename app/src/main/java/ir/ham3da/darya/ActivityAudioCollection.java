@@ -89,6 +89,7 @@ public class ActivityAudioCollection extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UtilFunctions.changeTheme(this, true);
         setContentView(R.layout.activity_audio_collection);
 
         ActionBar actionBar = getSupportActionBar();

@@ -203,5 +203,6 @@
     <string name="is_correct">Well, your answer is correct.</string>
     <string name="is_incorrect">Sorry, your answer is incorrect.</string>
     <string name="loadingVers">Loading verse</string>
+    <string name="night_theme">Night mode</string>
 
 </resources>

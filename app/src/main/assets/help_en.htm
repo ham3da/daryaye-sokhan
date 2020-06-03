@@ -13,7 +13,7 @@
 
 a
 {
-   color: blue;
+   color: $link_color;
    text-decoration: none;
 }
 .serif
@@ -22,11 +22,12 @@ a
 }
 html
 {
-  color: black;
-  background-color: #FFFFFF;
+  background-color: $background_color;
+  color: $text_color;
   font-family: 'IRANSans', serif;
   font-size: $fontSize;
 }
+
 body
 {
  margin: 10px;
@@ -48,7 +49,19 @@ font-family: 'IRANSans', serif;
 {
     height: 24px;
     width: 24px;
+    margin:4px 4px;
 }
+.icon
+{
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    text-align: center;
+    border-radius: 50%;
+    vertical-align: middle;
+    background-color: #fff;
+}
+
 </style>
 </head>
 
@@ -57,15 +70,15 @@ font-family: 'IRANSans', serif;
 <h3>Add new collection of poems</h3>
 <p>To add a new collection of poems, first turn on your device&#39;s Internet and
     then touch the
-    <img class="icons" border="0" src="file:///android_res/drawable/ic_add_black_24dp.png"/>
+    <span class="icon"><img class="icons" border="0" src="file:///android_res/drawable/ic_add_black_24dp.png"/></span>
     button to pop up a new collection. In this section you can add poems of your
     favorite poets to the app.</p>
 <h3>Search the poems</h3>
 <p>Touch the
-    <img class="icons" border="0" src="file:///android_res/drawable/ic_search_black_24dp.png"/>
-    button to search in the poems database. Then enter the search word and touch the search button(<img class="icons" border="0" src="file:///android_res/drawable/ic_search_black_24dp.png"/>)
+    <span class="icon"><img class="icons" border="0" src="file:///android_res/drawable/ic_search_black_24dp.png"/></span>
+    button to search in the poems database. Then enter the search word and touch the search button(<span class="icon"><img class="icons" border="0" src="file:///android_res/drawable/ic_search_black_24dp.png"/></span>)
     to see the search result. You can also change the search settings on the search
-    page by touching the <img class="icons" border="0" src="file:///android_res/drawable/ic_settings_black_24dp.png"/>
+    page by touching the <span class="icon"><img class="icons" border="0" src="file:///android_res/drawable/ic_settings_black_24dp.png"/></span>
     button. By limiting search, the app&#39;s search speed will increase. We recommend
     that you select the collection of poems by touching or <b>Select all</b> when
     limiting search settings after selecting a poet.</p>
@@ -77,12 +90,12 @@ font-family: 'IRANSans', serif;
 <p>Some of the poems in the app database contain audio files (such as Hafiz and
     Saadi&#39;s sonnets) stored in the Ganjoor Internet repository. While reading the
     poems of these poets, touch the
-    <img class="icons" border="0" src="file:///android_res/drawable/ic_record_voice_over_black_24dp.png"/>
+    <span class="icon"><img class="icons" border="0" src="file:///android_res/drawable/ic_record_voice_over_black_24dp.png"/></span>
     button to download their audio files. You can listen to the poems after
     downloading the audio files.<span lang="fa"> The downloaded files will be stored
-in the phone </span>storage<span lang="fa"> on the path: <b>Android
-/data/ir.ham3da.darya</b> and removed by removing their </span>app<span lang="fa">.</span></p>
-<h3>Report software errors</h3>
+in the phone </span>storage<span lang="fa"> on the path: <b>Android/data/ir.ham3da.darya</b> and removed by removing their </span>app<span lang="fa">.</span>
+</p>
+<h3>Report application errors</h3>
 <p>Please report application bugs to us. Our email:
     <a href="mailto:ham3da.j@gmail.com">ham3da.j@gmail.com</a></p>
 <p>&nbsp;</p>

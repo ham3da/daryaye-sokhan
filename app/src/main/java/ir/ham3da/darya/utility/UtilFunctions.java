@@ -11,6 +11,8 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.Uri;
+
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.res.ResourcesCompat;
 import android.os.Build;
 import android.os.StrictMode;
@@ -49,7 +51,7 @@ public class UtilFunctions {
 
     private ClipboardManager myClipboard;
     private ClipData myClip;
-    private static int Store = 5;
+    private static int Store = 0;
 
     public UtilFunctions(Context mCtx) {
 
@@ -627,4 +629,46 @@ public class UtilFunctions {
     }
 
 
+    public static  void changeTheme(Context context)
+    {
+        AppSettings.Init(context);
+        if(AppSettings.checkThemeIsDark())
+        {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            //context.setTheme(R.style.AppTheme_NoActionBar);
+        }
+        else
+        {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            //context.setTheme(R.style.AppTheme_NoActionBar);
+        }
+    }
+    public static  void changeTheme(Context context, boolean WithActionBar)
+    {
+        AppSettings.Init(context);
+        if(AppSettings.checkThemeIsDark())
+        {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            if(WithActionBar)
+            {
+                //context.setTheme(R.style.AppTheme_ActionBar);
+            }
+            else
+            {
+               // context.setTheme(R.style.AppTheme);
+            }
+        }
+        else
+        {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            if(WithActionBar)
+            {
+                //context.setTheme(R.style.AppTheme_ActionBar);
+            }
+            else
+            {
+               // context.setTheme(R.style.AppTheme);
+            }
+        }
+    }
 }

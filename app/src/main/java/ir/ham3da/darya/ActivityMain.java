@@ -2,6 +2,8 @@ package ir.ham3da.darya;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -61,17 +64,31 @@ public class ActivityMain extends AppCompatActivity
         super.attachBaseContext(newContext);
     }
 
+
+
+    @Override
+    public void applyOverrideConfiguration(Configuration overrideConfiguration)
+    {
+        if (overrideConfiguration != null) {
+            int uiMode = overrideConfiguration.uiMode;
+            overrideConfiguration.setTo(getBaseContext().getResources().getConfiguration());
+            overrideConfiguration.uiMode = uiMode;
+        }
+        super.applyOverrideConfiguration(overrideConfiguration);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
+        UtilFunctions.changeTheme(this);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             SetLanguage.wrap(this);
         }
+
+       // setTheme(R.style.LightTheme);
         setContentView(R.layout.activity_main);
 
-        AppSettings.Init(this);
         LangSettingList langSetting = AppSettings.getLangSettingList(this);
         currentLocalIndex = langSetting.getId();
 

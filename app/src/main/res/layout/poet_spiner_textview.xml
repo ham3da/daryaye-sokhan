@@ -11,7 +11,7 @@
         android:singleLine="true"
         android:layout_marginStart="50dp"
         android:text="@string/select_all"
-        android:textColor="@color/black"
+        android:textColor="?attr/ListTextColor"
         android:textSize="15sp"
         android:gravity="center_vertical" />
 </LinearLayout>

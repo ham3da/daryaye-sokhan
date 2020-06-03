@@ -166,7 +166,7 @@ public class ActivityCollection extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        UtilFunctions.changeTheme(this, true);
 
         setContentView(R.layout.activity_collection);
 

@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -22,7 +23,7 @@
         android:layout_centerVertical="true"
         android:adjustViewBounds="true"
         android:padding="5dp"
-        android:tint="@color/feed_text_color"
+        android:tint="?attr/iconsTintColor"
         app:srcCompat="@drawable/ic_instagram" />
 
         <TextView
@@ -33,7 +34,7 @@
             android:padding="5dp"
             android:layout_marginStart="5dp"
             android:text="@string/text"
-            android:textColor="@color/black"
+            android:textColor="?attr/ListTextColor"
             android:layout_toEndOf="@+id/icon_image"
             android:textSize="14sp" />
 
@@ -42,6 +43,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/background"
+        android:background="?attr/ListDivider"
         />
 </LinearLayout>

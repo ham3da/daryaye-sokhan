@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/listBackgroundColor">
 
     <include layout="@layout/custom_dialog2"
         android:layout_width="match_parent"
@@ -19,7 +20,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background"/>
+            android:background="?attr/ListDivider"/>
         <Button
             android:id="@+id/okBtn"
             android:layout_marginTop="5dp"

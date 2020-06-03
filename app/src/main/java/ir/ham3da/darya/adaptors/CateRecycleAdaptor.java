@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -78,7 +79,7 @@ public class CateRecycleAdaptor extends RecyclerView.Adapter<CateRecycleAdaptor.
 
         public TextView item_text;
         public ImageView avatar_item;
-        public CardView cateCardView;
+        public LinearLayout cateCardView;
 
         public ViewHolder(View itemView)
         {

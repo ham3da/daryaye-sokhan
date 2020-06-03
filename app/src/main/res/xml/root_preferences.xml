@@ -18,6 +18,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
+        app:title="@string/general">
+
+        <SwitchPreferenceCompat
+            app:icon="@drawable/ic_brightness_3_gray_24dp"
+            app:key="night_theme"
+            app:defaultValue="false"
+            app:title="@string/night_theme"
+            android:background="?attr/listBackgroundColor"/>
+
+        <EditTextPreference
+            app:icon="@drawable/ic_signature"
+            app:title="@string/signature"
+            app:summary="@string/signature_des"
+            app:key="signature"
+            app:negativeButtonText="@string/cancel"
+            app:positiveButtonText="@string/ok"
+            />
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:textSize="15sp"
         app:title="@string/indexing">
 
@@ -72,27 +92,6 @@
             />
 
     </PreferenceCategory>
-
-    <PreferenceCategory
-        app:title="@string/general">
-
-        <EditTextPreference
-            app:icon="@drawable/ic_signature"
-            app:title="@string/signature"
-            app:summary="@string/signature_des"
-            app:key="signature"
-            app:negativeButtonText="@string/cancel"
-            app:positiveButtonText="@string/ok"
-            />
-
-        <!--<Preference-->
-            <!--app:key="backup"-->
-            <!--app:icon="@drawable/ic_save_gray_24dp"-->
-            <!--app:title="@string/backup"-->
-            <!--app:summary="@string/"/>-->
-
-    </PreferenceCategory>
-
 
     <PreferenceCategory
         app:title="@string/Text_options">

@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.webkit.WebView;
 
 import ir.ham3da.darya.utility.SetLanguage;
+import ir.ham3da.darya.utility.UtilFunctions;
 
 public class ActivityWeb extends AppCompatActivity {
 
@@ -21,7 +22,7 @@ public class ActivityWeb extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        UtilFunctions.changeTheme(this, true);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             SetLanguage.wrap(this);
         }
