@@ -2,7 +2,6 @@ package ir.ham3da.darya.adaptors;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.opengl.Visibility;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -11,7 +10,6 @@ import android.view.ViewGroup;
 import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;

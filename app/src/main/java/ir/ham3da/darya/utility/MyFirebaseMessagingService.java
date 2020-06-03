@@ -1,11 +1,5 @@
 package ir.ham3da.darya.utility;
 
-import android.content.Intent;
-import android.util.Log;
-
-import com.google.firebase.messaging.FirebaseMessagingService;
-import com.google.firebase.messaging.RemoteMessage;
-
 import ir.ham3da.darya.ActivityMain;
 import ir.ham3da.darya.R;
 
@@ -14,7 +8,6 @@ import java.util.Map;
 
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
@@ -24,8 +17,6 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-
-import org.json.JSONObject;
 
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {

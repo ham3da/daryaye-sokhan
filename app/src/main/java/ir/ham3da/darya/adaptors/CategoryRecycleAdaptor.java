@@ -20,7 +20,6 @@ import ir.ham3da.darya.ActivityPoem;
 import ir.ham3da.darya.Bungee;
 import ir.ham3da.darya.R;
 import ir.ham3da.darya.ganjoor.CateWithPoem;
-import ir.ham3da.darya.ganjoor.GanjoorCat;
 import ir.ham3da.darya.utility.AppFontManager;
 import ir.ham3da.darya.utility.AppSettings;
 

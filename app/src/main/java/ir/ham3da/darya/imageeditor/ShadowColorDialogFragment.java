@@ -1,16 +1,12 @@
 package ir.ham3da.darya.imageeditor;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 

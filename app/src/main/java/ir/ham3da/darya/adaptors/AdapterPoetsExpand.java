@@ -7,7 +7,6 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 
 import android.util.TypedValue;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -114,7 +113,7 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
         LinearLayout poets_liner;
 
         private PoetsViewHolder(View view) {
-            super(view, (ImageView) view.findViewById(R.id.item_arrow));
+            super(view, view.findViewById(R.id.item_arrow));
 
 
             poets_name = view.findViewById(R.id.poets_name);

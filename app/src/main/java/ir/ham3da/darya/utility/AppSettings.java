@@ -4,10 +4,8 @@ import ir.ham3da.darya.R;
 import ir.ham3da.darya.utility.PreferenceHelper;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -19,7 +17,6 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import ir.ham3da.darya.utility.LangSettingList;
 import ir.ham3da.darya.utility.UtilFunctions;
