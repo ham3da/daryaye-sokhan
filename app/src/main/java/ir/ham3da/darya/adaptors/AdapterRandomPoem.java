@@ -153,7 +153,7 @@ public class AdapterRandomPoem extends PoetAndBooksAdapter<AdapterRandomPoem.Poe
         LinearLayout poets_liner;
 
         private PoetsViewHolder(View view) {
-            super(view, (ImageView) view.findViewById(R.id.item_arrow));
+            super(view, view.findViewById(R.id.item_arrow));
             poets_name = view.findViewById(R.id.poets_name);
             checkbox_poet = view.findViewById(R.id.checkbox_poet);
             poets_liner = view.findViewById(R.id.poets_liner);

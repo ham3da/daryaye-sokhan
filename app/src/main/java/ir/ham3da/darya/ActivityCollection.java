@@ -220,7 +220,7 @@ public class ActivityCollection extends AppCompatActivity {
             int id = searchView.getContext()
                     .getResources()
                     .getIdentifier("android:id/search_src_text", null, null);
-            TextView textView = (TextView) searchView.findViewById(id);
+            TextView textView = searchView.findViewById(id);
             textView.setTypeface(typeface);
         } catch (Exception ex) {
             Log.e(TAG, "msg: " + ex.getMessage());
