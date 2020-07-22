@@ -98,4 +98,12 @@
     <color name="SearchInputGB" >#2c373d</color>
     <color name="textColor">#fff</color>
     <color name="itemBackground">#232d36</color>
+
+    <color name="primaryTextColor">#fff</color>
+    <color name="btnColor">#00af9c</color>
+    <color name="text_dl_marked">#C5E17A</color>
+
+    <color name="icon_dl">#737373</color>
+    <color name="icon_dl_marked">#00af9c</color>
+
 </resources>

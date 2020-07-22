@@ -2,6 +2,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="ir.ham3da.darya.ActivityCate">
+
+    <item
+        android:id="@+id/action_download_declaim"
+        android:orderInCategory="99"
+        android:title="@string/download_declaim"
+        android:icon="@drawable/ic_record_voice_over_white_24dp"
+        app:showAsAction="ifRoom"
+        />
+
     <item
         android:id="@+id/action_search"
         android:orderInCategory="100"
@@ -9,4 +18,6 @@
         android:icon="@drawable/ic_search_white_24dp"
         app:showAsAction="always"
         />
+
+
 </menu>

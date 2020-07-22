@@ -32,10 +32,10 @@
             android:icon="@drawable/ic_group"
             android:title="@string/social_networks" />
 
-        <item
-            android:id="@+id/nav_donate"
-            android:icon="@drawable/ic_gift_box_24dp"
-            android:title="@string/donate" />
+<!--        <item-->
+<!--            android:id="@+id/nav_donate"-->
+<!--            android:icon="@drawable/ic_gift_box_24dp"-->
+<!--            android:title="@string/donate" />-->
 
         <item
             android:id="@+id/nav_about"

@@ -115,20 +115,15 @@ public class PoemVerseRecycleAdaptor extends RecyclerView.Adapter<PoemVerseRecyc
             }
         }
 
+        //Verse 1
         if (this.indexingStatus) {
 
             if (GanjoorVerse1._Index != -1) {
                 String verseIndexStr = String.format(Locale.getDefault(), "%d", GanjoorVerse1._Index);
                 text1 = verseIndexStr + ". " + text1;
             }
-            holder.verse_text1.setText(UtilFunctions.fromHtml(text1), TextView.BufferType.NORMAL); //Verse 1
-
-        } else {
-
-            holder.verse_text1.setText(UtilFunctions.fromHtml(text1), TextView.BufferType.NORMAL);//Verse 1
         }
-
-
+        holder.verse_text1.setText(UtilFunctions.fromHtml(text1), TextView.BufferType.NORMAL); //Verse 1
         if (GanjoorVerse1._Centered)
         {
             holder.verse_text1.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -168,10 +163,7 @@ public class PoemVerseRecycleAdaptor extends RecyclerView.Adapter<PoemVerseRecyc
         final int poemID = GanjoorVerse1._PoemID;
 
         finalHolder.versCardView.setSelected(GanjoorVerse1._Selected);
-
-
         holder.versCardView.setOnClickListener(v -> {
-
             if (finalHolder.versCardView.isSelected()) {
                 GanjoorVerse1._Selected = false;
                 finalHolder.versCardView.setSelected(false);
@@ -221,26 +213,20 @@ public class PoemVerseRecycleAdaptor extends RecyclerView.Adapter<PoemVerseRecyc
     }
 
     public void copyVerses() {
-
         List<String> stringList = getListOfVerses();
         stringList.add("✏ «" + this.ganjoorPoet._Name + "»");
         String stringLineSeparated = TextUtils.join(System.lineSeparator(), stringList);
-
-
         utilFunctions.copyText(stringLineSeparated);
     }
 
 
     public void shareVerses() {
         List<String> stringList = getListOfVerses();
-
         if(!signature.isEmpty()) {
             stringList.add("«" + signature + "»");
         }
         stringList.add("✏ «" + this.ganjoorPoet._Name + "»");
-
         String stringLineSeparated = TextUtils.join(System.lineSeparator(), stringList);
-
         utilFunctions.shareText(stringLineSeparated);
 
     }

@@ -71,10 +71,10 @@ public class CustomProgress {
 
     public void setProgress(int percent)
     {
-        TextView progressText = mDialog.findViewById(R.id.progress_text);
+        TextView progressText = this.mDialog.findViewById(R.id.progress_text);
         String percentStr = String.format(Locale.getDefault(), "%d", percent)+ " %";
         progressText.setText(percentStr);
-        ProgressBar  mProgressBar = mDialog.findViewById(R.id.progress_bar);
+        ProgressBar  mProgressBar = this.mDialog.findViewById(R.id.progress_bar);
         mProgressBar.setProgress(percent);
     }
 

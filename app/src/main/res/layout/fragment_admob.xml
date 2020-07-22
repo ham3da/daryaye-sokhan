@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/main_layer_admob"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/admob_des"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:lineSpacingExtra="8sp"
+            android:text="@string/admob_des"
+            android:textColor="@color/textColor"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btn_view_ad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="150dp"
+            android:layout_below="@+id/admob_des"
+            android:textColor="@color/primaryTextColor"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:drawableBottom="@drawable/ic_baseline_videocam_24"
+            android:drawablePadding="0dp"
+            android:padding="15dp"
+            android:textSize="16sp"
+            android:backgroundTint="@color/btnColor"
+            android:text="@string/view_admob" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_view_ad"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="0dp"
+            android:indeterminateOnly="true"
+            android:visibility="invisible"
+            style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
+            />
+    </RelativeLayout>
+
+
+</LinearLayout>

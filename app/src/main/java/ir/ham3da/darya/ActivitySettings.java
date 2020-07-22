@@ -152,12 +152,8 @@ public class ActivitySettings extends AppCompatActivity
             final ActivitySettings activitySettings = (ActivitySettings) getActivity();
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
             GanjoorDbBrowser GanjoorDbBrowser1 = new GanjoorDbBrowser(getContext());
-
             EditTextPreference prefTextSize = findPreference("TextSize");
-
-
             final float textSize = AppSettings.getTextSize();
-
 
             if (prefTextSize != null)
             {

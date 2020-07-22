@@ -21,7 +21,15 @@ public class DownloadFromUrl
     // Given a URL, establishes an HttpUrlConnection and retrieves
     // the web page content as a InputStream, which it returns as
     // a string.
-    public static String downloadDataFromUrl(String urlStr) throws IOException {
+
+    /**
+     *
+     * @param urlStr XML URL
+     * @param UseCaches set Use Caches
+     * @return XML String
+     * @throws IOException
+     */
+    public static String downloadDataFromUrl(String urlStr, boolean UseCaches) throws IOException {
         InputStream inputStream1 = null;
 
         URL url = new URL(urlStr);
@@ -30,7 +38,7 @@ public class DownloadFromUrl
         conn.setConnectTimeout(15000);
         conn.setRequestMethod("GET");
         conn.setDoInput(true);
-        conn.setUseCaches(false);
+        conn.setUseCaches(UseCaches);
         // Starts the query
         conn.connect(); // calling the web address
 

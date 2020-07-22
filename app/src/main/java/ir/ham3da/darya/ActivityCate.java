@@ -26,6 +26,7 @@ import java.util.List;
 import ir.ham3da.darya.adaptors.CategoryRecycleAdaptor;
 import ir.ham3da.darya.adaptors.PoemsRecycleAdaptor;
 import ir.ham3da.darya.ganjoor.CateWithPoem;
+import ir.ham3da.darya.ganjoor.GanjoorAudioInfo;
 import ir.ham3da.darya.ganjoor.GanjoorCat;
 import ir.ham3da.darya.ganjoor.GanjoorDbBrowser;
 import ir.ham3da.darya.ganjoor.GanjoorPoem;
@@ -54,7 +55,7 @@ public class ActivityCate extends AppCompatActivity {
     CollapsingToolbarLayout toolbarLayout;
 
     UtilFunctions UtilFunctions1;
-
+    Menu menuAct;
 
 
     @Override
@@ -86,10 +87,6 @@ public class ActivityCate extends AppCompatActivity {
             return true;
         });
 
-
-
-
-
         toolbarLayout = findViewById(R.id.toolbar_layout);
         UtilFunctions1.setupToolbarLayout(toolbarLayout, true);
 
@@ -107,12 +104,6 @@ public class ActivityCate extends AppCompatActivity {
         GanjoorCat1 = GanjoorDbBrowser1.getCat(cate_id);
         poet_id = GanjoorCat1._PoetID;
         cate_url = GanjoorCat1._Url;
-
-//        if (cate_url.isEmpty())
-//        {
-//            fab.setEnabled(false);
-//
-//        }
 
         GanjoorPoet1 = GanjoorDbBrowser1.getPoet(poet_id);
         TextView poet_name = this.findViewById(R.id.poet_name);
@@ -176,6 +167,8 @@ public class ActivityCate extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
 
+
+
     }
 
     @Override
@@ -193,6 +186,17 @@ public class ActivityCate extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.cate_menu, menu);
+
+        MenuItem item = menu.findItem(R.id.action_download_declaim);
+        if(poemList != null && poemList.size() > 0)
+        {
+            item.setVisible(true);
+        }
+        else
+        {
+            item.setVisible(false);
+        }
+
         return true;
     }
 
@@ -203,6 +207,7 @@ public class ActivityCate extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
 
+        Intent intent ;
         int id = item.getItemId();
         switch (id) {
             case android.R.id.home:
@@ -210,10 +215,24 @@ public class ActivityCate extends AppCompatActivity {
                 Bungee.slideDown(this);
                 break;
             case R.id.action_search:
-                Intent intent = new Intent(ActivityCate.this, ActivitySearch.class);
+
+                intent = new Intent(this, ActivitySearch.class);
                 ActivityCate.this.startActivity(intent);
                 Bungee.card(ActivityCate.this);
                 break;
+            case R.id.action_download_declaim:
+
+                intent = new Intent(this, ActivityAudioCollection.class);
+                intent.putExtra("poem_id", 0);
+                intent.putExtra("dl_type", GanjoorAudioInfo.DOWNLOAD_CATE_POEMS);
+                intent.putExtra("poet_id", poet_id);
+                intent.putExtra("cate_id", cate_id);
+
+                startActivity(intent);
+                Bungee.slideUp(this);
+                break;
+
+
 
         }
         return super.onOptionsItemSelected(item);

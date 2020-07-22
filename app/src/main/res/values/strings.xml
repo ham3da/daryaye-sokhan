@@ -90,10 +90,13 @@
     <string name="change_lang">Change language</string>
     <string name="text">Text</string>
     <string name="delete">Delete</string>
+    <string name="deleting">Deleting</string>
     <string name="browse">Browse</string>
     <string name="fav_delete_ques">Are you sure you want to remove "%s" from your favorites list?</string>
     <string name="poet_delete_ques">Are you sure you want to remove "%s" from the poets list?</string>
     <string name="poet_delete_poem_au">Are you sure you want to remove "%s" from the declaim list?</string>
+    <string name="delete_all_au">Are you sure you want to delete the marked items?</string>
+
     <string name="indexing">Indexing</string>
     <string name="poets_indexing">Numbering the list of poets</string>
     <string name="verse_indexing">Numbering lines of poems</string>
@@ -188,6 +191,8 @@
     <string name="download_all">Download all</string>
     <string name="reload">Reload</string>
     <string name="all_collectons_added">All collections have been downloaded successfully.</string>
+    <string name="selected_collectons_added">Selected collections successfully downloaded.</string>
+
     <string name="sample_text">Sample text</string>
     <string name="shadow_radius">Shadow radius</string>
     <string name="horizontal_offset">Horizontal offset</string>
@@ -204,5 +209,17 @@
     <string name="is_incorrect">Sorry, your answer is incorrect.</string>
     <string name="loadingVers">Loading verse</string>
     <string name="night_theme">Night mode</string>
+
+    <string name="interstitial_ad_unit_id" translatable="false">ca-app-pub-5843948052196502/1951219884</string>
+
+    <string name="easy_donating">Easy donating</string>
+    <string name="admob_not_load">No ads are currently available. Please try again later.</string>
+    <string name="admob_des">Dear user, to support this valuable application, touch the "View Ad" button And after displaying the ad, touch it as well.</string>
+    <string name="view_admob">View ads</string>
+    <string name="thanks_a_lot">Thanks a lot</string>
+    <string name="declaimer">Declaimer</string>
+
+
+
 
 </resources>

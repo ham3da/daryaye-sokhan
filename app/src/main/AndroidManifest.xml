@@ -3,9 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="ir.ham3da.darya">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
+
 
     <application
         android:name=".App"
@@ -18,21 +19,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-
         tools:ignore="GoogleAppIndexingWarning">
+        <!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-5843948052196502~9554377732" />
+
         <activity
             android:name=".ActivityPuzzle"
-            android:theme="@style/AppTheme.ActionBar"
             android:label="@string/dont_forget_poetry"
-            />
-        <activity android:name=".ActivityWeb"
-            android:theme="@style/AppTheme.ActionBar"
+            android:theme="@style/AppTheme.ActionBar" />
+        <activity
+            android:name=".ActivityWeb"
             android:label="@string/about"
-            />
-        <activity android:name=".ActivityImageEdit"
+            android:theme="@style/AppTheme.ActionBar" />
+        <activity
+            android:name=".ActivityImageEdit"
             android:label="@string/share_as_img"
-            android:theme="@style/AppTheme.ActionBar"
-            />
+            android:theme="@style/AppTheme.ActionBar" />
         <activity
             android:name=".ActivityInfo2"
             android:label="@string/app_name"
@@ -40,16 +44,15 @@
         <activity
             android:name=".ActivityAudioCollection"
             android:label="@string/download_declaim"
-            android:theme="@style/AppTheme.ActionBar"
-            />
+            android:theme="@style/AppTheme.ActionBar" />
         <activity
             android:name=".ActivityCollection"
-            android:theme="@style/AppTheme.ActionBar"
-            android:label="@string/collections" />
+            android:label="@string/collections"
+            android:theme="@style/AppTheme.ActionBar" />
         <activity
             android:name=".ActivitySettings"
-              android:theme="@style/AppTheme.ActionBar"
-            android:label="@string/action_settings" />
+            android:label="@string/action_settings"
+            android:theme="@style/AppTheme.ActionBar" />
         <activity
             android:name=".ActivityMain"
             android:label="@string/app_name"
@@ -60,23 +63,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ActivitySearch"
             android:label="@string/search"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter android:label="@string/search_in_app">
                 <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ActivityPoem"
             android:label="@string/poem"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ActivityCate"
             android:label="@string/category"

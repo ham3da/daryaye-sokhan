@@ -16,7 +16,7 @@ import ir.ham3da.darya.ganjoor.SearchResult;
 import ir.ham3da.darya.utility.AppSettings;
 
 public class SearchWordAsyncTask extends AsyncTask<Void, Void, Void> {
-    private String mTAG = "srcAsyncTask";
+    String mTAG = "srcAsyncTask";
     private String findStr;
     private int offset;
     private int per_page;
@@ -30,7 +30,6 @@ public class SearchWordAsyncTask extends AsyncTask<Void, Void, Void> {
     private SearchCustomAdapter adapter;
     private GanjoorDbBrowser GanjoorDbBrowser1;
 
-    private Context mContext;
     private ActivitySearch activitySearch;
     private ProgressBar ProgressBar1;
 
@@ -40,8 +39,7 @@ public class SearchWordAsyncTask extends AsyncTask<Void, Void, Void> {
         this.offset = offset;
         this.start_index = start_index;
         this.per_page = per_page;
-        this.mContext = context;
-        this.activitySearch = (ActivitySearch) mContext;
+        this.activitySearch = (ActivitySearch) context;
         this.GanjoorDbBrowser1 = ganjoorDbBrowser;
         this.ProgressBar1 = this.activitySearch.progressBar_loader;
         this.new_status = new_status;
@@ -58,7 +56,7 @@ public class SearchWordAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... arg) {
 
-       try {
+        try {
 
             this.tempSearchResult = new ArrayList<>();
             int poet_id = AppSettings.getSearchSelectedPoet();
@@ -86,9 +84,9 @@ public class SearchWordAsyncTask extends AsyncTask<Void, Void, Void> {
             if(this.new_status)
             {
                 int res_count = activitySearch.resCount;
-               // String str_found = String.format(Locale.getDefault(), "%d ", res_count) + mContext.getString(R.string.items_found);
+                // String str_found = String.format(Locale.getDefault(), "%d ", res_count) + mContext.getString(R.string.items_found);
                 this.adapter.notifyDataSetChanged(); // or notifyItemRangeRemoved
-               // Toast.makeText(activitySearch, str_found, Toast.LENGTH_SHORT).show();
+                // Toast.makeText(activitySearch, str_found, Toast.LENGTH_SHORT).show();
             }
         }
         else

@@ -86,10 +86,12 @@
     <string name="change_lang">تغییر زبان</string>
     <string name="text">متن</string>
     <string name="delete">حذف</string>
+    <string name="deleting">در حال پاک کردن</string>
     <string name="browse">مرور</string>
     <string name="fav_delete_ques">آیا برای حذف «%s» از لیست گزیده‌ها مطمئن هستید؟</string>
     <string name="poet_delete_ques">آیا برای حذف «%s» از لیست شاعران مطمئن هستید؟</string>
     <string name="poet_delete_poem_au">آیا برای حذف «%s» از لیست خوانش‌ها مطمئن هستید؟</string>
+    <string name="delete_all_au">آیا برای حذف موارد علامت‌گذاری شده مطمئن هستید؟</string>
     <string name="indexing">شماره‌گذاری</string>
     <string name="poets_indexing">شماره‌گذاری لیست شاعران</string>
     <string name="verse_indexing">شماره‌گذاری مصراع‌های اشعار</string>
@@ -176,6 +178,7 @@
     <string name="download_all">دریافت همه</string>
     <string name="reload">فراخوانی مجدد</string>
     <string name="all_collectons_added">تمام مجموعه‌ها با موفقیت دریافت شدند.</string>
+    <string name="selected_collectons_added">مجموعه‌های انتخاب شده با موفقیت دریافت شد.</string>
     <string name="sample_text">متن نمونه</string>
     <string name="shadow_radius">شعاع سایه</string>
     <string name="horizontal_offset">انحراف افقی</string>
@@ -192,4 +195,11 @@
     <string name="is_incorrect">متأسفانه پاسخ شما نادرست است.</string>
     <string name="loadingVers">در حال فراخوانی شعر</string>
     <string name="night_theme">حالت شب</string>
+
+    <string name="easy_donating">همیاری</string>
+    <string name="admob_not_load">در حال حاضر تبلیغی در دسترس نیست. لطفاً بعداً دوباره سعی کنید.</string>
+    <string name="admob_des">کاربر گرامی، از شما تقاضا داریم به پاس حمایت از این نرم‌افزار ارزشمند، گاهی اوقات روی دکمه "مشاهدۀ" آگهی لمس کنید و پس از مشاهده آگهی، آن را نیز لمس نمایید. با این کار کمک بزرگی به توسعه این نرم‌‌افزار خواهید نمود.</string>
+    <string name="view_admob">مشاهدۀ آگهی</string>
+    <string name="thanks_a_lot">سپاسگزاریم</string>
+    <string name="declaimer">گوینده</string>
 </resources>

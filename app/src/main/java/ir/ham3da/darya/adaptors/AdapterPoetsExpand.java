@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import ir.ham3da.darya.ActivityAudioCollection;
 import ir.ham3da.darya.ActivityInfo2;
 import ir.ham3da.darya.ui.main.MainPoetsFragment;
 import ir.ham3da.darya.utility.AppFontManager;
@@ -86,11 +87,11 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
         /**
          * Add book
          *
-         * @param book
-         * @param id
-         * @param child_Count
-         * @param poet_Index
-         * @param parent_id
+         * @param book book
+         * @param id id
+         * @param child_Count child Count
+         * @param poet_Index poet Index
+         * @param parent_id parent id
          * @param list_type   int 0: poet, 1: categories, 2: poems , 3: biographi
          */
         public PoetsAndCateItem(String book, int id, int child_Count, int poet_Index, int parent_id, int list_type) {
@@ -158,11 +159,11 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
     }
 
     /**
-     * show More Menu for an item
      *
-     * @param view
-     * @param poetId
-     * @param position
+     * @param view view
+     * @param poetId poet Id
+     * @param position position
+     * @param parentLayer parent Layer
      */
     public void showMenu(final View view, final int poetId, final int position, final LinearLayout parentLayer) {
         //creating a popup menu
@@ -178,6 +179,15 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
                     break;
                 case R.id.poet_open:
                     parentLayer.performClick();
+                    break;
+                case R.id.download_declaim:
+                    Intent intent = new Intent(mContext, ActivityAudioCollection.class);
+                    intent.putExtra("poem_id", 0);
+                    intent.putExtra("dl_type", 2);
+                    intent.putExtra("poet_id", poetId);
+
+                    mContext.startActivity(intent);
+                    Bungee.slideUp(mContext);
                     break;
             }
             return false;

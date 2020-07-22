@@ -52,6 +52,7 @@ public class GDBInfo {
         _PubDateString = source._PubDateString;
         _Index = source._Index;
 
+
     }
 
     /**
@@ -248,5 +249,7 @@ public class GDBInfo {
     public boolean _UpdateAvailable = false;
 
     public int _Index;
+
+    public  boolean Selected = false;
 
 }

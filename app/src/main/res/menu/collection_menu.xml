@@ -11,13 +11,8 @@
         app:actionViewClass="android.widget.SearchView"
         />
 
-    <item android:id="@+id/download_all"
-        android:icon="@drawable/ic_save"
-        app:showAsAction="collapseActionView"
-        android:title="@string/download_all" />
-
     <item android:id="@+id/reload_all"
         android:icon="@drawable/ic_refresh_white_24dp"
-        app:showAsAction="collapseActionView"
-        android:title="@string/reload" />
+        android:title="@string/reload"
+        app:showAsAction="ifRoom"/>
 </menu>

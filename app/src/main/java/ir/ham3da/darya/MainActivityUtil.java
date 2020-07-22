@@ -18,10 +18,7 @@ public class MainActivityUtil
     private ClipboardManager myClipboard;
     private ClipData myClip;
     private int booksCount = 0;
-    /**
-     * google play = 0, cafebazaar = 1, myket = 2 ,samsung apps =3
-     */
-    private int Store = 0;
+
 
     public MainActivityUtil(Context mCtx) {
 
@@ -46,8 +43,6 @@ public class MainActivityUtil
             } catch (IOException e) {
                 Log.e("ham3da_library", "extractGanjoor_db err: " + e.getMessage());
             }
-
-
         }
     }
 

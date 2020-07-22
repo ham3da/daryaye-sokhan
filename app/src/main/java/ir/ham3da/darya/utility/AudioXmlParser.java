@@ -59,14 +59,20 @@ public class AudioXmlParser {
     private List<GanjoorAudioInfo> readItems(XmlPullParser parser) throws XmlPullParserException, IOException {
         List<GanjoorAudioInfo> entries = new ArrayList<>();
         parser.require(XmlPullParser.START_TAG, ns, "DesktopGanjoorPoemAudioList");
-        while (parser.next() != XmlPullParser.END_TAG) {
+        int index = 0;
+        while (parser.next() != XmlPullParser.END_TAG)
+        {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
             String name = parser.getName();
-            if (name.equals("PoemAudio")) {
-                entries.add(readEntry(parser));
-            } else {
+            if (name.equals("PoemAudio"))
+            {
+                index++;
+                entries.add(readEntry(parser, index));
+            }
+            else
+            {
                 skip(parser);
             }
         }
@@ -74,7 +80,7 @@ public class AudioXmlParser {
     }
 
 
-    private GanjoorAudioInfo readEntry(XmlPullParser parser) throws XmlPullParserException, IOException {
+    private GanjoorAudioInfo readEntry(XmlPullParser parser, int index) throws XmlPullParserException, IOException {
         parser.require(XmlPullParser.START_TAG, ns, "PoemAudio");
 
 
@@ -97,7 +103,9 @@ public class AudioXmlParser {
 
         Date audio_date = null;
 
-        while (parser.next() != XmlPullParser.END_TAG) {
+
+        while (parser.next() != XmlPullParser.END_TAG)
+        {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
@@ -180,7 +188,7 @@ public class AudioXmlParser {
         return new GanjoorAudioInfo(audio_post_ID, audio_order, audio_xml,
                 audio_ogg, audio_mp3, audio_title, audio_artist,
                 audio_artist_url, audio_src, audio_src_url, audio_guid,
-                audio_fchecksum, audio_mp3bsize, audio_oggbsize, audio_date, false);
+                audio_fchecksum, audio_mp3bsize, audio_oggbsize, audio_date, false, index, false);
     }
 
 
@@ -193,7 +201,7 @@ public class AudioXmlParser {
 
     private int readItemInt(XmlPullParser parser, String TagName) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, ns, TagName);
-        int value = Integer.valueOf(readText(parser));
+        int value = Integer.parseInt(readText(parser));
         parser.require(XmlPullParser.END_TAG, ns, TagName);
         return value;
     }

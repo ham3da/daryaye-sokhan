@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class GanjoorAudioInfo {
 
+    public int Index;
     public int audio_post_ID;
     public int audio_order;
 
@@ -25,12 +26,20 @@ public class GanjoorAudioInfo {
     public Date audio_date;
 
     public boolean exist;
+    public static final int DOWNLOAD_POEM = 1;
+    public static final int DOWNLOAD_POET_POEMS= 2;
+    public static final int DOWNLOAD_ALL_POEM = 3;
+    public static final int DOWNLOAD_CATE_POEMS= 4;
+
+
+    public Boolean Selected;
+
 
 
     public GanjoorAudioInfo(int audio_post_ID, int audio_order, String audio_xml,
                             String audio_ogg, String audio_mp3, String audio_title, String audio_artist,
                             String audio_artist_url, String audio_src, String audio_src_url, String audio_guid,
-                            String audio_fchecksum, int audio_mp3bsize, int audio_oggbsize, Date audio_date, boolean exist) {
+                            String audio_fchecksum, int audio_mp3bsize, int audio_oggbsize, Date audio_date, boolean exist, int index, boolean selected) {
         this.audio_post_ID = audio_post_ID;
         this.audio_order = audio_order;
 
@@ -51,5 +60,7 @@ public class GanjoorAudioInfo {
 
         this.audio_date = audio_date;
         this.exist = exist;
+        this.Index = index;
+        this.Selected = selected;
     }
 }

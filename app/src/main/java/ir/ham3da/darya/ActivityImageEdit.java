@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ImageDecoder;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -39,6 +40,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 import ir.ham3da.darya.filters.FilterListener;
 import ir.ham3da.darya.filters.FilterViewAdapter;
@@ -334,7 +336,7 @@ public class ActivityImageEdit extends AppCompatActivity implements
 
         File file = new File(saveDir + File.separator + "" + System.currentTimeMillis() + ".jpg");
         try {
-            file.createNewFile();
+            boolean newFile = file.createNewFile();
 
             SaveSettings saveSettings = new SaveSettings.Builder()
                     .setClearViewsEnabled(true)
@@ -369,7 +371,7 @@ public class ActivityImageEdit extends AppCompatActivity implements
             });
         } catch (Exception e) {
             Log.e(TAG, "saveImage: " + e.getMessage());
-            showSnackbar(e.getMessage());
+            showSnackbar(Objects.requireNonNull(e.getMessage()));
             customProgressDlg.dismiss();
         }
 
@@ -392,7 +394,7 @@ public class ActivityImageEdit extends AppCompatActivity implements
             switch (requestCode) {
                 case CAMERA_REQUEST:
                     //mPhotoEditor.clearAllViews();
-                    Bitmap photo = (Bitmap) data.getExtras().get("data");
+                    Bitmap photo = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
                     mPhotoEditorView.getSource().setImageBitmap(photo);
 
                     break;
@@ -403,19 +405,19 @@ public class ActivityImageEdit extends AppCompatActivity implements
 
                         Bitmap bitmap ;
 
-//                        if(Build.VERSION.SDK_INT >= 28) {
-//                              *** It doesn't work properly and causes an error while saving.***
-//                            ImageDecoder.Source source  = ImageDecoder.createSource(getContentResolver(), selectedImageURI);
-//                            Drawable drawable = ImageDecoder.decodeDrawable(source);
-//                            bitmap = ((BitmapDrawable) drawable).getBitmap();
-//
-//                        }
-//                        else
-//                        {
-//                            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageURI);
-//                        }
+                        if(Build.VERSION.SDK_INT >= 28) {
+                              //*** It doesn't work properly and causes an error while saving.***
+                            ImageDecoder.Source source  = ImageDecoder.createSource(this.getContentResolver(), selectedImageURI);
+                            bitmap = ImageDecoder.decodeBitmap(source);
 
-                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageURI);
+                        }
+                        else
+                        {
+                            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageURI);
+                        }
+
+                       // bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageURI);
+
                         mPhotoEditorView.getSource().setImageBitmap(bitmap);
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -552,29 +554,27 @@ public class ActivityImageEdit extends AppCompatActivity implements
     //Permission
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case 2:
                 Log.d(TAG, "Write External storage");
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.v(TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
+                    Log.v(TAG, "Permission: " + permissions[0] + " was " + grantResults[0]);
                     //resume tasks needing this permission
                     saveImage(shareRequest);
-                } else {
-                    //
                 }
+
                 break;
 
             case 3:
                 Log.d(TAG, "Read External storage");
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.v(TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
+                    Log.v(TAG, "Permission: " + permissions[0] + " was " + grantResults[0]);
                     //resume tasks needing this permission
                     //SharePdfFile();
-                } else {
-                    //
                 }
+
                 break;
         }
     }

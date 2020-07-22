@@ -2,7 +2,12 @@ package ir.ham3da.darya.utility;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.loader.content.AsyncTaskLoader;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,9 +17,13 @@ import java.lang.ref.WeakReference;
 
 import ir.ham3da.darya.ActivityMain;
 import ir.ham3da.darya.R;
+
+import java.util.concurrent.Executor;
+
 import ir.ham3da.darya.utility.AppSettings;
 import ir.ham3da.darya.utility.CustomProgress;
 import ir.ham3da.darya.utility.UtilFunctions;
+
 
 public class CopyDatabaseTask extends AsyncTask<String, Integer, Long>
 {

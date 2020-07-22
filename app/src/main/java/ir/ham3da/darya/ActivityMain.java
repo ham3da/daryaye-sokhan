@@ -3,10 +3,10 @@ package ir.ham3da.darya;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,7 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -32,9 +31,11 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.Locale;
+import java.util.Objects;
 
 import ir.ham3da.darya.ganjoor.GanjoorDbBrowser;
 import ir.ham3da.darya.ganjoor.GanjoorPoem;
+import ir.ham3da.darya.admob.MainAdMobFragment;
 import ir.ham3da.darya.ui.main.MainFavoritesFragment;
 import ir.ham3da.darya.ui.main.MainPoetsFragment;
 import ir.ham3da.darya.utility.AppSettings;
@@ -45,8 +46,11 @@ import ir.ham3da.darya.utility.PreferenceHelper;
 import ir.ham3da.darya.utility.SetLanguage;
 import ir.ham3da.darya.utility.UtilFunctions;
 
+
+
 public class ActivityMain extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener
+{
 
     public int booksCount = 0;
     MainActivityUtil mainActivityUtil1;
@@ -55,21 +59,23 @@ public class ActivityMain extends AppCompatActivity
     String TAG = "ActivityMain";
     DrawerLayout drawer;
     int currentLocalIndex;
-    private FirebaseAnalytics mFirebaseAnalytics;
 
+    boolean doLoading;
+    private Handler progressBarHandler = new Handler();
 
     @Override
-    protected void attachBaseContext(Context newBase) {
+    protected void attachBaseContext(Context newBase)
+    {
         Context newContext = SetLanguage.wrap(newBase);
         super.attachBaseContext(newContext);
     }
 
 
-
     @Override
     public void applyOverrideConfiguration(Configuration overrideConfiguration)
     {
-        if (overrideConfiguration != null) {
+        if (overrideConfiguration != null)
+        {
             int uiMode = overrideConfiguration.uiMode;
             overrideConfiguration.setTo(getBaseContext().getResources().getConfiguration());
             overrideConfiguration.uiMode = uiMode;
@@ -78,15 +84,17 @@ public class ActivityMain extends AppCompatActivity
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
 
         super.onCreate(savedInstanceState);
         UtilFunctions.changeTheme(this);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+        {
             SetLanguage.wrap(this);
         }
 
-       // setTheme(R.style.LightTheme);
+        // setTheme(R.style.LightTheme);
         setContentView(R.layout.activity_main);
 
         LangSettingList langSetting = AppSettings.getLangSettingList(this);
@@ -95,6 +103,7 @@ public class ActivityMain extends AppCompatActivity
         mainActivityUtil1 = new MainActivityUtil(this);
         UtilFunctions1 = new UtilFunctions(this);
         MyDialogs1 = new MyDialogs(this);
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -110,65 +119,71 @@ public class ActivityMain extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         String DB_PATH = AppSettings.getDatabasePath(this);
-        //Log.e(TAG, "DB_PATH: " + DB_PATH);
+        Log.e(TAG, "DB_PATH1: " + DB_PATH);
         boolean exist_db = MainActivityUtil.checkExists(DB_PATH);
-
-        if (exist_db) {
+        if (exist_db)
+        {
             loadPager();
-        } else {
-            mainActivityUtil1.extractGangoorDB(DB_PATH);
         }
-
-        if (UtilFunctions.getAppStoreCode() != 0) {
-            MenuItem mi = navigationView.getMenu().findItem(R.id.nav_donate);
-            mi.setVisible(false);
+        else
+        {
+          mainActivityUtil1.extractGangoorDB(DB_PATH);
         }
-
-        //get_token();
+        Log.e(TAG, "DB_PATH2: " + AppSettings.getAppFolderPath());
 
     }
 
 
-    private void get_token() {
+    private void get_token()
+    {
         //  Log.e("Instance ID ",FirebaseInstanceId.getInstance().getId());
 
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(task -> {
-                    if (!task.isSuccessful()) {
+                    if (!task.isSuccessful())
+                    {
                         Log.w(TAG, "getInstanceId failed", task.getException());
                         return;
                     }
-                    String token = task.getResult().getToken();
+                    String token = Objects.requireNonNull(task.getResult()).getToken();
                     Log.e("Token", token);
                 });
     }
 
-    public void LoadDBFirstTime(CustomProgress dlg1) {
+    public void LoadDBFirstTime(CustomProgress dlg1)
+    {
         GanjoorDbBrowser GanjoorDbBrowser1 = new GanjoorDbBrowser(this);
         dlg1.dismiss();
         loadPager();
     }
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.tab_poets, R.string.tab_favorites};
+    private static final int[] TAB_TITLES = new int[]{R.string.tab_poets, R.string.tab_favorites, R.string.easy_donating};
 
-    public void loadPager() {
+    public void loadPager()
+    {
         ViewPager2 viewPager = findViewById(R.id.view_pager);
-        viewPager.setAdapter(new FragmentStateAdapter(this) {
+        viewPager.setAdapter(new FragmentStateAdapter(this)
+        {
             @Override
-            public int getItemCount() {
+            public int getItemCount()
+            {
                 return TAB_TITLES.length;
             }
 
             @NonNull
             @Override
-            public Fragment createFragment(int position) {
-                switch (position) {
+            public Fragment createFragment(int position)
+            {
+                switch (position)
+                {
                     case 0:
-                        return new MainPoetsFragment();
                     default:
+                        return new MainPoetsFragment();
                     case 1:
                         return new MainFavoritesFragment();
+                    case 2:
+                        return new MainAdMobFragment();
                 }
             }
         });
@@ -178,16 +193,18 @@ public class ActivityMain extends AppCompatActivity
         showNotify();
     }
 
-    public void showNotify() {
+    public void showNotify()
+    {
 
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         boolean notifyed = false;
         String notify_title, notify_url, notify_url_text, notify_text;
         PreferenceHelper preferenceHelper = new PreferenceHelper(getApplicationContext());
         notify_text = preferenceHelper.getKey("notify_text", "");
 
-        if (!notify_text.isEmpty()) {
+        if (!notify_text.isEmpty())
+        {
 
             notify_title = preferenceHelper.getKey("notify_title", "");
             notify_url = preferenceHelper.getKey("notify_url", "");
@@ -198,15 +215,19 @@ public class ActivityMain extends AppCompatActivity
         }
 
 
-        if (!notifyed) {
+        if (!notifyed)
+        {
 
-            if (getIntent().getExtras() != null) {
+            if (getIntent().getExtras() != null)
+            {
 
-                for (String key : getIntent().getExtras().keySet()) {
+                for (String key : getIntent().getExtras().keySet())
+                {
                     Log.e(TAG, key + ": " + getIntent().getExtras().get(key));
                 }
 
-                if (getIntent().getExtras().containsKey("Package") && getIntent().getExtras().getString("Package", "").equals(getPackageName())) {
+                if (getIntent().getExtras().containsKey("Package") && getIntent().getExtras().getString("Package", "").equals(getPackageName()))
+                {
 
                     notify_text = getIntent().getExtras().getString("Text", "");
                     notify_title = getIntent().getExtras().getString("Title", "");
@@ -222,17 +243,22 @@ public class ActivityMain extends AppCompatActivity
     }
 
     @Override
-    public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+    public void onBackPressed()
+    {
+        if (drawer.isDrawerOpen(GravityCompat.START))
+        {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        }
+        else
+        {
             super.onBackPressed();
         }
     }
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
@@ -240,11 +266,13 @@ public class ActivityMain extends AppCompatActivity
 
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         GanjoorDbBrowser GanjoorDbBrowser1 = new GanjoorDbBrowser(this);
         Intent intent;
         int id = item.getItemId();
-        switch (id) {
+        switch (id)
+        {
             case R.id.action_search:
                 intent = new Intent(this, ActivitySearch.class);
                 this.startActivity(intent);
@@ -256,22 +284,27 @@ public class ActivityMain extends AppCompatActivity
 
             case R.id.action_random_poem:
 
-                try {
+                try
+                {
 
                     String randomSelectedCategories = AppSettings.getRandomSelectedCategories();
 
                     GanjoorPoem poem = GanjoorDbBrowser1.getPoemRandom(randomSelectedCategories);
 
-                    if (poem != null) {
+                    if (poem != null)
+                    {
 
                         intent = new Intent(ActivityMain.this, ActivityPoem.class);
                         intent.putExtra("poem_id", poem._ID);
                         startActivity(intent);
                         Bungee.spin(this);
-                    } else {
+                    }
+                    else
+                    {
                         Toast.makeText(this, R.string.nothing_found, Toast.LENGTH_SHORT).show();
                     }
-                } catch (Exception ex) {
+                } catch (Exception ex)
+                {
                     Log.e(TAG, "getPoemRandom: " + ex.getMessage());
                 }
 
@@ -282,28 +315,36 @@ public class ActivityMain extends AppCompatActivity
     }
 
 
-    public void ShowCollectionAct() {
+    public void ShowCollectionAct()
+    {
 
-        if (UtilFunctions.isNetworkConnected(this)) {
+        if (UtilFunctions.isNetworkConnected(this))
+        {
             Intent intent = new Intent(this, ActivityCollection.class);
             this.startActivity(intent);
             Bungee.card(this);
 
 
-        } else {
+        }
+        else
+        {
             MyDialogs1.ShowWarningMessage(getString(R.string.internet_failed));
         }
     }
 
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem)
+    {
 
 
         final int id = menuItem.getItemId();
-        new Handler().postDelayed(() -> {
+        Handler handler = new Handler(Looper.getMainLooper());
+
+        handler.postDelayed(() -> {
             Intent intent;
-            switch (id) {
+            switch (id)
+            {
                 case R.id.collections:
                     ShowCollectionAct();
                     break;
@@ -311,12 +352,15 @@ public class ActivityMain extends AppCompatActivity
                 case R.id.nav_last_read:
 
                     int getLastPoemIdVisited = AppSettings.getLastPoemIdVisited();
-                    if (getLastPoemIdVisited > 0) {
+                    if (getLastPoemIdVisited > 0)
+                    {
                         intent = new Intent(ActivityMain.this, ActivityPoem.class);
                         intent.putExtra("poem_id", getLastPoemIdVisited);
                         startActivity(intent);
                         Bungee.card(ActivityMain.this);
-                    } else {
+                    }
+                    else
+                    {
                         Toast.makeText(ActivityMain.this, R.string.nothing_found, Toast.LENGTH_LONG).show();
                     }
 
@@ -344,7 +388,7 @@ public class ActivityMain extends AppCompatActivity
 
                     break;
                 case R.id.nav_rating:
-                    UtilFunctions1.gotoRateing();
+                    UtilFunctions1.gotoRating();
 
                     break;
                 case R.id.nav_contact_us:
@@ -362,10 +406,9 @@ public class ActivityMain extends AppCompatActivity
                     MyDialogs1.showPolicy();
                     break;
 
-                case R.id.nav_donate:
-
-                    UtilFunctions1.openUrl("https://ham3da.ir/darya-donate/");
-                    break;
+//                case R.id.nav_donate:
+//                    UtilFunctions1.openUrl("https://ham3da.ir/darya-donate/");
+//                    break;
 
 
                 case R.id.nav_poem_game:
@@ -382,7 +425,8 @@ public class ActivityMain extends AppCompatActivity
 
         // Handle navigation view item clicks here.
 
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+        if (drawer.isDrawerOpen(GravityCompat.START))
+        {
 
             drawer.closeDrawer(GravityCompat.START);
         }
@@ -390,7 +434,8 @@ public class ActivityMain extends AppCompatActivity
 
     }
 
-    public void restartApp() {
+    public void restartApp()
+    {
         Intent intent = new Intent(getBaseContext(), ActivityMain.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -398,13 +443,14 @@ public class ActivityMain extends AppCompatActivity
         startActivity(intent);
     }
 
-    //### custom functions start
 
     /**
      * Set Count of Poets And Books in textview
      */
-    public void setCountPoetsAndBooks() {
-        try {
+    public void setCountPoetsAndBooks()
+    {
+        try
+        {
             GanjoorDbBrowser GanjoorDbBrowser1 = new GanjoorDbBrowser(this);
             int getPoetsCount = GanjoorDbBrowser1.getPoetsCount();
             int getBooksCount = booksCount;
@@ -415,26 +461,28 @@ public class ActivityMain extends AppCompatActivity
             String str_count_all_word = String.format(Locale.getDefault(), getString(R.string.nav_header_subtitle), getBooksCount, getPoetsCount);
             textView_all_count.setText(str_count_all_word);
 
-        } catch (Exception ex) {
+        } catch (Exception ex)
+        {
             Log.e(TAG, "setCountPoetsAndBooks: " + ex.getMessage());
         }
 
 
     }
 
+
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
 
         LangSettingList langSetting = AppSettings.getLangSettingList(this);
 
-        if (currentLocalIndex != langSetting.getId()) {
+        if (currentLocalIndex != langSetting.getId())
+        {
             currentLocalIndex = langSetting.getId();
             recreate();
         }
 
     }
-
-    //### custom functions end
 
 }

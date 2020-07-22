@@ -189,35 +189,18 @@ public class AppSettings {
      * @param context Context
      * @return String path
      */
-    public static String getAudioDownloadPath(Context context) {
-        if (PreferenceManager1 == null) {
-            return null;
+    public static String getAudioDownloadPath(Context context)
+    {
+
+        File dir = new File( Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),  "Darya-sokhan" );
+        if (!dir.exists())
+        {
+            boolean mkdir = dir.mkdir();
         }
-
-        File dl_path = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
-        String defaultDLDir = dl_path.getAbsolutePath();
-
-        if (!dl_path.exists()) {
-            dl_path.mkdir();
-        }
-
-        return PreferenceManager1.getKey("audiodwnldpath", defaultDLDir);
+        return dir.getAbsolutePath();
     }
 
 
-    /**
-     * Audio Download Path
-     * ذخیرۀ مقدار مسیر فایلهای دریافتی
-     *
-     * @param Value مسیر فایلهای دریافتی
-     */
-    public static void setAudioDownloadPath(String Value) {
-        if (PreferenceManager1 == null) {
-            return;
-        }
-
-        PreferenceManager1.setKey("audiodwnldpath", Value);
-    }
 
     /**
      * Database Download Path
@@ -233,7 +216,7 @@ public class AppSettings {
         File dir = new File(defaultDLDir);
 
         if (!dir.exists()) {
-            dir.mkdir();
+            boolean mkdir = dir.mkdir();
             setDownloadPath(defaultDLDir);
         }
 
@@ -591,13 +574,23 @@ public class AppSettings {
 
         ///String dirPath = MediaStore.Images.Media.EXTERNAL_CONTENT_URI.getPath() + File.separator + "Darya";
 
-        File dir =         new File( Environment.getExternalStoragePublicDirectory( Environment.DIRECTORY_PICTURES),  "Darya" );
-       // Log.e("getImageFolderPath", "dir: "+dir.getAbsolutePath() );
+        File dir = new File( Environment.getExternalStoragePublicDirectory( Environment.DIRECTORY_PICTURES),  "Darya" );
 
         if (!dir.exists()) {
-            dir.mkdir();
+            boolean mkdir = dir.mkdir();
         }
         return dir.getAbsolutePath();
     }
+
+    public static String getAppFolderPath() {
+
+        File dir = new File( Environment.getExternalStorageDirectory(),  "Darya-sokhan" );
+        if (!dir.exists())
+        {
+            boolean mkdir = dir.mkdir();
+        }
+        return dir.getAbsolutePath();
+    }
+
 
 }

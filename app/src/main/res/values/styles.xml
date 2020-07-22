@@ -34,6 +34,7 @@
         <item name="android:itemBackground">@color/itemBackground</item>
 
         <item name="colorPrimaryBG">@color/colorPrimaryBG</item>
+        <item name="actionModeBackground">@color/colorPrimary</item>
 
     </style>
 

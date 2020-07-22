@@ -7,13 +7,13 @@
         android:orderInCategory="100"
         android:title="@string/done"
         android:icon="@drawable/ic_share_white_24dp"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         />
     <item
         android:id="@+id/action_play"
         android:orderInCategory="99"
         android:title="@string/declaim"
         android:icon="@drawable/ic_record_voice_over_white_24dp"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         />
 </menu>

@@ -455,15 +455,15 @@ public class ActivityPoem extends AppCompatActivity {
             PoemAudio poemAudio = existAudioList.get(0);
             mPlayer = new MediaPlayer();
             mPlayer.setOnCompletionListener(mediaPlayer -> play_audio.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_black_24dp)));
-            PlayAudio(poemAudio);
+            playAudio(poemAudio);
         } else {
             ShowAudioCollection();
         }
     }
 
-    private void PlayAudio(PoemAudio poemAudio)
+    private void playAudio(PoemAudio poemAudio)
     {
-        SetupAudio();
+        setupAudio();
 
         try {
 
@@ -516,7 +516,7 @@ public class ActivityPoem extends AppCompatActivity {
             builder.setIcon(R.drawable.ic_playlist_play_gray_24dp);
             builder.setItems(items, (dialog, which) -> {
                 PoemAudio poemAudio = existAudioList.get(which);
-                PlayAudio(poemAudio);
+                playAudio(poemAudio);
 
             });
 
@@ -668,7 +668,7 @@ public class ActivityPoem extends AppCompatActivity {
                     mPlayer = new MediaPlayer();
                     mPlayer.setOnCompletionListener(mediaPlayer -> play_audio.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_black_24dp)));
 
-                    PlayAudio(poemAudio);
+                    playAudio(poemAudio);
                     audio_player_bar.setVisibility(View.VISIBLE);
                 } else {
                     ShowAudioCollection();
@@ -681,6 +681,13 @@ public class ActivityPoem extends AppCompatActivity {
                 }
             }
 
+        }
+        else
+        {
+            if (mPlayer != null && !mPlayer.isPlaying()) {
+                mPlayer.start();
+                play_audio.setImageDrawable(getDrawable(R.drawable.ic_pause_black_24dp));
+            }
         }
     }
 
@@ -751,7 +758,7 @@ public class ActivityPoem extends AppCompatActivity {
         }
     }
 
-    private  void SetupAudio()
+    private  void setupAudio()
     {
         try {
 
@@ -770,8 +777,6 @@ public class ActivityPoem extends AppCompatActivity {
                Log.e(TAG, "onAudioFocusChange: " + focusChange);
                 switch (focusChange) {
                     case AudioManager.AUDIOFOCUS_LOSS:
-                        pauseAudio();
-                        break;
 
                     case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                         pauseAudio();

@@ -3,6 +3,7 @@
     <color name="colorPrimary">#51a2d5</color>
     <color name="colorPrimaryDark">#31537b</color>
     <color name="colorAccent">#d58451</color>
+
     <color name="lightGray">#e0e0e0</color>
     <color name="white">#ffffff</color>
     <color name="dark">#5e5656</color>
@@ -96,6 +97,9 @@
     <color name="SearchInputGB">#fff</color>
     <color name="textColor">#000</color>
     <color name="itemBackground">#fff</color>
-
-
+    <color name="primaryTextColor">#fff</color>
+    <color name="btnColor">#0288d1</color>
+    <color name="text_dl_marked">#008498</color>
+    <color name="icon_dl">#737373</color>
+    <color name="icon_dl_marked">#008498</color>
  </resources>
