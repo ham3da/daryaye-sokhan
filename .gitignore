@@ -13,3 +13,5 @@
 .externalNativeBuild
 ssh_keys_github
 ssh_keys_github.pub
+/app/release/
+/app/release/

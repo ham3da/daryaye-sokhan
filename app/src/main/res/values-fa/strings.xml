@@ -202,4 +202,5 @@
     <string name="view_admob">مشاهدۀ آگهی</string>
     <string name="thanks_a_lot">سپاسگزاریم</string>
     <string name="declaimer">گوینده</string>
+    <string name="err_list_audio">دریافت لیست فایل‌های صوتی با خطا مواجه شد! لطفاً دوباره سعی کنید.</string>
 </resources>

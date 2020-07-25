@@ -15,7 +15,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -84,7 +83,7 @@ public class PoemVerseRecycleAdaptor extends RecyclerView.Adapter<PoemVerseRecyc
     @Override
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_vers, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_verse, parent, false);
         return new ViewHolder(v);
     }
 

@@ -748,7 +748,7 @@ public class ActivityCollection extends AppCompatActivity
             } catch (Exception e)
             {
                 Log.e("DownloadFromUrl", "doInBackground: " + e.getMessage());
-                return null;
+                return -1;
             }
         }
 
@@ -770,6 +770,10 @@ public class ActivityCollection extends AppCompatActivity
             if (result == 1)
             {
                 showGDBList(_MixedList);
+            }
+            else if(result == -1)
+            {
+                Toast.makeText(getBaseContext(), getString(R.string.err_list_audio), Toast.LENGTH_SHORT).show();
             }
             else
             {

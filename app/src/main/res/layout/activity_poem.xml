@@ -18,7 +18,7 @@
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|left"
         app:maxImageSize="30dp"
-        app:srcCompat="@drawable/ic_star_wite_24dp" />
+        app:srcCompat="@drawable/ic_star_white_24dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ConstraintLayout2"
@@ -43,7 +43,7 @@
                 android:layout_below="@+id/include"
                 android:layoutAnimation="@anim/layout_animation_fall_down"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                tools:listitem="@layout/item_vers"
+                tools:listitem="@layout/item_verse"
                />
         </RelativeLayout>
 

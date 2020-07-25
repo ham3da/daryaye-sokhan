@@ -67,7 +67,6 @@ public class UtilFunctions
     {
         try
         {
-
             Intent telegramIntent = new Intent(Intent.ACTION_VIEW);
             telegramIntent.setData(Uri.parse("https://telegram.me/ham3da_ir"));
             telegramIntent.setPackage("org.telegram.messenger");

@@ -916,13 +916,14 @@ public class ActivityAudioCollection extends AppCompatActivity
                 adaptorAudio.notifyDataSetChanged();
                 recycler_audio.scrollToPosition(0);
             }
+            else if(result == -1)
+            {
+                Toast.makeText(getBaseContext(), getString(R.string.err_list_audio), Toast.LENGTH_SHORT).show();
+            }
             else
             {
-
                 Toast.makeText(getBaseContext(), getString(R.string.nothing_found), Toast.LENGTH_SHORT).show();
-
             }
-
         }
     }
 
