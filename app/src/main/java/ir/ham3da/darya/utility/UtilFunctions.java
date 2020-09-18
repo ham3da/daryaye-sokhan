@@ -55,7 +55,7 @@ public class UtilFunctions
 
 //      google play => 0 , cafebazaar => 1 , myket => 2,
 //      charkhoneh => 3, iranapps => 4  , avvalmarket => 5, cando => 6
-    private static int Store = 0;
+    private static int Store = 2;
 
     public UtilFunctions(Context mCtx)
     {
