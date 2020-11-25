@@ -203,4 +203,6 @@
     <string name="thanks_a_lot">سپاسگزاریم</string>
     <string name="declaimer">گوینده</string>
     <string name="err_list_audio">دریافت لیست فایل‌های صوتی با خطا مواجه شد! لطفاً دوباره سعی کنید.</string>
+    <string name="ad_attribution">تبلیغات</string>
+    <string name="ad_exit_text">کاربر گرامی، از شما تقاضا داریم به پاس حمایت از این نرم افزار ارزشمند، قبل از بستن برنامه، روی دکمه مشاهده آگهی لمس کنید و یک آگهی مشاهده کنید و سپس روی آگهی نیز لمس نمایید.</string>
 </resources>

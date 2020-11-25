@@ -210,13 +210,21 @@
     <string name="loadingVers">Loading verse</string>
     <string name="night_theme">Night mode</string>
 
+    <!--    Real Ad -->
     <string name="interstitial_ad_unit_id" translatable="false">ca-app-pub-5843948052196502/1951219884</string>
+    <string name="native_ad_unit_id" translatable="false">ca-app-pub-5843948052196502/3648160888</string>
+
+    <!--    Test Ad -->
+<!--    <string name="interstitial_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/1033173712</string>-->
+<!--    <string name="native_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/2247696110</string>-->
 
     <string name="easy_donating">Easy donating</string>
     <string name="admob_not_load">No ads are currently available. Please try again later.</string>
-    <string name="admob_des">Dear user, to support this valuable application, touch the "View Ad" button And after displaying the ad, touch it as well.</string>
+    <string name="admob_des">Dear user, in order to support this valuable application, touch the "View ads" button And after displaying the ad, touch it as well.</string>
     <string name="view_admob">View ads</string>
     <string name="thanks_a_lot">Thanks a lot</string>
     <string name="declaimer">Declaimer</string>
     <string name="err_list_audio">Error getting list of audio files! Please try again.</string>
+    <string name="ad_attribution">Ad</string>
+    <string name="ad_exit_text">Dear user, in order to support this valuable application, we ask you to touch the "View ads" button and view an advertisement before closing the application.</string>
 </resources>

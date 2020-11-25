@@ -1,8 +1,9 @@
 package ir.ham3da.darya
 
 import android.content.Context
-import android.os.AsyncTask
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.format.Formatter
 import android.util.Log
 import android.view.ActionMode
@@ -30,7 +31,6 @@ import java.io.IOException
 import java.io.InputStream
 import java.nio.charset.StandardCharsets
 import java.util.*
-import kotlin.math.roundToInt
 
 @Suppress("UNREACHABLE_CODE")
 class ActivityCollection : AppCompatActivity() {
@@ -158,8 +158,7 @@ class ActivityCollection : AppCompatActivity() {
 
         recyclerViewCollection?.let { recyclerViewCollection!!.setLayoutManager(linearLayoutManager) }
 
-        var downloadRelativelayout: RelativeLayout? = null
-        downloadRelativelayout = findViewById(R.id.download_RelativeLayout)
+        val downloadRelativelayout: RelativeLayout = findViewById(R.id.download_RelativeLayout)
 
         if (downloadRelativelayout.isShown) {
             downloadRelativelayout.visibility = View.GONE
@@ -192,22 +191,21 @@ class ActivityCollection : AppCompatActivity() {
     }
 
     fun downloadBooks(scheduleBookList1: List<ScheduleGDB>?) {
-        var downloadRelativelayout: RelativeLayout? = null
-        downloadRelativelayout = findViewById(R.id.download_RelativeLayout)
+        val downloadRelatively: RelativeLayout? = findViewById(R.id.download_RelativeLayout)
 
         val totalDownloads = scheduleBookList1!!.size
         if (totalDownloads > 0) {
-            if (downloadRelativelayout!!.visibility != View.VISIBLE) {
-                downloadRelativelayout!!.visibility = View.VISIBLE
+            if (downloadRelatively!!.visibility != View.VISIBLE) {
+                downloadRelatively.visibility = View.VISIBLE
             }
             progress_bar!!.progress = 0
             progress_text!!.text = ""
             progress_description!!.text = ""
             progress_text1!!.text = ""
             progress_text2!!.text = ""
-            cancel_downloads!!.setOnClickListener { v: View? ->
+            cancel_downloads!!.setOnClickListener {
                 PRDownloader.cancelAll()
-                downloadRelativelayout.visibility = View.GONE
+                downloadRelatively.visibility = View.GONE
             }
             if (totalDownloads > sumDownloaded) {
                 val scheduleGDB = scheduleBookList1[sumDownloaded]
@@ -243,7 +241,7 @@ class ActivityCollection : AppCompatActivity() {
                                     if (imported) {
                                         GDBListAdaptor1!!.notifyNewImported(scheduleGDB._Pos, scheduleGDB._PoetID)
                                         try {
-                                            val delete = file.delete()
+                                            file.delete()
                                         } catch (ex: Exception) {
                                             Log.e(TAG, "onPostExecute: " + ex.message)
                                         }
@@ -258,8 +256,8 @@ class ActivityCollection : AppCompatActivity() {
                                         multi_dl = true
                                     }
                                     GDBListAdaptor1!!.notifyDataSetChanged()
-                                    ShowSuccessDownloadToast(multi_dl)
-                                    downloadRelativelayout.visibility = View.GONE
+                                    showSuccessDownloadToast(multi_dl)
+                                    downloadRelatively.visibility = View.GONE
                                 }
                             }
 
@@ -269,7 +267,7 @@ class ActivityCollection : AppCompatActivity() {
                                         ", get Connection Exception:" + error.connectionException.message)
                                 downloadFailToast()
                                 PRDownloader.cancel(scheduleGDB._Pos)
-                                downloadRelativelayout.visibility = View.GONE
+                                downloadRelatively.visibility = View.GONE
                                 GDBListAdaptor1!!.notifyDataSetChanged()
                             }
                         })
@@ -292,82 +290,94 @@ class ActivityCollection : AppCompatActivity() {
         val ques = getString(R.string.delete_all_au)
         val yesNoDialog = MyDialogs1.YesNoDialog(ques, getDrawable(R.drawable.ic_delete_white_24dp), true)
         val noBtn = yesNoDialog.findViewById<Button>(R.id.noBtn)
-        noBtn.setOnClickListener { view: View? -> yesNoDialog.dismiss() }
+        noBtn.setOnClickListener { yesNoDialog.dismiss() }
         val yesBtn = yesNoDialog.findViewById<Button>(R.id.yesBtn)
-        yesBtn.setOnClickListener { view: View? ->
+        yesBtn.setOnClickListener {
             yesNoDialog.dismiss()
-            val deleteBookFilesTask = DeleteBookFilesTask()
+
             val ganjoorBookInfoListArray = gdbInfos.toTypedArray()
-            deleteBookFilesTask.execute(*ganjoorBookInfoListArray)
+            val deleteBookFilesTask = DeleteBookFilesTask(ganjoorBookInfoListArray)
+            deleteBookFilesTask.execute()
         }
         yesNoDialog.show()
     }
 
-    private inner class DeleteBookFilesTask : AsyncTask<GDBInfo?, Int?, Int>() {
-        override fun onPreExecute() {
-            super.onPreExecute()
 
-            var downloadRelativelayout: RelativeLayout? = null
-            downloadRelativelayout = findViewById(R.id.download_RelativeLayout)
+    inner class DeleteBookFilesTask(var gdbInfoArrayList: Array<GDBInfo>) {
+        var mainHandler = Handler(Looper.getMainLooper())
+        var deleteThread: Thread? = null
 
-            downloadRelativelayout!!.visibility = View.VISIBLE
+        fun execute() {
+            val downloadRelatively: RelativeLayout? = findViewById(R.id.download_RelativeLayout)
+
+            downloadRelatively!!.visibility = View.VISIBLE
             progress_bar!!.progress = 0
             progress_text!!.text = ""
             progress_description!!.text = ""
             progress_text1!!.text = ""
             progress_text2!!.text = ""
+
+            deleteThread = Thread { doInBackground() }
+            deleteThread!!.start()
         }
 
-        override fun onProgressUpdate(vararg values: Int?) {
-            super.onProgressUpdate(*values)
+        private fun doInBackground() {
+            try {
+                val count = gdbInfoArrayList.size
+                for (i in 0 until count) {
+                    val gdbInfo = gdbInfoArrayList[i]
+                    GDBListAdaptor1!!.deleteItemMarked(gdbInfo)
+                    publishProgress(i + 1, count)
+                }
+                completed()
+            }
+            catch (ex: Exception)
+            {
+                Log.e("xml_Dl", "doInBackground: " + ex.message)
+            }
+
+        }
+
+        private fun publishProgress(vararg values: Int?) {
+
             val total = values[1]
             val current = values[0]
 
             val num1 = current?.toDouble()
-           val num2 = total?.toDouble()
+            val num2 = total?.toDouble()
 
             val percent = ((num1?.div(num2!!))?.times(100))?.toInt()
-
-            Log.e(TAG, "onProgressUpdate: $percent")
-
-            if (percent != null) {
-                if (percent > 0) {
-                    progress_bar!!.progress = percent
-                }
-            }
             val percentStr = String.format(Locale.getDefault(), "%d", percent) + " %"
-            progress_text!!.text = percentStr
-            progress_description!!.setText(R.string.deleting)
-            progress_text1!!.text = ""
-            progress_text2!!.text = ""
+
+            mainHandler.post {
+                if (percent != null) {
+
+                    if (percent > 0) {
+                        progress_bar!!.progress = percent
+                    }
+                }
+                progress_text!!.text = percentStr
+                progress_description!!.setText(R.string.deleting)
+                progress_text1!!.text = ""
+                progress_text2!!.text = ""
+            };
+
+
         }
 
-        override fun onPostExecute(result: Int) {
-            var downloadRelativelayout: RelativeLayout? = null
-            downloadRelativelayout = findViewById(R.id.download_RelativeLayout)
+        private fun completed() {
+             runOnUiThread {
+                val downloadRelativeLayout: RelativeLayout? = findViewById(R.id.download_RelativeLayout)
 
-            downloadRelativelayout!!.visibility = View.GONE
-            GDBListAdaptor1!!.notifyDataSetChanged()
+                downloadRelativeLayout!!.visibility = View.GONE
+                GDBListAdaptor1!!.notifyDataSetChanged()
+            }
+
         }
 
         init {
-
-            cancel_downloads!!.setOnClickListener { v: View? -> cancel(true) }
-        }
-
-        override fun doInBackground(vararg p0: GDBInfo?): Int {
-            return try {
-                val count = p0.size
-                for (i in 0 until count) {
-                    val gdbInfo = p0[i]
-                    GDBListAdaptor1!!.deleteItemMarked(gdbInfo)
-                    publishProgress(i+1, count)
-                }
-                1
-            } catch (ex: Exception) {
-                ex.printStackTrace()
-                Log.e("xml_Dl", "doInBackground: " + ex.message)
-                -1
+            cancel_downloads!!.setOnClickListener {
+                deleteThread!!.interrupt()
             }
         }
 
@@ -399,12 +409,6 @@ class ActivityCollection : AppCompatActivity() {
         }
         searchView!!.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                // Toast like print
-//                Toast.makeText(ActivityCollection.this, "SearchOnQueryTextSubmit: " + query, Toast.LENGTH_SHORT).show();
-//                if (!searchView.isIconified()) {
-//                    searchView.setIconified(true);
-//                }
-//                action_search.collapseActionView();
                 searchInRecycleView(query.trim { it <= ' ' })
                 return false
             }
@@ -413,7 +417,7 @@ class ActivityCollection : AppCompatActivity() {
                 return false
             }
         })
-        searchView!!.setOnQueryTextFocusChangeListener { v: View?, hasFocus: Boolean -> searchViewHasFocus = hasFocus }
+        searchView!!.setOnQueryTextFocusChangeListener { _: View?, hasFocus: Boolean -> searchViewHasFocus = hasFocus }
         return true
     }
 
@@ -432,16 +436,16 @@ class ActivityCollection : AppCompatActivity() {
     }
 
     private fun loadItems() {
-        val downloadXmlTask: DownloadXmlTask = DownloadXmlTask()
-        downloadXmlTask.execute(_Lists_Url[0])
+        val downloadXmlTask = DownloadXmlTask(_Lists_Url[0])
+        downloadXmlTask.execute()
     }
 
     private fun SetLists(XMLString: String?): Int {
-        val res = 0
+        //val res = 0
         if (XMLString != null && !XMLString.isEmpty()) {
             val InputStream1: InputStream = ByteArrayInputStream(XMLString.toByteArray(StandardCharsets.UTF_8))
             val lists: MutableList<GDBList> = LinkedList()
-            var list: GDBList? = null
+            val list: GDBList?
             try {
                 list = GDBList.Build(0, InputStream1, _DbBrowser)
                 if (list != null) {
@@ -478,11 +482,15 @@ class ActivityCollection : AppCompatActivity() {
         recyclerViewCollection!!.scrollToPosition(0)
     }
 
-    private inner class DownloadXmlTask : AsyncTask<String?, Int?, Int>() {
-        // onPreExecute called before the doInBackgroud start for display
+
+    inner class DownloadXmlTask(var dlUrls: String?) {
+
+        var downloadThread: Thread? = null
+
         // progress dialog.
-        override fun onPreExecute() {
-            super.onPreExecute()
+
+        fun execute() {
+
             if (_MixedList != null) {
                 _MixedList = null
             }
@@ -492,42 +500,49 @@ class ActivityCollection : AppCompatActivity() {
             if (!simpleSwipeRefreshLayout!!.isRefreshing) {
                 simpleSwipeRefreshLayout!!.isRefreshing = true
             }
+
+            downloadThread = Thread { doInBackground(dlUrls) }
+            downloadThread!!.start()
+
         }
 
-        override fun doInBackground(vararg urls: String?): Int {
-            return try {
+        private fun doInBackground(vararg urls: String?) {
+            try {
                 val result = DownloadFromUrl.downloadDataFromUrl(urls[0], false)
-                val res2 = SetLists(result)
-                publishProgress(100)
-                res2
+                SetLists(result)
+                complete(1)
+
             } catch (e: Exception) {
                 Log.e("DownloadFromUrl", "doInBackground: " + e.message)
-                -1
+                complete(-1)
             }
         }
 
+        private fun complete(result: Int)
+        {
 
-        override fun onProgressUpdate(vararg values: Int?) {
-            super.onProgressUpdate(*values)
-        }
+            runOnUiThread {
+                if (simpleSwipeRefreshLayout!!.isRefreshing) {
+                    simpleSwipeRefreshLayout!!.isRefreshing = false
+                }
+                if (result == 1)
+                {
+                    showGDBList(_MixedList)
+                }
+                else if (result == -1)
+                {
+                    Toast.makeText(baseContext, getString(R.string.err_list_audio), Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this@ActivityCollection, getString(R.string.nothing_found), Toast.LENGTH_SHORT).show()
+                }
+            }
 
-        override fun onPostExecute(result: Int) {
-            if (simpleSwipeRefreshLayout!!.isRefreshing) {
-                simpleSwipeRefreshLayout!!.isRefreshing = false
-            }
-            if (result == 1) {
-                showGDBList(_MixedList)
-            } else if (result == -1) {
-                Toast.makeText(baseContext, getString(R.string.err_list_audio), Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this@ActivityCollection, getString(R.string.nothing_found), Toast.LENGTH_SHORT).show()
-            }
         }
 
 
     }
 
-    fun ShowSuccessDownloadToast(DownloadAll: Boolean) {
+    fun showSuccessDownloadToast(DownloadAll: Boolean) {
         if (DownloadAll) {
             Toast.makeText(this, getString(R.string.selected_collectons_added), Toast.LENGTH_SHORT).show()
         } else {

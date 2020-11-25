@@ -16,7 +16,7 @@ public class App extends Application
 {
 
 
-    private boolean updatePoetList, updateFavList = false;
+    private boolean updatePoetList, updateFavList, Adviewd = false;
     private FirebaseAnalytics mFirebaseAnalytics;
 
     public boolean getUpdatePoetList()
@@ -37,6 +37,15 @@ public class App extends Application
     public void setUpdateFavList(boolean status)
     {
         updateFavList = status;
+    }
+
+    public void setAdviewd(boolean adviewd)
+    {
+        Adviewd = adviewd;
+    }
+    public boolean getAdviewd()
+    {
+        return  Adviewd;
     }
 
     static {

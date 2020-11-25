@@ -1,39 +1,26 @@
 package ir.ham3da.darya.utility;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.loader.content.AsyncTaskLoader;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.ref.WeakReference;
 
 import ir.ham3da.darya.ActivityMain;
 import ir.ham3da.darya.R;
 
-import java.util.concurrent.Executor;
-
-import ir.ham3da.darya.utility.AppSettings;
-import ir.ham3da.darya.utility.CustomProgress;
-import ir.ham3da.darya.utility.UtilFunctions;
-
-
-public class CopyDatabaseTask extends AsyncTask<String, Integer, Long>
+public class CopyDatabaseTask
 {
-    private WeakReference<ActivityMain> activityMain;
-
-    private Context context1;
-    private CustomProgress customProgressDlg;
-    private String  destFile;
-    private InputStream sourceFile;
-
+    private final Context context1;
+    private final CustomProgress customProgressDlg;
+    private final String  destFile;
+    private final InputStream sourceFile;
+    Handler mainHandler = new Handler(Looper.getMainLooper());
     public CopyDatabaseTask(Context contextActivityMain, InputStream sourceFile, String destFile)
     {
         this.context1 = contextActivityMain;
@@ -43,22 +30,21 @@ public class CopyDatabaseTask extends AsyncTask<String, Integer, Long>
 
     }
 
-    /**
-     * Before starting background thread
-     * Show Progress Bar Dialog
-     * */
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
+    public void Execute() {
+
         this.customProgressDlg.showProgress(this.context1.getString(R.string.prepar_database), "0 %" , false, false, false);
         this.customProgressDlg.setProgress(0);
+        Thread copyingThread = new Thread(this::doInBackground);
+        copyingThread.start();
+
+       // new Handler().postDelayed(this::doInBackground, 500);
     }
 
     /**
      * Copy file in background thread
      * */
-    @Override
-    protected Long doInBackground(String... files)
+
+    protected void doInBackground()
     {
 
         long totalBytesCopied = 0;
@@ -78,51 +64,50 @@ public class CopyDatabaseTask extends AsyncTask<String, Integer, Long>
             long expectedBytes = mInput.available();
             while ((mLength = mInput.read(mBuffer)) > 0) {
                 totalBytesCopied += mLength;
+                mOutput.write(mBuffer, 0, mLength);
+
                 int progress = (int) Math.round(((double) totalBytesCopied / (double) expectedBytes) * 100);
-                if(progress > 0) {
+                if(progress > 0)
+                {
                     publishProgress(progress);
                 }
-                mOutput.write(mBuffer, 0, mLength);
+
             }
             mOutput.flush();
             mOutput.close();
             mInput.close();
+            completed(100);
         }
         catch (IOException e)
         {
             this.customProgressDlg.dismiss();
             String exception = UtilFunctions.getStackTrace(e);
             Log.e("doInBackground", exception );
-
-
         }
-        return totalBytesCopied;
     }
 
-    /**
-     * Updating progress bar
-     * */
-    @Override
-    protected void onProgressUpdate(Integer... progress)
+    protected void publishProgress(Integer progress)
     {
-        this.customProgressDlg.setProgress(progress[0]);
+        Log.e("copy", "publishProgress: "+ progress);
+        if(customProgressDlg != null)
+        {
+            mainHandler.post(() -> customProgressDlg.setProgress(progress));
+        }
+
     }
 
     /**
      * After completing background task
      *
      * **/
-    @Override
-    protected void onPostExecute(Long result)
+
+    protected void completed(Integer result)
     {
-        super.onPostExecute(result);
+
         //### Load Poets List
         ActivityMain activityMain = (ActivityMain) this.context1;
+        activityMain.runOnUiThread(() -> activityMain.LoadDBFirstTime(customProgressDlg));
 
-//        MainPoetsFragment fragment = new MainPoetsFragment();
-//        MainPoetsFragment currentFragment = (MainPoetsFragment)((AppCompatActivity) context).getSupportFragmentManager().findFragmentByTag(this.fragmentTag);
-//
-        activityMain.LoadDBFirstTime(this.customProgressDlg);
     }
 
 

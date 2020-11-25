@@ -20,21 +20,8 @@
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:contentDescription="@string/about"
-            android:tint="@color/white"
-            app:srcCompat="@drawable/ic_error_outline_white_24dp" />
-
-        <!--<TextView-->
-            <!--android:id="@+id/dialog_title"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_marginStart="10dp"-->
-            <!--android:layout_toEndOf="@id/dialog_icon"-->
-            <!--style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"-->
-            <!--android:fontFamily="@font/iransans"-->
-            <!--android:text="@string/title"-->
-            <!--android:textColor="@color/white" />-->
-
+            app:srcCompat="@drawable/ic_error_outline_white_24dp"
+            app:tint="@color/white" />
 
     </RelativeLayout>
     <ScrollView
@@ -43,7 +30,9 @@
         android:scrollbars="vertical"
         android:fillViewport="true"
         android:padding="5dp">
-
+        <RelativeLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content">
         <TextView
             android:id="@+id/dialog_text"
             android:layout_width="wrap_content"
@@ -54,5 +43,19 @@
             android:linksClickable="true"
             android:text="@string/text"
             android:textColor="?attr/ListTextColor" />
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:layout_below="@+id/dialog_text"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
+            android:indeterminateOnly="true"
+            android:visibility="gone"
+            style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
+            />
+        </RelativeLayout>
     </ScrollView>
 </LinearLayout>

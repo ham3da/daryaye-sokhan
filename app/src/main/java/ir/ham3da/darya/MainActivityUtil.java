@@ -31,15 +31,18 @@ public class MainActivityUtil
         return DbFile.exists();
     }
 
-    public void extractGangoorDB(String filePath) {
+    public void extractGangoorDB(String filePath)
+    {
         boolean check_exists = checkExists(filePath);
         if (!check_exists) {
 
             try {
 
                 InputStream fileToCopy = mCtx.getAssets().open(AppSettings.getDatabaseName());
+
                 CopyDatabaseTask copyDatabaseTask1 = new CopyDatabaseTask(mCtx, fileToCopy, filePath);
-                copyDatabaseTask1.execute(filePath);
+
+                copyDatabaseTask1.Execute();
             } catch (IOException e) {
                 Log.e("ham3da_library", "extractGanjoor_db err: " + e.getMessage());
             }

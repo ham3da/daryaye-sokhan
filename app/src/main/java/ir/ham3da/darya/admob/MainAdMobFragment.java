@@ -20,6 +20,8 @@ import androidx.fragment.app.FragmentActivity;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.LoadAdError;
+
 import ir.ham3da.darya.App;
 import ir.ham3da.darya.MainActivityUtil;
 import ir.ham3da.darya.R;
@@ -60,8 +62,6 @@ public class MainAdMobFragment extends Fragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-
-
         View root = inflater.inflate(R.layout.fragment_admob, container, false);
 
         final FragmentActivity fragmentActivity = getActivity();
@@ -75,9 +75,6 @@ public class MainAdMobFragment extends Fragment
         interstitial.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
         // Request for Ads
         AdRequest adRequest = new AdRequest.Builder()
-                // Add a test device to show Test Ads
-//                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-//                .addTestDevice(deviceid)
                 .build();
 
 
@@ -109,7 +106,6 @@ public class MainAdMobFragment extends Fragment
             @Override
             public void onAdOpened()
             {
-
                 super.onAdOpened();
             }
 
@@ -117,17 +113,20 @@ public class MainAdMobFragment extends Fragment
             public void onAdClosed()
             {
                 Toast.makeText(getContext(), getString(R.string.thanks_a_lot), Toast.LENGTH_SHORT).show();
+                App globalVariable = (App) getActivity().getApplicationContext();
+                globalVariable.setAdviewd(true);
                 super.onAdClosed();
             }
 
             @Override
-            public void onAdFailedToLoad(int i)
+            public void onAdFailedToLoad(LoadAdError loadAdError)
             {
-                Log.e("interstitial", "onAdFailedToLoad: ");
+                super.onAdFailedToLoad(loadAdError);
                 progress_bar.setVisibility(View.INVISIBLE);
+                Log.e("interstitial", "onAdFailedToLoad: "+loadAdError.getMessage());
                 Toast.makeText(getContext(), getString(R.string.admob_not_load), Toast.LENGTH_SHORT).show();
-                super.onAdFailedToLoad(i);
             }
+
         });
         return root;
     }

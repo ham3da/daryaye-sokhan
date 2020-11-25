@@ -2,6 +2,7 @@ package ir.ham3da.darya.adaptors;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -202,7 +203,7 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 
             notifyDataSetChanged();
 
-            new Handler().postDelayed(() -> {
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 if (!checkAll)
                     checkAll = true;
             }, 50);

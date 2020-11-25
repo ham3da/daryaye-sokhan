@@ -327,7 +327,8 @@ public class ActivityImageEdit extends AppCompatActivity implements
     }
 
     @SuppressLint("MissingPermission")
-    protected void doSaveImage(final boolean share) {
+    protected void doSaveImage(final boolean share)
+    {
         final CustomProgress customProgressDlg = new CustomProgress(this);
         customProgressDlg.showProgress(getString(R.string.saving), getString(R.string.please_wait2), false, false, true);
 
@@ -336,6 +337,7 @@ public class ActivityImageEdit extends AppCompatActivity implements
 
         File file = new File(saveDir + File.separator + "" + System.currentTimeMillis() + ".jpg");
         try {
+
             boolean newFile = file.createNewFile();
 
             SaveSettings saveSettings = new SaveSettings.Builder()
@@ -381,7 +383,8 @@ public class ActivityImageEdit extends AppCompatActivity implements
 
     private void saveImage(boolean share) {
         shareRequest = share;
-        if (isWriteStoragePermissionGranted()) {
+        if (isWriteStoragePermissionGranted())
+        {
             doSaveImage(share);
         }
     }

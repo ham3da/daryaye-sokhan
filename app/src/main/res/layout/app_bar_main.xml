@@ -47,4 +47,13 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+    <ProgressBar
+        android:id="@+id/progressBar_loader"
+        style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminateOnly="true"
+        android:visibility="gone"
+        tools:style="@style/Base.TextAppearance.AppCompat.Large" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

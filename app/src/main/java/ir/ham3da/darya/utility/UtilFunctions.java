@@ -51,11 +51,11 @@ import ir.ham3da.darya.R;
 
 public class UtilFunctions
 {
-    private Context context1;
+    private final Context context1;
 
 //      google play => 0 , cafebazaar => 1 , myket => 2,
 //      charkhoneh => 3, iranapps => 4  , avvalmarket => 5, cando => 6
-    private static int Store = 2;
+    private static final int Store = 4;
 
     public UtilFunctions(Context mCtx)
     {
@@ -588,7 +588,6 @@ public class UtilFunctions
     {
         try
         {
-
             Typeface typeface = ResourcesCompat.getFont(context1, R.font.iran_sans_mobile_light);
             toolbarLayout.setCollapsedTitleTextAppearance(R.style.TextAppearance_AppCompat_Title);
             toolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedTitleTextAppearance);

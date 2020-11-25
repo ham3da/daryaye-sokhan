@@ -30,7 +30,7 @@ public class MyDialogs {
     public int ButtonsColorRes = R.color.darkDeepOrange;
     public int Icon = R.drawable.ic_star_border_white_36dp;
     private Context context;
-
+    Dialog dialog;
     public String price;
     public String app_name;
     public String version = BuildConfig.VERSION_NAME;
@@ -74,7 +74,7 @@ public class MyDialogs {
         String appMame = this.context.getString(R.string.app_name);
 
 
-        final Dialog dialog = new Dialog(context);
+        dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_listview);
 
@@ -123,7 +123,7 @@ public class MyDialogs {
         String appMame = this.context.getString(R.string.app_name);
 
 
-        final Dialog dialog = new Dialog(context);
+         dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_listview);
 
@@ -320,9 +320,7 @@ public class MyDialogs {
 
     public void ShowWebDialog(String title, String text, int icon)
     {
-        final Dialog dialog = new Dialog(this.context);
-
-
+        dialog = new Dialog(this.context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         SetLanguage.wrap(dialog.getContext());
         dialog.setContentView(R.layout.dialog_webview);
@@ -351,25 +349,25 @@ public class MyDialogs {
 
     public void ShowMessage(String message, int icon) {
 
-        final Dialog mDialog = new Dialog(context);
+        dialog = new Dialog(context);
         // no tile for the dialog
-        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mDialog.setContentView(R.layout.dialog_message);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_message);
 
-        TextView dialog_text = mDialog.findViewById(R.id.dialog_text);
+        TextView dialog_text = dialog.findViewById(R.id.dialog_text);
 
-        ImageView dialog_icon = mDialog.findViewById(R.id.dialog_icon);
+        ImageView dialog_icon = dialog.findViewById(R.id.dialog_icon);
 
         dialog_icon.setImageDrawable(context.getDrawable(icon));
 
         dialog_text.setText(UtilFunctions.fromHtml(message), TextView.BufferType.SPANNABLE);
 
-        Button okBtn = mDialog.findViewById(R.id.okBtn);
-        okBtn.setOnClickListener(v -> mDialog.dismiss());
+        Button okBtn = dialog.findViewById(R.id.okBtn);
+        okBtn.setOnClickListener(v -> dialog.dismiss());
 
-        mDialog.setCancelable(true);
-        mDialog.setCanceledOnTouchOutside(true);
-        mDialog.show();
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
     }
 
     public void ShowWarningMessage(String message) {
@@ -380,24 +378,26 @@ public class MyDialogs {
     public Dialog YesNoDialog(String message, Drawable drawableIcon, boolean cancelAble) {
 
 
-        Dialog mDialog = new Dialog(context);
+        dialog = new Dialog(context);
         // no tile for the dialog
-        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mDialog.setContentView(R.layout.dialog_yes_no);
+        //dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        TextView dialog_text = mDialog.findViewById(R.id.dialog_text);
+        dialog.setContentView(R.layout.dialog_yes_no);
 
-        ImageView dialog_icon = mDialog.findViewById(R.id.dialog_icon);
+        TextView dialog_text = dialog.findViewById(R.id.dialog_text);
+
+        ImageView dialog_icon = dialog.findViewById(R.id.dialog_icon);
 
         dialog_icon.setImageDrawable(drawableIcon);
 
 
         dialog_text.setText(UtilFunctions.fromHtml(message), TextView.BufferType.SPANNABLE);
-        mDialog.setCancelable(cancelAble);
-        mDialog.setCanceledOnTouchOutside(cancelAble);
+        dialog.setCancelable(cancelAble);
+        dialog.setCanceledOnTouchOutside(cancelAble);
 
-        return mDialog;
+        return dialog;
     }
+
 
     /**
      *
@@ -414,9 +414,8 @@ public class MyDialogs {
 
         if (!notify_text.isEmpty()) {
 
-            MyDialogs myDialogs = new MyDialogs(context);
 
-            final Dialog yesNoDialog = myDialogs.YesNoDialog(notify_text, context.getDrawable(R.drawable.ic_notifications_none_white_24dp), true);
+            final Dialog yesNoDialog = YesNoDialog(notify_text, context.getDrawable(R.drawable.ic_notifications_none_white_24dp), true);
 
             Button yesBtn = yesNoDialog.findViewById(R.id.yesBtn);
             Button noBtn = yesNoDialog.findViewById(R.id.noBtn);

@@ -1,6 +1,8 @@
 package ir.ham3da.darya;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -8,15 +10,20 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -25,6 +32,10 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.LoadAdError;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -33,6 +44,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import java.util.Locale;
 import java.util.Objects;
 
+import ir.ham3da.darya.ganjoor.GanjoorAudioInfo;
 import ir.ham3da.darya.ganjoor.GanjoorDbBrowser;
 import ir.ham3da.darya.ganjoor.GanjoorPoem;
 import ir.ham3da.darya.admob.MainAdMobFragment;
@@ -47,7 +59,6 @@ import ir.ham3da.darya.utility.SetLanguage;
 import ir.ham3da.darya.utility.UtilFunctions;
 
 
-
 public class ActivityMain extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
 {
@@ -60,8 +71,8 @@ public class ActivityMain extends AppCompatActivity
     DrawerLayout drawer;
     int currentLocalIndex;
 
-    boolean doLoading;
-    private Handler progressBarHandler = new Handler();
+    // boolean doLoading;
+    //Handler progressBarHandler = new Handler();
 
     @Override
     protected void attachBaseContext(Context newBase)
@@ -83,11 +94,18 @@ public class ActivityMain extends AppCompatActivity
         super.applyOverrideConfiguration(overrideConfiguration);
     }
 
+    AdRequest adRequest;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
 
         super.onCreate(savedInstanceState);
+        interstitial = new InterstitialAd(this);
+        interstitial.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
+        adRequest = new AdRequest.Builder().build();
+        setAdListen();
+
         UtilFunctions.changeTheme(this);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
         {
@@ -127,27 +145,11 @@ public class ActivityMain extends AppCompatActivity
         }
         else
         {
-          mainActivityUtil1.extractGangoorDB(DB_PATH);
+            mainActivityUtil1.extractGangoorDB(DB_PATH);
         }
         Log.e(TAG, "DB_PATH2: " + AppSettings.getAppFolderPath());
+        progress_bar_dlg = findViewById(R.id.progressBar_loader);
 
-    }
-
-
-    private void get_token()
-    {
-        //  Log.e("Instance ID ",FirebaseInstanceId.getInstance().getId());
-
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(task -> {
-                    if (!task.isSuccessful())
-                    {
-                        Log.w(TAG, "getInstanceId failed", task.getException());
-                        return;
-                    }
-                    String token = Objects.requireNonNull(task.getResult()).getToken();
-                    Log.e("Token", token);
-                });
     }
 
     public void LoadDBFirstTime(CustomProgress dlg1)
@@ -251,7 +253,18 @@ public class ActivityMain extends AppCompatActivity
         }
         else
         {
-            super.onBackPressed();
+            App globalVariable = (App) getApplicationContext();
+
+            if (globalVariable.getAdviewd())
+            {
+                globalVariable.setAdviewd(false);
+                super.onBackPressed();
+            }
+            else
+            {
+                askExitAd();
+            }
+
         }
     }
 
@@ -484,5 +497,88 @@ public class ActivityMain extends AppCompatActivity
         }
 
     }
+
+    InterstitialAd interstitial;
+
+
+    private void setAdListen()
+    {
+        interstitial.setAdListener(new AdListener()
+        {
+
+            @Override
+            public void onAdLoaded()
+            {
+                super.onAdLoaded();
+                progress_bar_dlg.setVisibility(View.GONE);
+                if (interstitial.isLoaded())
+                {
+                    interstitial.show();
+                }
+                else
+                {
+                    Toast.makeText(ActivityMain.this, getString(R.string.admob_not_load), Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+
+            }
+
+
+            @Override
+            public void onAdOpened()
+            {
+                super.onAdOpened();
+
+            }
+
+            @Override
+            public void onAdClosed()
+            {
+                super.onAdClosed();
+                finish();
+            }
+
+            @Override
+            public void onAdFailedToLoad(LoadAdError loadAdError)
+            {
+                super.onAdFailedToLoad(loadAdError);
+                progress_bar_dlg.setVisibility(View.GONE);
+                Log.e("interstitial", "onAdFailedToLoad: " + loadAdError.getMessage());
+                Toast.makeText(ActivityMain.this, getString(R.string.admob_not_load), Toast.LENGTH_SHORT).show();
+
+                finish();
+            }
+
+        });
+    }
+
+    ProgressBar progress_bar_dlg;
+
+    private void askExitAd()
+    {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setIcon(R.drawable.ic_baseline_favorite_border_24);
+
+        dialog.setCancelable(false);
+        dialog.setTitle(R.string.easy_donating);
+        dialog.setMessage(R.string.ad_exit_text);
+        dialog.setPositiveButton(R.string.view_admob, (dialog1, id) -> {
+            progress_bar_dlg.setVisibility(View.VISIBLE);
+            if (interstitial.isLoaded())
+            {
+                interstitial.show();
+            }
+            else
+            {
+                interstitial.loadAd(adRequest);
+            }
+
+        })
+                .setNegativeButton(R.string.close, (dialog12, which) -> finish());
+
+        final AlertDialog alert = dialog.create();
+        alert.show();
+    }
+
 
 }

@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -115,7 +116,7 @@ public class ActivityPoem extends AppCompatActivity {
     boolean MEDIA_IS_LOADED = false;
     private boolean AUDIO_DOWNLOAD_SHOW = false;
 
-    private Handler hdlr = new Handler();
+    private Handler hdlr = new Handler(Looper.getMainLooper());
 
 
     @Override

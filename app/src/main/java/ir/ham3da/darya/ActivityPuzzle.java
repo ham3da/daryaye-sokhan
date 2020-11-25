@@ -3,12 +3,13 @@ package ir.ham3da.darya;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -89,7 +90,7 @@ public class ActivityPuzzle extends AppCompatActivity {
 
         puzzle_new.setOnClickListener(v -> {
             editText_response.setText("");
-            puzzle_check.setImageTintList(getResources().getColorStateList(R.color.black));
+            puzzle_check.setImageTintList(ContextCompat.getColorStateList(this, R.color.black));
             generateNewVerse();
         });
         puzzle_new.setOnLongClickListener(v -> {
@@ -127,7 +128,7 @@ public class ActivityPuzzle extends AppCompatActivity {
             if (!isAnswered) {
                 boolean check = checkAnswer(validResponse, editText_response.getText().toString());
                 if (check) {
-                    puzzle_check.setImageTintList(getResources().getColorStateList(R.color.green_color_picker));
+                    puzzle_check.setImageTintList(ContextCompat.getColorStateList(this, R.color.green_color_picker));
                     //play ok
                     if (!AppSettings.getGameSoundMute()) {
                         mp = MediaPlayer.create(getApplicationContext(), R.raw.valid2);
@@ -135,12 +136,12 @@ public class ActivityPuzzle extends AppCompatActivity {
                     }
 
                     textViewShowResult.setText(R.string.is_correct);
-                    textViewShowResult.setTextColor(getResources().getColor(R.color.green_color_picker));
+                    textViewShowResult.setTextColor(ContextCompat.getColor(this, R.color.green_color_picker));
                     GanjoorDbBrowser1.saveRate(1, RateType.PLUAS_RATE_COL, verseList.get(1)._PoemID, verseList.get(1)._Order);
 
                 } else {
 
-                    puzzle_check.setImageTintList(getResources().getColorStateList(R.color.red500));
+                    puzzle_check.setImageTintList(ContextCompat.getColorStateList(this,R.color.red500));
                     //play warning
                     if (!AppSettings.getGameSoundMute()) {
                         mp = MediaPlayer.create(getApplicationContext(), R.raw.error3);
@@ -151,7 +152,7 @@ public class ActivityPuzzle extends AppCompatActivity {
                     String html = str + "<br>" + getString(R.string.correct_answer) + " <strong>" + validResponse + "</strong>";
 
                     textViewShowResult.setText(UtilFunctions.fromHtml(html), TextView.BufferType.SPANNABLE);
-                    textViewShowResult.setTextColor(getResources().getColor(R.color.red500));
+                    textViewShowResult.setTextColor(ContextCompat.getColor(this, R.color.red500));
 
                     GanjoorDbBrowser1.saveRate(1, RateType.NAGATIVE_RATE_COL, verseList.get(1)._PoemID, verseList.get(1)._Order);
                 }
@@ -238,18 +239,18 @@ public class ActivityPuzzle extends AppCompatActivity {
             NewVerseAsyncTask newVerseAsyncTask = new NewVerseAsyncTask();
             newVerseAsyncTask.execute();
         };
-        new Handler().postDelayed(task1, 1000);
+        new Handler(Looper.getMainLooper()).postDelayed(task1, 1000);
 
     }
 
-    private class NewVerseAsyncTask extends AsyncTask<Void, Void, Void> {
+    private class NewVerseAsyncTask {
 
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
 
-            if (progress_bar.getVisibility() != View.VISIBLE) {
+        protected void execute() {
+
+            if (progress_bar.getVisibility() != View.VISIBLE)
+            {
                 progress_bar.setVisibility(View.VISIBLE);
                 progress_bar.setIndeterminate(true);
             }
@@ -260,10 +261,11 @@ public class ActivityPuzzle extends AppCompatActivity {
             puzzle_info.setEnabled(false);
             puzzle_check.setEnabled(false);
 
+            Thread verseThread = new Thread(this::doInBackground);
+            verseThread.start();
         }
 
-        @Override
-        protected Void doInBackground(Void... urls) {
+        protected void doInBackground() {
 
             try {
                 if (parentCate > 0) {
@@ -310,35 +312,38 @@ public class ActivityPuzzle extends AppCompatActivity {
 
                 vreseStringWithLine = TextUtils.join("<br>", allVerse);
 
+                complete();
 
                 Log.e("APL", "validResponse: " + validResponse);
             } catch (Exception ex) {
                 ex.printStackTrace();
+                complete();
             }
 
-            return null;
         }
 
         // onPostExecute displays the results of the doInBackgroud and also we
         // can hide progress dialog.
-        @Override
-        protected void onPostExecute(Void result) {
+        protected void complete() {
 
-            progress_bar.setVisibility(View.INVISIBLE);
+            runOnUiThread(() -> {
+                progress_bar.setVisibility(View.INVISIBLE);
 
-            if(vreseStringWithLine != null) {
-                textViewVerse.setText(UtilFunctions.fromHtml(vreseStringWithLine), TextView.BufferType.SPANNABLE);
-            }
+                if(vreseStringWithLine != null) {
+                    textViewVerse.setText(UtilFunctions.fromHtml(vreseStringWithLine), TextView.BufferType.SPANNABLE);
+                }
 
-            isAnswered = false;
-            editText_response.setEnabled(true);
-            editText_response.requestFocus();
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-            inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                isAnswered = false;
+                editText_response.setEnabled(true);
+                editText_response.requestFocus();
+                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
-            puzzle_new.setEnabled(true);
-            puzzle_info.setEnabled(true);
-            puzzle_check.setEnabled(true);
+                puzzle_new.setEnabled(true);
+                puzzle_info.setEnabled(true);
+                puzzle_check.setEnabled(true);
+            });
+
 
         }
     }

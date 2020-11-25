@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -12,32 +11,27 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.apache.commons.io.IOUtil;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.ByteArrayInputStream;
@@ -55,6 +49,7 @@ import java.util.Locale;
 import ir.ham3da.darya.adaptors.AdaptorAudio;
 
 import ir.ham3da.darya.adaptors.ScheduleAudio;
+import ir.ham3da.darya.ganjoor.GDBInfo;
 import ir.ham3da.darya.ganjoor.GanjoorDbBrowser;
 import ir.ham3da.darya.ganjoor.GanjoorPoet;
 import ir.ham3da.darya.utility.AppSettings;
@@ -146,7 +141,7 @@ public class ActivityAudioCollection extends AppCompatActivity
         cate_id = getIntent().getIntExtra("cate_id", -1);
         dl_type = getIntent().getIntExtra("dl_type", 1);
 
-        UseCaches = (dl_type == GanjoorAudioInfo.DOWNLOAD_POET_POEMS  || dl_type == GanjoorAudioInfo.DOWNLOAD_CATE_POEMS);
+        UseCaches = (dl_type == GanjoorAudioInfo.DOWNLOAD_POET_POEMS || dl_type == GanjoorAudioInfo.DOWNLOAD_CATE_POEMS);
 
         simpleSwipeRefreshLayout = findViewById(R.id.simpleSwipeRefreshLayout);
 
@@ -339,9 +334,9 @@ public class ActivityAudioCollection extends AppCompatActivity
         yesBtn.setOnClickListener(view ->
         {
             yesNoDialog.dismiss();
-            DeleteAudioFilesTask deleteAudioFilesTask = new DeleteAudioFilesTask();
             GanjoorAudioInfo[] ganjoorAudioInfoListArray = ganjoorAudioInfoList2.toArray(new GanjoorAudioInfo[0]);
-            deleteAudioFilesTask.execute(ganjoorAudioInfoListArray);
+            DeleteAudioFilesTask deleteAudioFilesTask = new DeleteAudioFilesTask(ganjoorAudioInfoListArray);
+            deleteAudioFilesTask.execute();
 
         });
         yesNoDialog.show();
@@ -624,8 +619,8 @@ public class ActivityAudioCollection extends AppCompatActivity
             existAudioList = _DbBrowser.getPoemAudios(poem_id);
         }
 
-        DownloadXmlTask downloadXmlTask = new DownloadXmlTask();
-        downloadXmlTask.execute(getAudioListUrl(dl_type));
+        DownloadXmlTask downloadXmlTask = new DownloadXmlTask(getAudioListUrl(dl_type));
+        downloadXmlTask.execute();
     }
 
     /**
@@ -692,7 +687,7 @@ public class ActivityAudioCollection extends AppCompatActivity
 
                         case GanjoorAudioInfo.DOWNLOAD_CATE_POEMS:
                             get_cate_id = _DbBrowser.getPoemCateId(audioInfo.audio_post_ID);
-                            if(get_cate_id == cate_id)
+                            if (get_cate_id == cate_id)
                             {
                                 new_index++;
                                 audioInfo.Index = new_index;
@@ -773,92 +768,107 @@ public class ActivityAudioCollection extends AppCompatActivity
         Toast.makeText(this, getString(R.string.download_failed), Toast.LENGTH_SHORT).show();
     }
 
-    private class DeleteAudioFilesTask extends AsyncTask<GanjoorAudioInfo, Integer, Integer>
+
+    private class DeleteAudioFilesTask
     {
 
+        GanjoorAudioInfo[] ganjoorAudioInfos;
+        Thread deleteThread;
+        Handler mainHandler = new Handler(Looper.getMainLooper());
 
-        public DeleteAudioFilesTask()
+        public DeleteAudioFilesTask(GanjoorAudioInfo[] ganjoorAudioInfos1)
         {
+            ganjoorAudioInfos = ganjoorAudioInfos1;
             cancel_downloads.setOnClickListener(v -> {
-                this.cancel(true);
+                this.deleteThread.interrupt();
             });
         }
 
-        @Override
-        protected void onPreExecute()
-        {
-            super.onPreExecute();
 
+        protected void execute()
+        {
             download_RelativeLayout.setVisibility(View.VISIBLE);
             progress_bar.setProgress(0);
             progress_text.setText("");
             progress_description.setText("");
             progress_text1.setText("");
             progress_text2.setText("");
+
+            deleteThread = new Thread(() -> doInBackground(ganjoorAudioInfos));
+            deleteThread.start();
+
         }
 
-        @Override
-        protected Integer doInBackground(GanjoorAudioInfo... ganjoorAudioInfos)
+
+        protected void doInBackground(GanjoorAudioInfo... ganjoorAudioInfos1)
         {
             try
             {
-                int count = ganjoorAudioInfos.length;
+                int count = ganjoorAudioInfos1.length;
                 for (int i = 0; i < count; i++)
                 {
-
-                    GanjoorAudioInfo scheduleAudio = ganjoorAudioInfos[i];
+                    GanjoorAudioInfo scheduleAudio = ganjoorAudioInfos1[i];
                     adaptorAudio.deleteItemMarked(scheduleAudio);
                     publishProgress(i, count);
                 }
+                completed();
 
-                return 1;
             } catch (Exception ex)
             {
                 ex.printStackTrace();
                 Log.e("xml_Dl", "doInBackground: " + ex.getMessage());
-                return -1;
             }
         }
 
 
-        @Override
-        protected void onProgressUpdate(Integer... values)
+        protected void publishProgress(int total, int current)
         {
-            super.onProgressUpdate(values);
-            int total = values[1];
-            int current = values[0];
-            int percent = (int) Math.round(((double) current / (double) total) * 100);
-            if (percent > 0)
-            {
-                progress_bar.setProgress(percent);
-            }
+            //super.onProgressUpdate(values);
 
-            String percentStr = String.format(Locale.getDefault(), "%d", percent) + " %";
-            progress_text.setText(percentStr);
-            progress_description.setText(R.string.deleting);
-            progress_text1.setText("");
-            progress_text2.setText("");
+            mainHandler.post(() -> {
+                if (progress_bar != null)
+                {
+                    int percent = (int) Math.round(((double) current / (double) total) * 100);
+                    if (percent > 0)
+                    {
+                        progress_bar.setProgress(percent);
+                    }
+
+                    String percentStr = String.format(Locale.getDefault(), "%d", percent) + " %";
+                    progress_text.setText(percentStr);
+                    progress_description.setText(R.string.deleting);
+                    progress_text1.setText("");
+                    progress_text2.setText("");
+                }
+            });
+
+
         }
 
 
-        @Override
-        protected void onPostExecute(Integer result)
+        protected void completed()
         {
-            download_RelativeLayout.setVisibility(View.GONE);
-            adaptorAudio.notifyDataSetChanged();
+            runOnUiThread(() -> {
+                download_RelativeLayout.setVisibility(View.GONE);
+                adaptorAudio.notifyDataSetChanged();
+            });
+
 
         }
     }
 
-    private class DownloadXmlTask extends AsyncTask<String, Integer, Integer>
+    private class DownloadXmlTask
     {
 
-        // onPreExecute called before the doInBackgroud start for display
-        // progress dialog.
-        @Override
-        protected void onPreExecute()
+        String[] Urls;
+
+        public DownloadXmlTask(String... urls)
         {
-            super.onPreExecute();
+            Urls = urls;
+        }
+
+        public void execute()
+        {
 
             if (adaptorAudio != null)
             {
@@ -869,61 +879,70 @@ public class ActivityAudioCollection extends AppCompatActivity
             {
                 simpleSwipeRefreshLayout.setRefreshing(true);
             }
+
+            Thread copyingThread = new Thread(this::doInBackground);
+            copyingThread.start();
         }
 
-        @Override
-        protected Integer doInBackground(String... urls)
+
+        protected void doInBackground()
         {
             try
             {
-                String res = DownloadFromUrl.downloadDataFromUrl(urls[0], UseCaches);
+                String res = DownloadFromUrl.downloadDataFromUrl(Urls[0], UseCaches);
                 int res2 = SetLists(res);
                 publishProgress(100);
-                return res2;
+                completed(1);
             } catch (Exception ex)
             {
                 ex.printStackTrace();
                 Log.e("xml_Dl", "doInBackground: " + ex.getMessage());
-                return -1;
+                completed(-1);
+
             }
         }
 
 
-        @Override
-        protected void onProgressUpdate(Integer... values)
+        protected void publishProgress(Integer value)
         {
-            super.onProgressUpdate(values);
+            //
 
         }
 
-        // onPostExecute displays the results of the doInBackgroud and also we
-        // can hide progress dialog.
-        @Override
-        protected void onPostExecute(Integer result)
-        {
-            if (simpleSwipeRefreshLayout.isRefreshing())
-            {
-                simpleSwipeRefreshLayout.setRefreshing(false);
-            }
+        /**
+         * After completing background task
+         **/
 
-            if (result == 1)
-            {
-                recycler_audio.setAdapter(adaptorAudio);
-                recycler_audio.scrollToPosition(0);
-            }
-            else if (result == 2)
-            {
-                adaptorAudio.notifyDataSetChanged();
-                recycler_audio.scrollToPosition(0);
-            }
-            else if(result == -1)
-            {
-                Toast.makeText(getBaseContext(), getString(R.string.err_list_audio), Toast.LENGTH_SHORT).show();
-            }
-            else
-            {
-                Toast.makeText(getBaseContext(), getString(R.string.nothing_found), Toast.LENGTH_SHORT).show();
-            }
+        protected void completed(Integer result)
+        {
+            Log.e(TAG, "completed: " + result);
+            runOnUiThread(() -> {
+                if (simpleSwipeRefreshLayout.isRefreshing())
+                {
+                    simpleSwipeRefreshLayout.setRefreshing(false);
+                }
+
+                if (result == 1)
+                {
+                    recycler_audio.setAdapter(adaptorAudio);
+                    recycler_audio.scrollToPosition(0);
+                }
+                else if (result == 2)
+                {
+                    adaptorAudio.notifyDataSetChanged();
+                    recycler_audio.scrollToPosition(0);
+                }
+                else if (result == -1)
+                {
+                    Toast.makeText(getBaseContext(), getString(R.string.err_list_audio), Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Toast.makeText(getBaseContext(), getString(R.string.nothing_found), Toast.LENGTH_SHORT).show();
+                }
+
+            });
+
         }
     }
 
