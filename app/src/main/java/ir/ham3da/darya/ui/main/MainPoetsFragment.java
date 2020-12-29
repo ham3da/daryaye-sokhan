@@ -94,10 +94,12 @@ public class MainPoetsFragment extends Fragment {
 
             if (activityMain!= null) {
                 activityMain.setCountPoetsAndBooks();
+                activityMain.startPoemAlarm();
             }
 
             GanjoorDbBrowser GanjoorDbBrowser1 = new GanjoorDbBrowser(mContext);
             poetCounts = GanjoorDbBrowser1.getPoetsCount();
+
 
         } catch (Exception ex) {
             Log.e(TAG, "loadPoetsAndBooks err: " + ex.getMessage());

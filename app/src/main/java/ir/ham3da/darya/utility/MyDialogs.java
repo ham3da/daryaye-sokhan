@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class MyDialogs {
     Dialog dialog;
     public String price;
     public String app_name;
-    public String version = BuildConfig.VERSION_NAME;
+    public String version = ir.ham3da.darya.BuildConfig.VERSION_NAME;
 
 
     public MyDialogs(Context mCtx) {
@@ -123,7 +124,7 @@ public class MyDialogs {
         String appMame = this.context.getString(R.string.app_name);
 
 
-         dialog = new Dialog(context);
+        dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_listview);
 
@@ -358,7 +359,7 @@ public class MyDialogs {
 
         ImageView dialog_icon = dialog.findViewById(R.id.dialog_icon);
 
-        dialog_icon.setImageDrawable(context.getDrawable(icon));
+        dialog_icon.setImageDrawable(ContextCompat.getDrawable(context, icon));
 
         dialog_text.setText(UtilFunctions.fromHtml(message), TextView.BufferType.SPANNABLE);
 
@@ -373,6 +374,7 @@ public class MyDialogs {
     public void ShowWarningMessage(String message) {
         ShowMessage(message, R.drawable.ic_warning_white_24dp);
     }
+
 
 
     public Dialog YesNoDialog(String message, Drawable drawableIcon, boolean cancelAble) {
@@ -415,7 +417,7 @@ public class MyDialogs {
         if (!notify_text.isEmpty()) {
 
 
-            final Dialog yesNoDialog = YesNoDialog(notify_text, context.getDrawable(R.drawable.ic_notifications_none_white_24dp), true);
+            final Dialog yesNoDialog = YesNoDialog(notify_text, ContextCompat.getDrawable(context, R.drawable.ic_notifications_none_white_24dp), true);
 
             Button yesBtn = yesNoDialog.findViewById(R.id.yesBtn);
             Button noBtn = yesNoDialog.findViewById(R.id.noBtn);

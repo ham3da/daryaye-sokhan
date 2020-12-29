@@ -278,7 +278,9 @@ public class ActivityPoem extends AppCompatActivity {
                         }
                     }));
 
-            if (!findStr.isEmpty()) {
+            if (!findStr.isEmpty())
+            {
+                Log.e(TAG, "onCreate: "+findStr);
                 appBarLayout.setExpanded(false, true);
 
                 int rowIndex = adapter.getFirstLineContainFindStr(vOrder);

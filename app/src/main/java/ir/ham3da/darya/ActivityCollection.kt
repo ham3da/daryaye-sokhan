@@ -531,7 +531,7 @@ class ActivityCollection : AppCompatActivity() {
                 }
                 else if (result == -1)
                 {
-                    Toast.makeText(baseContext, getString(R.string.err_list_audio), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(baseContext, getString(R.string.err_list_file), Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(this@ActivityCollection, getString(R.string.nothing_found), Toast.LENGTH_SHORT).show()
                 }

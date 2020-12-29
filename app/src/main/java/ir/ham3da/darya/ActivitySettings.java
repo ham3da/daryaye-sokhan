@@ -2,11 +2,13 @@ package ir.ham3da.darya;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,13 +27,19 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
+import com.dr1009.app.chronodialogpreference.ChronoPreferenceFragment;
+import com.dr1009.app.chronodialogpreference.TimeDialogPreference;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import ir.ham3da.darya.adaptors.AdapterSocialList;
 import ir.ham3da.darya.ganjoor.GanjoorDbBrowser;
 import ir.ham3da.darya.ganjoor.GanjoorPoet;
+import ir.ham3da.darya.notification.PoemService;
 import ir.ham3da.darya.utility.AppFontManager;
 import ir.ham3da.darya.utility.AppSettings;
 import ir.ham3da.darya.utility.CustomProgress;
@@ -41,16 +49,16 @@ import ir.ham3da.darya.utility.SetLanguage;
 import ir.ham3da.darya.utility.UtilFunctions;
 
 public class ActivitySettings extends AppCompatActivity
+
 {
 
 
     static Preference pref_op_db, pref_setFont;
-   static boolean nightTheme ;
+    static boolean nightTheme;
 
     //    static Preference  pref_rand_poem;
     int currentLocalIndex;
     GanjoorDbBrowser GanjoorDbBrowser1;
-
 
 
     public void setRandomPoemText()
@@ -98,7 +106,8 @@ public class ActivitySettings extends AppCompatActivity
     @Override
     public void applyOverrideConfiguration(Configuration overrideConfiguration)
     {
-        if (overrideConfiguration != null) {
+        if (overrideConfiguration != null)
+        {
             int uiMode = overrideConfiguration.uiMode;
             overrideConfiguration.setTo(getBaseContext().getResources().getConfiguration());
             overrideConfiguration.uiMode = uiMode;
@@ -110,7 +119,7 @@ public class ActivitySettings extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-       UtilFunctions.changeTheme(this, true);
+        UtilFunctions.changeTheme(this, true);
         AppSettings.Init(this);
         nightTheme = AppSettings.checkThemeIsDark();
 
@@ -141,7 +150,7 @@ public class ActivitySettings extends AppCompatActivity
         setTitle(R.string.action_settings);
     }
 
-    public static class SettingsFragment extends PreferenceFragmentCompat
+    public static class SettingsFragment extends ChronoPreferenceFragment
     {
 
         @Override
@@ -181,9 +190,9 @@ public class ActivitySettings extends AppCompatActivity
             {
                 night_theme.setOnPreferenceChangeListener((preference, newValue) -> {
 
-                    if(nightTheme != (boolean)newValue)
+                    if (nightTheme != (boolean) newValue)
                     {
-                         activitySettings.recreate();
+                        activitySettings.recreate();
                     }
                     return true;
                 });
@@ -217,9 +226,52 @@ public class ActivitySettings extends AppCompatActivity
 
             }
 
+            TimeDialogPreference timeDialogPreference = findPreference("random_notify_time");
+            assert timeDialogPreference != null;
+            timeDialogPreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                Log.e("timeDialogPreference", "onCreatePreferences: "+newValue );
+
+                UtilFunctions.restartPoemAlarm(getContext());
+
+
+                return true;
+            });
+
+            SwitchPreferenceCompat random_notify = findPreference("random_notify");
+            if (random_notify != null)
+            {
+                random_notify.setOnPreferenceChangeListener((preference, newValue) ->
+                {
+
+                    if (!((boolean) newValue))
+                    {
+                        if (PoemService.getIsRunning())
+                        {
+                            UtilFunctions.cancelPoemAlarm(getContext());
+                            PoemService.setIsisRunning(false);
+                        }
+                    }
+                    else
+                    {
+                        if (!PoemService.getIsRunning())
+                        {
+                            Intent i = new Intent(getContext(), PoemService.class);
+                            requireActivity().startService(i);
+                        }
+                    }
+
+                    App globalVariable = (App) getContext().getApplicationContext();
+                    globalVariable.setUpdateRandPoemNotify(true);
+
+                    return true;
+                });
+            }
+
 
             pref_op_db = findPreference("optimize_db");
+            assert pref_op_db != null;
             pref_op_db.setOnPreferenceClickListener(preference -> {
+                assert activitySettings != null;
                 activitySettings.optimizeDatabase();
                 return true;
             });

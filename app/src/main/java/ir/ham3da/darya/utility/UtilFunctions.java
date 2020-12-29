@@ -1,10 +1,14 @@
 package ir.ham3da.darya.utility;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.Network;
@@ -16,7 +20,9 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.res.ResourcesCompat;
 
 import android.os.Build;
+import android.os.Environment;
 import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
@@ -48,18 +54,19 @@ import java.util.Random;
 import ir.ham3da.darya.ganjoor.GanjoorVerse;
 import ir.ham3da.darya.ganjoor.GanjoorVerseB;
 import ir.ham3da.darya.R;
+import ir.ham3da.darya.notification.AlarmNotificationReceiver;
+import ir.ham3da.darya.notification.PoemService;
 
 public class UtilFunctions
 {
     private final Context context1;
 
-//      google play => 0 , cafebazaar => 1 , myket => 2,
+    //      google play => 0 , cafebazaar => 1 , myket => 2,
 //      charkhoneh => 3, iranapps => 4  , avvalmarket => 5, cando => 6
-    private static final int Store = 4;
 
+    private static final int Store = 0;
     public UtilFunctions(Context mCtx)
     {
-
         this.context1 = mCtx;
     }
 
@@ -95,27 +102,19 @@ public class UtilFunctions
         String app_link = "https://play.google.com/store/apps/details?id=" + packageName;//google play
         switch (Store)
         {
-            case 0:
+            case VarTypes.GOOGLE_PLAY_VER:
                 app_link = "https://play.google.com/store/apps/details?id=" + packageName;//google play
                 break;
-            case 1:
+            case VarTypes.CAFEBAZAAR_VER:
                 app_link = "https://cafebazaar.ir/app/" + packageName + "/";//cafebazaar
                 break;
-            case 2:
+            case VarTypes.MYKET_VER:
                 app_link = "https://myket.ir/app/" + packageName + "/";//myket
                 break;
-            case 3:
-                app_link = "http://play.google.com/store/apps/details?id=" + packageName;//charkhoneh
-                break;
-            case 4:
+            case VarTypes.IRANAPPS_VER:
                 app_link = "https://iranapps.ir/app/" + packageName; //iranapps
                 break;
-            case 5:
-                app_link = "https://avvalmarket.ir/apps/" + packageName; //avvalmarket
-                break;
-            case 6:
-                app_link = "http://cando.asr24.com/app.jsp?package=" + packageName; // cando
-                break;
+
         }
         return app_link;
     }
@@ -194,7 +193,7 @@ public class UtilFunctions
             Intent intent = new Intent(Intent.ACTION_VIEW);
             switch (Store)
             {
-                case 0:
+                case VarTypes.GOOGLE_PLAY_VER:
                     Uri.Builder uriBuilder = Uri.parse("https://play.google.com/store/apps/details")
                             .buildUpon()
                             .appendQueryParameter("id", packageName)
@@ -203,27 +202,17 @@ public class UtilFunctions
                     intent.setPackage("com.android.vending");
                     break;
 
-                case 1:
+                case VarTypes.CAFEBAZAAR_VER:
                     intent.setData(Uri.parse("https://cafebazaar.ir/app/" + packageName + "/"));
                     intent.setPackage("com.farsitel.bazaar");
                     break;
-                case 2:
+                case VarTypes.MYKET_VER:
                     intent.setData(Uri.parse("https://myket.ir/app/" + packageName));
                     intent.setPackage("ir.mservices.market");
                     break;
-                case 3:
-                    intent.setData(Uri.parse("jhoobin://search?q=" + packageName));
-                    break;
-                case 4:
+                case VarTypes.IRANAPPS_VER:
                     intent.setData(Uri.parse("http://iranapps.ir/app/" + packageName));
                     intent.setPackage("ir.tgbs.android.iranapp");
-                    break;
-                case 5:
-                    intent.setData(Uri.parse("market://details?id=" + packageName));
-                    intent.setPackage("com.hrm.android.market");
-                    break;
-                case 6:
-                    intent.setData(Uri.parse(getAppLink()));
                     break;
 
             }
@@ -245,7 +234,7 @@ public class UtilFunctions
             Intent intent = new Intent(Intent.ACTION_VIEW);
             switch (Store)
             {
-                case 0:
+                case VarTypes.GOOGLE_PLAY_VER:
                     intent = new Intent(Intent.ACTION_VIEW);
                     Uri.Builder uriBuilder = Uri.parse("https://play.google.com/store/apps/details")
                             .buildUpon()
@@ -255,37 +244,23 @@ public class UtilFunctions
                     intent.setPackage("com.android.vending");
                     break;
 
-                case 1:
+                case VarTypes.CAFEBAZAAR_VER:
                     intent = new Intent(Intent.ACTION_EDIT);
                     intent.setData(Uri.parse("bazaar://details?id=" + packageName));
                     intent.setPackage("com.farsitel.bazaar");
 
                     break;
 
-                case 2:
+                case VarTypes.MYKET_VER:
                     intent = new Intent(Intent.ACTION_VIEW);
                     intent.setData(Uri.parse("myket://comment/#Intent;scheme=comment;package=" + packageName + ";end"));
                     intent.setPackage("ir.mservices.market");
                     break;
-                case 3:
 
-                    intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse("jhoobin://comment?q=" + packageName));
-                    break;
-                case 4:
+                case VarTypes.IRANAPPS_VER:
                     intent = new Intent(Intent.ACTION_VIEW);
                     intent.setData(Uri.parse("iranapps://app/" + packageName + "?a=comment&r=5"));
                     intent.setPackage("ir.tgbs.android.iranapp");
-                    break;
-                case 5:
-                    intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse("market://details?id=" + packageName));
-                    intent.setPackage("com.hrm.android.market");
-                    break;
-
-                case 6:
-                    intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse("cando://leave-review?id=" + packageName));
                     break;
 
             }
@@ -734,12 +709,10 @@ public class UtilFunctions
         if (AppSettings.checkThemeIsDark())
         {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            //context.setTheme(R.style.AppTheme_NoActionBar);
         }
         else
         {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            //context.setTheme(R.style.AppTheme_NoActionBar);
         }
     }
 
@@ -749,14 +722,91 @@ public class UtilFunctions
         if (AppSettings.checkThemeIsDark())
         {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            //context.setTheme(R.style.AppTheme_ActionBar);
-            // context.setTheme(R.style.AppTheme);
         }
         else
         {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            //context.setTheme(R.style.AppTheme_ActionBar);
-            // context.setTheme(R.style.AppTheme);
         }
+    }
+
+    public static String saveImageToStorage(Context context, Bitmap bitmap, String fileFullName) throws IOException
+    {
+        OutputStream imageOutStream;
+        String imagesDir = AppSettings.getImageFolderPath();
+
+        String imagePath;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+        {
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Images.Media.DISPLAY_NAME, fileFullName);
+            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+            values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/Darya");
+            Uri uri = context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+            imageOutStream = context.getContentResolver().openOutputStream(uri);
+
+            imagePath = imagesDir + "/" + fileFullName;
+        }
+        else
+        {
+            File image = new File(imagesDir, fileFullName);
+            imageOutStream = new FileOutputStream(image);
+            imagePath = image.getAbsolutePath();
+        }
+
+
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, imageOutStream);
+
+        Log.e("imagePath", "saveImageToStorage: " + imagePath);
+        assert imageOutStream != null;
+        imageOutStream.close();
+        return imagePath;
+    }
+
+    public static void addPicToGallery(Context context, String photoPath)
+    {
+
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(photoPath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        context.sendBroadcast(mediaScanIntent);
+    }
+
+    public static int getResID(Context context, String imageName)
+    {
+        return context.getResources().getIdentifier(imageName, "drawable", context.getPackageName());
+    }
+
+    public static void cancelPoemAlarm(Context context)
+    {
+        Intent intent  = new Intent(context, AlarmNotificationReceiver.class);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        alarmManager.cancel(pendingIntent);
+
+        Intent intent1 = new Intent(context, PoemService.class);
+        context.stopService(intent1);
+
+    }
+
+    public static void restartPoemAlarm(Context context)
+    {
+        Intent intent  = new Intent(context, AlarmNotificationReceiver.class);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        alarmManager.cancel(pendingIntent);
+
+        Intent intent1 = new Intent(context, PoemService.class);
+        context.stopService(intent1);
+
+        context.startService(intent1);
+
+
+    }
+
+    public static String convertLinkHttp(String link)
+    {
+        return link.replace("https", "http");
     }
 }

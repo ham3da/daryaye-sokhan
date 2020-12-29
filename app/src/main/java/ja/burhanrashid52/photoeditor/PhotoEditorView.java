@@ -10,6 +10,7 @@ import android.os.Build;
 
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -66,6 +67,7 @@ public class PhotoEditorView extends RelativeLayout {
 
         //Setup image attributes
         mImgSource = new FilterImageView(getContext());
+        mImgSource.setLayerType(View.LAYER_TYPE_NONE, null);
         mImgSource.setId(imgSrcId);
         mImgSource.setAdjustViewBounds(true);
         LayoutParams imgSrcParam = new LayoutParams(

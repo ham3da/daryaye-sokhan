@@ -67,10 +67,7 @@ public class AdaptorAudio extends RecyclerView.Adapter<AdaptorAudio.ViewHolder>
     @NonNull
     public AdaptorAudio.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
-
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_audio, parent, false);
-
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_audio, parent, false);
         return new AdaptorAudio.ViewHolder(v);
     }
 
@@ -79,17 +76,12 @@ public class AdaptorAudio extends RecyclerView.Adapter<AdaptorAudio.ViewHolder>
     {
 
         final GanjoorAudioInfo audioInfo = mainAudioList.get(position);
-
         holder.index = audioInfo.Index;
-
         String IndexStr = String.format(Locale.getDefault(), "%d", audioInfo.Index);
-
         String nameAudio;
         if (this.dl_type == GanjoorAudioInfo.DOWNLOAD_POET_POEMS || this.dl_type == GanjoorAudioInfo.DOWNLOAD_CATE_POEMS)
         {
             GanjoorPoem ganjoorPoem = GanjoorDbBrowser1.getPoem(audioInfo.audio_post_ID);
-
-
             nameAudio = IndexStr + ". " + ganjoorPoem._Title + " - " + android.text.format.Formatter.formatShortFileSize(context1, audioInfo.audio_mp3bsize);
             nameAudio += System.lineSeparator() + context1.getString(R.string.declaimer) + ": " + audioInfo.audio_artist;
         }
@@ -97,7 +89,6 @@ public class AdaptorAudio extends RecyclerView.Adapter<AdaptorAudio.ViewHolder>
         {
             nameAudio = IndexStr + ". " + audioInfo.audio_artist + " - " + android.text.format.Formatter.formatShortFileSize(context1, audioInfo.audio_mp3bsize);
         }
-
 
         holder.audio_name.setText(nameAudio);
         if (audioInfo.exist)
@@ -121,8 +112,11 @@ public class AdaptorAudio extends RecyclerView.Adapter<AdaptorAudio.ViewHolder>
         });
 
 
-        holder.imageButton_play.setOnClickListener(v -> {
-            activityAudioCollection.playAudio(audioInfo);
+        holder.imageButton_play.setOnClickListener(v ->
+        {
+
+           activityAudioCollection.playAudioThread(audioInfo);
+
         });
 
         holder.imageButton_pause.setOnClickListener(v -> {
@@ -144,6 +138,8 @@ public class AdaptorAudio extends RecyclerView.Adapter<AdaptorAudio.ViewHolder>
         });
 
     }
+
+
 
     public GanjoorAudioInfo getGanjoorAudioInfo(int auIndex)
     {
@@ -258,7 +254,7 @@ public class AdaptorAudio extends RecyclerView.Adapter<AdaptorAudio.ViewHolder>
         MyDialogs MyDialogs1 = new MyDialogs(context1);
 
         String ques = String.format(context1.getString(R.string.poet_delete_poem_au), "<b>" + audioInfo.audio_artist + "</b>");
-        final Dialog yesNoDialog = MyDialogs1.YesNoDialog(ques, context1.getDrawable(R.drawable.ic_delete_white_24dp), true);
+        final Dialog yesNoDialog = MyDialogs1.YesNoDialog(ques, ContextCompat.getDrawable(context1, R.drawable.ic_delete_white_24dp), true);
         Button noBtn = yesNoDialog.findViewById(R.id.noBtn);
         noBtn.setOnClickListener(view -> yesNoDialog.dismiss());
 

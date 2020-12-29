@@ -34,6 +34,7 @@ import java.util.List;
 import ir.ham3da.darya.ActivityImageEdit;
 import ir.ham3da.darya.ActivityMain;
 import ir.ham3da.darya.R;
+import ir.ham3da.darya.utility.UtilFunctions;
 
 /**
  * <p>
@@ -63,7 +64,7 @@ public class PhotoEditor implements BrushViewChangeListener
     private Typeface mDefaultEmojiTypeface;
 
 
-    private PhotoEditor(Builder builder)
+    protected PhotoEditor(Builder builder)
     {
         this.context = builder.context;
         this.parentView = builder.parentView;
@@ -844,18 +845,17 @@ public class PhotoEditor implements BrushViewChangeListener
     /**
      * Save the edited image on given path
      *
-     * @param imagePath      path on which image to be saved
+     * @param fileFullName      file Full Name
      * @param saveSettings   builder for multiple save options {@link SaveSettings}
      * @param onSaveListener callback for saving image
      * @see OnSaveListener
      */
     @SuppressLint("StaticFieldLeak")
     @RequiresPermission(allOf = {Manifest.permission.WRITE_EXTERNAL_STORAGE})
-    public void saveAsFile(@NonNull final String imagePath,
-                           @NonNull final SaveSettings saveSettings,
-                           @NonNull final OnSaveListener onSaveListener)
+    public void saveAsFile(String fileFullName,   SaveSettings saveSettings, OnSaveListener onSaveListener)
     {
-        Log.d(TAG, "Image Path: " + imagePath);
+
+        Log.d(TAG, "fileFullName : " + fileFullName);
         parentView.saveFilter(new OnSaveBitmap()
         {
             @Override
@@ -871,36 +871,46 @@ public class PhotoEditor implements BrushViewChangeListener
                         saveThread.start();
                     }
 
-                    @SuppressLint("MissingPermission")
+
                     private void doInBackground()
                     {
                         // Create a media file name
-                        File file = new File(imagePath);
+                       // File file = new File(imagePath);
                         try
                         {
 
-                            Log.e(TAG, "imagePath: " + imagePath);
-                            FileOutputStream out = new FileOutputStream(file, false);
+                           // Log.e(TAG, "imagePath: " + imagePath);
+                           // FileOutputStream out = new FileOutputStream(file, false);
                             if (parentView != null)
                             {
                                 parentView.setDrawingCacheEnabled(true);
                                 parentView.buildDrawingCache();
                                 Bitmap drawingCache = saveSettings.isTransparencyEnabled() ? BitmapUtil.removeTransparency(parentView.getDrawingCache()) : parentView.getDrawingCache();
-                                drawingCache.compress(saveSettings.getCompressFormat(), saveSettings.getCompressQuality(), out);
+
+                               String savedImagePath = UtilFunctions.saveImageToStorage(context, drawingCache, fileFullName);
+
+                               // drawingCache.compress(saveSettings.getCompressFormat(), saveSettings.getCompressQuality(), out);
+                                complete(null, savedImagePath);
+                                Log.d(TAG, "Filed Saved Successfully");
+
                             }
-                            out.flush();
-                            out.close();
-                            Log.d(TAG, "Filed Saved Successfully");
-                            complete(null);
+                            else
+                            {
+                                Exception exception =   new Exception("parentView in saveAsFile method is null!");
+                                complete(exception, null);
+                            }
+                           // out.flush();
+                           // out.close();
+
                         } catch (Exception e)
                         {
                             e.printStackTrace();
                             Log.d(TAG, "Failed to save File");
-                            complete(e);
+                            complete(e, null);
                         }
                     }
 
-                    private void complete(Exception e)
+                    private void complete(Exception e, String savedImagePath1)
                     {
                         if (e == null)
                         {
@@ -909,7 +919,7 @@ public class PhotoEditor implements BrushViewChangeListener
 
                             activity.runOnUiThread(() -> {
                                 if (saveSettings.isClearViewsEnabled()) clearAllViews();
-                                onSaveListener.onSuccess(imagePath);
+                                onSaveListener.onSuccess(savedImagePath1);
                             });
                         }
                         else

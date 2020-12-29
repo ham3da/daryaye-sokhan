@@ -159,6 +159,7 @@
     <string name="label_brush">Brush</string>
     <string name="label_emoji">Emoji</string>
     <string name="label_sticker">Sticker</string>
+    <string name="label_background">Background</string>
     <string name="label_eraser">Eraser</string>
     <string name="label_text">Text</string>
     <string name="label_filter">Filter</string>
@@ -168,7 +169,7 @@
     <string name="saving">Saving&#8230;</string>
     <string name="save">Save</string>
     <string name="saved">Image Saved Successfully</string>
-    <string name="failed_save">Failed to save Image</string>
+    <string name="failed_save">Failed to save Image! try again.</string>
     <string name="discard">Discard</string>
     <string name="alret_save">Are you want to exit without saving image?</string>
     <string name="opacity">Opacity</string>
@@ -225,6 +226,20 @@
     <string name="thanks_a_lot">Thanks a lot</string>
     <string name="declaimer">Declaimer</string>
     <string name="err_list_audio">Error getting list of audio files! Please try again.</string>
+    <string name="err_list_file">Error getting list of files! Please try again.</string>
     <string name="ad_attribution">Ad</string>
     <string name="ad_exit_text">Dear user, in order to support this valuable application, we ask you to touch the "View ads" button and view an advertisement before closing the application.</string>
+    <string name="select_bg">Choose a background</string>
+    <string name="starting_download">Starting download</string>
+    <string name="update_app_des">The new version of this app is ready to download. Please update.</string>
+
+    <string name="daily_poem">Daily Poetry</string>
+    <string name="daily_poem_switch">Show one verse every day as a notification.</string>
+    <string name="set_value">OK</string>
+    <string name="prefTwelveTwentyfour" translatable="false">true</string>
+    <string name="set_the_time">Set the time</string>
+    <string name="show_every_day">Show every day</string>
+
+
+
 </resources>

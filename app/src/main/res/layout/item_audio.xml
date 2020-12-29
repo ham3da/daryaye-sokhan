@@ -31,8 +31,8 @@
                 android:layout_centerVertical="true"
                 android:background="@drawable/circle"
                 android:scaleType="fitCenter"
-                android:tint="@color/icon_dl"
-                app:srcCompat="@drawable/ic_volume_down_black_24dp" />
+                app:srcCompat="@drawable/ic_volume_down_black_24dp"
+                app:tint="@color/icon_dl" />
 
             <TextView
                 android:id="@+id/audio_name"

@@ -451,6 +451,42 @@ public class GanjoorDbBrowser
     }
 
 
+    public List<GanjoorVerse> getRandomPoemNotify()
+    {
+
+        List<GanjoorVerse> ganjoorVerseList = new ArrayList<>();
+
+        if (getIsConnected())
+        {
+            Cursor cursor = _db.rawQuery(
+                    "SELECT  poem_id, vorder, position, text From [verse] WHERE (position = 1)  ORDER BY RANDOM() Limit 1",
+                    null);
+            if (cursor.moveToFirst())
+            {
+                GanjoorVerse GanjoorVerse1 = new GanjoorVerse(
+                        cursor.getInt(IDX_VERSE_POEMID),
+                        cursor.getInt(IDX_VERSE_ORDER),
+                        cursor.getInt(IDX_VERSE_POSITION),
+                        cursor.getString(IDX_VERSE_TEXT)
+                );
+                cursor.close();
+
+
+                GanjoorVerse GanjoorVerse0 = getPrevVerse(GanjoorVerse1._PoemID, GanjoorVerse1._Order);
+                if (GanjoorVerse0 != null)
+                {
+                    ganjoorVerseList.add(GanjoorVerse0);
+                }
+                ganjoorVerseList.add(GanjoorVerse1);
+            }
+
+            cursor.close();
+            return ganjoorVerseList;
+        }
+        return null;
+    }
+
+
     public List<GanjoorVerse> getRandomVersePuzzle(int poem_id)
     {
         List<GanjoorVerse> ganjoorVerseList = new ArrayList<>();
@@ -1544,6 +1580,35 @@ public class GanjoorDbBrowser
         }
         return null;
     }
+
+    /**
+     * Get Previuse Verse of current verse
+     * @param PoemId Poem ID
+     * @param VerseOrder Verse Order
+     * @return GanjoorVerse Verse or null
+     */
+    public GanjoorVerse getPrevVerse(int PoemId, int VerseOrder)
+    {
+        if (getIsConnected())
+        {
+
+            Cursor cursor = _db.query("verse", new String[]{"poem_id", "vorder", "position", "text"}, "poem_id = " + PoemId + " AND vorder = " + (VerseOrder - 1), null, null, null, "vorder", "1");
+            if (cursor.moveToFirst())
+            {
+                GanjoorVerse GanjoorVerse1 = new GanjoorVerse(
+                        cursor.getInt(IDX_VERSE_POEMID),
+                        cursor.getInt(IDX_VERSE_ORDER),
+                        cursor.getInt(IDX_VERSE_POSITION),
+                        cursor.getString(IDX_VERSE_TEXT)
+                );
+                cursor.close();
+                return GanjoorVerse1;
+            }
+            cursor.close();
+        }
+        return null;
+    }
+
 
     /**
      * Get the next poem

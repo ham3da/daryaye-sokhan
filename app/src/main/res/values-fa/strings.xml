@@ -153,6 +153,7 @@
     <string name="label_brush">قلم مو</string>
     <string name="label_emoji">ایموجی</string>
     <string name="label_sticker">استیکر</string>
+    <string name="label_background">پس زمینه</string>
     <string name="label_eraser">پاک کن</string>
     <string name="label_text">متن</string>
     <string name="label_filter">فیلتر</string>
@@ -162,7 +163,7 @@
     <string name="saving">در حال ذخیره</string>
     <string name="save">ذخیره</string>
     <string name="saved">عکس با موفقیت ذخیره شد</string>
-    <string name="failed_save">ذخیره عکس با شکست مواجه شد</string>
+    <string name="failed_save">ذخیره عکس با شکست مواجه شد! دوباره سعی کنید.</string>
     <string name="discard">نادیده گرفتن</string>
     <string name="alret_save">آیا می‌خواهید بدون ذخیره عکس خارج شوید؟</string>
     <string name="opacity">شفافیت</string>
@@ -203,6 +204,16 @@
     <string name="thanks_a_lot">سپاسگزاریم</string>
     <string name="declaimer">گوینده</string>
     <string name="err_list_audio">دریافت لیست فایل‌های صوتی با خطا مواجه شد! لطفاً دوباره سعی کنید.</string>
+    <string name="err_list_file">دریافت لیست فایل‌ها با خطا مواجه شد! لطفاً دوباره سعی کنید.</string>
     <string name="ad_attribution">تبلیغات</string>
     <string name="ad_exit_text">کاربر گرامی، از شما تقاضا داریم به پاس حمایت از این نرم افزار ارزشمند، قبل از بستن برنامه، روی دکمه مشاهده آگهی لمس کنید و یک آگهی مشاهده کنید و سپس روی آگهی نیز لمس نمایید.</string>
+    <string name="select_bg">یک پس زمینه انتخاب کنید</string>
+    <string name="starting_download">در حال شروع دریافت</string>
+    <string name="update_app_des">نسخه جدید دریای سخن آماده دریافت است. لطفاً دریافت کنید.</string>
+
+    <string name="daily_poem">شعر روز</string>
+    <string name="daily_poem_switch">هر روز یک بیت شعر به صورت اعلان نمایش داده شود.</string>
+    <string name="set_value">تائید</string>
+    <string name="set_the_time">تنظیم زمان</string>
+    <string name="show_every_day">هر روز نمایش داده شود</string>
 </resources>

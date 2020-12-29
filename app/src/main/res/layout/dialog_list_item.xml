@@ -23,8 +23,8 @@
         android:layout_centerVertical="true"
         android:adjustViewBounds="true"
         android:padding="5dp"
-        android:tint="?attr/iconsTintColor"
-        app:srcCompat="@drawable/ic_instagram" />
+        app:srcCompat="@drawable/ic_instagram"
+        app:tint="?attr/iconsTintColor" />
 
         <TextView
             android:id="@+id/item_text"

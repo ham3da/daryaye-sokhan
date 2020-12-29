@@ -1,14 +1,20 @@
 package ir.ham3da.darya;
 
+import android.annotation.SuppressLint;
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -41,6 +47,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -48,6 +55,8 @@ import ir.ham3da.darya.ganjoor.GanjoorAudioInfo;
 import ir.ham3da.darya.ganjoor.GanjoorDbBrowser;
 import ir.ham3da.darya.ganjoor.GanjoorPoem;
 import ir.ham3da.darya.admob.MainAdMobFragment;
+import ir.ham3da.darya.notification.AlarmNotificationReceiver;
+import ir.ham3da.darya.notification.PoemService;
 import ir.ham3da.darya.ui.main.MainFavoritesFragment;
 import ir.ham3da.darya.ui.main.MainPoetsFragment;
 import ir.ham3da.darya.utility.AppSettings;
@@ -55,7 +64,9 @@ import ir.ham3da.darya.utility.CustomProgress;
 import ir.ham3da.darya.utility.LangSettingList;
 import ir.ham3da.darya.utility.MyDialogs;
 import ir.ham3da.darya.utility.PreferenceHelper;
+import ir.ham3da.darya.utility.SerializableNotify;
 import ir.ham3da.darya.utility.SetLanguage;
+import ir.ham3da.darya.utility.UpdateApp;
 import ir.ham3da.darya.utility.UtilFunctions;
 
 
@@ -95,12 +106,37 @@ public class ActivityMain extends AppCompatActivity
     }
 
     AdRequest adRequest;
+    int rnd_poem_id;
+    String findStr;
+    int vOrder;
+
+    @Override
+    protected void onNewIntent(Intent intent)
+    {
+        super.onNewIntent(intent);
+
+        Bundle extras = intent.getExtras();
+        if (extras != null)
+        {
+            if (extras.containsKey("serializableNotifyVerse"))
+            {
+                SerializableNotify serializableNotify = (SerializableNotify) extras.getSerializable("serializableNotifyVerse");
+                assert serializableNotify != null;
+                rnd_poem_id = serializableNotify.getRnd_poem_id();
+                findStr = serializableNotify.getFindStr();
+                vOrder = serializableNotify.getvOrder();
+                extras.putSerializable("serializableNotifyVerse", null);
+            }
+            showPoem(rnd_poem_id, findStr, vOrder);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
 
         super.onCreate(savedInstanceState);
+
         interstitial = new InterstitialAd(this);
         interstitial.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
         adRequest = new AdRequest.Builder().build();
@@ -150,6 +186,9 @@ public class ActivityMain extends AppCompatActivity
         Log.e(TAG, "DB_PATH2: " + AppSettings.getAppFolderPath());
         progress_bar_dlg = findViewById(R.id.progressBar_loader);
 
+        UpdateApp update = new UpdateApp(this);
+        update.initUpdate();
+
     }
 
     public void LoadDBFirstTime(CustomProgress dlg1)
@@ -177,6 +216,7 @@ public class ActivityMain extends AppCompatActivity
             @Override
             public Fragment createFragment(int position)
             {
+                Log.e(TAG, "createFragment2: " + position);
                 switch (position)
                 {
                     case 0:
@@ -192,13 +232,38 @@ public class ActivityMain extends AppCompatActivity
         new TabLayoutMediator(findViewById(R.id.tabs), viewPager,
                 (tab, position) -> tab.setText(getString(TAB_TITLES[position]))).attach();
 
-        showNotify();
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null)
+        {
+
+            if (extras.containsKey("serializableNotifyVerse"))
+            {
+                SerializableNotify serializableNotify = (SerializableNotify) extras.getSerializable("serializableNotifyVerse");
+                assert serializableNotify != null;
+                rnd_poem_id = serializableNotify.getRnd_poem_id();
+                findStr = serializableNotify.getFindStr();
+                vOrder = serializableNotify.getvOrder();
+                extras.putSerializable("serializableNotifyVerse", null);
+            }
+
+            Log.e(TAG, "getExtras: ok " + findStr);
+        }
+
+        if (rnd_poem_id > 0)
+        {
+            showPoem(rnd_poem_id, findStr, vOrder);
+        }
+        else
+        {
+            showNotify();
+        }
+
+
     }
 
     public void showNotify()
     {
-
-        FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         boolean notifyed = false;
         String notify_title, notify_url, notify_url_text, notify_text;
@@ -223,10 +288,10 @@ public class ActivityMain extends AppCompatActivity
             if (getIntent().getExtras() != null)
             {
 
-                for (String key : getIntent().getExtras().keySet())
-                {
-                    Log.e(TAG, key + ": " + getIntent().getExtras().get(key));
-                }
+//                for (String key : getIntent().getExtras().keySet())
+//                {
+//                    Log.e(TAG, key + ": " + getIntent().getExtras().get(key));
+//                }
 
                 if (getIntent().getExtras().containsKey("Package") && getIntent().getExtras().getString("Package", "").equals(getPackageName()))
                 {
@@ -278,6 +343,7 @@ public class ActivityMain extends AppCompatActivity
     }
 
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
@@ -336,8 +402,6 @@ public class ActivityMain extends AppCompatActivity
             Intent intent = new Intent(this, ActivityCollection.class);
             this.startActivity(intent);
             Bungee.card(this);
-
-
         }
         else
         {
@@ -346,11 +410,34 @@ public class ActivityMain extends AppCompatActivity
     }
 
 
+    private void showPoem(int poem_id)
+    {
+        Log.e(TAG, "rnd_poem_id: " + poem_id);
+        Intent intent = new Intent(ActivityMain.this, ActivityPoem.class);
+        intent.putExtra("poem_id", poem_id);
+        startActivity(intent);
+        Bungee.card(ActivityMain.this);
+    }
+
+
+    private void showPoem(int poem_id, String findStr, int vOrder)
+    {
+        Intent intent = new Intent(ActivityMain.this, ActivityPoem.class);
+        intent.putExtra("poem_id", poem_id);
+        intent.putExtra("from_search", true);
+        intent.putExtra("findStr", findStr);
+        intent.putExtra("vOrder", vOrder);
+
+
+        startActivity(intent);
+        Bungee.card(ActivityMain.this);
+    }
+
+
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem)
     {
-
-
         final int id = menuItem.getItemId();
         Handler handler = new Handler(Looper.getMainLooper());
 
@@ -367,10 +454,7 @@ public class ActivityMain extends AppCompatActivity
                     int getLastPoemIdVisited = AppSettings.getLastPoemIdVisited();
                     if (getLastPoemIdVisited > 0)
                     {
-                        intent = new Intent(ActivityMain.this, ActivityPoem.class);
-                        intent.putExtra("poem_id", getLastPoemIdVisited);
-                        startActivity(intent);
-                        Bungee.card(ActivityMain.this);
+                        showPoem(getLastPoemIdVisited);
                     }
                     else
                     {
@@ -573,12 +657,23 @@ public class ActivityMain extends AppCompatActivity
                 interstitial.loadAd(adRequest);
             }
 
-        })
-                .setNegativeButton(R.string.close, (dialog12, which) -> finish());
+        }).setNegativeButton(R.string.close, (dialog12, which) -> finish());
 
         final AlertDialog alert = dialog.create();
         alert.show();
     }
 
+    public void startPoemAlarm()
+    {
+        if (AppSettings.checkRandomNotifyIsActive())
+        {
+            if (!PoemService.getIsRunning())
+            {
+                Intent i = new Intent(this, PoemService.class);
+                startService(i);
+            }
+        }
+
+    }
 
 }

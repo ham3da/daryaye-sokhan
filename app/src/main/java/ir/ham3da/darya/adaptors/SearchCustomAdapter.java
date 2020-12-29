@@ -78,7 +78,6 @@ public class SearchCustomAdapter extends RecyclerView.Adapter<SearchCustomAdapte
             intent.putExtra("poem_id", srcResult._PoemID);
             intent.putExtra("from_search", true);
             intent.putExtra("findStr", findStr);
-
             intent.putExtra("vOrder", srcResult._Order);
 
             context1.startActivity(intent);

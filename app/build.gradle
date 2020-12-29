@@ -4,13 +4,13 @@ apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion '30.0.2'
+    buildToolsVersion '30.0.3'
     defaultConfig {
         applicationId "ir.ham3da.darya"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 25
-        versionName "2.5.5"
+        versionCode 31
+        versionName "2.6.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -45,7 +45,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:18.0.0'
     implementation 'com.google.firebase:firebase-messaging:21.0.0'
     implementation 'com.google.firebase:firebase-analytics:18.0.0'
-    implementation 'com.google.android.gms:play-services-ads:19.5.0'
+    implementation 'com.google.android.gms:play-services-ads:19.6.0'
     implementation 'com.mindorks.android:prdownloader:0.6.0'
     //implementation group: 'commons-io', name: 'commons-io', version: '20030203.000550'
     testImplementation 'junit:junit:4.13.1'
@@ -54,7 +54,12 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation "androidx.core:core-ktx:1.3.2"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.10"
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.21'
+
+    implementation 'com.github.koji-1009:ChronoDialogPreference:2.1.0'
+
+
+    implementation 'com.google.android.play:core:1.9.0'
 }
 repositories {
     maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }

@@ -16,8 +16,22 @@ public class App extends Application
 {
 
 
-    private boolean updatePoetList, updateFavList, Adviewd = false;
+    private boolean updatePoetList, updateFavList, Adviewd = false, updateRandPoemNotify;
     private FirebaseAnalytics mFirebaseAnalytics;
+
+
+
+    public boolean getUpdateRandPoemNotify()
+    {
+        return updateRandPoemNotify;
+    }
+
+    public void setUpdateRandPoemNotify(boolean updateRandPoemNotify)
+    {
+        this.updateRandPoemNotify = updateRandPoemNotify;
+    }
+
+
 
     public boolean getUpdatePoetList()
     {

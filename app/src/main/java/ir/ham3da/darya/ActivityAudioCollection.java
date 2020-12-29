@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -213,9 +214,6 @@ public class ActivityAudioCollection extends AppCompatActivity
                 switch (focusChange)
                 {
                     case AudioManager.AUDIOFOCUS_LOSS:
-                        pauseAudio();
-                        break;
-
                     case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                         pauseAudio();
                         break;
@@ -259,6 +257,17 @@ public class ActivityAudioCollection extends AppCompatActivity
         }
     }
 
+    public void playAudioThread(GanjoorAudioInfo audioInfo)
+    {
+
+        Toast.makeText(this, R.string.please_wait, Toast.LENGTH_SHORT).show();
+        Runnable thread = () -> playAudio(audioInfo);
+        Thread t = new Thread(thread);
+        t.start();
+
+
+    }
+
     public void playAudio(GanjoorAudioInfo audioInfo)
     {
         SetupAudio();
@@ -272,7 +281,7 @@ public class ActivityAudioCollection extends AppCompatActivity
         }
         else
         {
-            filePath = audioInfo.audio_mp3;
+            filePath = UtilFunctions.convertLinkHttp(audioInfo.audio_mp3) ;
         }
 
         try
@@ -288,6 +297,22 @@ public class ActivityAudioCollection extends AppCompatActivity
                 mPlayer.setDataSource(filePath);
                 mDataSource = filePath;
                 mPlayer.prepare();
+                mPlayer.setOnPreparedListener(mp -> {
+
+                });
+                mPlayer.setOnErrorListener((mp, what, extra) ->
+                {
+                    Log.e(TAG, "setOnErrorListener, extra: " + extra+" what: "+what);
+                    try
+                    {
+                        mPlayer.stop();
+                    } catch (IllegalStateException e)
+                    {
+                        Log.e(TAG, "IllegalStateException " + e.getMessage());
+                    }
+                    mPlayer = null;
+                    return true;
+                });
             }
             mPlayer.start();
 
@@ -326,7 +351,7 @@ public class ActivityAudioCollection extends AppCompatActivity
         MyDialogs MyDialogs1 = new MyDialogs(this);
 
         String ques = getString(R.string.delete_all_au);
-        final Dialog yesNoDialog = MyDialogs1.YesNoDialog(ques, getDrawable(R.drawable.ic_delete_white_24dp), true);
+        final Dialog yesNoDialog = MyDialogs1.YesNoDialog(ques, ContextCompat.getDrawable(this, R.drawable.ic_delete_white_24dp), true);
         Button noBtn = yesNoDialog.findViewById(R.id.noBtn);
         noBtn.setOnClickListener(view -> yesNoDialog.dismiss());
 
@@ -350,16 +375,18 @@ public class ActivityAudioCollection extends AppCompatActivity
         int total_downloads = scheduleAudioList1.size();
         if (total_downloads > 0)
         {
+            progress_bar.setProgress(0);
+            progress_text.setText("0");
+            progress_description.setText(R.string.starting_download);
+            progress_text1.setText("...");
+            progress_text2.setText("...");
+
             if (download_RelativeLayout.getVisibility() != View.VISIBLE)
             {
                 download_RelativeLayout.setVisibility(View.VISIBLE);
             }
 
-            progress_bar.setProgress(0);
-            progress_text.setText("");
-            progress_description.setText("");
-            progress_text1.setText("");
-            progress_text2.setText("");
+
 
             cancel_downloads.setOnClickListener(v -> {
                 PRDownloader.cancelAll();
@@ -374,7 +401,8 @@ public class ActivityAudioCollection extends AppCompatActivity
                 String fileName = scheduleAudio._FileName;
                 String des = String.format(Locale.getDefault(), "%d", sumDownloaded) + " / " + String.format(Locale.getDefault(), "%d", total_downloads);
 
-                DownloadRequestBuilder downloadRequestBuilder = PRDownloader.download(scheduleAudio._URL, dl_path, scheduleAudio._FileName);
+                String dl_audio_ulr = UtilFunctions.convertLinkHttp(scheduleAudio._URL);
+                DownloadRequestBuilder downloadRequestBuilder = PRDownloader.download(dl_audio_ulr, dl_path, scheduleAudio._FileName);
                 int finalSum = sumDownloaded;
                 DownloadRequest downloadRequest = downloadRequestBuilder.build();
                 downloadRequest.setDownloadId(scheduleAudio._Pos);
@@ -397,6 +425,7 @@ public class ActivityAudioCollection extends AppCompatActivity
                 })
                         .start(new OnDownloadListener()
                         {
+
                             @Override
                             public void onDownloadComplete()
                             {
@@ -418,9 +447,11 @@ public class ActivityAudioCollection extends AppCompatActivity
                             @Override
                             public void onError(Error error)
                             {
+                                error.getConnectionException().printStackTrace();
                                 Log.e("DownloadAudioTask", "ResponseCode: " +
                                         error.getResponseCode() + ", get ServerError Message: " + error.getServerErrorMessage() +
                                         ", get Connection Exception:" + error.getConnectionException().getMessage());
+                                Log.e(TAG, "dl_audio_ulr: "+dl_audio_ulr );
                                 DownloadFailToast();
                                 PRDownloader.cancel(scheduleAudio._Pos);
                                 download_RelativeLayout.setVisibility(View.GONE);

@@ -32,10 +32,8 @@
         <item name="android:thumbTint">@color/colorAccent</item>
         <item name="ListDivider">@color/divider</item>
         <item name="android:itemBackground">@color/itemBackground</item>
-
         <item name="colorPrimaryBG">@color/colorPrimaryBG</item>
         <item name="actionModeBackground">@color/colorPrimary</item>
-
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -71,7 +69,6 @@
         <item name="android:thumbTint">@color/colorAccent</item>
         <item name="ListDivider">@color/divider</item>
         <item name="android:itemBackground">@color/itemBackground</item>
-
         <item name="colorPrimaryBG">@color/colorPrimaryBG</item>
     </style>
 
@@ -108,13 +105,8 @@
         <item name="android:thumbTint">@color/colorAccent</item>
         <item name="ListDivider">@color/divider</item>
         <item name="android:itemBackground">@color/itemBackground</item>
-
         <item name="colorPrimaryBG">@color/colorPrimaryBG</item>
     </style>
-
-
-
-
 
     <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">
         <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>

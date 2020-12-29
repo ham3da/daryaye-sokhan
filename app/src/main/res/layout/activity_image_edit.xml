@@ -25,7 +25,6 @@
             android:paddingBottom="92dip">
 
 
-
             <ja.burhanrashid52.photoeditor.PhotoEditorView
                 android:id="@+id/photoEditorView"
                 android:layout_width="match_parent"
@@ -36,6 +35,7 @@
                 android:id="@+id/tool_buttons"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layoutDirection="ltr"
                 android:layout_alignParentBottom="true">
 
                 <ImageView
@@ -63,6 +63,7 @@
                     android:layout_toStartOf="@+id/imgCamera"
                     android:background="#99000000"
                     android:padding="8dp"
+                    android:visibility="gone"
                     app:srcCompat="@drawable/ic_gallery" />
 
                 <ImageView
@@ -72,6 +73,7 @@
                     android:layout_alignParentEnd="true"
                     android:background="#99000000"
                     android:padding="8dp"
+                    android:visibility="gone"
                     app:srcCompat="@drawable/ic_camera"
 
                     />
@@ -83,8 +85,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_gravity="center_horizontal|bottom">
-
-
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvConstraintTools"
@@ -107,6 +107,15 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/row_filter_view" />
 
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvBackground"
+                android:layout_width="match_parent"
+                android:layout_height="92dp"
+                android:background="@color/tool_bg"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_image" />
 
 
         </RelativeLayout>
