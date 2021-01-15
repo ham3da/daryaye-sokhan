@@ -3,14 +3,20 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
 
 android {
+    signingConfigs {
+        darya_sign_confing {
+            storeFile file('F:\\Android\\Android_B4a\\keystore_android_studio\\android_studio_darya.jks')
+            keyAlias 'darya'
+        }
+    }
     compileSdkVersion 30
     buildToolsVersion '30.0.3'
     defaultConfig {
         applicationId "ir.ham3da.darya"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 31
-        versionName "2.6.0"
+        versionCode 32
+        versionName "2.6.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -42,9 +48,9 @@ dependencies {
     implementation 'androidx.fragment:fragment-ktx:1.2.5'
     implementation 'androidx.preference:preference-ktx:1.1.1'
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
-    implementation 'com.google.firebase:firebase-core:18.0.0'
-    implementation 'com.google.firebase:firebase-messaging:21.0.0'
-    implementation 'com.google.firebase:firebase-analytics:18.0.0'
+    implementation 'com.google.firebase:firebase-core:18.0.1'
+    implementation 'com.google.firebase:firebase-messaging:21.0.1'
+    implementation 'com.google.firebase:firebase-analytics:18.0.1'
     implementation 'com.google.android.gms:play-services-ads:19.6.0'
     implementation 'com.mindorks.android:prdownloader:0.6.0'
     //implementation group: 'commons-io', name: 'commons-io', version: '20030203.000550'
