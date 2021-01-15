@@ -15,19 +15,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "848431671364-r8thu49b490uppmn46il991a5mul3vkq.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "ir.ham3da.darya",
-            "certificate_hash": "b2e718d0521aa41236b4d1a99634428f5ad6dca7"
-          }
-        },
-        {
           "client_id": "848431671364-kto0mntl237f6lkbrcfta2gvnh6hnnjm.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "ir.ham3da.darya",
             "certificate_hash": "5a29ca6be6dad849bda12064acb3a60fc15fb530"
+          }
+        },
+        {
+          "client_id": "848431671364-r8thu49b490uppmn46il991a5mul3vkq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ir.ham3da.darya",
+            "certificate_hash": "b2e718d0521aa41236b4d1a99634428f5ad6dca7"
           }
         },
         {
@@ -49,7 +49,8 @@
             }
           ]
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-5843948052196502~9554377732"
     }
   ],
   "configuration_version": "1"
