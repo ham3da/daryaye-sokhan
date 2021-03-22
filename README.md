@@ -19,6 +19,9 @@
 
 
 ## Donation
+
+* <b>Bitcoin:</b> bc1qdrjpcxnnay42jfc56hze4vrpkrf5s5c45xd5va
+* <b>Ethereum:</b> 0xcD7be5D82805f851CbeBBF67ea434cB02f6e2436
 * <b>Perfect Money:</b> U21873528
 * <b>حمایت از ما در ایران:</b> [سامانه حمایت از پروژه دریای سخن](https://ham3da.ir/darya-donate/)
 ## Screenshots
