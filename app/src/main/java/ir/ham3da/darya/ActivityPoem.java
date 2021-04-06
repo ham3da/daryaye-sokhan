@@ -337,7 +337,6 @@ public class ActivityPoem extends AppCompatActivity {
 
                 case R.id.verse_declaim:
 
-
                     if (MEDIA_IS_LOADED) {
                         if (mPlayer.isPlaying()) {
                             mPlayer.pause();
@@ -353,6 +352,10 @@ public class ActivityPoem extends AppCompatActivity {
                     startActivity(intent);
                     Bungee.slideUp(mContext);
                     break;
+                case R.id.action_view_ganjoor:
+                    openPoemURL();
+                    break;
+
             }
             return false;
         });
@@ -400,10 +403,10 @@ public class ActivityPoem extends AppCompatActivity {
             if (MEDIA_IS_LOADED) {
                 if (mPlayer.isPlaying()) {
                     mPlayer.pause();
-                    play_audio.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_black_24dp));
+                    play_audio.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_play_arrow_black_24dp));
                 } else {
                     mPlayer.start();
-                    play_audio.setImageDrawable(getDrawable(R.drawable.ic_pause_black_24dp));
+                    play_audio.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_pause_black_24dp));
                 }
             } else {
                 PlayFirsAudio();
@@ -457,7 +460,7 @@ public class ActivityPoem extends AppCompatActivity {
         if (existAudioList.size() > 0) {
             PoemAudio poemAudio = existAudioList.get(0);
             mPlayer = new MediaPlayer();
-            mPlayer.setOnCompletionListener(mediaPlayer -> play_audio.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_black_24dp)));
+            mPlayer.setOnCompletionListener(mediaPlayer -> play_audio.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_play_arrow_black_24dp)));
             playAudio(poemAudio);
         } else {
             ShowAudioCollection();
@@ -476,13 +479,13 @@ public class ActivityPoem extends AppCompatActivity {
             }
             mPlayer = new MediaPlayer();
 
-            mPlayer.setOnCompletionListener(mediaPlayer -> play_audio.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_black_24dp)));
+            mPlayer.setOnCompletionListener(mediaPlayer -> play_audio.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_play_arrow_black_24dp)));
 
             oTime = 0;
             mPlayer.setDataSource(poemAudio.filePath);
             mPlayer.prepare();
             mPlayer.start();
-            play_audio.setImageDrawable(getDrawable(R.drawable.ic_pause_black_24dp));
+            play_audio.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_pause_black_24dp));
             eTime = mPlayer.getDuration();
             sTime = mPlayer.getCurrentPosition();
 
@@ -549,7 +552,7 @@ public class ActivityPoem extends AppCompatActivity {
             if (MEDIA_IS_LOADED) {
                 hdlr.removeCallbacks(UpdateSongTime);
                 mPlayer.stop();
-                play_audio.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_black_24dp));
+                play_audio.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_play_arrow_black_24dp));
                 MEDIA_IS_LOADED = false;
                 audio_seekbar.setProgress(0);
 
@@ -621,6 +624,15 @@ public class ActivityPoem extends AppCompatActivity {
         fab.startAnimation(animation);
     }
 
+    private void openPoemURL()
+    {
+        if(GanjoorPoem1 != null)
+        {
+            String url = GanjoorPoem1._Url;
+            UtilFunctions1.openUrl(url);
+        }
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -669,7 +681,7 @@ public class ActivityPoem extends AppCompatActivity {
 
                     PoemAudio poemAudio = existAudioList.get(0);
                     mPlayer = new MediaPlayer();
-                    mPlayer.setOnCompletionListener(mediaPlayer -> play_audio.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_black_24dp)));
+                    mPlayer.setOnCompletionListener(mediaPlayer -> play_audio.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_play_arrow_black_24dp)));
 
                     playAudio(poemAudio);
                     audio_player_bar.setVisibility(View.VISIBLE);
@@ -680,7 +692,7 @@ public class ActivityPoem extends AppCompatActivity {
                 if (mPlayer != null && !mPlayer.isPlaying()) {
                     audio_player_bar.setVisibility(View.VISIBLE);
                     mPlayer.start();
-                    play_audio.setImageDrawable(getDrawable(R.drawable.ic_pause_black_24dp));
+                    play_audio.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_pause_black_24dp));
                 }
             }
 
@@ -689,7 +701,7 @@ public class ActivityPoem extends AppCompatActivity {
         {
             if (mPlayer != null && !mPlayer.isPlaying()) {
                 mPlayer.start();
-                play_audio.setImageDrawable(getDrawable(R.drawable.ic_pause_black_24dp));
+                play_audio.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_pause_black_24dp));
             }
         }
     }
@@ -698,7 +710,7 @@ public class ActivityPoem extends AppCompatActivity {
     private void ShowAudioCollection() {
 
         MyDialogs MyDialogs1 = new MyDialogs(mContext);
-        final Dialog yesNoDialog = MyDialogs1.YesNoDialog(getString(R.string.no_donload_this_item), mContext.getDrawable(R.drawable.ic_cloud_download_white_24dp), true);
+        final Dialog yesNoDialog = MyDialogs1.YesNoDialog(getString(R.string.no_donload_this_item), ContextCompat.getDrawable(this, R.drawable.ic_cloud_download_white_24dp), true);
 
         Button noBtn = yesNoDialog.findViewById(R.id.noBtn);
         noBtn.setOnClickListener(view -> yesNoDialog.dismiss());
@@ -748,7 +760,7 @@ public class ActivityPoem extends AppCompatActivity {
             {
                 Log.e(TAG, "pauseAudio: true");
                 mPlayer.pause();
-                play_audio.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_black_24dp));
+                play_audio.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_play_arrow_black_24dp));
             }
         }
     }
@@ -794,6 +806,4 @@ public class ActivityPoem extends AppCompatActivity {
                 }
 
             };
-
-
 }

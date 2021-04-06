@@ -6,173 +6,215 @@
     android:layout_height="match_parent"
     tools:context=".ActivityPuzzle">
 
-    <LinearLayout
-        android:id="@+id/linearLayout1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <RelativeLayout
-            android:id="@+id/relativeLayout1"
+        <LinearLayout
+            android:id="@+id/linearLayout1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <RelativeLayout
-                android:id="@+id/relativeLayoutRadtes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:id="@+id/relativeLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
 
-                <ImageView
-                    android:id="@+id/reward2"
+                <RelativeLayout
+                    android:id="@+id/relativeLayoutRadtes"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="5dp"
-                    android:src="@drawable/ic_reward"
-                    android:tint="@color/darkGreen" />
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/reward2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="5dp"
+                        android:src="@drawable/ic_reward"
+                        app:tint="@color/darkGreen" />
+
+                    <TextView
+                        android:id="@+id/textview_plus_rate"
+                        android:layout_width="96dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginEnd="2dp"
+                        android:layout_toStartOf="@+id/reward2"
+                        android:gravity="center_vertical|end"
+                        android:padding="2dp"
+                        android:text="0"
+                        android:textColor="@color/darkGreen"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/reward1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="5dp"
+                        android:src="@drawable/ic_reward"
+                        app:tint="?attr/PuzzleIncorrectColor" />
+
+                    <TextView
+                        android:id="@+id/textview_negative_rate"
+                        android:layout_width="96dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginEnd="2dp"
+                        android:layout_toEndOf="@+id/reward1"
+                        android:gravity="start|center_vertical"
+                        android:padding="2dp"
+                        android:text="0"
+                        android:textColor="?attr/PuzzleIncorrectColor"
+                        android:textSize="14sp" />
+
+                </RelativeLayout>
 
                 <TextView
-                    android:id="@+id/textview_plus_rate"
-                    android:layout_width="96dp"
+                    android:id="@+id/textViewVerse"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="2dp"
-                    android:layout_toStartOf="@+id/reward2"
-                    android:gravity="center_vertical|end"
-                    android:padding="2dp"
-                    android:text="0"
-                    android:textColor="@color/darkGreen"
-                    android:textSize="14sp" />
+                    android:layout_below="@+id/relativeLayoutRadtes"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/border_view_3"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:scrollbars="vertical"
+                    android:text="@string/verse"
+                    android:textColor="?attr/ListTextColor"
+                    android:textSize="15sp" />
 
-                <ImageView
-                    android:id="@+id/reward1"
-                    android:layout_width="wrap_content"
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginStart="5dp"
-                    android:src="@drawable/ic_reward"
-                    android:tint="?attr/PuzzleIncorrectColor" />
+                    android:layout_below="@+id/textViewVerse"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="0dp"
+                    android:max="100"
+                    android:progress="0"
+                    android:visibility="invisible"
+
+                    />
+
+
+                <EditText
+                    android:id="@+id/your_response"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/progress_bar"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/border_view_2"
+                    android:hint="@string/enter_missing"
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:textColor="?attr/ListTextColor"
+                    android:textSize="15sp" />
+
+                <RelativeLayout
+                    android:id="@+id/relativeLayout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/your_response"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:padding="5dp">
+
+                    <ImageButton
+                        android:id="@+id/puzzle_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/my_ripple"
+                        app:srcCompat="@drawable/ic_info_outline_black_24dp" />
+
+                    <ImageButton
+                        android:id="@+id/puzzle_new"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_toEndOf="@+id/puzzle_info"
+                        android:background="@drawable/my_ripple"
+                        app:srcCompat="@drawable/ic_sync_black_24dp" />
+
+                    <ImageButton
+                        android:id="@+id/puzzle_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_toEndOf="@+id/puzzle_new"
+                        android:background="@drawable/my_ripple"
+                        android:tint="@color/black"
+                        app:srcCompat="@drawable/ic_check_black_24dp" />
+
+
+                </RelativeLayout>
 
                 <TextView
-                    android:id="@+id/textview_negative_rate"
-                    android:layout_width="96dp"
+                    android:id="@+id/show_result"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="2dp"
-                    android:layout_toEndOf="@+id/reward1"
-                    android:gravity="start|center_vertical"
-                    android:padding="2dp"
-                    android:text="0"
-                    android:textColor="?attr/PuzzleIncorrectColor"
-                    android:textSize="14sp" />
+                    android:layout_below="@+id/relativeLayout2"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:text="@string/correct_answer"
+                    android:textColor="?attr/PuzzleIncorrectColor" />
+
+
+                <RelativeLayout
+                    android:id="@+id/ad_layout"
+                    android:layout_below="@+id/show_result"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/note_text_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/reward_des"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:textColor="?attr/ListTextColor" />
+
+                    <Button
+                        android:id="@+id/btn_view_ad"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="150dp"
+                        android:layout_below="@+id/note_text_view"
+                        android:textColor="@color/primaryTextColor"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="15dp"
+                        android:drawableBottom="@drawable/ic_baseline_videocam_24"
+                        android:drawablePadding="0dp"
+                        android:padding="15dp"
+                        android:textSize="16sp"
+                        android:backgroundTint="@color/btnColor"
+                        android:text="@string/view_admob" />
+
+
+                </RelativeLayout>
 
             </RelativeLayout>
+        </LinearLayout>
 
-            <TextView
-                android:id="@+id/textViewVerse"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/relativeLayoutRadtes"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:background="@drawable/border_view_3"
-                android:gravity="center"
-                android:padding="10dp"
-                android:scrollbars="vertical"
-                android:text="@string/verse"
-                android:textColor="?attr/ListTextColor"
-                android:textSize="15sp" />
-
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textViewVerse"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="0dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="0dp"
-                android:max="100"
-                android:progress="0"
-                android:visibility="invisible"
-
-                />
-
-
-            <EditText
-                android:id="@+id/your_response"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/progress_bar"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/border_view_2"
-                android:hint="@string/enter_missing"
-                android:padding="10dp"
-                android:singleLine="true"
-                android:textColor="?attr/ListTextColor"
-                android:textSize="15sp" />
-
-            <RelativeLayout
-                android:id="@+id/relativeLayout2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/your_response"
-                android:layout_marginTop="5dp"
-                android:gravity="center"
-                android:padding="5dp">
-
-                <ImageButton
-                    android:id="@+id/puzzle_info"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/my_ripple"
-                    app:srcCompat="@drawable/ic_info_outline_black_24dp" />
-
-                <ImageButton
-                    android:id="@+id/puzzle_new"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_toEndOf="@+id/puzzle_info"
-                    android:background="@drawable/my_ripple"
-                    app:srcCompat="@drawable/ic_sync_black_24dp" />
-
-                <ImageButton
-                    android:id="@+id/puzzle_check"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_toEndOf="@+id/puzzle_new"
-                    android:background="@drawable/my_ripple"
-                    android:tint="@color/black"
-                    app:srcCompat="@drawable/ic_check_black_24dp" />
-
-
-            </RelativeLayout>
-
-            <TextView
-                android:id="@+id/show_result"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/relativeLayout2"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:text="@string/correct_answer"
-                android:textColor="?attr/PuzzleIncorrectColor" />
-
-
-        </RelativeLayout>
-    </LinearLayout>
-
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

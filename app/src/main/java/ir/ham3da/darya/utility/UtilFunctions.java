@@ -64,7 +64,7 @@ public class UtilFunctions
     //      google play => 0 , cafebazaar => 1 , myket => 2,
 //      charkhoneh => 3, iranapps => 4  , avvalmarket => 5, cando => 6
 
-    private static final int Store = 0;
+    private static final int Store = 2 ;
     public UtilFunctions(Context mCtx)
     {
         this.context1 = mCtx;
@@ -276,7 +276,6 @@ public class UtilFunctions
 
     public void openUrl(String url)
     {
-
         Intent intent1 = new Intent(Intent.ACTION_VIEW);
         intent1.setData(Uri.parse(url));
         context1.startActivity(intent1);

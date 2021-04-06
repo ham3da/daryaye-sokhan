@@ -31,6 +31,7 @@ public class AppSettings
     public static final String NOTIFICATION_CHANNEL_ID_DAILY = "darya_1";
     private final static String default_notification_channel_id = "darya";
 
+    public final static int default_max_incorrect_ans = 3;
 
     /**
      * Class Initialization:
@@ -53,6 +54,10 @@ public class AppSettings
         }
     }
 
+    public static void InitPreference(Context context)
+    {
+         PreferenceManager1 = new PreferenceHelper(context);
+    }
 
     public static void ReInit(Context context)
     {
@@ -62,6 +67,25 @@ public class AppSettings
         setApplicationTypeface(font);
 
     }
+
+    public static int getIncorrectAnsCount()
+    {
+        if (PreferenceManager1 == null)
+        {
+            return 0;
+        }
+        return PreferenceManager1.getKey("incorrect_ans_count", 0);
+    }
+
+    public static void setIncorrectAnsCount(int count)
+    {
+        if (PreferenceManager1 == null)
+        {
+            return;
+        }
+        PreferenceManager1.setKey("incorrect_ans_count", count);
+    }
+
 
     public static String getXmlSting(Context context)
     {

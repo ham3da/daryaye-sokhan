@@ -62,8 +62,6 @@ public class AlarmNotificationReceiver extends BroadcastReceiver
 
             String rnd_poem_text = ganjoorVerseList.get(0)._Text + System.lineSeparator() + ganjoorVerseList.get(1)._Text;
 
-
-
             int poem_id = ganjoorVerseList.get(0)._PoemID;
 
             Intent myIntent = new Intent(context, ActivityMain.class);

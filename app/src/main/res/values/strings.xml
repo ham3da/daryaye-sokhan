@@ -213,7 +213,7 @@
 
     <!--    Real Ad -->
     <string name="interstitial_ad_unit_id" translatable="false">ca-app-pub-5843948052196502/1951219884</string>
-    <string name="native_ad_unit_id" translatable="false">ca-app-pub-5843948052196502/3648160888</string>
+    <string name="reward_ad_unit_id" translatable="false">ca-app-pub-5843948052196502/9658637050</string>
 
     <!--    Test Ad -->
 <!--    <string name="interstitial_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/1033173712</string>-->
@@ -240,6 +240,11 @@
     <string name="set_the_time">Set the time</string>
     <string name="show_every_day">Show every day</string>
 
+    <string name="tree_incorrect">Show ads</string>
+    <string name="reward_des">Dear user, after 3 incorrect answers, you should see an ad to continue.</string>
+    <string name="congratulations">congratulations! Now you can continue.</string>
+    <string name="no_ads2">Fortunately no ads were found! You can continue.</string>
+    <string name="view_on_ganjoor">View on Ganjoor</string>
 
 
 </resources>

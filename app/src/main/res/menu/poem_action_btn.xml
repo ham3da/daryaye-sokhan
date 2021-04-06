@@ -39,4 +39,10 @@
     <item android:id="@+id/verse_declaim"
         android:icon="@drawable/ic_record_voice_over_white_24dp"
         android:title="@string/download_declaim" />
+
+    <item android:id="@+id/action_view_ganjoor"
+        android:icon="@drawable/ic_language_black_24dp"
+        android:title="@string/view_on_ganjoor" />
+
+
 </menu>

@@ -38,10 +38,12 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -105,10 +107,11 @@ public class ActivityMain extends AppCompatActivity
         super.applyOverrideConfiguration(overrideConfiguration);
     }
 
-    AdRequest adRequest;
     int rnd_poem_id;
     String findStr;
     int vOrder;
+
+    InterstitialAd mInterstitialAd;
 
     @Override
     protected void onNewIntent(Intent intent)
@@ -137,10 +140,6 @@ public class ActivityMain extends AppCompatActivity
 
         super.onCreate(savedInstanceState);
 
-        interstitial = new InterstitialAd(this);
-        interstitial.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
-        adRequest = new AdRequest.Builder().build();
-        setAdListen();
 
         UtilFunctions.changeTheme(this);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
@@ -327,7 +326,14 @@ public class ActivityMain extends AppCompatActivity
             }
             else
             {
-                askExitAd();
+                if (UtilFunctions.isNetworkConnected(this))
+                {
+                    askExitAd();
+                }
+                else
+                {
+                    super.onBackPressed();
+                }
             }
 
         }
@@ -582,59 +588,86 @@ public class ActivityMain extends AppCompatActivity
 
     }
 
-    InterstitialAd interstitial;
 
 
-    private void setAdListen()
+
+    private void AdmobInterstitialInit(boolean requestShow)
     {
-        interstitial.setAdListener(new AdListener()
+        FullScreenContentCallback fullScreenContentCallback = new FullScreenContentCallback()
         {
-
             @Override
-            public void onAdLoaded()
+            public void onAdDismissedFullScreenContent()
             {
-                super.onAdLoaded();
-                progress_bar_dlg.setVisibility(View.GONE);
-                if (interstitial.isLoaded())
-                {
-                    interstitial.show();
-                }
-                else
-                {
-                    Toast.makeText(ActivityMain.this, getString(R.string.admob_not_load), Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-
-            }
-
-
-            @Override
-            public void onAdOpened()
-            {
-                super.onAdOpened();
-
-            }
-
-            @Override
-            public void onAdClosed()
-            {
-                super.onAdClosed();
+                mInterstitialAd = null;
+                Toast.makeText(getBaseContext(), getString(R.string.thanks_a_lot), Toast.LENGTH_SHORT).show();
+                App globalVariable = (App) getApplicationContext();
+                globalVariable.setAdviewd(true);
                 finish();
+
             }
 
+
             @Override
-            public void onAdFailedToLoad(LoadAdError loadAdError)
+            public void onAdFailedToShowFullScreenContent(AdError adError)
             {
-                super.onAdFailedToLoad(loadAdError);
-                progress_bar_dlg.setVisibility(View.GONE);
-                Log.e("interstitial", "onAdFailedToLoad: " + loadAdError.getMessage());
+                Log.e(TAG, "onAdFailedToShowFullScreenContent: " + adError.getMessage());
+                super.onAdFailedToShowFullScreenContent(adError);
                 Toast.makeText(ActivityMain.this, getString(R.string.admob_not_load), Toast.LENGTH_SHORT).show();
-
                 finish();
             }
+        };
 
-        });
+        String mAdunitID = getString(R.string.interstitial_ad_unit_id);
+
+        InterstitialAd.load(
+                this,
+                mAdunitID,
+                new AdRequest.Builder().build(),
+                new InterstitialAdLoadCallback()
+                {
+
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd ad)
+                    {
+                        if(progress_bar_dlg.getVisibility() == View.VISIBLE)
+                        {
+                            progress_bar_dlg.setVisibility(View.GONE);
+                        }
+
+                        mInterstitialAd = ad;
+                        mInterstitialAd.setFullScreenContentCallback(fullScreenContentCallback);
+                        if (requestShow)
+                        {
+                            mInterstitialAd.show(ActivityMain.this);
+                        }
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError adError)
+                    {
+                        Log.e(TAG, "onAdFailedToLoad: " + adError.getMessage());
+                        progress_bar_dlg.setVisibility(View.GONE);
+                        Toast.makeText(ActivityMain.this, getString(R.string.admob_not_load), Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                });
+
     }
+
+
+    public void displayInterstitial()
+    {
+        if (mInterstitialAd != null)
+        {
+            mInterstitialAd.show(this);
+        }
+        else
+        {
+            AdmobInterstitialInit(true);
+        }
+
+    }
+
 
     ProgressBar progress_bar_dlg;
 
@@ -648,14 +681,7 @@ public class ActivityMain extends AppCompatActivity
         dialog.setMessage(R.string.ad_exit_text);
         dialog.setPositiveButton(R.string.view_admob, (dialog1, id) -> {
             progress_bar_dlg.setVisibility(View.VISIBLE);
-            if (interstitial.isLoaded())
-            {
-                interstitial.show();
-            }
-            else
-            {
-                interstitial.loadAd(adRequest);
-            }
+            displayInterstitial();
 
         }).setNegativeButton(R.string.close, (dialog12, which) -> finish());
 
