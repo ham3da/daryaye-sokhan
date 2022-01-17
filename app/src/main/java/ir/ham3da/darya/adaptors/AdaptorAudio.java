@@ -48,6 +48,7 @@ public class AdaptorAudio extends RecyclerView.Adapter<AdaptorAudio.ViewHolder>
     private int dl_type;
     GanjoorPoet ganjoorPoet;
 
+
     public AdaptorAudio(List<GanjoorAudioInfo> audioList, Context mCtx, int dl_type, GanjoorPoet poet)
     {
 

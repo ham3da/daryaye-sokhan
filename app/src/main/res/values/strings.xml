@@ -1,5 +1,20 @@
 <resources>
     <string name="app_name">Sea of Poetry</string>
+    <string name="git_url" translatable="false">https://github.com/ham3da/daryaye-sokhan</string>
+    <string name="new_collection_url" translatable="false">https://daryaye-sokhan.ir/add-new-collection/</string>
+
+    <string name="address_btc" translatable="false">bc1qdrjpcxnnay42jfc56hze4vrpkrf5s5c45xd5va</string>
+    <string name="address_eth" translatable="false">0x8425d6010C12D0781D87D9cAaDA3bDedd15c9347</string>
+    <string name="address_perfect" translatable="false">U21873528</string>
+    <string name="address_trx" translatable="false">TTahPYiMfWygFALi2Ew3aQK8jF7rGPTk5b</string>
+    <string name="address_doge" translatable="false">DEzQc7hKbCtjeThs2PokVRrkYcWLNj5GzW</string>
+
+    <string name="perfect_money" translatable="false">Perfect Money</string>
+    <string name="bitcoin" translatable="false">Bitcoin</string>
+    <string name="ethereum" translatable="false">Ethereum</string>
+    <string name="tron" translatable="false">Tron</string>
+
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Sea of Persian Poetry</string>
@@ -216,19 +231,19 @@
     <string name="reward_ad_unit_id" translatable="false">ca-app-pub-5843948052196502/9658637050</string>
 
     <!--    Test Ad -->
-<!--    <string name="interstitial_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/1033173712</string>-->
-<!--    <string name="native_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/2247696110</string>-->
+    <!--    <string name="interstitial_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/1033173712</string>-->
+    <!--    <string name="native_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/2247696110</string>-->
 
     <string name="easy_donating">Easy donating</string>
     <string name="admob_not_load">No ads are currently available. Please try again later.</string>
     <string name="admob_des">Dear user, in order to support this valuable application, touch the "View ads" button And after displaying the ad, touch it as well.</string>
-    <string name="view_admob">View ads</string>
+    <string name="view_admob">View products</string>
     <string name="thanks_a_lot">Thanks a lot</string>
     <string name="declaimer">Declaimer</string>
     <string name="err_list_audio">Error getting list of audio files! Please try again.</string>
     <string name="err_list_file">Error getting list of files! Please try again.</string>
     <string name="ad_attribution">Ad</string>
-    <string name="ad_exit_text">Dear user, in order to support this valuable application, we ask you to touch the "View ads" button and view an advertisement before closing the application.</string>
+    <string name="ad_exit_text">Dear user, to support this valuable application, we ask you to see our other products before closing it.</string>
     <string name="select_bg">Choose a background</string>
     <string name="starting_download">Starting download</string>
     <string name="update_app_des">The new version of this app is ready to download. Please update.</string>
@@ -245,6 +260,30 @@
     <string name="congratulations">congratulations! Now you can continue.</string>
     <string name="no_ads2">Fortunately no ads were found! You can continue.</string>
     <string name="view_on_ganjoor">View on Ganjoor</string>
+    <string name="join_dev_team">Join the development team:</string>
+    <string name="github">GitHub</string>
+    <string name="donation">Donation</string>
+    <string name="donate_with">Donate with:</string>
+    <string name="donate_with_crypto">Donate with cryptocurrencies</string>
+    <string name="cryptocurrencies">Cryptocurrencies</string>
+    <string name="online_payment">Online payment</string>
+    <string name="new_collection">Collected Poems</string>
+
+    <string name="btc_address_copied">Bitcoin address copied.</string>
+    <string name="eth_address_copied">Ethereum address copied.</string>
+    <string name="account_copied">Perfect Money account number copied.</string>
+    <string name="bank_transfer">Bank Transfer</string>
+    <string name="in_collections">Collaboration in collections:</string>
+    <string name="our_products">Our products</string>
+    <string name="our_products_url" translatable="false">https://ads.daryaye-sokhan.ir/</string>
+    <string name="view_our_products">View our products</string>
+    <string name="title_activity_login">Login</string>
+    <string name="login_google">Sign in with Google</string>
+    <string name="login_guest">Login as guest</string>
+    <string name="login_google_des">By signing in to your Google Account, your data will be saved for future use, such as your favorite poems and "Don\'t forget poetry" points.</string>
+    <string name="google_sign_failed">Google Sign In failed!</string>
+    <string name="google_sign_ok">Google Sign In was successful!</string>
+    <string name="profile">Profile</string>
 
 
 </resources>

@@ -79,6 +79,7 @@ public class SearchWordAsyncTask {
             ProgressBar1.setVisibility(View.GONE);
             if (tempSearchResult.size() > 0)
             {
+
                 this.outputSearchResult.addAll(tempSearchResult);
 
                 this.adapter.notifyItemRangeInserted(this.outputSearchResult.size(), this.outputSearchResult.size() - 1);

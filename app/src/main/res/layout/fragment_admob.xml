@@ -6,52 +6,159 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/main_layer_admob"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/admob_des"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:lineSpacingExtra="8sp"
-            android:text="@string/admob_des"
-            android:textColor="@color/textColor"
-            android:textSize="16sp" />
-
-        <Button
-            android:id="@+id/btn_view_ad"
+        <RelativeLayout
+            android:id="@+id/main_layer_admob"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minWidth="150dp"
-            android:layout_below="@+id/admob_des"
-            android:textColor="@color/primaryTextColor"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="15dp"
-            android:drawableBottom="@drawable/ic_baseline_videocam_24"
-            android:drawablePadding="0dp"
-            android:padding="15dp"
-            android:textSize="16sp"
-            android:backgroundTint="@color/btnColor"
-            android:text="@string/view_admob" />
+            android:padding="10dp">
 
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/btn_view_ad"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="0dp"
-            android:indeterminateOnly="true"
-            android:visibility="invisible"
-            style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
-            />
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/join_dev"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:lineSpacingExtra="8sp"
+                android:text="@string/join_dev_team"
+                android:textColor="@color/textColor"
+                android:textSize="16sp" />
 
 
+            <Button
+                android:id="@+id/btn_donate_github"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/join_dev"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:backgroundTint="@color/btnColor"
+                android:drawableEnd="@drawable/ic_baseline_android_24"
+                android:drawablePadding="5dp"
+                android:minWidth="200dp"
+                android:padding="15dp"
+                android:text="@string/github"
+                android:textAllCaps="false"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="16sp" />
+
+
+            <TextView
+                android:id="@+id/join_collections"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_donate_github"
+                android:layout_marginTop="10dp"
+                android:lineSpacingExtra="8sp"
+                android:text="@string/in_collections"
+                android:textColor="@color/textColor"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btn_donate_collections"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/join_collections"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:backgroundTint="@color/btnColor"
+                android:drawableEnd="@drawable/ic_folder_black_24dp"
+                android:drawablePadding="5dp"
+                android:minWidth="200dp"
+                android:padding="15dp"
+                android:text="@string/new_collection"
+                android:textAllCaps="false"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="16sp"
+                app:drawableTint="@color/white" />
+
+            <TextView
+                android:id="@+id/admob_des"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_donate_collections"
+                android:layout_marginTop="10dp"
+                android:lineSpacingExtra="8sp"
+                android:text="@string/donate_with"
+                android:textColor="@color/textColor"
+                android:textSize="16sp" />
+
+            <RelativeLayout
+                android:id="@+id/rv_pay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/admob_des">
+
+
+                <Button
+                    android:id="@+id/btn_donate_crypto"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    android:backgroundTint="@color/btnColor"
+                    android:drawableEnd="@drawable/ic_btc"
+                    android:drawablePadding="5dp"
+                    android:minWidth="150dp"
+                    android:padding="15dp"
+                    android:text="@string/cryptocurrencies"
+                    android:textAllCaps="false"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="16sp"
+                    app:drawableTint="@color/white" />
+
+                <Button
+                    android:id="@+id/btn_donate_pay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/btn_donate_crypto"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    android:backgroundTint="@color/btnColor"
+                    android:drawableEnd="@drawable/ic_baseline_payment_24"
+                    android:drawablePadding="5dp"
+                    android:minWidth="200dp"
+                    android:padding="15dp"
+                    android:text="@string/bank_transfer"
+                    android:textAllCaps="false"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="16sp"
+                    app:drawableTint="@color/white" />
+
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/btn_view_ad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rv_pay"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:backgroundTint="@color/btnColor"
+                android:drawableEnd="@drawable/ic_baseline_apps_24"
+                android:drawablePadding="0dp"
+                android:minWidth="200dp"
+                android:padding="15dp"
+                android:text="@string/view_our_products"
+                android:textAllCaps="false"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="16sp" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_view_ad"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="0dp"
+                android:indeterminateOnly="true"
+                android:visibility="invisible" />
+        </RelativeLayout>
+
+    </ScrollView>
 </LinearLayout>

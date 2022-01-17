@@ -127,7 +127,9 @@ public class GDBList {
 
         inputStream.close();
         if (result._Items.size() == 0)
+        {
             return null;
+        }
         return result;
     }
 

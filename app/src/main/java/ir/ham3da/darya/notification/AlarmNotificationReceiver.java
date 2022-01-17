@@ -74,18 +74,30 @@ public class AlarmNotificationReceiver extends BroadcastReceiver
             myIntent.putExtra("serializableNotifyVerse", serializableNotify);
 
             Log.e(TAG, "rnd_poem_id: "+poem_id);
-            PendingIntent pendingIntent = PendingIntent.getActivity(
-                    context,
-                    0,
-                    myIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S)
+            {
+                pendingIntent = PendingIntent.getActivity(
+                        context,
+                        0,
+                        myIntent,
+                        PendingIntent.FLAG_MUTABLE);
+            }
+            else
+            {
+                pendingIntent = PendingIntent.getActivity(
+                        context,
+                        0,
+                        myIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+            }
 
             builder.setAutoCancel(false)
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setContentTitle(context.getString(R.string.app_name))
                     .setContentText(ganjoorVerseList.get(0)._Text+"...")
                     .setContentIntent(pendingIntent)
-                    .setNotificationSilent()
+                    .setSilent(true)
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(rnd_poem_text));
 
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context.getApplicationContext());

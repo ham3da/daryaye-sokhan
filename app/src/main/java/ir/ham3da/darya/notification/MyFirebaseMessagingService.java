@@ -5,6 +5,8 @@ import ir.ham3da.darya.R;
 import ir.ham3da.darya.utility.PreferenceHelper;
 
 import java.util.Map;
+
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Build;
@@ -56,13 +58,22 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.e("onSendError", "msg: "+ var2.getMessage());
     }
 
+    @SuppressLint("UnspecifiedImmutableFlag")
     @SuppressWarnings("deprecation")
     private void sendNotification(String messageBody, String messageTitle) {
         try {
 
             Intent notificationIntent = new Intent(getApplicationContext(), ActivityMain.class);
             notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
+
+            PendingIntent pendingIntent = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S)
+            {
+                pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_MUTABLE);
+            }
+            else{
+                pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
+            }
 
 
             NotificationCompat.Builder mBuilder;

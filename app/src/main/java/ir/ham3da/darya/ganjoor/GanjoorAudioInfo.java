@@ -39,7 +39,8 @@ public class GanjoorAudioInfo {
     public GanjoorAudioInfo(int audio_post_ID, int audio_order, String audio_xml,
                             String audio_ogg, String audio_mp3, String audio_title, String audio_artist,
                             String audio_artist_url, String audio_src, String audio_src_url, String audio_guid,
-                            String audio_fchecksum, int audio_mp3bsize, int audio_oggbsize, Date audio_date, boolean exist, int index, boolean selected) {
+                            String audio_fchecksum, int audio_mp3bsize, int audio_oggbsize, Date audio_date,
+                            boolean exist, int index, boolean selected) {
         this.audio_post_ID = audio_post_ID;
         this.audio_order = audio_order;
 

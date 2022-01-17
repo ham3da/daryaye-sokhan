@@ -1,32 +1,30 @@
 package ir.ham3da.darya.admob;
 
-import android.Manifest;
+
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.graphics.drawable.ColorDrawable;
+import android.content.Intent;
+
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
-import android.util.Log;
+
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.gms.ads.AdError;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.FullScreenContentCallback;
-import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.interstitial.InterstitialAd;
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+import java.util.Locale;
 
+import ir.ham3da.darya.ActivityDonateCrypto;
 import ir.ham3da.darya.ActivityMain;
+import ir.ham3da.darya.ActivityWeb;
 import ir.ham3da.darya.App;
+import ir.ham3da.darya.Bungee;
 import ir.ham3da.darya.MainActivityUtil;
 import ir.ham3da.darya.R;
 
@@ -40,10 +38,10 @@ public class MainAdMobFragment extends Fragment
     Context mContext;
     Button btn_view_ad;
 
-    InterstitialAd mInterstitialAd;
+//    InterstitialAd mInterstitialAd;
     ProgressBar progress_bar;
     String TAG = "MainAdMobFragment";
-
+    UtilFunctions UtilFunctions1;
 
     public MainAdMobFragment()
     {
@@ -72,107 +70,77 @@ public class MainAdMobFragment extends Fragment
         mContext = getContext();
         AppSettings.Init(mContext);
 
-        AdmobInterstitialInit(false);
+        String CurrentLang = Locale.getDefault().getLanguage();
+        UtilFunctions1 = new UtilFunctions(mContext);
 
         btn_view_ad = root.findViewById(R.id.btn_view_ad);
         progress_bar = root.findViewById(R.id.progress_bar);
 
+        Button btn_donate_github = root.findViewById(R.id.btn_donate_github);
+        Button btn_donate_collections = root.findViewById(R.id.btn_donate_collections);
+
+        Button btn_donate_pay = root.findViewById(R.id.btn_donate_pay);
+        Button btn_donate_crypto = root.findViewById(R.id.btn_donate_crypto);
+
+        View rv_pay = root.findViewById(R.id.rv_pay);
+
+        if (UtilFunctions.isGooglePlayVersion())
+        {
+            rv_pay.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            rv_pay.setVisibility(View.GONE);
+        }
+
         btn_view_ad.setOnClickListener(v ->
         {
-            displayInterstitial();
+           // displayInterstitial();
+            displayCustomAdWeb();
         });
+
+        btn_donate_github.setOnClickListener(v -> {
+            UtilFunctions1.openUrl(getString(R.string.git_url));
+        });
+
+        btn_donate_collections.setOnClickListener(v ->
+        {
+            UtilFunctions1.openUrl(getString(R.string.new_collection_url));
+
+        });
+
+        btn_donate_pay.setOnClickListener(v ->
+        {
+            String title = getString(R.string.donation);
+            String file_name = "donate_" + CurrentLang + ".htm";
+            String text = UtilFunctions.getHtmlFromAssetsFile(mContext, file_name);
+            UtilFunctions.showWebAct(mContext, title, text);
+
+        });
+
+        btn_donate_crypto.setOnClickListener(v ->
+        {
+            Intent intent = new Intent(mContext, ActivityDonateCrypto.class);
+            startActivity(intent);
+            Bungee.card(mContext);
+        });
+
 
         return root;
     }
 
-    private void AdmobInterstitialInit(boolean requestShow)
+
+
+    public void displayCustomAdWeb()
     {
+        Intent intent = new Intent(mContext, ActivityWeb.class);
+        intent.putExtra("title", getString(R.string.our_products));
+        intent.putExtra("fromUrl", true);
+        intent.putExtra("url",  getString(R.string.our_products_url));
 
-        FullScreenContentCallback fullScreenContentCallback = new FullScreenContentCallback()
-        {
-            @Override
-            public void onAdDismissedFullScreenContent()
-            {
-                mInterstitialAd = null;
-                // Proceed to the next level.
-                Toast.makeText(mContext, getString(R.string.thanks_a_lot), Toast.LENGTH_SHORT).show();
-                App globalVariable = (App) getActivity().getApplicationContext();
-                globalVariable.setAdviewd(true);
-
-            }
-
-            @Override
-            public void onAdShowedFullScreenContent()
-            {
-                super.onAdShowedFullScreenContent();
-            }
-
-            @Override
-            public void onAdFailedToShowFullScreenContent(AdError adError)
-            {
-                Log.e(TAG, "onAdFailedToShowFullScreenContent: " + adError.getMessage());
-                super.onAdFailedToShowFullScreenContent(adError);
-                Toast.makeText(mContext, getString(R.string.admob_not_load), Toast.LENGTH_SHORT).show();
-            }
-        };
-
-        String mAdunitID = getString(R.string.interstitial_ad_unit_id);
-
-        InterstitialAd.load(
-                mContext,
-                mAdunitID,
-                new AdRequest.Builder().build(),
-                new InterstitialAdLoadCallback()
-                {
-
-                    @Override
-                    public void onAdLoaded(@NonNull InterstitialAd ad)
-                    {
-                        if(progress_bar.getVisibility() == View.VISIBLE)
-                        {
-                            progress_bar.setVisibility(View.INVISIBLE);
-                        }
-
-                        mInterstitialAd = ad;
-                        mInterstitialAd.setFullScreenContentCallback(fullScreenContentCallback);
-                        if (requestShow)
-                        {
-                            mInterstitialAd.show(getActivity());
-                        }
-                    }
-
-                    @Override
-                    public void onAdFailedToLoad(@NonNull LoadAdError adError)
-                    {
-                        Log.e(TAG, "onAdFailedToLoad: " + adError.getMessage());
-                        progress_bar.setVisibility(View.INVISIBLE);
-                        Toast.makeText(mContext, getString(R.string.admob_not_load), Toast.LENGTH_SHORT).show();
-                    }
-                });
-
+        startActivity(intent);
+        Bungee.card(mContext);
     }
 
-
-    public void displayInterstitial()
-    {
-        if (UtilFunctions.isNetworkConnected(mContext))
-        {
-
-            if (mInterstitialAd != null)
-            {
-                mInterstitialAd.show(getActivity());
-            }
-            else
-            {
-                progress_bar.setVisibility(View.VISIBLE);
-                AdmobInterstitialInit(true);
-            }
-        }
-        else
-        {
-            Toast.makeText(mContext, getString(R.string.internet_failed), Toast.LENGTH_SHORT).show();
-        }
-
-    }
 
 }

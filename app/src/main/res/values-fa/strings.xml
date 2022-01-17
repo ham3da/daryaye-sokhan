@@ -200,13 +200,13 @@
     <string name="easy_donating">همیاری</string>
     <string name="admob_not_load">در حال حاضر تبلیغی در دسترس نیست. لطفاً بعداً دوباره سعی کنید.</string>
     <string name="admob_des">کاربر گرامی، از شما تقاضا داریم به پاس حمایت از این نرم‌افزار ارزشمند، گاهی اوقات روی دکمه "مشاهدۀ" آگهی لمس کنید و پس از مشاهده آگهی، آن را نیز لمس نمایید. با این کار کمک بزرگی به توسعه این نرم‌‌افزار خواهید نمود.</string>
-    <string name="view_admob">مشاهدۀ آگهی</string>
+    <string name="view_admob">مشاهدۀ محصولات</string>
     <string name="thanks_a_lot">سپاسگزاریم</string>
     <string name="declaimer">گوینده</string>
     <string name="err_list_audio">دریافت لیست فایل‌های صوتی با خطا مواجه شد! لطفاً دوباره سعی کنید.</string>
     <string name="err_list_file">دریافت لیست فایل‌ها با خطا مواجه شد! لطفاً دوباره سعی کنید.</string>
     <string name="ad_attribution">تبلیغات</string>
-    <string name="ad_exit_text">کاربر گرامی، از شما تقاضا داریم به پاس حمایت از این نرم افزار ارزشمند، قبل از بستن برنامه، روی دکمه مشاهده آگهی لمس کنید و یک آگهی مشاهده کنید و سپس روی آگهی نیز لمس نمایید.</string>
+    <string name="ad_exit_text">کاربر گرامی، از شما تقاضا داریم به پاس حمایت از این نرم افزار ارزشمند، قبل از بستن برنامه، سایر محصولات ما را نیز مشاهده کنید.</string>
     <string name="select_bg">یک پس زمینه انتخاب کنید</string>
     <string name="starting_download">در حال شروع دریافت</string>
     <string name="update_app_des">نسخه جدید دریای سخن آماده دریافت است. لطفاً دریافت کنید.</string>
@@ -216,11 +216,31 @@
     <string name="set_value">تائید</string>
     <string name="set_the_time">تنظیم زمان</string>
     <string name="show_every_day">هر روز نمایش داده شود</string>
-
     <string name="tree_incorrect">مشاهده آگهی</string>
     <string name="reward_des">کاربر گرامی، پس از سه پاسخ اشتباه تنها در صورتی می‌توانید ادامه دهید که یک آگهی مشاهده کنید.</string>
     <string name="congratulations">تبریک! حالا می توانید ادامه دهید.</string>
     <string name="no_ads2">خوشبختانه هیچ تبلیغی یافت نشد! می توانید ادامه دهید.</string>
     <string name="view_on_ganjoor">مشاهده بر روی گنجور</string>
-
+    <string name="join_dev_team">پیوستن به تیم توسعه دهنده:</string>
+    <string name="github">گیت هاب</string>
+    <string name="donation">حمایت مالی</string>
+    <string name="donate_with">حمایت مالی با:</string>
+    <string name="donate_with_crypto">حمایت با رمز ارزها</string>
+    <string name="cryptocurrencies">رمز ارزها</string>
+    <string name="online_payment">پرداخت آنلاین</string>
+    <string name="new_collection">مجموعه اشعار</string>
+    <string name="btc_address_copied">آدرس بیت کوین کپی شد.</string>
+    <string name="eth_address_copied">آدرس اتریوم کپی شد.</string>
+    <string name="account_copied">شماره حساب پرفکت مانی کپی شد.</string>
+    <string name="bank_transfer">حواله بانکی</string>
+    <string name="in_collections">همکاری در مجموعه‌ها:</string>
+    <string name="our_products">محصولات ما</string>
+    <string name="view_our_products">مشاهده محصولات ما</string>
+    <string name="title_activity_login">ورود</string>
+    <string name="login_google">ورود از طریق گوگل</string>
+    <string name="login_guest">ورود به عنوان مهمان</string>
+    <string name="login_google_des">با ورود از طریق حساب گوگل داده‌های شما در این برنامه مانند اشعار برگزیده و امتیازات بخش شعر یادت نره برای استفاده در آینده ذخیره خواهد شد.</string>
+    <string name="google_sign_failed">ورود با حساب گوگل با شکست مواجه شد!</string>
+    <string name="google_sign_ok">ورود با حساب گوگل با موفقیت انجام شد!</string>
+    <string name="profile">نمایه</string>
 </resources>

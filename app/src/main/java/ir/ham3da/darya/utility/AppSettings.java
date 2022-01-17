@@ -31,8 +31,6 @@ public class AppSettings
     public static final String NOTIFICATION_CHANNEL_ID_DAILY = "darya_1";
     private final static String default_notification_channel_id = "darya";
 
-    public final static int default_max_incorrect_ans = 3;
-
     /**
      * Class Initialization:
      * قبل از استفاده از کلاس حتماً باید این متد با مقدار غیر null برای پارامتر ورودی ارسال شود
@@ -632,7 +630,7 @@ public class AppSettings
     /**
      * get random poem notify time
      *
-     * @return
+     * @return String Time in houre:minute
      */
     public static String getRandomNotifyTime()
     {

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/address_btc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/rounded_border_tv"
+            android:layoutDirection="ltr"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/avatar_btc"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/circle"
+                app:tooltipText="@string/bitcoin"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/ic_btc_24" />
+
+            <TextView
+                android:id="@+id/address_btc_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/avatar_btc"
+                android:layout_toLeftOf="@+id/address_btc_copy"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="left"
+                android:layout_centerVertical="true"
+                android:text="@string/address_btc"
+                android:textColor="@color/textColor"
+                android:textDirection="ltr"
+                android:textSize="16sp" />
+
+            <ImageButton
+                android:id="@+id/address_btc_copy"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentRight="true"
+                android:backgroundTint="@color/btnColor"
+                android:padding="10dp"
+                app:tooltipText="@string/copy1"
+                android:src="@drawable/ic_content_copy_white_24dp"
+                android:background="@drawable/circle"
+                android:textColor="@color/primaryTextColor" />
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/address_eth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/address_btc"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/rounded_border_tv"
+            android:layoutDirection="ltr"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/avatar_eth"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:tooltipText="@string/ethereum"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/circle"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/ic_eth_24" />
+
+            <TextView
+                android:id="@+id/address_eth_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/avatar_eth"
+                android:layout_toLeftOf="@+id/address_eth_copy"
+                android:gravity="left"
+                android:layout_centerVertical="true"
+                android:text="@string/address_eth"
+                android:textColor="@color/textColor"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:textDirection="ltr"
+                android:textSize="16sp" />
+
+            <ImageButton
+                android:id="@+id/address_eth_copy"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:backgroundTint="@color/btnColor"
+                android:src="@drawable/ic_content_copy_white_24dp"
+                android:padding="10dp"
+                app:tooltipText="@string/copy1"
+                android:background="@drawable/circle"
+                android:textColor="@color/primaryTextColor"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentRight="true"
+                />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/address_perfect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/address_eth"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/rounded_border_tv"
+            android:layoutDirection="ltr"
+            android:padding="5dp">
+            <ImageView
+                android:id="@+id/avatar_pm"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:tooltipText="@string/perfect_money"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/circle"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/ic_pm_24" />
+
+            <TextView
+                android:id="@+id/address_perfect_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/avatar_pm"
+                android:layout_toLeftOf="@+id/address_perfect_copy"
+                android:gravity="left"
+                android:layout_centerVertical="true"
+                android:text="@string/address_perfect"
+                android:textColor="@color/textColor"
+                android:textDirection="ltr"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:textSize="16sp" />
+
+            <ImageButton
+                android:id="@+id/address_perfect_copy"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:backgroundTint="@color/btnColor"
+                android:src="@drawable/ic_content_copy_white_24dp"
+                android:padding="10dp"
+                app:tooltipText="@string/copy1"
+                android:background="@drawable/circle"
+                android:textColor="@color/primaryTextColor"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentRight="true"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/address_trx"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/address_perfect"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/rounded_border_tv"
+            android:layoutDirection="ltr"
+            android:padding="5dp">
+            <ImageView
+                android:id="@+id/avatar_trx"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:tooltipText="@string/tron"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/circle"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/ic_trx" />
+
+            <TextView
+                android:id="@+id/address_trx_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/avatar_trx"
+                android:layout_toLeftOf="@+id/address_trx_copy"
+                android:gravity="left"
+                android:layout_centerVertical="true"
+                android:text="@string/address_trx"
+                android:textColor="@color/textColor"
+                android:textDirection="ltr"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:textSize="16sp" />
+
+            <ImageButton
+                android:id="@+id/address_trx_copy"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:backgroundTint="@color/btnColor"
+                android:src="@drawable/ic_content_copy_white_24dp"
+                android:padding="10dp"
+                app:tooltipText="@string/copy1"
+                android:background="@drawable/circle"
+                android:textColor="@color/primaryTextColor"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentRight="true"
+                />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</ScrollView>

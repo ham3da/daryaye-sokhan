@@ -33,38 +33,42 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.xmlpull.v1.XmlPullParserException;
+import org.json.JSONArray;
+import org.json.JSONException;
 
-import java.io.ByteArrayInputStream;
+
 import java.io.File;
 
 import java.io.IOException;
-import java.io.InputStream;
 
-import java.nio.charset.StandardCharsets;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import ir.ham3da.darya.adaptors.AdaptorAudio;
 
 import ir.ham3da.darya.adaptors.ScheduleAudio;
-import ir.ham3da.darya.ganjoor.GDBInfo;
+
 import ir.ham3da.darya.ganjoor.GanjoorDbBrowser;
 import ir.ham3da.darya.ganjoor.GanjoorPoet;
 import ir.ham3da.darya.utility.AppSettings;
-import ir.ham3da.darya.utility.AudioXmlParser;
+
 
 
 import ir.ham3da.darya.ganjoor.GanjoorAudioInfo;
-import ir.ham3da.darya.utility.DownloadFromUrl;
 import ir.ham3da.darya.utility.MyDialogs;
 import ir.ham3da.darya.utility.PoemAudio;
 import ir.ham3da.darya.utility.SetLanguage;
 import ir.ham3da.darya.utility.UtilFunctions;
 
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.downloader.Error;
 
 import com.downloader.OnDownloadListener;
@@ -75,6 +79,7 @@ import com.downloader.PRDownloaderConfig;
 import com.downloader.request.DownloadRequest;
 import com.downloader.request.DownloadRequestBuilder;
 
+import ir.ham3da.darya.utility.EndlessRecyclerViewScrollListener;
 
 public class ActivityAudioCollection extends AppCompatActivity
 {
@@ -87,7 +92,8 @@ public class ActivityAudioCollection extends AppCompatActivity
     public AdaptorAudio adaptorAudio;
     List<PoemAudio> existAudioList;
     List<GanjoorAudioInfo> listXmlItems;
-    int poem_id, poet_id, dl_type, cate_id;
+    int poem_id, poet_id, dl_type, cate_id, page_number;
+    int page_size = 100;
     boolean UseCaches;
     TextView no_item_textview;
     String dl_path;
@@ -105,6 +111,8 @@ public class ActivityAudioCollection extends AppCompatActivity
     String mDataSource = "";
 
     private MediaPlayer mPlayer;
+
+    private EndlessRecyclerViewScrollListener scrollListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -141,15 +149,32 @@ public class ActivityAudioCollection extends AppCompatActivity
         poet_id = getIntent().getIntExtra("poet_id", -1);
         cate_id = getIntent().getIntExtra("cate_id", -1);
         dl_type = getIntent().getIntExtra("dl_type", 1);
+        page_number = 0;
 
         UseCaches = (dl_type == GanjoorAudioInfo.DOWNLOAD_POET_POEMS || dl_type == GanjoorAudioInfo.DOWNLOAD_CATE_POEMS);
 
         simpleSwipeRefreshLayout = findViewById(R.id.simpleSwipeRefreshLayout);
 
 
-        simpleSwipeRefreshLayout.setOnRefreshListener(this::loadItems);
+        simpleSwipeRefreshLayout.setOnRefreshListener(this::reloadItems);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recycler_audio.setLayoutManager(linearLayoutManager);
+
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager)
+        {
+            @Override
+            public void onLoadMore(final int page, int totalItemsCount, RecyclerView view)
+            {
+                //Log.e("onLoadMore", "onLoadMore: " + totalItemsCount);
+                if (totalItemsCount >= page_size)
+                {
+                    loadItems();
+                }
+
+            }
+        };
+        recycler_audio.addOnScrollListener(scrollListener);
+
         if (UtilFunctions.isNetworkConnected(this))
         {
             loadItems();
@@ -167,6 +192,13 @@ public class ActivityAudioCollection extends AppCompatActivity
         PRDownloader.initialize(getApplicationContext(), config);
     }
 
+    private void reloadItems()
+    {
+        this.listXmlItems.clear();
+        adaptorAudio.notifyDataSetChanged(); // or notifyItemRangeRemoved
+        scrollListener.resetState();
+        loadItems();
+    }
     private void downloadMarkedAudio()
     {
         scheduleAudioList = new ArrayList<>();
@@ -244,13 +276,11 @@ public class ActivityAudioCollection extends AppCompatActivity
     {
         try
         {
-
             if (audioManager == null)
             {
                 audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
                 requestAudioFocus(afChangeListener, AudioManager.STREAM_VOICE_CALL, AudioManager.AUDIOFOCUS_GAIN);
             }
-
         } catch (Exception ex)
         {
             Log.e(TAG, "SetupAudio: " + ex.getMessage());
@@ -259,13 +289,10 @@ public class ActivityAudioCollection extends AppCompatActivity
 
     public void playAudioThread(GanjoorAudioInfo audioInfo)
     {
-
         Toast.makeText(this, R.string.please_wait, Toast.LENGTH_SHORT).show();
         Runnable thread = () -> playAudio(audioInfo);
         Thread t = new Thread(thread);
         t.start();
-
-
     }
 
     public void playAudio(GanjoorAudioInfo audioInfo)
@@ -281,7 +308,7 @@ public class ActivityAudioCollection extends AppCompatActivity
         }
         else
         {
-            filePath = UtilFunctions.convertLinkHttp(audioInfo.audio_mp3) ;
+            filePath = audioInfo.audio_mp3;
         }
 
         try
@@ -298,11 +325,10 @@ public class ActivityAudioCollection extends AppCompatActivity
                 mDataSource = filePath;
                 mPlayer.prepare();
                 mPlayer.setOnPreparedListener(mp -> {
-
                 });
                 mPlayer.setOnErrorListener((mp, what, extra) ->
                 {
-                    Log.e(TAG, "setOnErrorListener, extra: " + extra+" what: "+what);
+                    Log.e(TAG, "setOnErrorListener, extra: " + extra + " what: " + what);
                     try
                     {
                         mPlayer.stop();
@@ -387,7 +413,6 @@ public class ActivityAudioCollection extends AppCompatActivity
             }
 
 
-
             cancel_downloads.setOnClickListener(v -> {
                 PRDownloader.cancelAll();
                 download_RelativeLayout.setVisibility(View.GONE);
@@ -401,7 +426,7 @@ public class ActivityAudioCollection extends AppCompatActivity
                 String fileName = scheduleAudio._FileName;
                 String des = String.format(Locale.getDefault(), "%d", sumDownloaded) + " / " + String.format(Locale.getDefault(), "%d", total_downloads);
 
-                String dl_audio_ulr = UtilFunctions.convertLinkHttp(scheduleAudio._URL);
+                String dl_audio_ulr = scheduleAudio._URL;
                 DownloadRequestBuilder downloadRequestBuilder = PRDownloader.download(dl_audio_ulr, dl_path, scheduleAudio._FileName);
                 int finalSum = sumDownloaded;
                 DownloadRequest downloadRequest = downloadRequestBuilder.build();
@@ -451,7 +476,7 @@ public class ActivityAudioCollection extends AppCompatActivity
                                 Log.e("DownloadAudioTask", "ResponseCode: " +
                                         error.getResponseCode() + ", get ServerError Message: " + error.getServerErrorMessage() +
                                         ", get Connection Exception:" + error.getConnectionException().getMessage());
-                                Log.e(TAG, "dl_audio_ulr: "+dl_audio_ulr );
+                                Log.e(TAG, "dl_audio_ulr: " + dl_audio_ulr);
                                 DownloadFailToast();
                                 PRDownloader.cancel(scheduleAudio._Pos);
                                 download_RelativeLayout.setVisibility(View.GONE);
@@ -631,14 +656,22 @@ public class ActivityAudioCollection extends AppCompatActivity
 
     public String getAudioListUrl(int type)
     {
-        if (type == GanjoorAudioInfo.DOWNLOAD_POEM)
+        String url = "";
+        switch (type)
         {
-            return "http://a.ganjoor.net/?p=" + this.poem_id;
+            case GanjoorAudioInfo.DOWNLOAD_POEM:
+                url = "https://ganjgah.ir/api/ganjoor/poem/" + this.poem_id + "/recitations";
+                break;
+            case GanjoorAudioInfo.DOWNLOAD_POET_POEMS:
+
+                url = "https://ganjgah.ir/api/audio/published?PageNumber=" + this.page_number + "&PageSize=" + this.page_size + "&poetId=" + this.poet_id + "&catId=0";
+                break;
+
+            case GanjoorAudioInfo.DOWNLOAD_CATE_POEMS:
+                url = "https://ganjgah.ir/api/audio/published?PageNumber=" + this.page_number + "&PageSize=" + this.page_size + "&poetId=0&catId=" + this.cate_id;
+                break;
         }
-        else
-        {
-            return "http://a.ganjoor.net";
-        }
+        return url;
     }
 
 
@@ -650,8 +683,27 @@ public class ActivityAudioCollection extends AppCompatActivity
             existAudioList = _DbBrowser.getPoemAudios(poem_id);
         }
 
-        DownloadXmlTask downloadXmlTask = new DownloadXmlTask(getAudioListUrl(dl_type));
-        downloadXmlTask.execute();
+        this.page_number = calc_page_num();
+        Log.e(TAG, " this.page_number: "+ this.page_number);
+        downloadJsonPoemAudios(getAudioListUrl(dl_type));
+    }
+
+    private int calc_page_num()
+    {
+        if(can_load_new_page())
+        {
+            double newPage = ((double) listXmlItems.size()  / page_size) +1;
+            int newPage2 = (int) Math.ceil(newPage);
+            return newPage2;
+        }
+        else
+        {
+            return  1;
+        }
+    }
+    private boolean can_load_new_page()
+    {
+        return (listXmlItems != null && listXmlItems.size() >= page_size);
     }
 
     /**
@@ -670,122 +722,194 @@ public class ActivityAudioCollection extends AppCompatActivity
                 if (PoemAudio1.poemID == ganjoorAudioInfo.audio_post_ID && ganjoorAudioInfo.audio_fchecksum.equals(PoemAudio1.fchksum))
                 {
                     result = true;
-                    break;
+                     break;
                 }
+
+            }
+            if(!result)
+            {
+                reAddSoundData(ganjoorAudioInfo);
             }
         }
         else
         {
             result = _DbBrowser.checkAudioFileExist(ganjoorAudioInfo.audio_fchecksum, dl_path);
+            if(result)
+            {
+                reAddSoundData(ganjoorAudioInfo);
+            }
         }
 
         return result;
     }
 
 
-    private Integer SetLists(String XMLString)
+    private void reAddSoundData(GanjoorAudioInfo ganjoorAudioInfo)
     {
-        int res = 0;
-        if (XMLString != null && !XMLString.isEmpty())
+        if(!_DbBrowser.IsSoundExist(ganjoorAudioInfo.audio_fchecksum))
         {
-            // String dl_path = AppSettings.getAudioDownloadPath(this);
-            InputStream InputStream1 = new ByteArrayInputStream(XMLString.getBytes(StandardCharsets.UTF_8));
-            AudioXmlParser audioXmlParser = new AudioXmlParser(this);
-            List<GanjoorAudioInfo> newAudioList = new ArrayList<>();
-            List<GanjoorAudioInfo> newAudioList2 = new ArrayList<>();
+            _DbBrowser.addToSound(ganjoorAudioInfo);
+        }
+    }
 
-            try
+
+
+    private void downloadJsonPoemAudios(String jsonUrl)
+    {
+
+        if (!simpleSwipeRefreshLayout.isRefreshing())
+        {
+            simpleSwipeRefreshLayout.setRefreshing(true);
+        }
+
+        StringRequest request = new StringRequest(jsonUrl, string ->
+        {
+            parseAudioListJsonData(string);
+            completedJsonDownload(1);
+        }, volleyError -> {
+            //dialog.dismiss();
+            if (simpleSwipeRefreshLayout.isRefreshing())
             {
-                newAudioList = audioXmlParser.parseXML(InputStream1);
-                int get_poet_id, get_cate_id;
-                int new_index = 0;
+                simpleSwipeRefreshLayout.setRefreshing(false);
+            }
+            Toast.makeText(getBaseContext(), getString(R.string.err_list_audio), Toast.LENGTH_SHORT).show();
+        });
 
-                for (GanjoorAudioInfo audioInfo : newAudioList)
+
+        RequestQueue rQueue = Volley.newRequestQueue(ActivityAudioCollection.this);
+        rQueue.add(request);
+    }
+
+    private void parseAudioListJsonData(String JsonString)
+    {
+        try
+        {
+            JSONArray jsonArray = new JSONArray(JsonString);
+            if(jsonArray.length() > 0)
+            {
+                List<GanjoorAudioInfo> ganjoorAudioInfos1 = new ArrayList<>();
+                int new_index = 0;
+                if(listXmlItems != null)
                 {
-                    // String dl_fileName = URLUtil.guessFileName(audioInfo.audio_mp3, null, null);
+                    new_index =  listXmlItems.size();
+                }
+
+                for (int i = 0; i < jsonArray.length(); i++)
+                {
+                    int audio_post_ID = jsonArray.getJSONObject(i).getInt("poemId");
+                    int audio_order = jsonArray.getJSONObject(i).getInt("id");
+
+                    String audio_xml = jsonArray.getJSONObject(i).getString("xmlText");
+
+                    String audio_mp3 = jsonArray.getJSONObject(i).getString("mp3Url");
+                    String audio_title = jsonArray.getJSONObject(i).getString("audioTitle");
+                    String audio_artist = jsonArray.getJSONObject(i).getString("audioArtist");
+                    String audio_artist_url = jsonArray.getJSONObject(i).getString("audioArtistUrl");
+                    String audio_src = jsonArray.getJSONObject(i).getString("audioSrc");
+                    String audio_src_url = jsonArray.getJSONObject(i).getString("audioSrcUrl");
+                    String audio_guid = jsonArray.getJSONObject(i).getString("legacyAudioGuid");
+                    String audio_fchecksum = jsonArray.getJSONObject(i).getString("mp3FileCheckSum");
+
+                    int audio_mp3bsize = jsonArray.getJSONObject(i).getInt("mp3SizeInBytes");
+                    int audio_oggbsize = 0;
+
+                    Date audio_date = null;
+
+                    String audio_date_str = jsonArray.getJSONObject(i).getString("publishDate");
+                    SimpleDateFormat sfd = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+                    try
+                    {
+                        audio_date = sfd.parse(audio_date_str);
+                    } catch (ParseException e)
+                    {
+                        e.printStackTrace();
+                    }
+
+                    new_index++;
+                    GanjoorAudioInfo ganjoorAudioInfo1 = new GanjoorAudioInfo(audio_post_ID, audio_order,
+                            audio_xml,null, audio_mp3, audio_title, audio_artist,
+                            audio_artist_url, audio_src, audio_src_url, audio_guid,
+                            audio_fchecksum, audio_mp3bsize, audio_oggbsize, audio_date, false,
+                            new_index, false);
+
+                    int get_poet_id, get_cate_id;
+
                     switch (dl_type)
                     {
                         case GanjoorAudioInfo.DOWNLOAD_POET_POEMS:
-                            get_poet_id = _DbBrowser.getPoemPoetId(audioInfo.audio_post_ID);
+                            get_poet_id = _DbBrowser.getPoemPoetId(audio_post_ID);
                             if (get_poet_id == poet_id)
                             {
-                                new_index++;
-                                audioInfo.Index = new_index;
-                                audioInfo.exist = checkExistAudio(audioInfo);
-                                newAudioList2.add(audioInfo);
+                                ganjoorAudioInfo1.exist = checkExistAudio(ganjoorAudioInfo1);
+                                ganjoorAudioInfos1.add(ganjoorAudioInfo1);
                             }
                             break;
 
                         case GanjoorAudioInfo.DOWNLOAD_CATE_POEMS:
-                            get_cate_id = _DbBrowser.getPoemCateId(audioInfo.audio_post_ID);
+                            get_cate_id = _DbBrowser.getPoemCateId(audio_post_ID);
                             if (get_cate_id == cate_id)
                             {
-                                new_index++;
-                                audioInfo.Index = new_index;
-                                audioInfo.exist = checkExistAudio(audioInfo);
-                                newAudioList2.add(audioInfo);
+                                ganjoorAudioInfo1.exist = checkExistAudio(ganjoorAudioInfo1);
+                                ganjoorAudioInfos1.add(ganjoorAudioInfo1);
                             }
                             break;
                         case GanjoorAudioInfo.DOWNLOAD_POEM:
                         default:
-                            audioInfo.exist = checkExistAudio(audioInfo);
-                            newAudioList2.add(audioInfo);
+                            ganjoorAudioInfo1.exist = checkExistAudio(ganjoorAudioInfo1);
+                            ganjoorAudioInfos1.add(ganjoorAudioInfo1);
                     }
-
                 }
 
-                if (newAudioList2.size() > 0)
-                {
-                    no_item_textview.setVisibility(View.GONE);
-                    listXmlItems = newAudioList2;
-                    if (adaptorAudio != null)
-                    {
-                        //adaptorAudio.notifyDataSetChanged();
-                        res = 2;
-                    }
-                    else
-                    {
-                        GanjoorPoet ganjoorPoet = null;
-                        if (dl_type == GanjoorAudioInfo.DOWNLOAD_POET_POEMS)
+
+                        no_item_textview.setVisibility(View.GONE);
+
+                        if (listXmlItems == null)
                         {
-                            ganjoorPoet = _DbBrowser.getPoet(poet_id);
+                            Log.e(TAG, "parseAudioListJsonData: listXmlItems is null");
+                            listXmlItems = ganjoorAudioInfos1;
+                            GanjoorPoet ganjoorPoet = null;
+                            if (dl_type == GanjoorAudioInfo.DOWNLOAD_POET_POEMS)
+                            {
+                                ganjoorPoet = _DbBrowser.getPoet(poet_id);
+                            }
+                            adaptorAudio = new AdaptorAudio(listXmlItems, this, dl_type, ganjoorPoet);
+                            recycler_audio.setAdapter(adaptorAudio);
+                            recycler_audio.scrollToPosition(0);
+                        }
+                        else
+                        {
+                            Log.e(TAG, "parseAudioListJsonData: listXmlItems is not null");
+                            listXmlItems.addAll(ganjoorAudioInfos1);
+                            this.adaptorAudio.notifyItemRangeInserted(this.listXmlItems.size(), this.listXmlItems.size() - 1);
                         }
 
 
-                        adaptorAudio = new AdaptorAudio(listXmlItems, this, dl_type, ganjoorPoet);
-                        //recycler_audio.setAdapter(adaptorAudio);
-                        res = 1;
-                    }
 
-                    //recycler_audio.scrollToPosition(0);
-
-                }
-                else
-                {
-                    no_item_textview.setVisibility(View.VISIBLE);
-                    Toast.makeText(this, getString(R.string.nothing_found), Toast.LENGTH_SHORT).show();
-                    res = 0;
-                }
-
-            } catch (IOException e)
-            {
-
-                Log.e("IOException", "parseXML err: " + e.getMessage());
-                res = -1;
-
-            } catch (XmlPullParserException e)
-            {
-
-                Log.e("XmlPullParserException", "parseXML err: " + e.getMessage());
-                res = -2;
-            } catch (Exception ex)
-            {
-                Log.e("Exception", "parseXML err: " + ex.getMessage());
-                res = -3;
+            }
+            else{
+                Toast.makeText(this, getString(R.string.nothing_found), Toast.LENGTH_SHORT).show();
             }
 
+
+        } catch (JSONException e)
+        {
+            e.printStackTrace();
+            Toast.makeText(getBaseContext(), getString(R.string.err_list_audio), Toast.LENGTH_SHORT).show();
+
+
         }
-        return res;
+
+
+    }
+
+    protected void completedJsonDownload(Integer result)
+    {
+        Log.e(TAG, "completedJsonDownload: " + result);
+        if (simpleSwipeRefreshLayout.isRefreshing())
+        {
+            simpleSwipeRefreshLayout.setRefreshing(false);
+        }
+
     }
 
 
@@ -886,95 +1010,7 @@ public class ActivityAudioCollection extends AppCompatActivity
 
 
         }
-    }
 
-    private class DownloadXmlTask
-    {
-
-        String[] Urls;
-
-        public DownloadXmlTask(String... urls)
-        {
-            Urls = urls;
-        }
-
-        public void execute()
-        {
-
-            if (adaptorAudio != null)
-            {
-                adaptorAudio.notifyDataSetChanged();
-            }
-
-            if (!simpleSwipeRefreshLayout.isRefreshing())
-            {
-                simpleSwipeRefreshLayout.setRefreshing(true);
-            }
-
-            Thread copyingThread = new Thread(this::doInBackground);
-            copyingThread.start();
-        }
-
-
-        protected void doInBackground()
-        {
-            try
-            {
-                String res = DownloadFromUrl.downloadDataFromUrl(Urls[0], UseCaches);
-                int res2 = SetLists(res);
-                publishProgress(100);
-                completed(1);
-            } catch (Exception ex)
-            {
-                ex.printStackTrace();
-                Log.e("xml_Dl", "doInBackground: " + ex.getMessage());
-                completed(-1);
-
-            }
-        }
-
-
-        protected void publishProgress(Integer value)
-        {
-            //
-
-        }
-
-        /**
-         * After completing background task
-         **/
-
-        protected void completed(Integer result)
-        {
-            Log.e(TAG, "completed: " + result);
-            runOnUiThread(() -> {
-                if (simpleSwipeRefreshLayout.isRefreshing())
-                {
-                    simpleSwipeRefreshLayout.setRefreshing(false);
-                }
-
-                if (result == 1)
-                {
-                    recycler_audio.setAdapter(adaptorAudio);
-                    recycler_audio.scrollToPosition(0);
-                }
-                else if (result == 2)
-                {
-                    adaptorAudio.notifyDataSetChanged();
-                    recycler_audio.scrollToPosition(0);
-                }
-                else if (result == -1)
-                {
-                    Toast.makeText(getBaseContext(), getString(R.string.err_list_audio), Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-                    Toast.makeText(getBaseContext(), getString(R.string.nothing_found), Toast.LENGTH_SHORT).show();
-                }
-
-            });
-
-        }
     }
 
 }

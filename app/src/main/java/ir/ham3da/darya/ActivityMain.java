@@ -1,31 +1,33 @@
 package ir.ham3da.darya;
 
 import android.annotation.SuppressLint;
-import android.app.AlarmManager;
+
+import android.app.Activity;
 import android.app.Dialog;
-import android.app.PendingIntent;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.Uri;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.SystemClock;
+
+import android.speech.RecognizerIntent;
 import android.util.Log;
-import android.view.LayoutInflater;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import android.view.Window;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -38,26 +40,16 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.google.android.gms.ads.AdError;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.FullScreenContentCallback;
-import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.interstitial.InterstitialAd;
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.iid.FirebaseInstanceId;
 
-import java.util.Calendar;
 import java.util.Locale;
-import java.util.Objects;
 
-import ir.ham3da.darya.ganjoor.GanjoorAudioInfo;
 import ir.ham3da.darya.ganjoor.GanjoorDbBrowser;
 import ir.ham3da.darya.ganjoor.GanjoorPoem;
 import ir.ham3da.darya.admob.MainAdMobFragment;
-import ir.ham3da.darya.notification.AlarmNotificationReceiver;
+
 import ir.ham3da.darya.notification.PoemService;
 import ir.ham3da.darya.ui.main.MainFavoritesFragment;
 import ir.ham3da.darya.ui.main.MainPoetsFragment;
@@ -72,6 +64,7 @@ import ir.ham3da.darya.utility.UpdateApp;
 import ir.ham3da.darya.utility.UtilFunctions;
 
 
+
 public class ActivityMain extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
 {
@@ -83,9 +76,12 @@ public class ActivityMain extends AppCompatActivity
     String TAG = "ActivityMain";
     DrawerLayout drawer;
     int currentLocalIndex;
+    int rnd_poem_id;
+    String findStr;
+    int vOrder;
 
-    // boolean doLoading;
-    //Handler progressBarHandler = new Handler();
+
+
 
     @Override
     protected void attachBaseContext(Context newBase)
@@ -107,11 +103,6 @@ public class ActivityMain extends AppCompatActivity
         super.applyOverrideConfiguration(overrideConfiguration);
     }
 
-    int rnd_poem_id;
-    String findStr;
-    int vOrder;
-
-    InterstitialAd mInterstitialAd;
 
     @Override
     protected void onNewIntent(Intent intent)
@@ -133,6 +124,7 @@ public class ActivityMain extends AppCompatActivity
             showPoem(rnd_poem_id, findStr, vOrder);
         }
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -188,11 +180,13 @@ public class ActivityMain extends AppCompatActivity
         UpdateApp update = new UpdateApp(this);
         update.initUpdate();
 
+
     }
 
     public void LoadDBFirstTime(CustomProgress dlg1)
     {
         GanjoorDbBrowser GanjoorDbBrowser1 = new GanjoorDbBrowser(this);
+        GanjoorDbBrowser1.AutoVacuum();
         dlg1.dismiss();
         loadPager();
     }
@@ -259,6 +253,10 @@ public class ActivityMain extends AppCompatActivity
         }
 
 
+
+
+
+
     }
 
     public void showNotify()
@@ -283,15 +281,8 @@ public class ActivityMain extends AppCompatActivity
 
         if (!notifyed)
         {
-
             if (getIntent().getExtras() != null)
             {
-
-//                for (String key : getIntent().getExtras().keySet())
-//                {
-//                    Log.e(TAG, key + ": " + getIntent().getExtras().get(key));
-//                }
-
                 if (getIntent().getExtras().containsKey("Package") && getIntent().getExtras().getString("Package", "").equals(getPackageName()))
                 {
 
@@ -317,22 +308,29 @@ public class ActivityMain extends AppCompatActivity
         }
         else
         {
-            App globalVariable = (App) getApplicationContext();
-
-            if (globalVariable.getAdviewd())
+            if (UtilFunctions.isGooglePlayVersion())
             {
-                globalVariable.setAdviewd(false);
                 super.onBackPressed();
             }
             else
             {
-                if (UtilFunctions.isNetworkConnected(this))
+                App globalVariable = (App) getApplicationContext();
+
+                if (globalVariable.getAdviewd())
                 {
-                    askExitAd();
+                    globalVariable.setAdviewd(false);
+                    super.onBackPressed();
                 }
                 else
                 {
-                    super.onBackPressed();
+                    if (UtilFunctions.isNetworkConnected(this))
+                    {
+                        askExitAd();
+                    }
+                    else
+                    {
+                        super.onBackPressed();
+                    }
                 }
             }
 
@@ -368,7 +366,6 @@ public class ActivityMain extends AppCompatActivity
                 break;
 
             case R.id.action_random_poem:
-
                 try
                 {
 
@@ -509,10 +506,6 @@ public class ActivityMain extends AppCompatActivity
                     MyDialogs1.showPolicy();
                     break;
 
-//                case R.id.nav_donate:
-//                    UtilFunctions1.openUrl("https://ham3da.ir/darya-donate/");
-//                    break;
-
 
                 case R.id.nav_poem_game:
                     intent = new Intent(ActivityMain.this, ActivityPuzzle.class);
@@ -535,15 +528,6 @@ public class ActivityMain extends AppCompatActivity
         }
         return true;
 
-    }
-
-    public void restartApp()
-    {
-        Intent intent = new Intent(getBaseContext(), ActivityMain.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
     }
 
 
@@ -588,84 +572,21 @@ public class ActivityMain extends AppCompatActivity
 
     }
 
-
-
-
-    private void AdmobInterstitialInit(boolean requestShow)
+    @Override
+    protected void onStart()
     {
-        FullScreenContentCallback fullScreenContentCallback = new FullScreenContentCallback()
-        {
-            @Override
-            public void onAdDismissedFullScreenContent()
-            {
-                mInterstitialAd = null;
-                Toast.makeText(getBaseContext(), getString(R.string.thanks_a_lot), Toast.LENGTH_SHORT).show();
-                App globalVariable = (App) getApplicationContext();
-                globalVariable.setAdviewd(true);
-                finish();
-
-            }
-
-
-            @Override
-            public void onAdFailedToShowFullScreenContent(AdError adError)
-            {
-                Log.e(TAG, "onAdFailedToShowFullScreenContent: " + adError.getMessage());
-                super.onAdFailedToShowFullScreenContent(adError);
-                Toast.makeText(ActivityMain.this, getString(R.string.admob_not_load), Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        };
-
-        String mAdunitID = getString(R.string.interstitial_ad_unit_id);
-
-        InterstitialAd.load(
-                this,
-                mAdunitID,
-                new AdRequest.Builder().build(),
-                new InterstitialAdLoadCallback()
-                {
-
-                    @Override
-                    public void onAdLoaded(@NonNull InterstitialAd ad)
-                    {
-                        if(progress_bar_dlg.getVisibility() == View.VISIBLE)
-                        {
-                            progress_bar_dlg.setVisibility(View.GONE);
-                        }
-
-                        mInterstitialAd = ad;
-                        mInterstitialAd.setFullScreenContentCallback(fullScreenContentCallback);
-                        if (requestShow)
-                        {
-                            mInterstitialAd.show(ActivityMain.this);
-                        }
-                    }
-
-                    @Override
-                    public void onAdFailedToLoad(@NonNull LoadAdError adError)
-                    {
-                        Log.e(TAG, "onAdFailedToLoad: " + adError.getMessage());
-                        progress_bar_dlg.setVisibility(View.GONE);
-                        Toast.makeText(ActivityMain.this, getString(R.string.admob_not_load), Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                });
-
+        super.onStart();
     }
 
-
-    public void displayInterstitial()
+    public void displayCustomAdWeb()
     {
-        if (mInterstitialAd != null)
-        {
-            mInterstitialAd.show(this);
-        }
-        else
-        {
-            AdmobInterstitialInit(true);
-        }
+        Intent intent = new Intent(this, ActivityWeb.class);
+        intent.putExtra("title", getString(R.string.our_products));
+        intent.putExtra("fromUrl", true);
+        intent.putExtra("url", getString(R.string.our_products_url));
 
+        startActivity(intent);
+        Bungee.card(this);
     }
 
 
@@ -679,11 +600,7 @@ public class ActivityMain extends AppCompatActivity
         dialog.setCancelable(false);
         dialog.setTitle(R.string.easy_donating);
         dialog.setMessage(R.string.ad_exit_text);
-        dialog.setPositiveButton(R.string.view_admob, (dialog1, id) -> {
-            progress_bar_dlg.setVisibility(View.VISIBLE);
-            displayInterstitial();
-
-        }).setNegativeButton(R.string.close, (dialog12, which) -> finish());
+        dialog.setPositiveButton(R.string.view_admob, (dialog1, id) -> displayCustomAdWeb()).setNegativeButton(R.string.close, (dialog12, which) -> finish());
 
         final AlertDialog alert = dialog.create();
         alert.show();

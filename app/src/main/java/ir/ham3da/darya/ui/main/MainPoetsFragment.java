@@ -14,7 +14,6 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import ir.ham3da.darya.App;
 import ir.ham3da.darya.adaptors.AdapterPoetsExpand;
 import ir.ham3da.darya.ganjoor.GanjoorDbBrowser;
@@ -37,6 +36,15 @@ public class MainPoetsFragment extends Fragment {
     int poetCounts = 0;
 
     public MainPoetsFragment() {
+
+    }
+
+    @Override
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState)
+    {
+
+
+        super.onCreate(savedInstanceState);
 
     }
 

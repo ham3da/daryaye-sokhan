@@ -1,5 +1,7 @@
 package ir.ham3da.darya;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -7,8 +9,11 @@ import android.os.Bundle;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+//import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -27,7 +32,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
+//import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,9 +71,11 @@ public class ActivitySearch extends AppCompatActivity
 
     private EndlessRecyclerViewScrollListener scrollListener;
     InputMethodManager inputManager;
-    private static final int REQUEST_CODE = 1001;
+//    private static final int REQUEST_CODE = 1001;
     boolean new_status;
     String findStr;
+
+    ActivityResultLauncher<Intent> spActivityResultLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -140,10 +147,12 @@ public class ActivitySearch extends AppCompatActivity
         {
             if ("text/plain".equals(type))
             {
+                Log.e("getExtras", "getExtras" );
                 String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+
                 if (sharedText != null)
                 {
-                    Log.e(TAG, "Search: ACTION_SEND" );
+                   // Log.e(TAG, "Search: ACTION_SEND" + String.valueOf(intent.getExtras()));
                     editTextSearch.setText(sharedText);
                     onClickFindBtn(editTextSearch);
                 }
@@ -159,8 +168,36 @@ public class ActivitySearch extends AppCompatActivity
             return false;
         });
 
+        spActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // There are no request codes
+                        Intent data = result.getData();
+
+                            if (null != data)
+                            {
+                                ArrayList<String> result2 = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                                assert result2 != null;
+                                String resStr = result2.get(0);
+                                if (!resStr.trim().isEmpty())
+                                {
+                                    strToFind = resStr.trim();
+                                    editTextSearch.setText(strToFind);
+                                    searchForPhraseInDB(strToFind.trim(), true);
+                                    Log.e(TAG, "onActivityResult: search For Phrase" );
+                                }
+
+                            }
+
+                    }
+                });
+
+
 
     }
+
+
 
     @Override
     protected void attachBaseContext(Context newBase)
@@ -205,6 +242,7 @@ public class ActivitySearch extends AppCompatActivity
     }
 
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item)
     {
@@ -246,37 +284,12 @@ public class ActivitySearch extends AppCompatActivity
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         try
         {
-            startActivityForResult(intent, REQUEST_CODE);
-        } catch (ActivityNotFoundException ignored)
+            spActivityResultLauncher.launch(intent);
+        } catch (ActivityNotFoundException ex)
         {
-
+            Log.d(TAG, "voiceButton: "+ ex.getMessage());
         }
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_CODE)
-        {
-            if (resultCode == RESULT_OK && null != data)
-            {
-                ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                assert result != null;
-                String resStr = result.get(0);
-                if (!resStr.trim().isEmpty())
-                {
-                    strToFind = resStr.trim();
-                    editTextSearch.setText(strToFind);
-                    searchForPhraseInDB(strToFind.trim(), true);
-                    Log.e(TAG, "onActivityResult: search For Phrase" );
-                }
-
-            }
-        }
-    }
-
 
     /**
      * @param findSTR2    searching phrase

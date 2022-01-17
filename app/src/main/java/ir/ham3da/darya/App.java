@@ -17,9 +17,25 @@ public class App extends Application
 
 
     private boolean updatePoetList, updateFavList, Adviewd = false, updateRandPoemNotify;
-    private FirebaseAnalytics mFirebaseAnalytics;
+    private int loginMethod = 1;
 
+    /**
+     * get Login Method
+     * @return int 1 => Login as Guest, 2 => login with google , 0 => not set
+     */
+    public int getLoginMethod()
+    {
+        return this.loginMethod;
+    }
 
+    /**
+     * set Login Method
+     * @param loginMethodParam int 1 => Login as Guest, 2 => login with google
+     */
+    public void setLoginMethod(int loginMethodParam)
+    {
+        this.loginMethod = loginMethodParam;
+    }
 
     public boolean getUpdateRandPoemNotify()
     {
@@ -71,7 +87,7 @@ public class App extends Application
         //SetLanguage.wrap(this);
         super.onCreate();
         AppSettings.Init(this);
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
     }
 }

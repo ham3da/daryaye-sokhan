@@ -94,7 +94,15 @@ public class PoemService extends Service
         calendar.set(Calendar.MINUTE, Integer.parseInt(time[1]));
 
         myIntent = new Intent(this, AlarmNotificationReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, 0);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S)
+        {
+            pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, PendingIntent.FLAG_IMMUTABLE);
+        }
+        else
+        {
+            pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, 0);
+        }
+
 
         manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 

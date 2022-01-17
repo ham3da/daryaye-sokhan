@@ -29,7 +29,7 @@ public class UpdateApp
     public void initUpdate()
     {
 
-        if(UtilFunctions.getAppStoreCode() == VarTypes.GOOGLE_PLAY_VER)
+        if(UtilFunctions.isGooglePlayVersion())
         {
             checkGooglePlayForUpdate();
         }

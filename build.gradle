@@ -2,17 +2,17 @@ buildscript {
 
     repositories {
         google()
-        jcenter()
-        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+        mavenCentral()
 
+
+        maven { url 'https://maven.google.com' }
+        maven { url "https://jitpack.io" }
+        maven { url "https://dl.google.com" }
+        maven { url "https://jcenter.bintray.com" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.2'
-        classpath 'com.google.gms:google-services:4.3.5'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.21"
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        classpath 'com.android.tools.build:gradle:7.0.3'
+        classpath 'com.google.gms:google-services:4.3.10'
     }
 
 
@@ -21,9 +21,13 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
+
+        maven { url 'https://maven.google.com' }
         maven { url "https://jitpack.io" }
-        
+        maven { url "https://dl.google.com" }
+        maven { url "https://jcenter.bintray.com" }
+
     }
     tasks.withType(JavaCompile) {
         options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"

@@ -105,7 +105,9 @@ public class CopyDatabaseTask
     {
 
         //### Load Poets List
+
         ActivityMain activityMain = (ActivityMain) this.context1;
+
         activityMain.runOnUiThread(() -> activityMain.LoadDBFirstTime(customProgressDlg));
 
     }

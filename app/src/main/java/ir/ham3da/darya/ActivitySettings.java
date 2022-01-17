@@ -444,7 +444,7 @@ public class ActivitySettings extends AppCompatActivity
         new Thread(() -> {
             try
             {
-                GanjoorDbBrowser1.Vacum();
+                GanjoorDbBrowser1.Vacuum();
             } catch (Exception e)
             {
                 e.printStackTrace();

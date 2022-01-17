@@ -53,7 +53,7 @@ public class GanjoorDbBrowser
         AppSettings.Init(context);
         //mimicking .NET Path.Combine:
         String dbPath = AppSettings.getDatabasePath(context);
-        OpenDatbase(dbPath);
+        OpenDatabase(dbPath);
     }
 
     /**
@@ -62,8 +62,7 @@ public class GanjoorDbBrowser
      */
     public GanjoorDbBrowser(Context context, String dbPath)
     {
-
-        OpenDatbase(dbPath);
+       OpenDatabase(dbPath);
     }
 
 
@@ -85,7 +84,7 @@ public class GanjoorDbBrowser
      * @param dbPath Database path
      * @return true if succeeds
      */
-    public Boolean OpenDatbase(String dbPath)
+    public Boolean OpenDatabase(String dbPath)
     {
         _dbPath = dbPath;
         //if(!getDatabaseFileExists())
@@ -108,13 +107,13 @@ public class GanjoorDbBrowser
      * Reopen previous opened database Database
      * @return نتیجه
      */
-    public Boolean OpenDatbase()
+    public Boolean OpenDatabase()
     {
         if (_dbPath.isEmpty())
         {
             return false;
         }
-        return OpenDatbase(_dbPath);
+        return OpenDatabase(_dbPath);
     }
 
     /**
@@ -182,7 +181,7 @@ public class GanjoorDbBrowser
      */
     private Boolean CreateEmptyDB(SQLiteDatabase newDb)
     {
-        String sql = "CREATE TABLE [cat] ([id] INTEGER  PRIMARY KEY NOT NULL,[poet_id] INTEGER  NULL,[text] NVARCHAR(100)  NULL,[parent_id] INTEGER  NULL,[url] NVARCHAR(255)  NULL);";
+        String sql = "CREATE TABLE [cat] ([id] INTEGER  PRIMARY KEY NOT NULL, [poet_id] INTEGER  NULL, [text] NVARCHAR(100)  NULL, [parent_id] INTEGER  NULL, [url] NVARCHAR(255)  NULL);";
         try
         {
             newDb.execSQL(sql);
@@ -1367,6 +1366,22 @@ public class GanjoorDbBrowser
     }
 
 
+    public Boolean IsSoundExist(String fchksum)
+    {
+        if (getIsConnected())
+        {
+
+            String countQuery1 = "SELECT  Count(*) AS sndCount FROM poemsnd Where fchksum LIKE '" + fchksum+"'" ;
+
+            Cursor cursor = _db.rawQuery(countQuery1, null);
+            cursor.moveToFirst();
+            int count = cursor.getInt(0);
+            cursor.close();
+            return count != 0;
+        }
+        return false;
+    }
+
     public long addToSound(GanjoorAudioInfo audioInfo)
     {
 
@@ -1375,6 +1390,7 @@ public class GanjoorDbBrowser
 
             try
             {
+
                 String dl_path = AppSettings.getAudioDownloadPath(mContext);
                 // String fileName = URLUtil.guessFileName(audioInfo.audio_mp3, null, null);
                 ContentValues contentValues = new ContentValues();
@@ -1387,6 +1403,7 @@ public class GanjoorDbBrowser
                 contentValues.put("isuploaded", 0);
 
                 return _db.insert("poemsnd", null, contentValues);
+
 
             } catch (Exception ex)
             {
@@ -2130,7 +2147,7 @@ public class GanjoorDbBrowser
     /**
      * VACUUM database (optimize database)
      */
-    public void Vacum()
+    public void Vacuum()
     {
         if (getIsConnected())
         {
@@ -2138,6 +2155,23 @@ public class GanjoorDbBrowser
         }
 
     }
+
+    public void AutoVacuum()
+    {
+        if (getIsConnected())
+        {
+            try
+            {
+                _db.execSQL("PRAGMA auto_vacuum = 1;");
+            }
+            catch (Exception ex)
+            {
+                Log.e(TAG, "AutoVacuum: "+ ex.getMessage());
+            }
+        }
+
+    }
+
 
 
     /**

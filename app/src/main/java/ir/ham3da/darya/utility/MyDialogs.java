@@ -172,42 +172,12 @@ public class MyDialogs {
 
     public void showHelp() {
         try {
-            float textSize = AppSettings.getTextSize();
-            String background_color = "#ffffff";
-            String text_color = "#000";
-            String link_color = "blue";
-
-
-            if(AppSettings.checkThemeIsDark())
-            {
-                background_color = "#101d24";
-                text_color = "#fff";
-                link_color = "#FFC107";
-            }
 
             String title = this.context.getString(R.string.help);
-
             String CurrentLang = Locale.getDefault().getLanguage();
             String file_name = "help_" + CurrentLang + ".htm";
-            InputStream stream = context.getAssets().open(file_name);
-
-            int size = stream.available();
-            byte[] buffer = new byte[size];
-            stream.read(buffer);
-            stream.close();
-
-            String text = new String(buffer);
-
-            text = text.replace("$fontSize", textSize + "px");
-            text = text.replace("$background_color", background_color);
-            text = text.replace("$text_color", text_color );
-            text = text.replace("$link_color", link_color );
-
-            Intent intent = new Intent(context, ActivityWeb.class);
-            intent.putExtra("title", title);
-            intent.putExtra("text", text);
-            context.startActivity(intent);
-            Bungee.card(context);
+            String text = UtilFunctions.getHtmlFromAssetsFile(context, file_name);
+            UtilFunctions.showWebAct(context, title, text);
 
 
         } catch (Exception ex)
@@ -219,46 +189,12 @@ public class MyDialogs {
 
     public void showPolicy() {
         try {
-            float textSize = AppSettings.getTextSize();
+
             String title = this.context.getString(R.string.about);
-            String background_color = "#ffffff";
-            String text_color = "#000";
-            String link_color = "blue";
-
-
-            if(AppSettings.checkThemeIsDark())
-            {
-                background_color = "#101d24";
-                text_color = "#fff";
-                link_color = "#FFC107";
-            }
-
             String CurrentLang = Locale.getDefault().getLanguage();
             String file_name = "pr_po_" + CurrentLang + ".htm";
-            InputStream stream = context.getAssets().open(file_name);
-
-            int size = stream.available();
-            byte[] buffer = new byte[size];
-            stream.read(buffer);
-            stream.close();
-
-            String text = new String(buffer);
-
-            text = text.replace("$version", version);
-            text = text.replace("$name", context.getString(R.string.app_name));
-
-            text = text.replace("$fontSize", textSize + "px");
-            text = text.replace("$background_color", background_color);
-            text = text.replace("$text_color", text_color );
-            text = text.replace("$link_color", link_color );
-
-            Intent intent = new Intent(context, ActivityWeb.class);
-            intent.putExtra("title", title);
-            intent.putExtra("text", text);
-            context.startActivity(intent);
-            Bungee.card(context);
-
-            //ShowWebDialog(title, text, R.drawable.ic_security_black_24dp);
+            String text = UtilFunctions.getHtmlFromAssetsFile(context, file_name);
+            UtilFunctions.showWebAct(context, title, text);
 
         } catch (Exception ex) {
             Log.e("about", "showAbout: " + ex.getMessage());
@@ -270,47 +206,12 @@ public class MyDialogs {
     {
 
         try {
-            float textSize = AppSettings.getTextSize();
+
             String title = this.context.getString(R.string.about);
-            String background_color = "#ffffff";
-            String text_color = "#000";
-            String link_color = "blue";
-
-
-            if(AppSettings.checkThemeIsDark())
-            {
-                background_color = "#101d24";
-                text_color = "#fff";
-                link_color = "#FFC107";
-            }
-
             String CurrentLang = Locale.getDefault().getLanguage();
-
             String file_name = "about_" + CurrentLang + ".htm";
-            InputStream stream = context.getAssets().open(file_name);
-
-            int size = stream.available();
-            byte[] buffer = new byte[size];
-            stream.read(buffer);
-            stream.close();
-
-            String text = new String(buffer);
-
-            text = text.replace("$version", version);
-            text = text.replace("$name", context.getString(R.string.app_name));
-
-            text = text.replace("$fontSize", textSize + "px");
-            text = text.replace("$background_color", background_color);
-            text = text.replace("$text_color", text_color );
-            text = text.replace("$link_color", link_color );
-
-            Intent intent = new Intent(context, ActivityWeb.class);
-            intent.putExtra("title", title);
-            intent.putExtra("text", text);
-            context.startActivity(intent);
-            Bungee.card(context);
-
-            //ShowWebDialog(title, text, R.drawable.ic_info_24px);
+            String text = UtilFunctions.getHtmlFromAssetsFile(context, file_name);
+            UtilFunctions.showWebAct(context, title, text);
 
         } catch (Exception ex) {
             Log.e("about", "showAbout: " + ex.getMessage());

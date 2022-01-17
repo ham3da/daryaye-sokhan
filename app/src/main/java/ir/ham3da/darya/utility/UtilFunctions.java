@@ -51,6 +51,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import ir.ham3da.darya.ActivityWeb;
+import ir.ham3da.darya.BuildConfig;
+import ir.ham3da.darya.Bungee;
 import ir.ham3da.darya.ganjoor.GanjoorVerse;
 import ir.ham3da.darya.ganjoor.GanjoorVerseB;
 import ir.ham3da.darya.R;
@@ -62,9 +65,10 @@ public class UtilFunctions
     private final Context context1;
 
     //      google play => 0 , cafebazaar => 1 , myket => 2,
-//      charkhoneh => 3, iranapps => 4  , avvalmarket => 5, cando => 6
+    //      charkhoneh => 3, iranapps => 4
 
-    private static final int Store = 2 ;
+    private static final int Store = 0;
+
     public UtilFunctions(Context mCtx)
     {
         this.context1 = mCtx;
@@ -83,6 +87,11 @@ public class UtilFunctions
         {
             Toast.makeText(context1, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public static boolean isGooglePlayVersion()
+    {
+        return (getAppStoreCode() == VarTypes.GOOGLE_PLAY_VER);
     }
 
     /**
@@ -779,9 +788,17 @@ public class UtilFunctions
 
     public static void cancelPoemAlarm(Context context)
     {
-        Intent intent  = new Intent(context, AlarmNotificationReceiver.class);
+        Intent intent = new Intent(context, AlarmNotificationReceiver.class);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        PendingIntent pendingIntent;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S)
+        {
+            pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        }
+        else
+        {
+            pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        }
         alarmManager.cancel(pendingIntent);
 
         Intent intent1 = new Intent(context, PoemService.class);
@@ -791,9 +808,20 @@ public class UtilFunctions
 
     public static void restartPoemAlarm(Context context)
     {
-        Intent intent  = new Intent(context, AlarmNotificationReceiver.class);
+        Intent intent = new Intent(context, AlarmNotificationReceiver.class);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        PendingIntent pendingIntent;
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S)
+        {
+            pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        }
+        else
+        {
+            pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        }
+
+
         alarmManager.cancel(pendingIntent);
 
         Intent intent1 = new Intent(context, PoemService.class);
@@ -807,5 +835,70 @@ public class UtilFunctions
     public static String convertLinkHttp(String link)
     {
         return link.replace("https", "http");
+    }
+
+
+    public static String getHtmlFromAssetsFile(Context context, String fileName)
+    {
+        try
+        {
+            InputStream stream = context.getAssets().open(fileName);
+
+            int size = stream.available();
+            byte[] buffer = new byte[size];
+            stream.read(buffer);
+            stream.close();
+            return new String(buffer);
+
+        } catch (Exception ex)
+        {
+            Log.e("about", "showAbout: " + ex.getMessage());
+            return null;
+        }
+    }
+
+    public static String getAppVersion()
+    {
+        return BuildConfig.VERSION_NAME;
+
+    }
+
+
+
+    public static void showWebAct(Context context, String title, String text)
+    {
+        try
+        {
+            float textSize = AppSettings.getTextSize();
+            String background_color = "#ffffff";
+            String text_color = "#000";
+            String link_color = "blue";
+
+
+            if (AppSettings.checkThemeIsDark())
+            {
+                background_color = "#101d24";
+                text_color = "#fff";
+                link_color = "#FFC107";
+            }
+
+            text = text.replace("$name", context.getString(R.string.app_name));
+            text = text.replace("$fontSize", textSize + "px");
+            text = text.replace("$background_color", background_color);
+            text = text.replace("$text_color", text_color);
+            text = text.replace("$link_color", link_color);
+            text = text.replace("$version", getAppVersion());
+
+
+            Intent intent = new Intent(context, ActivityWeb.class);
+            intent.putExtra("title", title);
+            intent.putExtra("text", text);
+            context.startActivity(intent);
+            Bungee.card(context);
+
+        } catch (Exception ex)
+        {
+            Log.e("about", "showAbout: " + ex.getMessage());
+        }
     }
 }

@@ -120,7 +120,7 @@ public class ShadowColorDialogFragment extends DialogFragment
         RecyclerView addTextColorPickerRecyclerView = view.findViewById(R.id.add_text_color_picker_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         addTextColorPickerRecyclerView.setLayoutManager(layoutManager);
-        addTextColorPickerRecyclerView.setHasFixedSize(true);
+        //addTextColorPickerRecyclerView.setHasFixedSize(true);
         ColorPickerAdapter colorPickerAdapter = new ColorPickerAdapter(getActivity());
         //This listener will change the text color when clicked on any color from picker
         colorPickerAdapter.setOnColorPickerClickListener(colorCode -> {

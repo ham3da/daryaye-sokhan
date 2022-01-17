@@ -2,11 +2,12 @@ package ir.ham3da.darya;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Dialog;
+import android.app.Activity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -18,19 +19,22 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+
 import android.transition.ChangeBounds;
 import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
+
 import android.view.animation.AnticipateOvershootInterpolator;
-import android.widget.Button;
+
 import android.widget.ImageView;
-import android.widget.TextView;
+
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -38,7 +42,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,7 +50,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -224,10 +228,55 @@ public class ActivityImageEdit extends AppCompatActivity implements
         }
 
         mPhotoEditor.addText(poemText, textStyleBuilder);
-        //   mPhotoEditor.addText(signature, textStyleBuilder);
         mPhotoEditor.setOnPhotoEditorListener(this);
 
+
+        cameraActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        Bitmap photo = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
+                        Drawable drawable = new BitmapDrawable(getResources(), photo);
+                        mPhotoEditorView.getSource().setImageDrawable(drawable);
+
+                    }
+                });
+
+        galleryActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK)
+                    {
+                        try{
+                        Intent data = result.getData();
+                        Uri selectedImageURI = data.getData();
+
+                        Bitmap bitmap;
+
+                        if (Build.VERSION.SDK_INT >= 28)
+                        {
+                            //*** It doesn't work properly and causes an error while saving.***
+                            ImageDecoder.Source source = ImageDecoder.createSource(this.getContentResolver(), selectedImageURI);
+                            bitmap = ImageDecoder.decodeBitmap(source);
+                        }
+                        else
+                        {
+                            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageURI);
+                        }
+
+                        Drawable drawable = new BitmapDrawable(getResources(), bitmap);
+                        mPhotoEditorView.getSource().setImageDrawable(drawable);
+                    } catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                    }
+                });
     }
+
+    ActivityResultLauncher<Intent> cameraActivityResultLauncher, galleryActivityResultLauncher;
+
 
     private void initViews()
     {
@@ -235,8 +284,6 @@ public class ActivityImageEdit extends AppCompatActivity implements
         ImageView imgRedo;
         ImageView imgCamera;
         ImageView imgGallery;
-        //ImageView imgSave;
-        // ImageView imgClose;
 
         mPhotoEditorView = findViewById(R.id.photoEditorView);
         //mTxtCurrentTool = findViewById(R.id.txtCurrentTool);
@@ -372,7 +419,8 @@ public class ActivityImageEdit extends AppCompatActivity implements
 
             case R.id.imgCamera:
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, CAMERA_REQUEST);
+                cameraActivityResultLauncher.launch(cameraIntent);
+
                 break;
 
             case R.id.imgGallery:
@@ -392,7 +440,10 @@ public class ActivityImageEdit extends AppCompatActivity implements
         intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, this.getString(R.string.select_picture)), PICK_REQUEST);
+
+        //startActivityForResult(Intent.createChooser(intent, this.getString(R.string.select_picture)), PICK_REQUEST);
+        galleryActivityResultLauncher.launch(Intent.createChooser(intent, this.getString(R.string.select_picture)));
+
     }
 
     @SuppressLint("MissingPermission")
@@ -401,10 +452,6 @@ public class ActivityImageEdit extends AppCompatActivity implements
         final CustomProgress customProgressDlg = new CustomProgress(this);
         customProgressDlg.showProgress(getString(R.string.saving), getString(R.string.please_wait2), false, false, true);
 
-
-
-       // String saveDir = AppSettings.getImageFolderPath();
-       // File file = new File(saveDir + File.separator + "" + System.currentTimeMillis() + ".jpg");
         try
         {
 
@@ -469,87 +516,34 @@ public class ActivityImageEdit extends AppCompatActivity implements
         }
     }
 
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK)
-        {
-            Drawable drawable;
-            switch (requestCode)
-            {
-                case CAMERA_REQUEST:
-                    //mPhotoEditor.clearAllViews();
-                    Bitmap photo = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
-                    drawable = new BitmapDrawable(getResources(), photo);
-                    mPhotoEditorView.getSource().setImageDrawable(drawable);
-
-                    break;
-                case PICK_REQUEST:
-                    try
-                    {
-                        //mPhotoEditor.clearAllViews();
-                        Uri selectedImageURI = data.getData();
-
-                        Bitmap bitmap;
-
-                        if (Build.VERSION.SDK_INT >= 28)
-                        {
-                            //*** It doesn't work properly and causes an error while saving.***
-                            ImageDecoder.Source source = ImageDecoder.createSource(this.getContentResolver(), selectedImageURI);
-                            bitmap = ImageDecoder.decodeBitmap(source);
-                        }
-                        else
-                        {
-                            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageURI);
-                        }
-
-                        drawable = new BitmapDrawable(getResources(), bitmap);
-                        mPhotoEditorView.getSource().setImageDrawable(drawable);
-                    } catch (IOException e)
-                    {
-                        e.printStackTrace();
-                    }
-                    break;
-            }
-        }
-    }
-
     @Override
     public void onColorChanged(int colorCode)
     {
         mPhotoEditor.setBrushColor(colorCode);
-        //mTxtCurrentTool.setText(R.string.label_brush);
     }
 
     @Override
     public void onOpacityChanged(int opacity)
     {
         mPhotoEditor.setOpacity(opacity);
-        //mTxtCurrentTool.setText(R.string.label_brush);
     }
 
     @Override
     public void onBrushSizeChanged(int brushSize)
     {
         mPhotoEditor.setBrushSize(brushSize);
-        //mTxtCurrentTool.setText(R.string.label_brush);
     }
 
     @Override
     public void onEmojiClick(String emojiUnicode)
     {
         mPhotoEditor.addEmoji(emojiUnicode);
-        // mTxtCurrentTool.setText(R.string.label_emoji);
-
     }
 
     @Override
     public void onStickerClick(Bitmap bitmap)
     {
         mPhotoEditor.addImage(bitmap);
-        //mTxtCurrentTool.setText(R.string.label_sticker);
     }
 
 
