@@ -88,14 +88,14 @@
                 android:id="@+id/address_eth_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/avatar_eth"
-                android:layout_toLeftOf="@+id/address_eth_copy"
-                android:gravity="left"
                 android:layout_centerVertical="true"
-                android:text="@string/address_eth"
-                android:textColor="@color/textColor"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
+                android:layout_toLeftOf="@+id/address_eth_copy"
+                android:layout_toRightOf="@+id/avatar_eth"
+                android:gravity="left"
+                android:text="@string/address_eth"
+                android:textColor="@color/textColor"
                 android:textDirection="ltr"
                 android:textSize="16sp" />
 
@@ -103,15 +103,14 @@
                 android:id="@+id/address_eth_copy"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:backgroundTint="@color/btnColor"
-                android:src="@drawable/ic_content_copy_white_24dp"
-                android:padding="10dp"
-                app:tooltipText="@string/copy1"
-                android:background="@drawable/circle"
-                android:textColor="@color/primaryTextColor"
-                android:layout_centerHorizontal="true"
                 android:layout_alignParentRight="true"
-                />
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/circle"
+                android:backgroundTint="@color/btnColor"
+                android:padding="10dp"
+                android:src="@drawable/ic_content_copy_white_24dp"
+                android:textColor="@color/primaryTextColor"
+                app:tooltipText="@string/copy1" />
         </RelativeLayout>
 
 
@@ -194,30 +193,29 @@
                 android:id="@+id/address_trx_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/avatar_trx"
-                android:layout_toLeftOf="@+id/address_trx_copy"
-                android:gravity="left"
                 android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_toLeftOf="@+id/address_trx_copy"
+                android:layout_toRightOf="@+id/avatar_trx"
+                android:gravity="left"
                 android:text="@string/address_trx"
                 android:textColor="@color/textColor"
                 android:textDirection="ltr"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
                 android:textSize="16sp" />
 
             <ImageButton
                 android:id="@+id/address_trx_copy"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:backgroundTint="@color/btnColor"
-                android:src="@drawable/ic_content_copy_white_24dp"
-                android:padding="10dp"
-                app:tooltipText="@string/copy1"
-                android:background="@drawable/circle"
-                android:textColor="@color/primaryTextColor"
-                android:layout_centerHorizontal="true"
                 android:layout_alignParentRight="true"
-                />
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/circle"
+                android:backgroundTint="@color/btnColor"
+                android:padding="10dp"
+                android:src="@drawable/ic_content_copy_white_24dp"
+                android:textColor="@color/primaryTextColor"
+                app:tooltipText="@string/copy1" />
 
         </RelativeLayout>
 

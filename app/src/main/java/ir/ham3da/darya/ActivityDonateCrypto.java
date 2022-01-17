@@ -44,22 +44,26 @@ public class ActivityDonateCrypto extends AppCompatActivity
         TextView address_perfect_txt = findViewById(R.id.address_perfect_txt);
 
 
+        ImageButton address_trx_copy = findViewById(R.id.address_trx_copy);
+        TextView address_trx_txt = findViewById(R.id.address_trx_txt);
+
+
         address_btc_copy.setOnClickListener(v -> {
             UtilFunctions1.copyText(address_btc_txt.getText().toString());
-            Toast.makeText(this, R.string.btc_address_copied, Toast.LENGTH_SHORT).show();
         });
 
         address_eth_copy.setOnClickListener(v -> {
-            UtilFunctions1.copyText(address_eth_txt.getText().toString());
-            Toast.makeText(this, R.string.eth_address_copied, Toast.LENGTH_SHORT).show();
+            UtilFunctions1.copyText(getString(R.string.address_eth_copy));
         });
 
         address_perfect_copy.setOnClickListener(v -> {
             UtilFunctions1.copyText(address_perfect_txt.getText().toString());
-            Toast.makeText(this, R.string.account_copied, Toast.LENGTH_SHORT).show();
+
         });
 
-
+        address_trx_copy.setOnClickListener(v -> {
+            UtilFunctions1.copyText(address_trx_txt.getText().toString());
+        });
 
 
     }
