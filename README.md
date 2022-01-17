@@ -20,10 +20,19 @@
 
 ## Donation
 
+* <b>Ethereum:</b> 0x8425d6010C12D0781D87D9cAaDA3bDedd15c9347 (BEP20)
+* <b>Tether:</b> 0x8425d6010C12D0781D87D9cAaDA3bDedd15c9347 (BEP20)
+* <b>Tron:</b> TTahPYiMfWygFALi2Ew3aQK8jF7rGPTk5b
 * <b>Bitcoin:</b> bc1qdrjpcxnnay42jfc56hze4vrpkrf5s5c45xd5va
-* <b>Ethereum:</b> 0xcD7be5D82805f851CbeBBF67ea434cB02f6e2436
 * <b>Perfect Money:</b> U21873528
-* <b>حمایت از ما در ایران:</b> [سامانه حمایت از پروژه دریای سخن](https://ham3da.ir/darya-donate/)
+
+## حمایت از ما در ایران
+* <b>حمایت آنلاین:</b> [https://zarinp.al/ham3da](https://zarinp.al/ham3da)
+* <b>شماره حساب شبا:</b> <span dir="ltr">IR190120020000005006181561</span>
+* <b>شماره کارت بانکی:</b> <span dir="ltr">6104-3379-5124-7251</span>
+* <b>شماه حساب:</b> 5006181561</p>
+* <b>نام صاحب حساب:</b> جواد احشامیان</p>
+* <b>نام بانک:</b> بانک ملت</p>
 ## Screenshots
 
 ![screenshot 1](screen-02.png)
