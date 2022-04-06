@@ -38,7 +38,7 @@ public class MainAdMobFragment extends Fragment
     Context mContext;
     Button btn_view_ad;
 
-//    InterstitialAd mInterstitialAd;
+    //    InterstitialAd mInterstitialAd;
     ProgressBar progress_bar;
     String TAG = "MainAdMobFragment";
     UtilFunctions UtilFunctions1;
@@ -79,23 +79,23 @@ public class MainAdMobFragment extends Fragment
         Button btn_donate_github = root.findViewById(R.id.btn_donate_github);
         Button btn_donate_collections = root.findViewById(R.id.btn_donate_collections);
 
-        Button btn_donate_pay = root.findViewById(R.id.btn_donate_pay);
         Button btn_donate_crypto = root.findViewById(R.id.btn_donate_crypto);
 
         View rv_pay = root.findViewById(R.id.rv_pay);
 
-        if (UtilFunctions.isGooglePlayVersion())
-        {
-            rv_pay.setVisibility(View.VISIBLE);
-        }
-        else
-        {
-            rv_pay.setVisibility(View.GONE);
-        }
+//        if (UtilFunctions.isGooglePlayVersion())
+//        {
+//            rv_pay.setVisibility(View.VISIBLE);
+//        }
+//        else
+//        {
+//            rv_pay.setVisibility(View.GONE);
+//        }
 
+        rv_pay.setVisibility(View.GONE);
         btn_view_ad.setOnClickListener(v ->
         {
-           // displayInterstitial();
+            // displayInterstitial();
             displayCustomAdWeb();
         });
 
@@ -106,15 +106,6 @@ public class MainAdMobFragment extends Fragment
         btn_donate_collections.setOnClickListener(v ->
         {
             UtilFunctions1.openUrl(getString(R.string.new_collection_url));
-
-        });
-
-        btn_donate_pay.setOnClickListener(v ->
-        {
-            String title = getString(R.string.donation);
-            String file_name = "donate_" + CurrentLang + ".htm";
-            String text = UtilFunctions.getHtmlFromAssetsFile(mContext, file_name);
-            UtilFunctions.showWebAct(mContext, title, text);
 
         });
 
@@ -130,16 +121,16 @@ public class MainAdMobFragment extends Fragment
     }
 
 
-
     public void displayCustomAdWeb()
     {
-        Intent intent = new Intent(mContext, ActivityWeb.class);
-        intent.putExtra("title", getString(R.string.our_products));
-        intent.putExtra("fromUrl", true);
-        intent.putExtra("url",  getString(R.string.our_products_url));
-
-        startActivity(intent);
-        Bungee.card(mContext);
+        UtilFunctions1.openUrl(getString(R.string.our_products_url));
+//        Intent intent = new Intent(mContext, ActivityWeb.class);
+//        intent.putExtra("title", getString(R.string.our_products));
+//        intent.putExtra("fromUrl", true);
+//        intent.putExtra("url",  getString(R.string.our_products_url));
+//
+//        startActivity(intent);
+//        Bungee.card(mContext);
     }
 
 

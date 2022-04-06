@@ -26,6 +26,7 @@
                 android:layout_centerVertical="true"
                 android:background="@drawable/circle"
                 app:tooltipText="@string/bitcoin"
+                android:contentDescription="@string/bitcoin"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/ic_btc_24" />
 
@@ -48,14 +49,15 @@
                 android:id="@+id/address_btc_copy"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_centerHorizontal="true"
                 android:layout_alignParentRight="true"
-                android:backgroundTint="@color/btnColor"
-                android:padding="10dp"
-                app:tooltipText="@string/copy1"
-                android:src="@drawable/ic_content_copy_white_24dp"
+                android:layout_centerHorizontal="true"
                 android:background="@drawable/circle"
-                android:textColor="@color/primaryTextColor" />
+                android:backgroundTint="@color/btnColor"
+                android:contentDescription="@string/copy1"
+                android:padding="10dp"
+                android:src="@drawable/ic_content_copy_white_24dp"
+                android:textColor="@color/primaryTextColor"
+                app:tooltipText="@string/copy1" />
 
 
         </RelativeLayout>
@@ -77,12 +79,14 @@
                 android:id="@+id/avatar_eth"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                app:tooltipText="@string/ethereum"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:background="@drawable/circle"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/ic_eth_24" />
+                app:srcCompat="@drawable/ic_eth_24"
+                app:tooltipText="@string/ethereum"
+                android:contentDescription="@string/ethereum"
+                />
 
             <TextView
                 android:id="@+id/address_eth_txt"
@@ -107,6 +111,7 @@
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/circle"
                 android:backgroundTint="@color/btnColor"
+                android:contentDescription="@string/copy1"
                 android:padding="10dp"
                 android:src="@drawable/ic_content_copy_white_24dp"
                 android:textColor="@color/primaryTextColor"
@@ -125,16 +130,18 @@
             android:background="@drawable/rounded_border_tv"
             android:layoutDirection="ltr"
             android:padding="5dp">
+
             <ImageView
                 android:id="@+id/avatar_pm"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                app:tooltipText="@string/perfect_money"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:background="@drawable/circle"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/ic_pm_24" />
+                app:srcCompat="@drawable/ic_pm_24"
+                android:contentDescription="@string/perfect_money"
+                app:tooltipText="@string/perfect_money" />
 
             <TextView
                 android:id="@+id/address_perfect_txt"
@@ -155,15 +162,15 @@
                 android:id="@+id/address_perfect_copy"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:backgroundTint="@color/btnColor"
-                android:src="@drawable/ic_content_copy_white_24dp"
-                android:padding="10dp"
-                app:tooltipText="@string/copy1"
-                android:background="@drawable/circle"
-                android:textColor="@color/primaryTextColor"
-                android:layout_centerHorizontal="true"
                 android:layout_alignParentRight="true"
-                />
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/circle"
+                android:backgroundTint="@color/btnColor"
+                android:padding="10dp"
+                android:src="@drawable/ic_content_copy_white_24dp"
+                android:textColor="@color/primaryTextColor"
+                app:tooltipText="@string/copy1"
+                android:contentDescription="@string/copy1"/>
 
         </RelativeLayout>
 
@@ -178,16 +185,18 @@
             android:background="@drawable/rounded_border_tv"
             android:layoutDirection="ltr"
             android:padding="5dp">
+
             <ImageView
                 android:id="@+id/avatar_trx"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                app:tooltipText="@string/tron"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:background="@drawable/circle"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/ic_trx" />
+                app:srcCompat="@drawable/ic_trx"
+                android:contentDescription="@string/tron"
+                app:tooltipText="@string/tron" />
 
             <TextView
                 android:id="@+id/address_trx_txt"
@@ -212,10 +221,12 @@
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/circle"
                 android:backgroundTint="@color/btnColor"
+                android:contentDescription="@string/copy1"
                 android:padding="10dp"
                 android:src="@drawable/ic_content_copy_white_24dp"
                 android:textColor="@color/primaryTextColor"
-                app:tooltipText="@string/copy1" />
+                app:tooltipText="@string/copy1"
+                />
 
         </RelativeLayout>
 

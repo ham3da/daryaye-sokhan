@@ -81,12 +81,13 @@
                 android:layout_below="@+id/btn_donate_collections"
                 android:layout_marginTop="10dp"
                 android:lineSpacingExtra="8sp"
-                android:text="@string/donate_with"
+                android:text="@string/our_products"
                 android:textColor="@color/textColor"
                 android:textSize="16sp" />
 
             <RelativeLayout
                 android:id="@+id/rv_pay"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/admob_des">
@@ -104,24 +105,6 @@
                     android:minWidth="150dp"
                     android:padding="15dp"
                     android:text="@string/cryptocurrencies"
-                    android:textAllCaps="false"
-                    android:textColor="@color/primaryTextColor"
-                    android:textSize="16sp"
-                    app:drawableTint="@color/white" />
-
-                <Button
-                    android:id="@+id/btn_donate_pay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/btn_donate_crypto"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="15dp"
-                    android:backgroundTint="@color/btnColor"
-                    android:drawableEnd="@drawable/ic_baseline_payment_24"
-                    android:drawablePadding="5dp"
-                    android:minWidth="200dp"
-                    android:padding="15dp"
-                    android:text="@string/bank_transfer"
                     android:textAllCaps="false"
                     android:textColor="@color/primaryTextColor"
                     android:textSize="16sp"

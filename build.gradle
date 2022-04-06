@@ -3,15 +3,14 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-
-
-        maven { url 'https://maven.google.com' }
-        maven { url "https://jitpack.io" }
-        maven { url "https://dl.google.com" }
         maven { url "https://jcenter.bintray.com" }
+        maven { url "https://jitpack.io" }
+        maven { url 'https://maven.google.com' }
+        maven { url "https://dl.google.com" }
+
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.3'
+        classpath 'com.android.tools.build:gradle:7.0.4'
         classpath 'com.google.gms:google-services:4.3.10'
     }
 
@@ -22,11 +21,11 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-
-        maven { url 'https://maven.google.com' }
-        maven { url "https://jitpack.io" }
-        maven { url "https://dl.google.com" }
         maven { url "https://jcenter.bintray.com" }
+        maven { url "https://jitpack.io" }
+        maven { url 'https://maven.google.com' }
+        maven { url "https://dl.google.com" }
+
 
     }
     tasks.withType(JavaCompile) {

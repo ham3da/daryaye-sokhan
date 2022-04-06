@@ -4,7 +4,7 @@
     <string name="new_collection_url" translatable="false">https://daryaye-sokhan.ir/add-new-collection/</string>
 
     <string name="address_btc" translatable="false">bc1qdrjpcxnnay42jfc56hze4vrpkrf5s5c45xd5va</string>
-    <string name="address_eth" translatable="false">0x8425d6010C12D0781D87D9cAaDA3bDedd15c9347(BSC)</string>
+    <string name="address_eth" translatable="false">0x8425d6010C12D0781D87D9cAaDA3bDedd15c9347(BEP20)</string>
     <string name="address_eth_copy" translatable="false">0x8425d6010C12D0781D87D9cAaDA3bDedd15c9347</string>
     <string name="address_perfect" translatable="false">U21873528</string>
     <string name="address_trx" translatable="false">TTahPYiMfWygFALi2Ew3aQK8jF7rGPTk5b</string>
@@ -275,7 +275,7 @@
     <string name="account_copied">Perfect Money account number copied.</string>
     <string name="bank_transfer">Bank Transfer</string>
     <string name="in_collections">Collaboration in collections:</string>
-    <string name="our_products">Our products</string>
+    <string name="our_products">Our products:</string>
     <string name="our_products_url" translatable="false">https://ads.daryaye-sokhan.ir/</string>
     <string name="view_our_products">View our products</string>
     <string name="title_activity_login">Login</string>

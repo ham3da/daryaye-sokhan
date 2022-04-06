@@ -92,7 +92,7 @@ public class UtilFunctions
     public static boolean isGooglePlayVersion()
     {
         return (getAppStoreCode() == VarTypes.GOOGLE_PLAY_VER);
-    }
+}
 
     /**
      * get AppStore Code

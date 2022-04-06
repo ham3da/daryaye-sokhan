@@ -1462,6 +1462,24 @@ public class GanjoorDbBrowser
         }
     }
 
+    /**
+     *
+     * @param fchecksum String checksum
+      */
+    public void deleteSound(String fchecksum)
+    {
+        if (getIsConnected())
+        {
+            try
+            {
+                _db.delete("poemsnd", "fchksum = ?", new String[]{String.valueOf(fchecksum)});
+            } catch (Exception ex)
+            {
+                Log.e("addToSound", "err: " + ex.getMessage());
+            }
+        }
+    }
+
     public void addToFavorites(int PoemId)
     {
         addToFavorites(PoemId, -1);

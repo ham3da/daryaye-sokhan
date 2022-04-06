@@ -58,7 +58,6 @@ import ir.ham3da.darya.ganjoor.GanjoorPoet;
 import ir.ham3da.darya.utility.AppSettings;
 
 
-
 import ir.ham3da.darya.ganjoor.GanjoorAudioInfo;
 import ir.ham3da.darya.utility.MyDialogs;
 import ir.ham3da.darya.utility.PoemAudio;
@@ -199,6 +198,7 @@ public class ActivityAudioCollection extends AppCompatActivity
         scrollListener.resetState();
         loadItems();
     }
+
     private void downloadMarkedAudio()
     {
         scheduleAudioList = new ArrayList<>();
@@ -684,23 +684,24 @@ public class ActivityAudioCollection extends AppCompatActivity
         }
 
         this.page_number = calc_page_num();
-        Log.e(TAG, " this.page_number: "+ this.page_number);
+        Log.e(TAG, " this.page_number: " + this.page_number);
         downloadJsonPoemAudios(getAudioListUrl(dl_type));
     }
 
     private int calc_page_num()
     {
-        if(can_load_new_page())
+        if (can_load_new_page())
         {
-            double newPage = ((double) listXmlItems.size()  / page_size) +1;
+            double newPage = ((double) listXmlItems.size() / page_size) + 1;
             int newPage2 = (int) Math.ceil(newPage);
             return newPage2;
         }
         else
         {
-            return  1;
+            return 1;
         }
     }
+
     private boolean can_load_new_page()
     {
         return (listXmlItems != null && listXmlItems.size() >= page_size);
@@ -715,28 +716,28 @@ public class ActivityAudioCollection extends AppCompatActivity
     private boolean checkExistAudio(GanjoorAudioInfo ganjoorAudioInfo)
     {
         boolean result = false;
-        if (dl_type == GanjoorAudioInfo.DOWNLOAD_POEM)
-        {
-            for (PoemAudio PoemAudio1 : existAudioList)
-            {
-                if (PoemAudio1.poemID == ganjoorAudioInfo.audio_post_ID && ganjoorAudioInfo.audio_fchecksum.equals(PoemAudio1.fchksum))
-                {
-                    result = true;
-                     break;
-                }
+        boolean existInDatabase = _DbBrowser.IsSoundExist(ganjoorAudioInfo.audio_fchecksum);
+        boolean fileExist = _DbBrowser.checkAudioFileExist(ganjoorAudioInfo.audio_fchecksum, dl_path);
 
-            }
-            if(!result)
+        if (existInDatabase)
+        {
+            if (fileExist)
             {
-                reAddSoundData(ganjoorAudioInfo);
+                result = true;
             }
+            else
+            {
+                _DbBrowser.deleteSound(ganjoorAudioInfo.audio_fchecksum);
+                result = false;
+            }
+
         }
         else
         {
-            result = _DbBrowser.checkAudioFileExist(ganjoorAudioInfo.audio_fchecksum, dl_path);
-            if(result)
+            if (fileExist)
             {
                 reAddSoundData(ganjoorAudioInfo);
+                result = true;
             }
         }
 
@@ -746,12 +747,11 @@ public class ActivityAudioCollection extends AppCompatActivity
 
     private void reAddSoundData(GanjoorAudioInfo ganjoorAudioInfo)
     {
-        if(!_DbBrowser.IsSoundExist(ganjoorAudioInfo.audio_fchecksum))
+        if (!_DbBrowser.IsSoundExist(ganjoorAudioInfo.audio_fchecksum))
         {
             _DbBrowser.addToSound(ganjoorAudioInfo);
         }
     }
-
 
 
     private void downloadJsonPoemAudios(String jsonUrl)
@@ -785,13 +785,13 @@ public class ActivityAudioCollection extends AppCompatActivity
         try
         {
             JSONArray jsonArray = new JSONArray(JsonString);
-            if(jsonArray.length() > 0)
+            if (jsonArray.length() > 0)
             {
                 List<GanjoorAudioInfo> ganjoorAudioInfos1 = new ArrayList<>();
                 int new_index = 0;
-                if(listXmlItems != null)
+                if (listXmlItems != null)
                 {
-                    new_index =  listXmlItems.size();
+                    new_index = listXmlItems.size();
                 }
 
                 for (int i = 0; i < jsonArray.length(); i++)
@@ -827,7 +827,7 @@ public class ActivityAudioCollection extends AppCompatActivity
 
                     new_index++;
                     GanjoorAudioInfo ganjoorAudioInfo1 = new GanjoorAudioInfo(audio_post_ID, audio_order,
-                            audio_xml,null, audio_mp3, audio_title, audio_artist,
+                            audio_xml, null, audio_mp3, audio_title, audio_artist,
                             audio_artist_url, audio_src, audio_src_url, audio_guid,
                             audio_fchecksum, audio_mp3bsize, audio_oggbsize, audio_date, false,
                             new_index, false);
@@ -861,32 +861,32 @@ public class ActivityAudioCollection extends AppCompatActivity
                 }
 
 
-                        no_item_textview.setVisibility(View.GONE);
+                no_item_textview.setVisibility(View.GONE);
 
-                        if (listXmlItems == null)
-                        {
-                            Log.e(TAG, "parseAudioListJsonData: listXmlItems is null");
-                            listXmlItems = ganjoorAudioInfos1;
-                            GanjoorPoet ganjoorPoet = null;
-                            if (dl_type == GanjoorAudioInfo.DOWNLOAD_POET_POEMS)
-                            {
-                                ganjoorPoet = _DbBrowser.getPoet(poet_id);
-                            }
-                            adaptorAudio = new AdaptorAudio(listXmlItems, this, dl_type, ganjoorPoet);
-                            recycler_audio.setAdapter(adaptorAudio);
-                            recycler_audio.scrollToPosition(0);
-                        }
-                        else
-                        {
-                            Log.e(TAG, "parseAudioListJsonData: listXmlItems is not null");
-                            listXmlItems.addAll(ganjoorAudioInfos1);
-                            this.adaptorAudio.notifyItemRangeInserted(this.listXmlItems.size(), this.listXmlItems.size() - 1);
-                        }
-
+                if (listXmlItems == null)
+                {
+                    Log.e(TAG, "parseAudioListJsonData: listXmlItems is null");
+                    listXmlItems = ganjoorAudioInfos1;
+                    GanjoorPoet ganjoorPoet = null;
+                    if (dl_type == GanjoorAudioInfo.DOWNLOAD_POET_POEMS)
+                    {
+                        ganjoorPoet = _DbBrowser.getPoet(poet_id);
+                    }
+                    adaptorAudio = new AdaptorAudio(listXmlItems, this, dl_type, ganjoorPoet);
+                    recycler_audio.setAdapter(adaptorAudio);
+                    recycler_audio.scrollToPosition(0);
+                }
+                else
+                {
+                    Log.e(TAG, "parseAudioListJsonData: listXmlItems is not null");
+                    listXmlItems.addAll(ganjoorAudioInfos1);
+                    this.adaptorAudio.notifyItemRangeInserted(this.listXmlItems.size(), this.listXmlItems.size() - 1);
+                }
 
 
             }
-            else{
+            else
+            {
                 Toast.makeText(this, getString(R.string.nothing_found), Toast.LENGTH_SHORT).show();
             }
 
