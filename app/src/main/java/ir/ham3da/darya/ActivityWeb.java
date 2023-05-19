@@ -74,9 +74,9 @@ public class ActivityWeb extends AppCompatActivity {
                 }
 
                 @Override
-                public boolean shouldOverrideUrlLoading(WebView view, String url)
+                public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request)
                 {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(request.getUrl().toString()));
                     startActivity(browserIntent);
                     return  true;
                 }

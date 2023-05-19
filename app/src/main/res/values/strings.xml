@@ -4,8 +4,8 @@
     <string name="new_collection_url" translatable="false">https://daryaye-sokhan.ir/add-new-collection/</string>
 
     <string name="address_btc" translatable="false">bc1qdrjpcxnnay42jfc56hze4vrpkrf5s5c45xd5va</string>
-    <string name="address_eth" translatable="false">0x8425d6010C12D0781D87D9cAaDA3bDedd15c9347(BEP20)</string>
-    <string name="address_eth_copy" translatable="false">0x8425d6010C12D0781D87D9cAaDA3bDedd15c9347</string>
+    <string name="address_eth" translatable="false">0xD6735B2457c3c1E25122220Cf3067C614Cf18Bc4(BEP20)</string>
+    <string name="address_eth_copy" translatable="false">0xD6735B2457c3c1E25122220Cf3067C614Cf18Bc4</string>
     <string name="address_perfect" translatable="false">U21873528</string>
     <string name="address_trx" translatable="false">TTahPYiMfWygFALi2Ew3aQK8jF7rGPTk5b</string>
     <string name="address_doge" translatable="false">DEzQc7hKbCtjeThs2PokVRrkYcWLNj5GzW</string>
@@ -226,14 +226,6 @@
     <string name="is_incorrect">Sorry, your answer is incorrect.</string>
     <string name="loadingVers">Loading verse</string>
     <string name="night_theme">Night mode</string>
-
-    <!--    Real Ad -->
-    <string name="interstitial_ad_unit_id" translatable="false">ca-app-pub-5843948052196502/1951219884</string>
-    <string name="reward_ad_unit_id" translatable="false">ca-app-pub-5843948052196502/9658637050</string>
-
-    <!--    Test Ad -->
-    <!--    <string name="interstitial_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/1033173712</string>-->
-    <!--    <string name="native_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/2247696110</string>-->
 
     <string name="easy_donating">Easy donating</string>
     <string name="admob_not_load">No ads are currently available. Please try again later.</string>

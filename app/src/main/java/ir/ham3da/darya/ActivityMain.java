@@ -1,33 +1,20 @@
 package ir.ham3da.darya;
 
 import android.annotation.SuppressLint;
-
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-
-import android.speech.RecognizerIntent;
 import android.util.Log;
-
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
-import android.view.Window;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -39,17 +26,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
-
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayoutMediator;
-
 import java.util.Locale;
-
 import ir.ham3da.darya.ganjoor.GanjoorDbBrowser;
 import ir.ham3da.darya.ganjoor.GanjoorPoem;
 import ir.ham3da.darya.admob.MainAdMobFragment;
-
 import ir.ham3da.darya.notification.PoemService;
 import ir.ham3da.darya.ui.main.MainFavoritesFragment;
 import ir.ham3da.darya.ui.main.MainPoetsFragment;
@@ -194,6 +176,7 @@ public class ActivityMain extends AppCompatActivity
     @StringRes
     private static final int[] TAB_TITLES = new int[]{R.string.tab_poets, R.string.tab_favorites, R.string.easy_donating};
 
+
     public void loadPager()
     {
         ViewPager2 viewPager = findViewById(R.id.view_pager);
@@ -232,7 +215,8 @@ public class ActivityMain extends AppCompatActivity
 
             if (extras.containsKey("serializableNotifyVerse"))
             {
-                SerializableNotify serializableNotify = (SerializableNotify) extras.getSerializable("serializableNotifyVerse");
+                SerializableNotify serializableNotify;
+                serializableNotify = (SerializableNotify) extras.getSerializable("serializableNotifyVerse");
                 assert serializableNotify != null;
                 rnd_poem_id = serializableNotify.getRnd_poem_id();
                 findStr = serializableNotify.getFindStr();

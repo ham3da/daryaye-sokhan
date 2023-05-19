@@ -39,15 +39,8 @@ public class AlarmNotificationReceiver extends BroadcastReceiver
     {
 
         NotificationCompat.Builder builder;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-        {
-            builder = new NotificationCompat.Builder(context, AppSettings.NOTIFICATION_CHANNEL_ID_DAILY);
-        }
-        else
-        {
-            builder = new NotificationCompat.Builder(context);
-        }
 
+        builder = new NotificationCompat.Builder(context, AppSettings.NOTIFICATION_CHANNEL_ID_DAILY);
 
         GanjoorDbBrowser ganjoorDbBrowser = new GanjoorDbBrowser(context.getApplicationContext());
         List<GanjoorVerse> ganjoorVerseList = ganjoorDbBrowser.getRandomPoemNotify();
