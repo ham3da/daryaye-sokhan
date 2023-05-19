@@ -31,6 +31,6 @@
 
 ## Screenshots
 
-![screenshot 1](screen-02.png)
-![screenshot 2](screen-03.png)
-![screenshot 3](screen-04.png)
+![screenshot 1](screen-02.png | width=320)
+![screenshot 2](screen-03.png | width=320)
+![screenshot 3](screen-04.png | width=320)
