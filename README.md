@@ -31,6 +31,8 @@
 
 ## Screenshots
 
-![screenshot 1](screen-02.png | width=320)
-![screenshot 2](screen-03.png | width=320)
-![screenshot 3](screen-04.png | width=320)
+<p>
+<img width="320" src="screen-02.png"><br>
+<img width="320" src="screen-03.png"><br>
+<img width="320" src="screen-04.png">
+</p>
