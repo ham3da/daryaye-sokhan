@@ -2,7 +2,7 @@
  The Sea of Poetry(Daryaye Sokhan) is a valuable library of poetry of Persian great poets.
  
 ## Useful information:
-* IDE: Android Studio 3.6+
+* IDE: Android Studio Android Studio Flamingo | 2022.2.1 Patch
 * Programming language: Java
 
 ## Used repositories:
