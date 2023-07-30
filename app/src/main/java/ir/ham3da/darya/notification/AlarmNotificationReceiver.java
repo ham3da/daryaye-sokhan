@@ -1,5 +1,6 @@
 package ir.ham3da.darya.notification;
 
+import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -12,10 +13,12 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
 
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -34,6 +37,7 @@ import static android.app.PendingIntent.FLAG_ONE_SHOT;
 public class AlarmNotificationReceiver extends BroadcastReceiver
 {
     String TAG = "AlarmNotificationReceiver";
+
     @Override
     public void onReceive(Context context, Intent intent)
     {
@@ -62,11 +66,11 @@ public class AlarmNotificationReceiver extends BroadcastReceiver
             myIntent.addCategory(Intent.CATEGORY_LAUNCHER);
             myIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-            SerializableNotify serializableNotify = new SerializableNotify(poem_id, ganjoorVerseList.get(0)._Text, ganjoorVerseList.get(0)._Order) ;
+            SerializableNotify serializableNotify = new SerializableNotify(poem_id, ganjoorVerseList.get(0)._Text, ganjoorVerseList.get(0)._Order);
 
             myIntent.putExtra("serializableNotifyVerse", serializableNotify);
 
-            Log.e(TAG, "rnd_poem_id: "+poem_id);
+            Log.e(TAG, "rnd_poem_id: " + poem_id);
             PendingIntent pendingIntent;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S)
             {
@@ -88,7 +92,7 @@ public class AlarmNotificationReceiver extends BroadcastReceiver
             builder.setAutoCancel(false)
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setContentTitle(context.getString(R.string.app_name))
-                    .setContentText(ganjoorVerseList.get(0)._Text+"...")
+                    .setContentText(ganjoorVerseList.get(0)._Text + "...")
                     .setContentIntent(pendingIntent)
                     .setSilent(true)
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(rnd_poem_text));
@@ -99,11 +103,15 @@ public class AlarmNotificationReceiver extends BroadcastReceiver
             {
 
                 NotificationChannel channel = new NotificationChannel(AppSettings.NOTIFICATION_CHANNEL_ID_DAILY,
-                        "Darya",
+                        context.getString(R.string.daily_poem),
                         NotificationManager.IMPORTANCE_DEFAULT);
                 notificationManager.createNotificationChannel(channel);
             }
 
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED)
+            {
+                return;
+            }
             notificationManager.notify(1, builder.build());
 
             Log.e(TAG, "onReceive: "+rnd_poem_text);

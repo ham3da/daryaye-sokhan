@@ -65,6 +65,7 @@ import ir.ham3da.darya.imageeditor.ShadowColorDialogFragment;
 import ir.ham3da.darya.imageeditor.StickerBSFragment;
 import ir.ham3da.darya.imageeditor.TextEditorDialogFragment;
 import ir.ham3da.darya.tools.EditingToolsAdapter;
+import ir.ham3da.darya.tools.PermissionMediaType;
 import ir.ham3da.darya.tools.ToolType;
 import ir.ham3da.darya.utility.AppFontManager;
 import ir.ham3da.darya.utility.AppSettings;
@@ -429,11 +430,6 @@ public class ActivityImageEdit extends AppCompatActivity implements
         }
     }
 
-
-
-
-
-
     private void pickFromGallery()
     {
         Intent intent = new Intent();
@@ -446,7 +442,6 @@ public class ActivityImageEdit extends AppCompatActivity implements
 
     }
 
-    @SuppressLint("MissingPermission")
     protected void doSaveImage(final boolean share)
     {
         final CustomProgress customProgressDlg = new CustomProgress(this);
@@ -510,7 +505,7 @@ public class ActivityImageEdit extends AppCompatActivity implements
     private void saveImage(boolean share)
     {
         shareRequest = share;
-        if (isWriteStoragePermissionGranted())
+        if (UtilFunctions.isWriteStoragePermissionGranted(this, PermissionMediaType.IMAGES))
         {
             doSaveImage(share);
         }
@@ -692,82 +687,15 @@ public class ActivityImageEdit extends AppCompatActivity implements
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
     {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode)
+        if (requestCode == 2)
         {
-            case 2:
-                Log.d(TAG, "Write External storage");
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                {
-                    Log.v(TAG, "Permission: " + permissions[0] + " was " + grantResults[0]);
-                    //resume tasks needing this permission
-                    saveImage(shareRequest);
-                }
-
-                break;
-
-            case 3:
-                Log.d(TAG, "Read External storage");
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                {
-                    Log.v(TAG, "Permission: " + permissions[0] + " was " + grantResults[0]);
-                    //resume tasks needing this permission
-                    //SharePdfFile();
-                }
-
-                break;
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+                Log.v(TAG, "Permission: " + permissions[0] + " was " + grantResults[0]);
+                saveImage(shareRequest);
+            }
         }
     }
-
-    public boolean isReadStoragePermissionGranted()
-    {
-        if (Build.VERSION.SDK_INT >= 23)
-        {
-            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED)
-            {
-                Log.v(TAG, "Permission is granted1");
-                return true;
-            }
-            else
-            {
-
-                Log.v(TAG, "Permission is revoked1");
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
-                return false;
-            }
-        }
-        else
-        { //permission is automatically granted on sdk<23 upon installation
-            Log.v(TAG, "Permission is granted1");
-            return true;
-        }
-    }
-
-    public boolean isWriteStoragePermissionGranted()
-    {
-        if (Build.VERSION.SDK_INT >= 23)
-        {
-            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED)
-            {
-                Log.v(TAG, "Permission is granted2");
-                return true;
-            }
-            else
-            {
-
-                Log.v(TAG, "Permission is revoked2");
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
-                return false;
-            }
-        }
-        else
-        { //permission is automatically granted on sdk<23 upon installation
-            Log.v(TAG, "Permission is granted2");
-            return true;
-        }
-    }
-
 
     protected void showSnackbar(@NonNull String message)
     {

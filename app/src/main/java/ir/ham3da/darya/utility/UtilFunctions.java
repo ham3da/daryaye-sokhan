@@ -1,5 +1,7 @@
 package ir.ham3da.darya.utility;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.ClipData;
@@ -7,6 +9,7 @@ import android.content.ClipboardManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -18,6 +21,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import android.os.Build;
@@ -60,13 +64,13 @@ import ir.ham3da.darya.ganjoor.GanjoorVerseB;
 import ir.ham3da.darya.R;
 import ir.ham3da.darya.notification.AlarmNotificationReceiver;
 import ir.ham3da.darya.notification.PoemService;
+import ir.ham3da.darya.tools.PermissionMediaType;
 
 public class UtilFunctions
 {
     private final Context context1;
 
     //      google play => 0 , cafebazaar => 1 , myket => 2,
-    //      charkhoneh => 3, iranapps => 4
 
     private static final int Store = 0;
 
@@ -90,6 +94,136 @@ public class UtilFunctions
         }
     }
 
+
+
+    public static void requestAllPermissions(Activity activity)
+    {
+
+        if ( Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+        {
+            return;
+        }
+
+
+        List<String> stringListPerm = new ArrayList<>();
+        String[] prms;
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU)
+        {
+            prms = new String[]{
+                    Manifest.permission.POST_NOTIFICATIONS,
+                    Manifest.permission.READ_MEDIA_AUDIO,
+                    Manifest.permission.READ_MEDIA_IMAGES};
+        }
+        else {
+            prms = new String[]{
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        }
+
+        for (String permission: prms)
+        {
+            if (activity.checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED)
+            {
+                stringListPerm.add(permission);
+            }
+        }
+        String[] array = stringListPerm.toArray(new String[0]);
+        ActivityCompat.requestPermissions(activity, array, 50);
+
+    }
+
+    public static void checkPostNotificationPermission(Activity activity)
+    {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU)
+        {
+            List<PermissionType> listPm = new ArrayList<>();
+            listPm.add( new PermissionType(Manifest.permission.POST_NOTIFICATIONS, 33));
+            UtilFunctions.requestPermissions(activity, listPm);
+        }
+    }
+
+
+    public static void requestPermissions(Activity activity, List<PermissionType> permissionTypes)
+    {
+
+        if ( Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+        {
+            Log.v("requestPermission", "POST_NOTIFICATIONS Permission is granted.");
+            return;
+        }
+        for (PermissionType permissionType: permissionTypes)
+        {
+            if (activity.checkSelfPermission(permissionType.getPermission()) != PackageManager.PERMISSION_GRANTED)
+            {
+                ActivityCompat.requestPermissions(activity, new String[]{permissionType.getPermission()}, permissionType.getRequestCode());
+            }
+        }
+    }
+
+    public static boolean isWriteStoragePermissionGranted(Activity activity, PermissionMediaType permissionMediaType)
+    {
+
+        String perm = android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+        {
+            if(permissionMediaType == PermissionMediaType.IMAGES)
+            {
+                perm =  Manifest.permission.READ_MEDIA_IMAGES;
+            }
+            else if(permissionMediaType == PermissionMediaType.AUDIO)
+            {
+                perm =  Manifest.permission.READ_MEDIA_AUDIO;
+            }
+            else if(permissionMediaType == PermissionMediaType.VIDEO)
+            {
+                perm =  Manifest.permission.READ_MEDIA_VIDEO;
+            }
+        }
+
+        if(!permissionIsGranted(activity, perm))
+        {
+            List<PermissionType> listPm = new ArrayList<>();
+            listPm.add( new PermissionType(perm, 2));
+            requestPermissions(activity, listPm);
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    public static boolean permissionIsGranted(Activity activity, String permisson)
+    {
+
+        if ( Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+        {
+              return true;
+        }
+        return activity.checkSelfPermission(permisson) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static boolean permissionsIsGranted(Activity activity, List<PermissionType> permissionTypes)
+    {
+
+        if ( Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+        {
+            return true;
+        }
+
+        boolean result = true;
+        for (PermissionType permission: permissionTypes)
+        {
+            Log.d("permissionsIsGranted", "permission: "+ permission);
+            if (activity.checkSelfPermission(permission.getPermission()) != PackageManager.PERMISSION_GRANTED)
+            {
+                result = false;
+                break;
+            }
+        }
+
+         return result;
+    }
+
     public static boolean isGooglePlayVersion()
     {
         return (getAppStoreCode() == VarTypes.GOOGLE_PLAY_VER);
@@ -98,8 +232,7 @@ public class UtilFunctions
     /**
      * get AppStore Code
      *
-     * @return int 0 => google play, 1 => cafebazaar, 2 => myket,
-     * 3 => charkhoneh, 4 => iranapps, 5 => avvalmarket, 6=> cando
+     * @return int 0 => Google play, 1 => Cafebazaar, 2 => Myket
      */
     public static int getAppStoreCode()
     {
@@ -120,9 +253,6 @@ public class UtilFunctions
                 break;
             case VarTypes.MYKET_VER:
                 app_link = "https://myket.ir/app/" + packageName + "/";//myket
-                break;
-            case VarTypes.IRANAPPS_VER:
-                app_link = "https://iranapps.ir/app/" + packageName; //iranapps
                 break;
 
         }
@@ -220,10 +350,6 @@ public class UtilFunctions
                     intent.setData(Uri.parse("https://myket.ir/app/" + packageName));
                     intent.setPackage("ir.mservices.market");
                     break;
-                case VarTypes.IRANAPPS_VER:
-                    intent.setData(Uri.parse("http://iranapps.ir/app/" + packageName));
-                    intent.setPackage("ir.tgbs.android.iranapp");
-                    break;
 
             }
             context1.startActivity(intent);
@@ -267,11 +393,6 @@ public class UtilFunctions
                     intent.setPackage("ir.mservices.market");
                     break;
 
-                case VarTypes.IRANAPPS_VER:
-                    intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse("iranapps://app/" + packageName + "?a=comment&r=5"));
-                    intent.setPackage("ir.tgbs.android.iranapp");
-                    break;
 
             }
             context1.startActivity(intent);
@@ -780,10 +901,6 @@ public class UtilFunctions
                 new String[]{f.toString()},
                 null, null);
 
-//        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-//        Uri contentUri = Uri.fromFile(f);
-//        mediaScanIntent.setData(contentUri);
-//        context.sendBroadcast(mediaScanIntent);
     }
 
     public static int getResID(Context context, String imageName)
@@ -802,7 +919,7 @@ public class UtilFunctions
         }
         else
         {
-            pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+            pendingIntent = PendingIntent.getBroadcast(context, 0, intent,  PendingIntent.FLAG_UPDATE_CURRENT);
         }
         alarmManager.cancel(pendingIntent);
 
@@ -823,7 +940,7 @@ public class UtilFunctions
         }
         else
         {
-            pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+            pendingIntent = PendingIntent.getBroadcast(context, 0, intent,  PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
 

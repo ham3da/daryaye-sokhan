@@ -1,5 +1,6 @@
 package ir.ham3da.darya;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -230,10 +231,7 @@ public class ActivitySettings extends AppCompatActivity
             assert timeDialogPreference != null;
             timeDialogPreference.setOnPreferenceChangeListener((preference, newValue) -> {
                 Log.e("timeDialogPreference", "onCreatePreferences: "+newValue );
-
                 UtilFunctions.restartPoemAlarm(getContext());
-
-
                 return true;
             });
 
@@ -253,10 +251,13 @@ public class ActivitySettings extends AppCompatActivity
                     }
                     else
                     {
+
+                        UtilFunctions.checkPostNotificationPermission(getActivity());
+
                         if (!PoemService.getIsRunning())
                         {
-                            Intent i = new Intent(getContext(), PoemService.class);
-                            requireActivity().startService(i);
+                            Intent intent = new Intent(getContext(), PoemService.class);
+                            requireActivity().startService(intent);
                         }
                     }
 

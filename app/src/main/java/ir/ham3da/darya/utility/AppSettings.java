@@ -6,6 +6,7 @@ import ir.ham3da.darya.utility.PreferenceHelper;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -29,7 +30,7 @@ public class AppSettings
 {
 
     public static final String NOTIFICATION_CHANNEL_ID_DAILY = "darya_1";
-    private final static String default_notification_channel_id = "darya";
+    public final static String default_notification_channel_id = "darya";
 
     /**
      * Class Initialization:
@@ -121,7 +122,6 @@ public class AppSettings
 
     public static String getDatabaseName()
     {
-
         return "ganjoor.s3db";
     }
 
@@ -133,17 +133,14 @@ public class AppSettings
      */
     public static String getDatabasePath(Context context)
     {
-
         File db_file = new File(context.getExternalFilesDir("databases"), "ganjoor.s3db");
-        String defaultDLDir = db_file.getAbsolutePath();
+        //String defaultDLDir = db_file.getAbsolutePath();
         if (!db_file.exists())
         {
             File db_path = context.getExternalFilesDir("databases");
             db_path.mkdirs();
         }
-
         //String DB_PATH = context.getDatabasePath("ganjoor.s3db").getAbsolutePath();
-
         String DB_PATH = db_file.getAbsolutePath();
         if (PreferenceManager1 == null)
         {
@@ -718,8 +715,6 @@ public class AppSettings
      */
     public static String getImageFolderPath()
     {
-
-        ///String dirPath = MediaStore.Images.Media.EXTERNAL_CONTENT_URI.getPath() + File.separator + "Darya";
 
         File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Darya");
 

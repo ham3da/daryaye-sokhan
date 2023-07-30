@@ -89,5 +89,7 @@ public class App extends Application
         AppSettings.Init(this);
         FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
+
+
     }
 }

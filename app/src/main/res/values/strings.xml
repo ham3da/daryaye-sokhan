@@ -100,7 +100,7 @@
     <string name="voice_search">Voice Search</string>
     <string name="tab_poets">Poets</string>
     <string name="tab_favorites">Favorites</string>
-    <string name="developer_name">Javad Ahshamian</string>
+    <string name="developer_name">Javad Ehteshami</string>
     <string name="persian" translatable="false">فارسی(ایران)</string>
     <string name="english" translatable="false">English(United States)</string>
     <string name="change_lang">Change language</string>
@@ -277,6 +277,7 @@
     <string name="google_sign_failed">Google Sign In failed!</string>
     <string name="google_sign_ok">Google Sign In was successful!</string>
     <string name="profile">Profile</string>
+    <string name="perm_msg">To use some features of the application, such as downloading audio files, displaying poems in notifications and sharing poems as photos, please allow the application to access the necessary permissions.</string>
 
 
 </resources>

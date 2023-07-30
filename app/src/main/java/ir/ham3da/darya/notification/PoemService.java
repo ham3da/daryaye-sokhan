@@ -31,7 +31,6 @@ public class PoemService extends Service
     public static void setIsisRunning(boolean isisRunning)
     {
         PoemService.isisRunning = isisRunning;
-
     }
 
     @Override
@@ -78,9 +77,7 @@ public class PoemService extends Service
 
     private void startPoemAlarm()
     {
-
         String getRandomNotifyTime = AppSettings.getRandomNotifyTime();
-
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent myIntent;
         PendingIntent pendingIntent;
@@ -89,7 +86,7 @@ public class PoemService extends Service
 
         String[] time = getRandomNotifyTime.split(":");
 
-        Log.e(TAG, "startPoemAlarm: "+time[0] + time[1] );
+        Log.e(TAG, "startPoemAlarm: "+time[0] + ":" + time[1] );
         calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time[0]));
         calendar.set(Calendar.MINUTE, Integer.parseInt(time[1]));
 
@@ -100,20 +97,15 @@ public class PoemService extends Service
         }
         else
         {
-            pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, 0);
+            pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
-
         manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-
         isisRunning = true;
 
         //if (!isRepeat)
         //manager.set(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime() + 3000, pendingIntent);
         // else
-
     }
-
-
 
 }

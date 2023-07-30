@@ -3,13 +3,11 @@ package ir.ham3da.darya;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -55,6 +53,7 @@ import ir.ham3da.darya.adaptors.ScheduleAudio;
 
 import ir.ham3da.darya.ganjoor.GanjoorDbBrowser;
 import ir.ham3da.darya.ganjoor.GanjoorPoet;
+import ir.ham3da.darya.tools.PermissionMediaType;
 import ir.ham3da.darya.utility.AppSettings;
 
 
@@ -520,32 +519,6 @@ public class ActivityAudioCollection extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    public boolean isWriteStoragePermissionGranted()
-    {
-        if (Build.VERSION.SDK_INT >= 23)
-        {
-            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED)
-            {
-                Log.v(TAG, "Permission is granted2");
-                return true;
-            }
-            else
-            {
-
-                Log.v(TAG, "Permission is revoked2");
-                String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
-                ActivityCompat.requestPermissions(this, permissions, 2);
-                return false;
-            }
-        }
-        else
-        { //permission is automatically granted on sdk<23 upon installation
-            Log.v(TAG, "Permission is granted2");
-            return true;
-        }
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
     {
@@ -610,7 +583,7 @@ public class ActivityAudioCollection extends AppCompatActivity
                     }
                     return true;
                 case R.id.action_dl:
-                    if (isWriteStoragePermissionGranted())
+                    if (UtilFunctions.isWriteStoragePermissionGranted(ActivityAudioCollection.this, PermissionMediaType.AUDIO))
                     {
                         downloadMarkedAudio();
                     }

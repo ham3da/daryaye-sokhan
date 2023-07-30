@@ -1,6 +1,3 @@
-/**
- *
- */
 package ir.ham3da.darya.ganjoor;
 
 import java.io.BufferedOutputStream;
@@ -34,8 +31,7 @@ import ir.ham3da.darya.utility.PoemAudio;
 import ir.ham3da.darya.utility.RateType;
 
 /**
- * @author Hamid Reza
- * کلاس اصلی استخراج و در صورت نیاز ذخیرۀ اطلاعات در دیتابیس گنجور رومیزی
+ * @author Hamid Reza and Javad
  */
 public class GanjoorDbBrowser
 {
@@ -43,10 +39,7 @@ public class GanjoorDbBrowser
     String TAG = "GanjoorDbBrowser";
     private Context mContext;
 
-    /**
-     * سازندۀ بدون پارامتر
-     *
-     */
+
     public GanjoorDbBrowser(Context context)
     {
         mContext = context;
@@ -57,22 +50,15 @@ public class GanjoorDbBrowser
     }
 
     /**
-     * سازندۀ با پارامتر مسیر دیتابیس
-     * @param dbPath مسیر دیتابیس
+     * @param dbPath
      */
     public GanjoorDbBrowser(Context context, String dbPath)
     {
        OpenDatabase(dbPath);
     }
 
-
-    /**
-     * دیتابیس برنامه
-     */
     private SQLiteDatabase _db = null;
-    /**
-     * مسیر فرستاده شده برای دیتابیس برنامه
-     */
+
     private String _dbPath = "";
     /**
      *Last Error exception
@@ -1672,10 +1658,10 @@ public class GanjoorDbBrowser
 
 
     /**
-     * شعر قبلی شعر در یک بخش را بر می گرداند
-     * @param PoemId شناسۀ رکورد شعر
-     * @param CatId شناسۀ رکورد بخش
-     * @return شعر قبلی یا null
+     * Previous poem Returns the poem in a section
+     * @param PoemId Poem record ID
+     * @param CatId
+     * @return Previous poem or null
      * @todo: add a method to getPrevPoem without specifying CatId
      */
     public GanjoorPoem getPrevPoem(int PoemId, int CatId)
@@ -1684,9 +1670,9 @@ public class GanjoorDbBrowser
     }
 
     /**
-     * شعر قبلی شعر در یک بخش را بر می گرداند
-     * @param Poem اطلاعات شعر فعلی
-     * @return شعر قبلی یا null
+     * Returns the previous poem in a category
+     * @param Poem Current poetry
+     * @return Previous poem or null
      */
     public GanjoorPoem getPrevPoem(GanjoorPoem Poem)
     {
@@ -1698,11 +1684,11 @@ public class GanjoorDbBrowser
     }
 
     /**
-     * شعر بعدی یا قبلی یک شعر در یک بخش را بر می گرداند
-     * @param PoemId شناسۀّ رکورد شعر
-     * @param CatId شناسۀ بخش
-     * @param NextOne بعدی را برگرداند یا قبلی را
-     * @return شعر بعدی یا قبلی یا null
+     * Returns the next or previous poem of a poem in a category
+     * @param PoemId ID of the poem
+     * @param CatId Category ID
+     * @param NextOne Return the next poem?
+     * @return Next or previous poem or null
      */
     private GanjoorPoem getRelPoem(int PoemId, int CatId, Boolean NextOne)
     {
@@ -1739,9 +1725,9 @@ public class GanjoorDbBrowser
     }
 
     /**
-     * شاعر بعدی را بر اساس حروف الفبا برمی گرداند
-     * @param Poet  اطلاعات رکورد شاعر فعلی
-     * @return اطلاعات شاعر بعدی یا null
+     * Returns the next poet alphabetically
+     * @param Poet Current poet
+     * @return The next poet or null
      */
     public GanjoorPoet getNextPoet(GanjoorPoet Poet)
     {
@@ -1749,9 +1735,9 @@ public class GanjoorDbBrowser
     }
 
     /**
-     * شاعر قبلی را بر اساس حروف الفبا برمی گرداند
-     * @param Poet  اطلاعات رکورد شاعر فعلی
-     * @return اطلاعات شاعر بعدی یا null
+     * Returns the previous poet alphabetically
+     * @param Poet  Current poet
+     * @return The next poet or null
      */
     public GanjoorPoet getPrevPoet(GanjoorPoet Poet)
     {
@@ -1759,10 +1745,10 @@ public class GanjoorDbBrowser
     }
 
     /**
-     * شاعر بعدی یا قبلی یک شاعر را بر می گرداند
-     * @param Poet اطلاعات رکورد شاعر
-     * @param NextOne بعدی یا قبلی
-     * @return اطلاعات شاعر بعدی یا قبلی یا null
+     * Returns the next or previous poet of a poet
+     * @param Poet the poet
+     * @param NextOne next(true) or previous ?
+     * @return Next or previous poet or null
      */
     private GanjoorPoet getRelPoet(GanjoorPoet Poet, Boolean NextOne)
     {
@@ -1791,7 +1777,7 @@ public class GanjoorDbBrowser
 
     /**
      *
-     * @return بخش بعدی در بخشهای شاعر
+     * @return The next category in poet categories
      */
     public GanjoorCat getNextCat(GanjoorCat Cat)
     {
@@ -1799,7 +1785,7 @@ public class GanjoorDbBrowser
     }
 
     /**
-     * بخش قبلی در بخشهای شاعر
+     * Previous category in poet categories
      */
     public GanjoorCat getPrevCat(GanjoorCat Cat)
     {
@@ -1808,9 +1794,9 @@ public class GanjoorDbBrowser
 
     /**
      *
-     * @param Cat بخش فعلی
+     * @param Cat Current Category
      * @param NextOne
-     * @return بخش بعدی یا قبلی در بخشهای شاعر را بر می گرداند
+     * @return Returns the next or previous category in poet categories
      */
     private GanjoorCat getRelCat(GanjoorCat Cat, Boolean NextOne)
     {
@@ -1847,7 +1833,7 @@ public class GanjoorDbBrowser
     }
 
     /**
-     * کپی استریم ورودی به استریم خروجی
+     * Copy the input stream to the output stream
      * @param in
      * @param out
      * @throws IOException
@@ -1866,8 +1852,8 @@ public class GanjoorDbBrowser
     }
 
     /**
-     * فایل gdb را که پسوندش ممکن است zip باشد به دیتابیس اضافه می کند
-     * @param fileName مسیر کامل فایل
+     * Adds the gdb file whose extension may be zip to the database
+     * @param fileName
      * @return true if succeeds
      */
     public Boolean ImportGdb(String fileName, String updateInfo)
@@ -1914,10 +1900,9 @@ public class GanjoorDbBrowser
     }
 
     /**
-     * نمونۀ سادۀ متد ImportDb که چکها و تغییر شناسه ها را در صورت
-     * تکراری بودن شناسه ها انجام نمی دهد
-     * @param dbPath فایل ورودی
-     * @return نتیجۀ کل عملیات
+     * Simple example of the ImportDb method that does not perform checks and changes of identifiers if the identifiers are duplicated.
+     * @param dbPath
+     * @return result
      */
     public Boolean ImportDbFastUnsafe(String dbPath, String updateInfo)
     {
@@ -1934,10 +1919,8 @@ public class GanjoorDbBrowser
                 return false;
             }
 
-            //آپگرید دیتابیسهای قدیمی
             gdbOpener.UpgradeOldDbs();
 
-            //یک چک مقدماتی و البته ناکافی
             List<GanjoorPoet> gdbPoets = gdbOpener.getPoets();
             for (GanjoorPoet gdbPoet : gdbPoets)
             {
@@ -1955,7 +1938,7 @@ public class GanjoorDbBrowser
             {
                 _db.beginTransaction();
 
-                //کپی cat
+                //cop cat
                 cursor = gdbOpener._db.query("cat", new String[]{"id", "poet_id", "text", "parent_id", "url"}, null, null, null, null, null);
                 if (cursor.moveToFirst())
                 {
@@ -1972,7 +1955,7 @@ public class GanjoorDbBrowser
                     } while (cursor.moveToNext());
                 }
                 cursor.close();
-                //کپی poet
+                //copy poet
                 cursor = gdbOpener._db.query("poet", new String[]{"id", "name", "cat_id", "description"}, null, null, null, null, null);
                 if (cursor.moveToFirst())
                 {
@@ -1989,7 +1972,7 @@ public class GanjoorDbBrowser
                     } while (cursor.moveToNext());
                 }
                 cursor.close();
-                //کپی poem
+                //copy poem
                 cursor = gdbOpener._db.query("poem", new String[]{"id", "cat_id", "title", "url"}, null, null, null, null, null);
                 if (cursor.moveToFirst())
                 {
@@ -2005,7 +1988,7 @@ public class GanjoorDbBrowser
                     } while (cursor.moveToNext());
                 }
                 cursor.close();
-                //کپی verse
+                //copy verse
                 cursor = gdbOpener._db.query("verse", new String[]{"poem_id", "vorder", "position", "text"}, null, null, null, null, null);
                 if (cursor.moveToFirst())
                 {
@@ -2043,16 +2026,14 @@ public class GanjoorDbBrowser
         }
     }
 
-    //ورژن گذاری و پشتیبانی از دیتابیسهای قدیمی
+
     private static final int DatabaseVersion = 3;
 
-    //تبدیل دیتابیسهای قدیمی تر
-    //تمام مراحل آپگرید دیتابیسهای قدیمی از ورژن دات نت
-    // به اینجا منتقل نشده، فقط مواردی که ایجاد مشکل بحرانی می کنند اضاففه شده اند.
+
     private void UpgradeOldDbs()
     {
-        //اگر جدول poet سه تا فیلد داشته باشد یعنی فیلد
-        //description را ندارد و باید آن را اضافه کنیم
+
+        //Add description field
         try
         {
             Cursor cursor = _db.rawQuery("PRAGMA table_info('poet')", null);
@@ -2128,8 +2109,7 @@ public class GanjoorDbBrowser
     }
 
     /**
-     * یک بخش را به همراه تمام زیر بخشها و شعرهای متعلقه حذف می کند
-     * @param Cat بخشی که باید حذف شود
+     * @param Cat
      */
     public void DeleteCat(GanjoorCat Cat)
     {
@@ -2152,8 +2132,7 @@ public class GanjoorDbBrowser
 
 
     /**
-     * آثار شاعر را از دیتابیس حذف می کند
-     * @param Poet شاعری که باید آثارش حذف شود
+     * @param Poet
      */
     public void DeletePoet(GanjoorPoet Poet)
     {
@@ -2193,8 +2172,7 @@ public class GanjoorDbBrowser
 
 
     /**
-     * آثار شاعر را از دیتابیس حذف می کند
-     * @param poet_id poet id
+      * @param poet_id poet id
      */
     public void DeletePoet(int poet_id)
     {

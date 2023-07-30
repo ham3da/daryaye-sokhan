@@ -1,5 +1,6 @@
 package ir.ham3da.darya;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -28,6 +30,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayoutMediator;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import ir.ham3da.darya.ganjoor.GanjoorDbBrowser;
 import ir.ham3da.darya.ganjoor.GanjoorPoem;
@@ -39,6 +44,7 @@ import ir.ham3da.darya.utility.AppSettings;
 import ir.ham3da.darya.utility.CustomProgress;
 import ir.ham3da.darya.utility.LangSettingList;
 import ir.ham3da.darya.utility.MyDialogs;
+import ir.ham3da.darya.utility.PermissionType;
 import ir.ham3da.darya.utility.PreferenceHelper;
 import ir.ham3da.darya.utility.SerializableNotify;
 import ir.ham3da.darya.utility.SetLanguage;
@@ -96,7 +102,14 @@ public class ActivityMain extends AppCompatActivity
         {
             if (extras.containsKey("serializableNotifyVerse"))
             {
-                SerializableNotify serializableNotify = (SerializableNotify) extras.getSerializable("serializableNotifyVerse");
+                SerializableNotify serializableNotify;
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                {
+                     serializableNotify = extras.getSerializable("serializableNotifyVerse", SerializableNotify.class);
+                }
+                else {
+                     serializableNotify = (SerializableNotify) extras.getSerializable("serializableNotifyVerse");
+                }
                 assert serializableNotify != null;
                 rnd_poem_id = serializableNotify.getRnd_poem_id();
                 findStr = serializableNotify.getFindStr();
@@ -111,9 +124,7 @@ public class ActivityMain extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-
         super.onCreate(savedInstanceState);
-
 
         UtilFunctions.changeTheme(this);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
@@ -162,8 +173,10 @@ public class ActivityMain extends AppCompatActivity
         UpdateApp update = new UpdateApp(this);
         update.initUpdate();
 
-
     }
+
+
+
 
     public void LoadDBFirstTime(CustomProgress dlg1)
     {
@@ -588,6 +601,30 @@ public class ActivityMain extends AppCompatActivity
 
         final AlertDialog alert = dialog.create();
         alert.show();
+    }
+
+    public void checkPermissions()
+    {
+        List<PermissionType> permissionTypes = new ArrayList<>();
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+        {
+            permissionTypes.add(new PermissionType(Manifest.permission.POST_NOTIFICATIONS, 33));
+            permissionTypes.add(new PermissionType(Manifest.permission.READ_MEDIA_AUDIO, 2));
+            permissionTypes.add( new PermissionType(Manifest.permission.READ_MEDIA_IMAGES, 2) );
+        }
+        else {
+            permissionTypes.add( new PermissionType(Manifest.permission.WRITE_EXTERNAL_STORAGE, 2) );
+        }
+
+        boolean pmGranted =  UtilFunctions.permissionsIsGranted(this, permissionTypes);
+        if(!pmGranted)
+        {
+            MyDialogs1.ShowPermissionMessage(this, getString(R.string.perm_msg), R.drawable.ic_security_black_24dp);
+        }
+
+
     }
 
     public void startPoemAlarm()

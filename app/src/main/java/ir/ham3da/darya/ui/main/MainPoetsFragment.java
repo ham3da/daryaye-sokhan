@@ -1,5 +1,6 @@
 package ir.ham3da.darya.ui.main;
 
+import android.Manifest;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +23,7 @@ import ir.ham3da.darya.adaptors.PoetAndBooksAdapter;
 import ir.ham3da.darya.ActivityMain;
 import ir.ham3da.darya.MainActivityUtil;
 import ir.ham3da.darya.R;
+import ir.ham3da.darya.utility.UtilFunctions;
 
 public class MainPoetsFragment extends Fragment {
     RecyclerView recycler;
@@ -78,6 +80,8 @@ public class MainPoetsFragment extends Fragment {
 
         loadPoetsAndBooks();
 
+
+
         return root;
 
     }
@@ -102,11 +106,15 @@ public class MainPoetsFragment extends Fragment {
 
             if (activityMain!= null) {
                 activityMain.setCountPoetsAndBooks();
+
+                activityMain.checkPermissions();
                 activityMain.startPoemAlarm();
             }
 
             GanjoorDbBrowser GanjoorDbBrowser1 = new GanjoorDbBrowser(mContext);
             poetCounts = GanjoorDbBrowser1.getPoetsCount();
+
+
 
 
         } catch (Exception ex) {

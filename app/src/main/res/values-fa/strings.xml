@@ -82,7 +82,7 @@
     <string name="voice_search">جستجوی صوتی</string>
     <string name="tab_poets">شاعران</string>
     <string name="tab_favorites">گزیده‌ها</string>
-    <string name="developer_name">جواد احشامیان</string>
+    <string name="developer_name">جواد احتشامی</string>
     <string name="change_lang">تغییر زبان</string>
     <string name="text">متن</string>
     <string name="delete">حذف</string>
@@ -243,4 +243,6 @@
     <string name="google_sign_failed">ورود با حساب گوگل با شکست مواجه شد!</string>
     <string name="google_sign_ok">ورود با حساب گوگل با موفقیت انجام شد!</string>
     <string name="profile">نمایه</string>
+    <string name="perm_msg">برای استفاده از برخی ویژگی‌های برنامه، مانند دانلود فایل‌های صوتی، نمایش شعر در اعلان‌ها و اشتراک شعر به صورت عکس، لطفاً به برنامه اجازه دهید تا به مجوزهای لازم دسترسی داشته باشد.</string>
+
 </resources>

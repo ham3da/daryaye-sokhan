@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -23,6 +24,7 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.annotation.RequiresPermission;
 import androidx.annotation.UiThread;
 
@@ -851,7 +853,6 @@ public class PhotoEditor implements BrushViewChangeListener
      * @see OnSaveListener
      */
     @SuppressLint("StaticFieldLeak")
-    @RequiresPermission(allOf = {Manifest.permission.WRITE_EXTERNAL_STORAGE})
     public void saveAsFile(String fileFullName,   SaveSettings saveSettings, OnSaveListener onSaveListener)
     {
 
@@ -885,6 +886,7 @@ public class PhotoEditor implements BrushViewChangeListener
                             {
                                 parentView.setDrawingCacheEnabled(true);
                                 parentView.buildDrawingCache();
+
                                 Bitmap drawingCache = saveSettings.isTransparencyEnabled() ? BitmapUtil.removeTransparency(parentView.getDrawingCache()) : parentView.getDrawingCache();
 
                                String savedImagePath = UtilFunctions.saveImageToStorage(context, drawingCache, fileFullName);

@@ -1,5 +1,6 @@
 package ir.ham3da.darya.utility;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -67,7 +68,7 @@ public class MyDialogs {
         final ArrayList<LinkItem> links = new ArrayList<>();
 
         links.add(new LinkItem(0, context.getString(R.string.app_telegram_channel), "https://t.me/daryaye_sokhan", R.drawable.ic_telegram));
-        links.add(new LinkItem(1, context.getString(R.string.app_instagram), "https://www.instagram.com/daryaye_sokhan/", R.drawable.ic_instagram));
+        links.add(new LinkItem(1, context.getString(R.string.app_instagram), "https://www.instagram.com/hamseda03/", R.drawable.ic_instagram));
 
 // setup the alert builder
 
@@ -271,6 +272,35 @@ public class MyDialogs {
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
     }
+
+    public void ShowPermissionMessage(Activity activity,String message, int icon) {
+
+        dialog = new Dialog(context);
+        // no tile for the dialog
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_message);
+
+        TextView dialog_text = dialog.findViewById(R.id.dialog_text);
+
+        ImageView dialog_icon = dialog.findViewById(R.id.dialog_icon);
+
+        dialog_icon.setImageDrawable(ContextCompat.getDrawable(context, icon));
+
+        dialog_text.setText(UtilFunctions.fromHtml(message), TextView.BufferType.SPANNABLE);
+
+        Button okBtn = dialog.findViewById(R.id.okBtn);
+        okBtn.setText(R.string.ok);
+        okBtn.setOnClickListener(v ->
+        {
+            UtilFunctions.requestAllPermissions(activity);
+            dialog.dismiss();
+        });
+
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+
 
     public void ShowWarningMessage(String message) {
         ShowMessage(message, R.drawable.ic_warning_white_24dp);
