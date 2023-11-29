@@ -17,6 +17,8 @@
 * [کافه‌بازار](https://cafebazaar.ir/app/ir.ham3da.darya)
 * [مایکت](https://myket.ir/app/ir.ham3da.darya)
 
+## حمایت مالی با زرین پال
+* [zarinp.al/ham3da](https://zarinp.al/ham3da)
 
 ## Donation with cryptocurrencies
 
