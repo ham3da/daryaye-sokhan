@@ -17,12 +17,12 @@
 * [کافه‌بازار](https://cafebazaar.ir/app/ir.ham3da.darya)
 * [مایکت](https://myket.ir/app/ir.ham3da.darya)
 
+## حمایت مالی با زرین پال
+* [zarinp.al/ham3da](https://zarinp.al/ham3da)
 
 ## Donation with cryptocurrencies
 
 * <b>Address:</b> 0xD6735B2457c3c1E25122220Cf3067C614Cf18Bc4 (Available on Ethereum, Binance Smart, Ethereum Classic and Polygon (Matic) networks)
-* <b>Tron:</b> TTahPYiMfWygFALi2Ew3aQK8jF7rGPTk5b
-* <b>Perfect Money:</b> U21873528
 
 ## حمایت از طریق بانکهای ایرانی 
 * <b>شماره شبا:</b> <span dir="ltr">IR19 0120 0200 0000 5006 1815 61</span>

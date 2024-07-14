@@ -47,8 +47,6 @@
 ## حمایت با رمز ارزها:
 
 * <b>آدرس:</b> 0xD6735B2457c3c1E25122220Cf3067C614Cf18Bc4 (قایل استفاده در شبکه های Ethereum، Binance Smart، Ethereum Classic و Polygon (Matic))
-* <b>Tron:</b> TTahPYiMfWygFALi2Ew3aQK8jF7rGPTk5b
-* <b>Perfect Money:</b> U21873528
 
 ## تصاویری از اپلیکیشن
 
