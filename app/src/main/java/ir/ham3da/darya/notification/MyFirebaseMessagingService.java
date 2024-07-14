@@ -70,8 +70,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
         Log.e("onSendError", "msg: " + var2.getMessage());
     }
 
-    @SuppressLint("UnspecifiedImmutableFlag")
-    @SuppressWarnings("deprecation")
     private void sendNotification(String messageBody, String messageTitle)
     {
         try
@@ -87,7 +85,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
             }
             else
             {
-                pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
+                pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
             }
 
 

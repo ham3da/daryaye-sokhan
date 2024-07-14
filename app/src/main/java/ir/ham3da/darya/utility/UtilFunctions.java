@@ -72,7 +72,7 @@ public class UtilFunctions
 
     //      google play => 0 , cafebazaar => 1 , myket => 2,
 
-    private static final int Store = 0;
+    private static final int Store = 2;
 
     public UtilFunctions(Context mCtx)
     {
