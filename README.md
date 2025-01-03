@@ -18,7 +18,7 @@
 * [مایکت](https://myket.ir/app/ir.ham3da.darya)
 
 ## حمایت مالی با زرین پال
-* [zarinp.al/ham3da](https://zarinp.al/ham3da)
+* [zarinp.al/665266](https://zarinp.al/665266)
 
 ## Donation with cryptocurrencies
 
