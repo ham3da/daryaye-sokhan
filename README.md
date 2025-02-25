@@ -14,7 +14,6 @@ The Daryaye Sokhan is a valuable library of poetry of Persian great poets.
 
 
 ## لینک اپ (APK Link)
-* [Google Play](https://play.google.com/store/apps/details?id=ir.ham3da.darya)
 * [کافه‌بازار](https://cafebazaar.ir/app/ir.ham3da.darya)
 * [مایکت](https://myket.ir/app/ir.ham3da.darya)
 
