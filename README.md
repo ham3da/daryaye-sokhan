@@ -1,18 +1,19 @@
-## Sea of Poetry(Daryaye sokhan)
- The Sea of Poetry(Daryaye Sokhan) is a valuable library of poetry of Persian great poets.
+## دریای سخن (Daryaye sokhan)
+‏‏پروژه دریای سخن کتابخانه‌ای بزرگ و ارزشمند از اشعار و سخنان شاعران گرانقدر ادب فارسی برپایه بانک اطلاعاتی گنجور است.
+The Daryaye Sokhan is a valuable library of poetry of Persian great poets.
  
-## Useful information:
+## اطلاعات مفید (Useful information):
 * IDE: Android Studio Android Studio Flamingo | 2022.2.1 Patch
 * Programming language: Java
 
-## Used repositories:
+## پروژه‌های استفاده شده (Used repositories):
 * [ganjooroid](https://github.com/ganjoor/ganjooroid)
 * [ganjoor](https://github.com/ganjoor/ganjoor)
 * [PhotoEditor](https://github.com/burhanrashid52/PhotoEditor)
 * [Rastikerdar Fonts](https://rastikerdar.github.io/)
 
 
-## APK Link
+## لینک اپ (APK Link)
 * [Google Play](https://play.google.com/store/apps/details?id=ir.ham3da.darya)
 * [کافه‌بازار](https://cafebazaar.ir/app/ir.ham3da.darya)
 * [مایکت](https://myket.ir/app/ir.ham3da.darya)
@@ -25,11 +26,11 @@
 * <b>Address:</b> 0xD6735B2457c3c1E25122220Cf3067C614Cf18Bc4 (Available on Ethereum, Binance Smart, Ethereum Classic and Polygon (Matic) networks)
 
 ## حمایت از طریق بانکهای ایرانی 
-* <b>شماره شبا:</b> <span dir="ltr">IR19 0120 0200 0000 5006 1815 61</span>
-* <b>شماره کارت بانکی:</b> <span dir="ltr">6104-3379-5124-7251</span>
- (به نام جواد احشامیان - احتشامی ، بانک ملت)
+* <b>شماره شبا:</b> <span dir="ltr">IR900170000000105099983003</span>
+* <b>شماره کارت بانکی:</b> <span dir="ltr">6037-9917-7246-9791</span>
+ (به نام جواد احتشامی ، بانک ملی ایران)
 
-## Screenshots
+## عکس‌هایی از محیط برنامه (Screenshots)
 
 <p>
 <img width="320" src="screen-02.png"><br>
