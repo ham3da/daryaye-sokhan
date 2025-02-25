@@ -1,6 +1,6 @@
 ## دریای سخن (Daryaye sokhan)
 ‏‏پروژه دریای سخن کتابخانه‌ای بزرگ و ارزشمند از اشعار و سخنان شاعران گرانقدر ادب فارسی برپایه بانک اطلاعاتی گنجور است.  
-The Daryaye Sokhan is a valuable library of poetry of Persian great poets.
+<p>The Daryaye Sokhan is a valuable library of poetry of Persian great poets.</p>
  
 ## اطلاعات مفید (Useful information):
 * IDE: Android Studio Android Studio Flamingo | 2022.2.1 Patch
