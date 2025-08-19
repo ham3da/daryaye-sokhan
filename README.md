@@ -17,17 +17,15 @@
 * [کافه‌بازار](https://cafebazaar.ir/app/ir.ham3da.darya)
 * [مایکت](https://myket.ir/app/ir.ham3da.darya)
 
-## حمایت مالی با زرین پال
-* [zarinp.al/665266](https://zarinp.al/665266)
+
+## 🙏 از توسعه پروژه حمایت کنید 
+این پروژه به صورت متن‌باز و رایگان توسعه داده شده است.
+برای ادامه این مسیر و افزودن قابلیت‌های جدید، لطفاً با مشاهده و خرید سایر محصولاتمان، از ما حمایت کنید:
+👉 [مشاهده محصولات](https://ads.daryaye-sokhan.ir/)
 
 ## Donation with cryptocurrencies
 
 * <b>Address:</b> 0xD6735B2457c3c1E25122220Cf3067C614Cf18Bc4 (Available on Ethereum, Binance Smart, Ethereum Classic and Polygon (Matic) networks)
-
-## حمایت از طریق بانکهای ایرانی 
-* <b>شماره شبا:</b> <span dir="ltr">IR900170000000105099983003</span>
-* <b>شماره کارت بانکی:</b> <span dir="ltr">6037-9917-7246-9791</span>
- (به نام جواد احتشامی ، بانک ملی ایران)
 
 ## عکس‌هایی از محیط برنامه (Screenshots)
 
