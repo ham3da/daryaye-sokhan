@@ -1,130 +1,111 @@
 package ir.ham3da.darya.notification;
 
-import ir.ham3da.darya.ActivityMain;
-import ir.ham3da.darya.R;
-import ir.ham3da.darya.utility.AppSettings;
-import ir.ham3da.darya.utility.PreferenceHelper;
-
-import java.util.Map;
-
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import android.util.Log;
-
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.Map;
 
-public class MyFirebaseMessagingService extends FirebaseMessagingService
-{
+import ir.ham3da.darya.ActivityMain;
+import ir.ham3da.darya.R;
+import ir.ham3da.darya.utility.PreferenceHelper;
 
-    String TAG = "MyFirebaseMessagingService";
+public class MyFirebaseMessagingService extends FirebaseMessagingService {
+
+    private static final String TAG = "MyFirebaseMessagingService";
 
     @Override
-    public void onNewToken(String s)
-    {
-        super.onNewToken(s);
-        Log.e("NEW_TOKEN_2", s);
+    public void onNewToken(@NonNull String token) {
+        super.onNewToken(token);
+       // Log.e(TAG, "New FCM Token: " + token);
+        FirebaseMessaging.getInstance().subscribeToTopic("general_nots")
+                .addOnCompleteListener(subTask -> {
+                    if (subTask.isSuccessful()) {
+                        Log.d("FCM", "subscribe To Topic is Successful");
+                    }
+                });
+
     }
 
-
     @Override
-    public void onMessageReceived(RemoteMessage remoteMessage)
-    {
+    public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        Map<String, String> remoteMessageData = remoteMessage.getData();
+        NotificationChannels.createAllChannels(getApplicationContext());
 
-        String notify_title = remoteMessage.getNotification().getTitle();
-        String notify_msg = remoteMessage.getNotification().getBody();
-        String notify_url = remoteMessageData.get("MyUrl");
-        String notify_url_text = remoteMessageData.get("MyUrlText");
-        String notify_text = remoteMessageData.get("Text");
+        Map<String, String> data = remoteMessage.getData();
 
-        PreferenceHelper PreferenceManager1 = new PreferenceHelper(getApplicationContext());
+        String notifyTitle = null;
+        String notifyBody = null;
 
-        PreferenceManager1.setKey("notify_title", notify_title);
-        PreferenceManager1.setKey("notify_url", notify_url);
-        PreferenceManager1.setKey("notify_text", notify_text);
-        PreferenceManager1.setKey("MyUrlText", notify_url_text);
-
-        // JSONObject json = new JSONObject(remoteMessage.getData());
-        Log.e("notify_url", "url: " + notify_url);
-
-        this.sendNotification(notify_msg, notify_title);
-        //Log.e("getBody", remoteMessage.getNotification().getBody());
-    }
-
-    @Override
-    public void onSendError(String var1, Exception var2)
-    {
-        Log.e("onSendError", "msg: " + var2.getMessage());
-    }
-
-    private void sendNotification(String messageBody, String messageTitle)
-    {
-        try
-        {
-
-            Intent notificationIntent = new Intent(getApplicationContext(), ActivityMain.class);
-            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-            PendingIntent pendingIntent = null;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S)
-            {
-                pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_MUTABLE);
-            }
-            else
-            {
-                pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
-            }
-
-
-            NotificationCompat.Builder mBuilder;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            {
-
-                mBuilder =
-                        // Builder class for devices targeting API 26+ requires a channel ID
-                        new NotificationCompat.Builder(this, AppSettings.default_notification_channel_id)
-                                .setSmallIcon(R.mipmap.ic_launcher)
-                                .setContentTitle(messageTitle)
-                                .setContentText(messageBody);
-            }
-            else
-            {
-                mBuilder =
-                        // this Builder class is deprecated
-                        new NotificationCompat.Builder(this)
-                                .setSmallIcon(R.mipmap.ic_launcher)
-                                .setContentTitle(messageTitle)
-                                .setContentText(messageBody);
-
-            }
-
-            NotificationManagerCompat manager = NotificationManagerCompat.from(getApplicationContext());
-            mBuilder.setContentIntent(pendingIntent);
-            mBuilder.setAutoCancel(true);
-
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED)
-            {
-                return;
-            }
-            manager.notify(0, mBuilder.build());
-
-        } catch (Exception ex) {
-            Log.e("ExceptionNotification", ex.getMessage());
+        if (remoteMessage.getNotification() != null) {
+            notifyTitle = remoteMessage.getNotification().getTitle();
+            notifyBody = remoteMessage.getNotification().getBody();
         }
 
+        String notifyUrl = data.get("MyUrl");
+        String notifyUrlText = data.get("MyUrlText");
+        String notifyText = data.get("Text");
 
+        PreferenceHelper prefs = new PreferenceHelper(getApplicationContext());
+        prefs.setKey("notify_title", notifyTitle);
+        prefs.setKey("notify_url", notifyUrl);
+        prefs.setKey("notify_text", notifyText);
+        prefs.setKey("MyUrlText", notifyUrlText);
+
+        Log.e(TAG, "Notification URL: " + notifyUrl);
+
+        sendNotification(notifyBody, notifyTitle);
+    }
+
+    private void sendNotification(String messageBody, String messageTitle) {
+        try {
+            if (messageTitle == null || messageBody == null) {
+                return;
+            }
+            Intent intent = new Intent(this, ActivityMain.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+            PendingIntent pendingIntent;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_MUTABLE);
+            } else {
+                pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
+            }
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NotificationChannels.CHANNEL_ID_FCM)
+                    .setSmallIcon(R.drawable.ic_artboard1)
+                    .setContentTitle(messageTitle)
+                    .setContentText(messageBody)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setAutoCancel(true)
+                    .setContentIntent(pendingIntent);
+
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                    Log.e(TAG, "Notification permission not granted");
+                    return;
+                }
+            }
+
+            notificationManager.notify(1001, builder.build());
+
+        } catch (Exception e) {
+            Log.e(TAG, "Notification Exception: " + e.getMessage());
+        }
     }
 }

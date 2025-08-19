@@ -1,8 +1,10 @@
 package ir.ham3da.darya;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import android.content.Context;
@@ -24,6 +26,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -38,8 +41,7 @@ import ir.ham3da.darya.utility.RateType;
 import ir.ham3da.darya.utility.SetLanguage;
 import ir.ham3da.darya.utility.UtilFunctions;
 
-public class ActivityPuzzle extends AppCompatActivity
-{
+public class ActivityPuzzle extends AppCompatActivity {
 
     UtilFunctions UtilFunctions1;
     GanjoorDbBrowser GanjoorDbBrowser1;
@@ -58,31 +60,31 @@ public class ActivityPuzzle extends AppCompatActivity
 
     int lastIncorrectAnsCount = 0;
 
-   RelativeLayout relativeLayout2;
+    RelativeLayout relativeLayout2;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UtilFunctions.changeTheme(this, true);
+        UtilFunctions.changeTheme(this);
         setContentView(R.layout.activity_puzzle);
+        UtilFunctions1 = new UtilFunctions(this);
+        UtilFunctions1.setBackBackPressed(ActivityPuzzle.this);
+
+        toolbar = findViewById(R.id.pz_toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(R.string.dont_forget_poetry);
+        }
         AppSettings.Init(this);
         lastIncorrectAnsCount = AppSettings.getIncorrectAnsCount();
 
         progress_bar = findViewById(R.id.progress_bar);
         relativeLayout2 = findViewById(R.id.relativeLayout2);
 
-        UtilFunctions1 = new UtilFunctions(this);
-
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
         GanjoorDbBrowser1 = new GanjoorDbBrowser(this);
-
         GanjoorDbBrowser1.createRateTable();
-
-        setTitle(R.string.dont_forget_poetry);
-
         MyDialogs1 = new MyDialogs(this);
 
         editText_response = findViewById(R.id.your_response);
@@ -132,22 +134,16 @@ public class ActivityPuzzle extends AppCompatActivity
 
         puzzle_check.setOnClickListener(v ->
         {
-            if (!isAnswered)
-            {
+            if (!isAnswered) {
                 boolean check = checkAnswer(validResponse, editText_response.getText().toString());
-                if (check)
-                {
+                if (check) {
                     puzzle_check.setImageTintList(ContextCompat.getColorStateList(this, R.color.green_color_picker));
                     //play ok
-                    if (!AppSettings.getGameSoundMute())
-                    {
-                        try
-                        {
+                    if (!AppSettings.getGameSoundMute()) {
+                        try {
                             mp = MediaPlayer.create(getApplicationContext(), R.raw.valid2);
                             mp.start();
-                        }
-                        catch (Exception exception)
-                        {
+                        } catch (Exception exception) {
                             exception.printStackTrace();
                         }
 
@@ -160,17 +156,13 @@ public class ActivityPuzzle extends AppCompatActivity
 
                 } else {
 
-                    puzzle_check.setImageTintList(ContextCompat.getColorStateList(this,R.color.red500));
+                    puzzle_check.setImageTintList(ContextCompat.getColorStateList(this, R.color.red500));
                     //play warning
-                    if (!AppSettings.getGameSoundMute())
-                    {
-                        try
-                        {
+                    if (!AppSettings.getGameSoundMute()) {
+                        try {
                             mp = MediaPlayer.create(getApplicationContext(), R.raw.error3);
                             mp.start();
-                        }
-                        catch (Exception exception)
-                        {
+                        } catch (Exception exception) {
                             exception.printStackTrace();
                         }
 
@@ -195,7 +187,6 @@ public class ActivityPuzzle extends AppCompatActivity
             }
 
         });
-
 
 
         editText_response.setOnEditorActionListener((v, actionId, event) -> {
@@ -224,12 +215,9 @@ public class ActivityPuzzle extends AppCompatActivity
     }
 
 
-    private void setProgressbarVisible(int visibility)
-    {
+    private void setProgressbarVisible(int visibility) {
         progress_bar.setVisibility(visibility);
     }
-
-
 
 
     private void loadPoints() {
@@ -285,15 +273,12 @@ public class ActivityPuzzle extends AppCompatActivity
     }
 
 
-
     private class NewVerseAsyncTask {
-
 
 
         protected void execute() {
 
-            if (progress_bar.getVisibility() != View.VISIBLE)
-            {
+            if (progress_bar.getVisibility() != View.VISIBLE) {
                 progress_bar.setVisibility(View.VISIBLE);
                 progress_bar.setIndeterminate(true);
             }
@@ -372,7 +357,7 @@ public class ActivityPuzzle extends AppCompatActivity
             runOnUiThread(() -> {
                 progress_bar.setVisibility(View.INVISIBLE);
 
-                if(vreseStringWithLine != null) {
+                if (vreseStringWithLine != null) {
                     textViewVerse.setText(UtilFunctions.fromHtml(vreseStringWithLine), TextView.BufferType.SPANNABLE);
                 }
 
@@ -389,12 +374,6 @@ public class ActivityPuzzle extends AppCompatActivity
 
 
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Bungee.slideDown(this);
     }
 
     @Override

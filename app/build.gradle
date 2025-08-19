@@ -1,7 +1,12 @@
-apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
+plugins {
+    id 'com.android.application'
+    id 'com.google.gms.google-services'
+}
+
 
 android {
+    namespace 'ir.ham3da.darya'
+
     signingConfigs {
         darya_sign_confing {
             storeFile file('D:/Android/Android_B4a/keystore_android_studio/android_studio_darya.jks')
@@ -9,14 +14,14 @@ android {
         }
     }
 
-    setCompileSdkVersion(34)
-    setBuildToolsVersion('34.0.0')
+    setCompileSdkVersion(35)
+    setBuildToolsVersion('35.0.0')
     defaultConfig {
         applicationId "ir.ham3da.darya"
-        minSdkVersion 21
-        setTargetSdkVersion(34)
-        versionCode 52
-        versionName "2.9.1"
+        minSdkVersion 23
+        setTargetSdkVersion(35)
+        versionCode 53
+        versionName "2.9.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -39,39 +44,42 @@ android {
         buildConfig true
     }
 
-    namespace 'ir.ham3da.darya'
+
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "androidx.appcompat:appcompat:1.7.0"
+    implementation "androidx.appcompat:appcompat:1.7.1"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.material:material:1.12.0'
-    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    implementation 'androidx.recyclerview:recyclerview:1.4.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.annotation:annotation:1.8.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
+    implementation 'androidx.annotation:annotation:1.9.1'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.viewpager2:viewpager2:1.1.0'
 
 
-    implementation platform('com.google.firebase:firebase-bom:33.1.2')
+    implementation platform('com.google.firebase:firebase-bom:34.1.0')
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.firebase:firebase-analytics'
 
-    implementation 'com.mindorks.android:prdownloader:0.6.0'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.8.3'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.3'
+//    implementation 'com.mindorks.android:prdownloader:0.6.0'
+    implementation 'com.github.amitshekhariitbhu:PRDownloader:1.0.2'
 
-    implementation 'com.google.android.play:integrity:1.3.0'
+
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.9.2'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.2'
+
+    implementation 'com.google.android.play:integrity:1.4.0'
 
 
     //implementation group: 'commons-io', name: 'commons-io', version: '20030203.000550'
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
-    androidTestImplementation 'androidx.test:runner:1.6.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.3.0'
+    androidTestImplementation 'androidx.test:runner:1.7.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
     implementation 'com.github.koji-1009:ChronoDialogPreference:2.1.0'
     implementation 'com.google.android.play:app-update:2.1.0'
     implementation 'com.android.volley:volley:1.2.1'

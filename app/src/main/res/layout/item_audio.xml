@@ -27,12 +27,12 @@
                 android:id="@+id/avatar_audio"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:padding="4dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:background="@drawable/circle"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/ic_volume_down_black_24dp"
-                app:tint="@color/icon_dl" />
+                app:srcCompat="@drawable/baseline_headphones_24"
+                app:tint="?attr/ListMoreBtnBGColor" />
 
             <TextView
                 android:id="@+id/audio_name"

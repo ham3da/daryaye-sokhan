@@ -23,20 +23,18 @@ public class ActivityDonateCrypto extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        UtilFunctions.changeTheme(this, true);
+        UtilFunctions.changeTheme(this);
         setContentView(R.layout.activity_donate_crypto);
         UtilFunctions1 = new UtilFunctions(this);
+        UtilFunctions1.setBackBackPressed(ActivityDonateCrypto.this);
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
         setTitle(R.string.donate_with_crypto);
-
         ImageButton address_btc_copy = findViewById(R.id.address_btc_copy);
         TextView address_btc_txt = findViewById(R.id.address_btc_txt);
-
-
         ImageButton address_eth_copy = findViewById(R.id.address_eth_copy);
         TextView address_eth_txt = findViewById(R.id.address_eth_txt);
 
@@ -68,11 +66,6 @@ public class ActivityDonateCrypto extends AppCompatActivity
 
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Bungee.slideDown(this); //fire the slide left animation
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -39,7 +39,7 @@ public class MainAdMobFragment extends Fragment
     Button btn_view_ad;
 
     //    InterstitialAd mInterstitialAd;
-    ProgressBar progress_bar;
+    //ProgressBar progress_bar;
     String TAG = "MainAdMobFragment";
     UtilFunctions UtilFunctions1;
 
@@ -74,25 +74,11 @@ public class MainAdMobFragment extends Fragment
         UtilFunctions1 = new UtilFunctions(mContext);
 
         btn_view_ad = root.findViewById(R.id.btn_view_ad);
-        progress_bar = root.findViewById(R.id.progress_bar);
 
         Button btn_donate_github = root.findViewById(R.id.btn_donate_github);
         Button btn_donate_collections = root.findViewById(R.id.btn_donate_collections);
 
-        Button btn_donate_crypto = root.findViewById(R.id.btn_donate_crypto);
 
-        View rv_pay = root.findViewById(R.id.rv_pay);
-
-//        if (UtilFunctions.isGooglePlayVersion())
-//        {
-//            rv_pay.setVisibility(View.VISIBLE);
-//        }
-//        else
-//        {
-//            rv_pay.setVisibility(View.GONE);
-//        }
-
-        rv_pay.setVisibility(View.GONE);
         btn_view_ad.setOnClickListener(v ->
         {
             // displayInterstitial();
@@ -109,15 +95,7 @@ public class MainAdMobFragment extends Fragment
 
         });
 
-        btn_donate_crypto.setOnClickListener(v ->
-        {
-            Intent intent = new Intent(mContext, ActivityDonateCrypto.class);
-            startActivity(intent);
-            Bungee.card(mContext);
-        });
-
-
-        return root;
+       return root;
     }
 
 

@@ -1,8 +1,10 @@
 package ir.ham3da.darya;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,15 +19,17 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.format.Formatter;
 import android.util.Log;
-import android.view.ActionMode;
+
+import androidx.appcompat.view.ActionMode;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -69,10 +73,12 @@ import com.downloader.PRDownloaderConfig;
 import com.downloader.Progress;
 import com.downloader.request.DownloadRequest;
 import com.downloader.request.DownloadRequestBuilder;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.appcompat.widget.SearchView;
 
 
-public class ActivityCollection extends AppCompatActivity
-{
+
+public class ActivityCollection extends AppCompatActivity {
 
     GanjoorDbBrowser _DbBrowser;
     GDBListAdaptor GDBListAdaptor1;
@@ -94,55 +100,112 @@ public class ActivityCollection extends AppCompatActivity
     TextView progress_text2;
     ProgressBar progress_bar;
     List<ScheduleGDB> scheduleGDBList;
-    ActionMode actionMode;
-
+    private Toolbar toolbar;
     /**
      * نام فایلهای مجموعه های پیش فرض
      */
     private final String[] _Lists_Url = {"http://i.ganjoor.net/android/androidgdbs.xml"};
+    boolean isActionMode = false;
 
-    public void showActionbar()
-    {
-        if (actionMode == null)
-        {
-            actionMode = startActionMode(callback);
-        }
+    private void enableActionMode() {
+        isActionMode = true;
+        toolbar.getMenu().clear();
+        toolbar.inflateMenu(R.menu.audio_collection_menu);
+        toolbar.setTitle("1");
     }
 
-    public void setActionbarTitle(String title)
-    {
-        if (actionMode != null)
-        {
-            actionMode.setTitle(title);
+    private void disableActionMode() {
+        setMainMenuActions();
+
+        isActionMode = false;
+        toolbar.getMenu().clear();
+        toolbar.inflateMenu(R.menu.collection_menu);
+        toolbar.setTitle(R.string.app_name);
+
+        MenuItem searchItem = toolbar.getMenu().findItem(R.id.action_search_collection);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                SearchView searchView = (SearchView) item.getActionView();
+                searchView.setFocusable(true);
+                searchView.setIconified(false);
+                searchView.requestFocus();
+                Log.e("TEST", "SearchView expanded");
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                Log.e("TEST", "SearchView collapsed");
+                return true;
+            }
+        });
+
+        try {
+            Typeface typeface = ResourcesCompat.getFont(this, R.font.iran_sans_mobile_light);
+            TextView searchText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+            searchText.setTypeface(typeface);
+        } catch (Exception ex) {
+            Log.e(TAG, "Font error: " + ex.getMessage());
         }
+        // تنظیمات SearchView
+        searchView.setQueryHint(getString(R.string.enter_poet_name));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //searchInRecycleView(query.trim());
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.trim().length() >= 2) {
+                    searchInRecycleView(newText.trim());
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
 
     }
 
-    private final ActionMode.Callback callback = new ActionMode.Callback()
-    {
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu)
-        {
-            mode.getMenuInflater().inflate(R.menu.audio_collection_menu, menu);
-            return true;
-        }
+    private void setMainMenuActions() {
+
+        toolbar.setOnMenuItemClickListener(item -> {
+
+             if (item.getItemId() == R.id.reload_all_collection) {
+                reloadRecycleView();
+            } else if (item.getItemId() == android.R.id.home) {
+                if (searchViewHasFocus) {
+                    searchView.setIconified(true);
+                    searchViewHasFocus = false;
+                } else {
+                    getOnBackPressedDispatcher().onBackPressed();
+                    Bungee.slideDown(this); //fire the slide left animation
+                }
+
+            }
+
+            return false;
+        });
+    }
 
 
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item)
-        {
-            switch (item.getItemId())
-            {
+    public void showActionbar() {
+        enableActionMode();
+        toolbar.setOnMenuItemClickListener(item -> {
+
+            switch (item.getItemId()) {
                 case R.id.action_select_all:
-                    if (GDBListAdaptor1 != null)
-                    {
-                        if (GDBListAdaptor1.checkAnyBookIsSelected())
-                        {
+                    if (GDBListAdaptor1 != null) {
+                        if (GDBListAdaptor1.checkAnyBookIsSelected()) {
                             GDBListAdaptor1.selectAllItem(false);
                             item.setIcon(R.drawable.ic_outline_library_add_check_24);
-                        }
-                        else
-                        {
+                        } else {
                             GDBListAdaptor1.selectAllItem(true);
                             item.setIcon(R.drawable.ic_baseline_library_add_check_24_fill);
                         }
@@ -161,48 +224,33 @@ public class ActivityCollection extends AppCompatActivity
                 default:
                     return false;
             }
+        });
+    }
+
+    public void setActionbarTitle(String title) {
+        if (isActionMode) {
+            toolbar.setTitle(title);
         }
 
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu)
-        {
-            return false;
-        }
+    }
 
-        @Override
-        public void onDestroyActionMode(ActionMode mode)
-        {
-            actionMode = null;
-
-        }
-    };
-
-    private void reloadRecycleView()
-    {
-        if (UtilFunctions.isNetworkConnected(this))
-        {
+    private void reloadRecycleView() {
+        if (UtilFunctions.isNetworkConnected(this)) {
             loadItems();
-        }
-        else
-        {
+        } else {
             finish();
             Toast.makeText(this, getString(R.string.internet_failed), Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void searchInRecycleView(String findStr)
-    {
-        if (!findStr.isEmpty())
-        {
-            if (_MixedList != null)
-            {
+    private void searchInRecycleView(String findStr) {
+        if (!findStr.isEmpty()) {
+            if (_MixedList != null) {
                 GDBList _MixedListSearch = new GDBList(_MixedList);
                 _MixedListSearch._Items.clear();
                 int Index = 0;
-                for (GDBInfo gdbInfo : _MixedList._Items)
-                {
-                    if (gdbInfo._CatName.contains(findStr))
-                    {
+                for (GDBInfo gdbInfo : _MixedList._Items) {
+                    if (gdbInfo._CatName.contains(findStr)) {
                         Index++;
                         gdbInfo._Index = Index;
                         _MixedListSearch._Items.add(gdbInfo);
@@ -214,43 +262,62 @@ public class ActivityCollection extends AppCompatActivity
     }
 
     @Override
-    protected void attachBaseContext(Context newBase)
-    {
+    protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(SetLanguage.wrap(newBase));
     }
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        UtilFunctions.changeTheme(this, true);
+        UtilFunctions.changeTheme(this);
 
         setContentView(R.layout.activity_collection);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null)
-        {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-        setTitle(R.string.collections);
+
+        toolbar = findViewById(R.id.toolbar_collection);
+        toolbar.setNavigationIcon(R.drawable.baseline_arrow_back_24);
+        toolbar.setTitle(R.string.dont_forget_poetry);
+
+        toolbar.setNavigationOnClickListener(v -> {
+            if (isActionMode) {
+                disableActionMode(); // خروج از حالت انتخاب
+            } else {
+
+                Log.e(TAG, "back1: 1" );
+                getOnBackPressedDispatcher().onBackPressed();
+            }
+        });
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+
+                if (isActionMode) {
+                    disableActionMode();
+                } else {
+                    if (searchViewHasFocus) {
+                        searchViewHasFocus = false;
+                        searchView.setIconified(true);
+                    } else {
+                        setEnabled(false);
+                        getOnBackPressedDispatcher().onBackPressed();
+                    }
+                }
+            }
+        });
+
+        disableActionMode();
+        //setTitle(R.string.collections);
         recyclerViewCollection = findViewById(R.id.RecyclerViewCollection);
         _DbBrowser = new GanjoorDbBrowser(this);
 
         simpleSwipeRefreshLayout = findViewById(R.id.simpleSwipeRefreshLayout);
-
-
         simpleSwipeRefreshLayout.setOnRefreshListener(this::loadItems);
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-
-
         recyclerViewCollection.setLayoutManager(linearLayoutManager);
-
-
         RelativeLayout downloadRelativelayout = findViewById(R.id.download_RelativeLayout);
-
-        if (downloadRelativelayout.isShown())
-        {
+        if (downloadRelativelayout.isShown()) {
             downloadRelativelayout.setVisibility(View.GONE);
         }
         cancel_downloads = findViewById(R.id.cancel_downloads);
@@ -268,15 +335,12 @@ public class ActivityCollection extends AppCompatActivity
         PRDownloader.initialize(getApplicationContext(), config);
     }
 
-    private void downloadMarkedBook()
-    {
+    private void downloadMarkedBook() {
         scheduleGDBList = new ArrayList<>();
 
-        for (int i = 0; i < GDBListAdaptor1.getItemCount(); i++)
-        {
+        for (int i = 0; i < GDBListAdaptor1.getItemCount(); i++) {
             if (GDBListAdaptor1.isSelected(i) && !GDBListAdaptor1.getBookExist(i)
-                    || GDBListAdaptor1.isSelected(i) && GDBListAdaptor1.getBookUpdateAvailable(i))
-            {
+                    || GDBListAdaptor1.isSelected(i) && GDBListAdaptor1.getBookUpdateAvailable(i)) {
                 ScheduleGDB scheduleBook = GDBListAdaptor1.getScheduleBook(i);
                 scheduleGDBList.add(scheduleBook);
             }
@@ -285,32 +349,24 @@ public class ActivityCollection extends AppCompatActivity
         downloadBooks(scheduleGDBList);
     }
 
-    public void showSuccessDownloadToast(Boolean DownloadAll)
-    {
-        if (DownloadAll)
-        {
+    public void showSuccessDownloadToast(Boolean DownloadAll) {
+        if (DownloadAll) {
             Toast.makeText(this, getString(R.string.selected_collectons_added), Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
+        } else {
             Toast.makeText(this, getString(R.string.success_add), Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void downloadFailToast()
-    {
+    public void downloadFailToast() {
         Toast.makeText(this, getString(R.string.download_failed), Toast.LENGTH_SHORT).show();
     }
 
-    public void downloadBooks(List<ScheduleGDB> scheduleBookList1)
-    {
+    public void downloadBooks(List<ScheduleGDB> scheduleBookList1) {
         RelativeLayout downloadRelatively = findViewById(R.id.download_RelativeLayout);
 
         int totalDownloads = scheduleBookList1.size();
-        if (totalDownloads > 0)
-        {
-            if (downloadRelatively.getVisibility() != View.VISIBLE)
-            {
+        if (totalDownloads > 0) {
+            if (downloadRelatively.getVisibility() != View.VISIBLE) {
                 downloadRelatively.setVisibility(View.VISIBLE);
             }
             progress_bar.setProgress(0);
@@ -324,8 +380,7 @@ public class ActivityCollection extends AppCompatActivity
                     }
             );
 
-            if (totalDownloads > sumDownloaded)
-            {
+            if (totalDownloads > sumDownloaded) {
                 ScheduleGDB scheduleGDB = scheduleBookList1.get(sumDownloaded);
                 sumDownloaded++;
                 String fileName = scheduleGDB._FileName;
@@ -340,8 +395,7 @@ public class ActivityCollection extends AppCompatActivity
 
                 downloadRequest.setOnProgressListener(progress -> {
                     int percent = (int) Math.round(((double) progress.currentBytes / (double) progress.totalBytes) * 100);
-                    if (percent > 0)
-                    {
+                    if (percent > 0) {
                         String formatBytesCopied = getString(R.string.file_received) + " " + Formatter.formatFileSize(ActivityCollection.this, progress.currentBytes);
 
                         String formatFileLength = getString(R.string.file_size) + " " + Formatter.formatFileSize(ActivityCollection.this, progress.totalBytes);
@@ -353,29 +407,22 @@ public class ActivityCollection extends AppCompatActivity
                         progress_text1.setText(formatBytesCopied);
                         progress_text2.setText(formatFileLength);
                     }
-                }).start(new OnDownloadListener()
-                {
+                }).start(new OnDownloadListener() {
                     @Override
-                    public void onDownloadComplete()
-                    {
+                    public void onDownloadComplete() {
                         String filePath = dlPath + "/" + fileName;
 
                         File file = new File(filePath);
-                        if (file.exists())
-                        {
-                            if (scheduleGDB._DoUpdate)
-                            {
+                        if (file.exists()) {
+                            if (scheduleGDB._DoUpdate) {
                                 _DbBrowser.DeletePoet(scheduleGDB._PoetID);
                             }
                             boolean imported = _DbBrowser.ImportGdb(filePath, scheduleGDB._Update_info);
-                            if (imported)
-                            {
+                            if (imported) {
                                 GDBListAdaptor1.notifyNewImported(scheduleGDB._Pos, scheduleGDB._PoetID);
-                                try
-                                {
+                                try {
                                     file.delete();
-                                } catch (Exception ex)
-                                {
+                                } catch (Exception ex) {
                                     Log.e(TAG, "onPostExecute: " + ex.getMessage());
                                 }
                                 App globalVariable = (App) getApplicationContext();
@@ -383,11 +430,9 @@ public class ActivityCollection extends AppCompatActivity
                             }
                             downloadBooks(scheduleGDBList);
                         }
-                        if (finalSum >= totalDownloads)
-                        {
+                        if (finalSum >= totalDownloads) {
                             boolean multi_dl = false;
-                            if (totalDownloads > 1)
-                            {
+                            if (totalDownloads > 1) {
                                 multi_dl = true;
                             }
                             GDBListAdaptor1.notifyDataSetChanged();
@@ -397,8 +442,7 @@ public class ActivityCollection extends AppCompatActivity
                     }
 
                     @Override
-                    public void onError(Error error)
-                    {
+                    public void onError(Error error) {
                         Log.e("DownloadAudioTask", "ResponseCode: " +
                                 error.getResponseCode() + ", get ServerError Message: " + error.getServerErrorMessage() +
                                 ", get Connection Exception:" + error.getConnectionException().getMessage());
@@ -414,17 +458,13 @@ public class ActivityCollection extends AppCompatActivity
         }
     }
 
-    private void deleteMarkedBook()
-    {
-        if (!GDBListAdaptor1.checkAnyBookIsSelected())
-        {
+    private void deleteMarkedBook() {
+        if (!GDBListAdaptor1.checkAnyBookIsSelected()) {
             return;
         }
         List<GDBInfo> gdbInfos = new ArrayList<>();
-        for (int i = 0; i < GDBListAdaptor1.getItemCount(); i++)
-        {
-            if (GDBListAdaptor1.isSelected(i) && GDBListAdaptor1.getBookExist(i))
-            {
+        for (int i = 0; i < GDBListAdaptor1.getItemCount(); i++) {
+            if (GDBListAdaptor1.isSelected(i) && GDBListAdaptor1.getBookExist(i)) {
                 GDBInfo gdbInfo = GDBListAdaptor1.getGanjoorBookInfo(i);
                 gdbInfos.add(gdbInfo);
             }
@@ -453,15 +493,13 @@ public class ActivityCollection extends AppCompatActivity
     }
 
 
-    private class DeleteBookFilesTask
-    {
+    private class DeleteBookFilesTask {
 
         GDBInfo[] gdbInfoArrayList;
         Thread deleteThread;
         Handler mainHandler = new Handler(Looper.getMainLooper());
 
-        public DeleteBookFilesTask(GDBInfo[] ganjoorBookInfo1)
-        {
+        public DeleteBookFilesTask(GDBInfo[] ganjoorBookInfo1) {
             gdbInfoArrayList = ganjoorBookInfo1;
             cancel_downloads.setOnClickListener(v -> {
                 this.deleteThread.interrupt();
@@ -469,8 +507,7 @@ public class ActivityCollection extends AppCompatActivity
         }
 
 
-        public void execute()
-        {
+        public void execute() {
             RelativeLayout downloadRelatively = findViewById(R.id.download_RelativeLayout);
 
             downloadRelatively.setVisibility(View.VISIBLE);
@@ -485,34 +522,27 @@ public class ActivityCollection extends AppCompatActivity
 
         }
 
-        private void doInBackground()
-        {
-            try
-            {
+        private void doInBackground() {
+            try {
                 int count = gdbInfoArrayList.length;
-                for (int i = 0; i < count; i++)
-                {
+                for (int i = 0; i < count; i++) {
                     GDBInfo gdbInfo = gdbInfoArrayList[i];
                     GDBListAdaptor1.deleteItemMarked(gdbInfo);
                     publishProgress(i + 1, count);
                 }
                 completed();
-            } catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Log.e("xml_Dl", "doInBackground: " + ex.getMessage());
             }
 
         }
 
-        private void publishProgress(int total, int current)
-        {
+        private void publishProgress(int total, int current) {
 
             mainHandler.post(() -> {
-                if (progress_bar != null)
-                {
+                if (progress_bar != null) {
                     int percent = (int) Math.round(((double) current / (double) total) * 100);
-                    if (percent > 0)
-                    {
+                    if (percent > 0) {
                         progress_bar.setProgress(percent);
                     }
 
@@ -526,8 +556,7 @@ public class ActivityCollection extends AppCompatActivity
 
         }
 
-        private void completed()
-        {
+        private void completed() {
             runOnUiThread(() -> {
                 RelativeLayout downloadRelativeLayout = findViewById(R.id.download_RelativeLayout);
                 downloadRelativeLayout.setVisibility(View.GONE);
@@ -540,133 +569,42 @@ public class ActivityCollection extends AppCompatActivity
     }
 
 
-    @Override
-    public void onBackPressed()
-    {
-        if (searchViewHasFocus)
-        {
-            searchView.setIconified(true);
-        }
-        else
-        {
-            super.onBackPressed();
-            Bungee.slideDown(this); //fire the slide left animation
-        }
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        getMenuInflater().inflate(R.menu.collection_menu, menu);
-        MenuItem action_search = menu.findItem(R.id.action_search);
-        searchView = (SearchView) action_search.getActionView();
-        searchView.setQueryHint(getString(R.string.enter_poet_name));
-        try
-        {
-            Typeface typeface = ResourcesCompat.getFont(this, R.font.iran_sans_mobile_light);
-            int id = searchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
-            TextView textView = searchView.findViewById(id);
-            textView.setTypeface(typeface);
-        } catch (Exception ex)
-        {
-            Log.e(TAG, "msg: " + ex.getMessage());
-        }
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
-        {
-            @Override
-            public boolean onQueryTextSubmit(String query)
-            {
-                searchInRecycleView(query.trim());
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText)
-            {
-                return false;
-            }
-        });
-        searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> searchViewHasFocus = hasFocus);
-        return true;
-
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item)
-    {
-
-        int id = item.getItemId();
-        if (android.R.id.home == id)
-        {
-            if (searchViewHasFocus)
-            {
-                searchView.setIconified(true);
-            }
-            else
-            {
-                super.onBackPressed();
-                Bungee.slideDown(this); //fire the slide left animation
-            }
-        }
-        else if(R.id.reload_all == id)
-        {
-            reloadRecycleView();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-
-    private void loadItems()
-    {
+    private void loadItems() {
         DownloadXmlTask downloadXmlTask = new DownloadXmlTask(_Lists_Url[0]);
         downloadXmlTask.execute();
 
 
     }
 
-    private Integer SetLists(String XMLString)
-    {
+    private Integer SetLists(String XMLString) {
         //val res = 0
-        if (XMLString != null && !XMLString.isEmpty())
-        {
+        if (XMLString != null && !XMLString.isEmpty()) {
             InputStream InputStream1 = new ByteArrayInputStream(XMLString.getBytes(StandardCharsets.UTF_8));
 
             List<GDBList> lists = new LinkedList<>();
             GDBList list;
-            try
-            {
+            try {
                 list = GDBList.Build(0, InputStream1, _DbBrowser);
-                if (list != null)
-                {
+                if (list != null) {
                     lists.add(list);
                 }
-            } catch (IOException e)
-            {
+            } catch (IOException e) {
                 Log.e("IOException", "SetLists err: " + e.getMessage());
                 //  e.printStackTrace();
-            } catch (XmlPullParserException e)
-            {
+            } catch (XmlPullParserException e) {
                 Log.e("XmlPullParserException", "SetLists err: " + e.getMessage());
                 // e.printStackTrace();
-            } catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Log.e("Exception", "SetLists err: " + ex.getMessage());
             }
             _MixedList = GDBList.Mix(lists);
-        }
-        else
-        {
+        } else {
             Log.e("SetLists_Error", "SetLists err: " + getString(R.string.nothing_found));
         }
 
-        if (_MixedList != null)
-        {
+        if (_MixedList != null) {
             return 1;
-        }
-        else
-        {
+        } else {
             return 0;
         }
     }
@@ -676,42 +614,35 @@ public class ActivityCollection extends AppCompatActivity
      *
      * @param list GDBList
      */
-    protected void showGDBList(GDBList list)
-    {
+    protected void showGDBList(GDBList list) {
         GDBListAdaptor1 = new GDBListAdaptor(list, this);
         recyclerViewCollection.setAdapter(GDBListAdaptor1);
         recyclerViewCollection.scrollToPosition(0);
     }
 
 
-    private class DownloadXmlTask
-    {
+    private class DownloadXmlTask {
 
         private String[] dlUrls;
         Thread downloadThread;
         Handler mainHandler = new Handler(Looper.getMainLooper());
 
-        public DownloadXmlTask(String... urls)
-        {
+        public DownloadXmlTask(String... urls) {
             dlUrls = urls;
         }
 
 
         // progress dialog.
 
-        public void execute()
-        {
+        public void execute() {
 
-            if (_MixedList != null)
-            {
+            if (_MixedList != null) {
                 _MixedList = null;
             }
-            if (GDBListAdaptor1 != null)
-            {
+            if (GDBListAdaptor1 != null) {
                 GDBListAdaptor1.notifyDataSetChanged();
             }
-            if (!simpleSwipeRefreshLayout.isRefreshing())
-            {
+            if (!simpleSwipeRefreshLayout.isRefreshing()) {
                 simpleSwipeRefreshLayout.setRefreshing(true);
             }
 
@@ -720,38 +651,28 @@ public class ActivityCollection extends AppCompatActivity
 
         }
 
-        private void doInBackground(String[] urls)
-        {
-            try
-            {
+        private void doInBackground(String[] urls) {
+            try {
                 String result = DownloadFromUrl.downloadDataFromUrl(urls[0], false);
                 SetLists(result);
                 complete(1);
 
-            } catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Log.e("DownloadFromUrl", "doInBackground: " + ex.getMessage());
                 complete(-1);
             }
         }
 
-        private void complete(int result)
-        {
+        private void complete(int result) {
             runOnUiThread(() -> {
-                if (simpleSwipeRefreshLayout.isRefreshing())
-                {
+                if (simpleSwipeRefreshLayout.isRefreshing()) {
                     simpleSwipeRefreshLayout.setRefreshing(false);
                 }
-                if (result == 1)
-                {
+                if (result == 1) {
                     showGDBList(_MixedList);
-                }
-                else if (result == -1)
-                {
+                } else if (result == -1) {
                     Toast.makeText(ActivityCollection.this, getString(R.string.err_list_file), Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
+                } else {
                     Toast.makeText(ActivityCollection.this,
                             getString(R.string.nothing_found), Toast.LENGTH_SHORT).show();
                 }

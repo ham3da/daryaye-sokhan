@@ -37,7 +37,7 @@
         android:title="@string/previous_poem" />
 
     <item android:id="@+id/verse_declaim"
-        android:icon="@drawable/ic_record_voice_over_white_24dp"
+        android:icon="@drawable/baseline_audio_file_24"
         android:title="@string/download_declaim" />
 
     <item android:id="@+id/action_view_ganjoor"

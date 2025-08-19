@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ir.ham3da.darya.App;
@@ -65,7 +66,15 @@ public class MainFavoritesFragment extends Fragment {
         super.onPause();
 
     }
-
+private void checkAdapterIsEmpty()
+{
+    if(favoritesPoemList.isEmpty()) {
+        FavoritesPoem emptyItem = new FavoritesPoem(0, 0, getString(R.string.empty_favorites), "", false,
+                "", "", "", 0);
+        emptyItem.isEmptyItem = true;
+        favoritesPoemList.add(emptyItem);
+    }
+}
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -89,8 +98,9 @@ public class MainFavoritesFragment extends Fragment {
             resCount = GanjoorDbBrowser1.getFavoritesCount();
 
             favoritesPoemList = GanjoorDbBrowser1.getFavoritesPoems(false, offset, per_page, 0);
-
+            checkAdapterIsEmpty();
             adapter = new FavoritesAdaptor(favoritesPoemList, mContext);
+
             fav_recycler.setAdapter(adapter);
 
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
@@ -116,23 +126,52 @@ public class MainFavoritesFragment extends Fragment {
 
     public void refreshFavorites() {
         offset = 0;
-        favoritesPoemList = GanjoorDbBrowser1.getFavoritesPoems(false, offset, per_page, 0);
+
+        if (favoritesPoemList != null) {
+            favoritesPoemList.clear();
+        } else {
+            favoritesPoemList = new ArrayList<>();
+        }
         resCount = GanjoorDbBrowser1.getFavoritesCount();
-        adapter = new FavoritesAdaptor(favoritesPoemList, mContext);
-        fav_recycler.setAdapter(adapter);
+        List<FavoritesPoem> newItems = GanjoorDbBrowser1.getFavoritesPoems(false, offset, per_page, 0); // بارگذاری صفحه اول
+        favoritesPoemList.addAll(newItems);
+
+        checkAdapterIsEmpty();
+
+        if (adapter == null) {
+            adapter = new FavoritesAdaptor(favoritesPoemList, mContext);
+            fav_recycler.setAdapter(adapter);
+        } else {
+            adapter.notifyDataSetChanged();
+        }
+
+        if (scrollListener != null) {
+            scrollListener.resetState();
+        }
+
         if (swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);
         }
+
+
     }
 
     /**
      * Load Poets And their Books in recycleview
      */
     public void loadFavorites() {
-        offset = favoritesPoemList.size();
-        List<FavoritesPoem> favoritesPoemList2 = GanjoorDbBrowser1.getFavoritesPoems(false, offset, per_page, offset);
-        favoritesPoemList.addAll(favoritesPoemList2);
-        adapter.notifyItemRangeInserted(favoritesPoemList2.size(), favoritesPoemList2.size() - 1);
+
+        int currentSize = favoritesPoemList.size();
+        offset = currentSize;
+        List<FavoritesPoem> favoritesPoemList2 = GanjoorDbBrowser1.getFavoritesPoems(false, offset, per_page, 0); // در اینجا offset سوم در getFavoritesPoems احتمالا باید 0 باشد اگر فقط برای limit query است
+        if (!favoritesPoemList2.isEmpty()) {
+            favoritesPoemList.addAll(favoritesPoemList2);
+            adapter.notifyItemRangeInserted(currentSize, favoritesPoemList2.size());
+        }
+        else {
+            checkAdapterIsEmpty();
+            adapter.notifyItemInserted(0);
+        }
 
     }
 

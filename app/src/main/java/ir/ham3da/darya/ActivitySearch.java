@@ -86,6 +86,8 @@ public class ActivitySearch extends AppCompatActivity
         progressBar_loader = findViewById(R.id.progressBar_loader);
 
         UtilFunctions1 = new UtilFunctions(this);
+        UtilFunctions1.setBackBackPressed(ActivitySearch.this);
+
         GanjoorDbBrowser1 = new GanjoorDbBrowser(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -96,8 +98,6 @@ public class ActivitySearch extends AppCompatActivity
         editTextSearch = findViewById(R.id.editTextSearch);
 
         UtilFunctions1.setupToolbarLayout(toolbarLayout, false);
-
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null)
@@ -226,12 +226,6 @@ public class ActivitySearch extends AppCompatActivity
         search_limits_text.setText(UtilFunctions.fromHtml(text), TextView.BufferType.NORMAL);
     }
 
-    @Override
-    public void onBackPressed()
-    {
-        super.onBackPressed();
-        Bungee.slideDown(this); //fire the slide left animation
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)

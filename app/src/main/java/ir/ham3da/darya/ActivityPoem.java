@@ -18,6 +18,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,9 +32,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -58,9 +61,9 @@ import ir.ham3da.darya.ganjoor.GanjoorVerse;
 import ir.ham3da.darya.ganjoor.GanjoorVerseB;
 import ir.ham3da.darya.utility.AppSettings;
 import ir.ham3da.darya.utility.MyDialogs;
-import ir.ham3da.darya.utility.MyTouchListener;
 import ir.ham3da.darya.utility.PoemAudio;
 import ir.ham3da.darya.utility.SetLanguage;
+import ir.ham3da.darya.utility.SwipeGestureListener;
 import ir.ham3da.darya.utility.UtilFunctions;
 
 public class ActivityPoem extends AppCompatActivity {
@@ -176,6 +179,10 @@ public class ActivityPoem extends AppCompatActivity {
         UtilFunctions.changeTheme(this);
         setContentView(R.layout.activity_poem);
 
+
+        UtilFunctions1 = new UtilFunctions(this);
+        UtilFunctions1.setBackBackPressed(ActivityPoem.this);
+
         Toolbar toolbar = findViewById(R.id.toolbar_poem);
         setSupportActionBar(toolbar);
         fab = findViewById(R.id.fab_poem);
@@ -183,7 +190,7 @@ public class ActivityPoem extends AppCompatActivity {
         mContext = this;
 
 
-        UtilFunctions1 = new UtilFunctions(this);
+
         GanjoorDbBrowser1 = new GanjoorDbBrowser(this);
         MyDialogs1 = new MyDialogs(this);
 
@@ -214,7 +221,6 @@ public class ActivityPoem extends AppCompatActivity {
             toolbarLayout = findViewById(R.id.poem_toolbar_layout);
             UtilFunctions1.setupToolbarLayout(toolbarLayout, true);
             toolbarLayout.setExpandedTitleColor(Color.TRANSPARENT);
-
 
             ActionBar actionBar = getSupportActionBar();
             if (actionBar != null) {
@@ -256,27 +262,19 @@ public class ActivityPoem extends AppCompatActivity {
 
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(linearLayoutManager);
+            recyclerView.addOnItemTouchListener(new SwipeGestureListener(this, recyclerView, new SwipeGestureListener.OnSwipeListener() {
+                @Override
+                public void onSwipeLeft(int position) {
+                    // شعر بعدی
+                    loadNextPreviousPoem(false);
+                }
 
-            recyclerView.addOnItemTouchListener(new MyTouchListener(this,
-                    recyclerView,
-                    new MyTouchListener.OnTouchActionListener() {
-                        @Override
-                        public void onLeftSwipe(View view, int position) {
-                            loadNextPreviousPoem(false);
-                        }
-
-                        @Override
-                        public void onRightSwipe(View view, int position) {
-                            loadNextPreviousPoem(true);
-
-                        }
-
-                        @Override
-                        public void onClick(View view, int position) {
-
-                            // Toast.makeText(mContext, ""+ view.getClass().getName() , Toast.LENGTH_SHORT).show();
-                        }
-                    }));
+                @Override
+                public void onSwipeRight(int position) {
+                    // شعر قبلی
+                    loadNextPreviousPoem(true);
+                }
+            }));
 
             if (!findStr.isEmpty())
             {
@@ -633,11 +631,6 @@ public class ActivityPoem extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Bungee.slideDown(this); //fire the slide left animation
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -806,4 +799,8 @@ public class ActivityPoem extends AppCompatActivity {
                 }
 
             };
+
+
+
+
 }

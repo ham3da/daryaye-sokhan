@@ -64,12 +64,11 @@ public class ActivityCate extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         UtilFunctions.changeTheme(this);
         setContentView(R.layout.activity_cate);
-
         Toolbar toolbar = findViewById(R.id.toolbar_cate);
         setSupportActionBar(toolbar);
 
         UtilFunctions1 = new UtilFunctions(this);
-
+        UtilFunctions1.setBackBackPressed(ActivityCate.this);
         FloatingActionButton fab = findViewById(R.id.fab);
 
         fab.setOnClickListener(v ->
@@ -80,27 +79,19 @@ public class ActivityCate extends AppCompatActivity {
             Bungee.card(this);
         }
         );
-
-
         fab.setOnLongClickListener(v -> {
             Toast.makeText(v.getContext(), R.string.dont_forget_poetry, Toast.LENGTH_SHORT).show();
             return true;
         });
-
         toolbarLayout = findViewById(R.id.toolbar_layout);
         UtilFunctions1.setupToolbarLayout(toolbarLayout, true);
-
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
         cate_id = getIntent().getIntExtra("cate_id", 0);
         boolean fromCate = getIntent().getBooleanExtra("fromCate", false);
-
         GanjoorDbBrowser1 = new GanjoorDbBrowser(this);
-
         GanjoorCat1 = GanjoorDbBrowser1.getCat(cate_id);
         poet_id = GanjoorCat1._PoetID;
         cate_url = GanjoorCat1._Url;
@@ -176,11 +167,6 @@ public class ActivityCate extends AppCompatActivity {
         super.attachBaseContext(SetLanguage.wrap(newBase));
     }
 
-    @Override
-    public void onBackPressed(){
-        super.onBackPressed();
-        Bungee.slideDown(this); //fire the slide left animation
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

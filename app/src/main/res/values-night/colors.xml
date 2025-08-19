@@ -107,7 +107,6 @@
     <color name="icon_dl">#737373</color>
     <color name="icon_dl_marked">#00af9c</color>
 
-
-
-
+    <color name="colorSurface">#1C2A32</color>
+    <color name="colorOnSurface">#FFFFFF</color>
 </resources>

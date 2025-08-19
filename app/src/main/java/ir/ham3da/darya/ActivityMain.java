@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -135,6 +136,33 @@ public class ActivityMain extends AppCompatActivity
         // setTheme(R.style.LightTheme);
         setContentView(R.layout.activity_main);
 
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+
+                if (drawer.isDrawerOpen(GravityCompat.START)) {
+                    drawer.closeDrawer(GravityCompat.START);
+                } else {
+                    if (UtilFunctions.isGooglePlayVersion()) {
+                        setEnabled(false);
+                        getOnBackPressedDispatcher().onBackPressed();
+                    } else {
+                        App globalVariable = (App) getApplicationContext();
+
+                        if (globalVariable.getAdviewd() || !AppSettings.canViewAdRequest() ) {
+                            globalVariable.setAdviewd(false);
+                            setEnabled(false);
+                            getOnBackPressedDispatcher().onBackPressed();
+                        } else {
+                            askExitAd();
+                        }
+                    }
+                }
+            }
+        });
+
+
+
         LangSettingList langSetting = AppSettings.getLangSettingList(this);
         currentLocalIndex = langSetting.getId();
 
@@ -172,6 +200,9 @@ public class ActivityMain extends AppCompatActivity
 
         UpdateApp update = new UpdateApp(this);
         update.initUpdate();
+
+
+        AppSettings.increaseLaunchCount();
 
     }
 
@@ -226,11 +257,15 @@ public class ActivityMain extends AppCompatActivity
         if (extras != null)
         {
 
-            if (extras.containsKey("serializableNotifyVerse"))
-            {
-                SerializableNotify serializableNotify;
+            SerializableNotify serializableNotify;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                serializableNotify = extras.getSerializable("serializableNotifyVerse", SerializableNotify.class);
+            } else {
                 serializableNotify = (SerializableNotify) extras.getSerializable("serializableNotifyVerse");
-                assert serializableNotify != null;
+            }
+
+            if (serializableNotify != null) {
                 rnd_poem_id = serializableNotify.getRnd_poem_id();
                 findStr = serializableNotify.getFindStr();
                 vOrder = serializableNotify.getvOrder();
@@ -290,44 +325,6 @@ public class ActivityMain extends AppCompatActivity
 
                     MyDialogs1.showNotify(notify_text, notify_title, notify_url, notify_url_text);
 
-                }
-            }
-
-        }
-    }
-
-    @Override
-    public void onBackPressed()
-    {
-        if (drawer.isDrawerOpen(GravityCompat.START))
-        {
-            drawer.closeDrawer(GravityCompat.START);
-        }
-        else
-        {
-            if (UtilFunctions.isGooglePlayVersion())
-            {
-                super.onBackPressed();
-            }
-            else
-            {
-                App globalVariable = (App) getApplicationContext();
-
-                if (globalVariable.getAdviewd())
-                {
-                    globalVariable.setAdviewd(false);
-                    super.onBackPressed();
-                }
-                else
-                {
-                    if (UtilFunctions.isNetworkConnected(this))
-                    {
-                        askExitAd();
-                    }
-                    else
-                    {
-                        super.onBackPressed();
-                    }
                 }
             }
 
@@ -597,17 +594,22 @@ public class ActivityMain extends AppCompatActivity
         dialog.setCancelable(false);
         dialog.setTitle(R.string.easy_donating);
         dialog.setMessage(R.string.ad_exit_text);
-        dialog.setPositiveButton(R.string.view_admob, (dialog1, id) -> displayCustomAdWeb()).setNegativeButton(R.string.close, (dialog12, which) -> finish());
+        dialog.setPositiveButton(R.string.view_admob, (dialog1, id) ->
+        {
+            App globalVariable = (App) getApplicationContext();
+            globalVariable.setAdviewd(true);
+            UtilFunctions1.openUrl(getString(R.string.our_products_url));
+
+        }).setNegativeButton(R.string.close, (dialog12, which) -> finish());
 
         final AlertDialog alert = dialog.create();
         alert.show();
+       AppSettings.resetLaunchCount();
     }
 
     public void checkPermissions()
     {
         List<PermissionType> permissionTypes = new ArrayList<>();
-
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
         {
             permissionTypes.add(new PermissionType(Manifest.permission.POST_NOTIFICATIONS, 33));

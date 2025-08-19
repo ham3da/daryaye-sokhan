@@ -33,16 +33,19 @@ import android.widget.ImageView;
 
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
 
+import androidx.core.view.GravityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -140,7 +143,7 @@ public class ActivityImageEdit extends AppCompatActivity implements
         switch (id)
         {
             case android.R.id.home:
-                onBackPressed();
+                getOnBackPressedDispatcher().onBackPressed();
                 break;
             case R.id.action_save:
                 saveImage(false);
@@ -167,13 +170,50 @@ public class ActivityImageEdit extends AppCompatActivity implements
 
     }
 
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
 
         super.onCreate(savedInstanceState);
-        UtilFunctions.changeTheme(this, true);
+        UtilFunctions.changeTheme(this);
         setContentView(R.layout.activity_image_edit);
+
+        toolbar = findViewById(R.id.img_toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(R.string.share_as_img);
+        }
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+
+                if (mIsFilterVisible || mIsBackgroundVisible)
+                {
+                    if(mIsFilterVisible)
+                    {
+                        showFilter(false);
+                    }
+                    if(mIsBackgroundVisible)
+                    {
+                        showBackgrounds(false);
+                    }
+                }
+                else if (!mPhotoEditor.isCacheEmpty())
+                {
+                    showSaveDialog();
+                }
+                else
+                {
+                    setEnabled(false);
+                    getOnBackPressedDispatcher().onBackPressed();
+                }
+
+
+            }
+        });
 
         AppSettings.Init(this);
 
@@ -181,15 +221,7 @@ public class ActivityImageEdit extends AppCompatActivity implements
 
         EditingToolsAdapter mEditingToolsAdapter = new EditingToolsAdapter(ActivityImageEdit.this, this);
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null)
-        {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-
-        setTitle(R.string.share_as_img);
-
-        poemText = getIntent().getStringExtra("poemText");
+       poemText = getIntent().getStringExtra("poemText");
         String poetName = getIntent().getStringExtra("poetName");
         PhotoEditorView mPhotoEditorView = findViewById(R.id.photoEditorView);
         fontId = AppSettings.getPoemsFont();
@@ -257,7 +289,6 @@ public class ActivityImageEdit extends AppCompatActivity implements
 
                         if (Build.VERSION.SDK_INT >= 28)
                         {
-                            //*** It doesn't work properly and causes an error while saving.***
                             ImageDecoder.Source source = ImageDecoder.createSource(this.getContentResolver(), selectedImageURI);
                             bitmap = ImageDecoder.decodeBitmap(source);
                         }
@@ -655,30 +686,6 @@ public class ActivityImageEdit extends AppCompatActivity implements
         mConstraintSet.applyTo(mRootView);
     }
 
-    @Override
-    public void onBackPressed()
-    {
-        if (mIsFilterVisible || mIsBackgroundVisible)
-        {
-            if(mIsFilterVisible)
-            {
-                showFilter(false);
-            }
-            if(mIsBackgroundVisible)
-            {
-                showBackgrounds(false);
-            }
-        }
-        else if (!mPhotoEditor.isCacheEmpty())
-        {
-            showSaveDialog();
-        }
-        else
-        {
-            super.onBackPressed();
-            Bungee.slideDown(this); //fire the slide left animation
-        }
-    }
 
 
     //Permission

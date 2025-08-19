@@ -1,8 +1,10 @@
 package ir.ham3da.darya;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -79,8 +81,7 @@ import com.downloader.request.DownloadRequestBuilder;
 
 import ir.ham3da.darya.utility.EndlessRecyclerViewScrollListener;
 
-public class ActivityAudioCollection extends AppCompatActivity
-{
+public class ActivityAudioCollection extends AppCompatActivity {
 
     private static final String TAG = "ActivityAudioCollection";
     GanjoorDbBrowser _DbBrowser;
@@ -95,7 +96,7 @@ public class ActivityAudioCollection extends AppCompatActivity
     boolean UseCaches;
     TextView no_item_textview;
     String dl_path;
-    ActionMode actionMode;
+    // ActionMode actionMode;
 
     List<ScheduleAudio> scheduleAudioList;
     RelativeLayout download_RelativeLayout;
@@ -109,23 +110,38 @@ public class ActivityAudioCollection extends AppCompatActivity
     String mDataSource = "";
 
     private MediaPlayer mPlayer;
-
+    private Toolbar toolbar;
     private EndlessRecyclerViewScrollListener scrollListener;
+    boolean isActionMode = false;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UtilFunctions.changeTheme(this, true);
+        UtilFunctions.changeTheme(this);
         setContentView(R.layout.activity_audio_collection);
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null)
-        {
-            actionBar.setDisplayHomeAsUpEnabled(true);
+        toolbar = findViewById(R.id.toolbar_audio);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(R.string.download_declaim);
         }
 
-        setTitle(R.string.download_declaim);
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (isActionMode) {
+                    setActionbarTitle(getString(R.string.download_declaim));
+                    setIsActionMode(false);
+                } else {
+
+                    setEnabled(false);
+                    getOnBackPressedDispatcher().onBackPressed();
+
+                }
+            }
+        });
+
 
         _DbBrowser = new GanjoorDbBrowser(this);
         recycler_audio = findViewById(R.id.recycler_audio);
@@ -158,14 +174,11 @@ public class ActivityAudioCollection extends AppCompatActivity
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recycler_audio.setLayoutManager(linearLayoutManager);
 
-        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager)
-        {
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
-            public void onLoadMore(final int page, int totalItemsCount, RecyclerView view)
-            {
+            public void onLoadMore(final int page, int totalItemsCount, RecyclerView view) {
                 //Log.e("onLoadMore", "onLoadMore: " + totalItemsCount);
-                if (totalItemsCount >= page_size)
-                {
+                if (totalItemsCount >= page_size) {
                     loadItems();
                 }
 
@@ -173,12 +186,9 @@ public class ActivityAudioCollection extends AppCompatActivity
         };
         recycler_audio.addOnScrollListener(scrollListener);
 
-        if (UtilFunctions.isNetworkConnected(this))
-        {
+        if (UtilFunctions.isNetworkConnected(this)) {
             loadItems();
-        }
-        else
-        {
+        } else {
             finish();
             Toast.makeText(this, getString(R.string.internet_failed), Toast.LENGTH_SHORT).show();
         }
@@ -190,21 +200,17 @@ public class ActivityAudioCollection extends AppCompatActivity
         PRDownloader.initialize(getApplicationContext(), config);
     }
 
-    private void reloadItems()
-    {
+    private void reloadItems() {
         this.listXmlItems.clear();
         adaptorAudio.notifyDataSetChanged(); // or notifyItemRangeRemoved
         scrollListener.resetState();
         loadItems();
     }
 
-    private void downloadMarkedAudio()
-    {
+    private void downloadMarkedAudio() {
         scheduleAudioList = new ArrayList<>();
-        for (int i = 0; i < adaptorAudio.getItemCount(); i++)
-        {
-            if (adaptorAudio.isSelected(i) && !adaptorAudio.getAudioExist(i))
-            {
+        for (int i = 0; i < adaptorAudio.getItemCount(); i++) {
+            if (adaptorAudio.isSelected(i) && !adaptorAudio.getAudioExist(i)) {
                 ScheduleAudio scheduleAudio = adaptorAudio.getScheduleAudio(i);
                 scheduleAudioList.add(scheduleAudio);
             }
@@ -214,11 +220,9 @@ public class ActivityAudioCollection extends AppCompatActivity
 
     }
 
-    public boolean requestAudioFocus(AudioManager.OnAudioFocusChangeListener focusChangeListener, int streamType, int audioFocusGain)
-    {
+    public boolean requestAudioFocus(AudioManager.OnAudioFocusChangeListener focusChangeListener, int streamType, int audioFocusGain) {
         int r;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-        {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             r = audioManager.requestAudioFocus(
                     new AudioFocusRequest.Builder(audioFocusGain)
                             .setAudioAttributes(
@@ -227,9 +231,7 @@ public class ActivityAudioCollection extends AppCompatActivity
                                             .build())
                             .setOnAudioFocusChangeListener(focusChangeListener)
                             .build());
-        }
-        else
-        {
+        } else {
             //deprecation
             r = audioManager.requestAudioFocus(focusChangeListener, streamType, audioFocusGain);
         }
@@ -242,8 +244,7 @@ public class ActivityAudioCollection extends AppCompatActivity
     AudioManager.OnAudioFocusChangeListener afChangeListener =
             focusChange -> {
                 Log.e(TAG, "onAudioFocusChange: " + focusChange);
-                switch (focusChange)
-                {
+                switch (focusChange) {
                     case AudioManager.AUDIOFOCUS_LOSS:
                     case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                         pauseAudio();
@@ -259,64 +260,49 @@ public class ActivityAudioCollection extends AppCompatActivity
 
             };
 
-    public void pauseAudio()
-    {
-        if (mPlayer != null)
-        {
-            if (mPlayer.isPlaying())
-            {
+    public void pauseAudio() {
+        if (mPlayer != null) {
+            if (mPlayer.isPlaying()) {
                 Log.e(TAG, "pauseAudio: true");
                 mPlayer.pause();
             }
         }
     }
 
-    private void SetupAudio()
-    {
-        try
-        {
-            if (audioManager == null)
-            {
+    private void SetupAudio() {
+        try {
+            if (audioManager == null) {
                 audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
                 requestAudioFocus(afChangeListener, AudioManager.STREAM_VOICE_CALL, AudioManager.AUDIOFOCUS_GAIN);
             }
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             Log.e(TAG, "SetupAudio: " + ex.getMessage());
         }
     }
 
-    public void playAudioThread(GanjoorAudioInfo audioInfo)
-    {
+    public void playAudioThread(GanjoorAudioInfo audioInfo) {
         Toast.makeText(this, R.string.please_wait, Toast.LENGTH_SHORT).show();
         Runnable thread = () -> playAudio(audioInfo);
         Thread t = new Thread(thread);
         t.start();
     }
 
-    public void playAudio(GanjoorAudioInfo audioInfo)
-    {
+    public void playAudio(GanjoorAudioInfo audioInfo) {
         SetupAudio();
         String filePath;
 
         String fileName = audioInfo.audio_fchecksum + ".mp3";
 
-        if (audioInfo.exist)
-        {
+        if (audioInfo.exist) {
             filePath = dl_path + "/" + fileName;
-        }
-        else
-        {
+        } else {
             filePath = audioInfo.audio_mp3;
         }
 
-        try
-        {
-            if (!mDataSource.equals(filePath) || mPlayer == null)
-            {
+        try {
+            if (!mDataSource.equals(filePath) || mPlayer == null) {
 
-                if (mPlayer != null)
-                {
+                if (mPlayer != null) {
                     mPlayer.stop();
                 }
                 mPlayer = new MediaPlayer();
@@ -328,11 +314,9 @@ public class ActivityAudioCollection extends AppCompatActivity
                 mPlayer.setOnErrorListener((mp, what, extra) ->
                 {
                     Log.e(TAG, "setOnErrorListener, extra: " + extra + " what: " + what);
-                    try
-                    {
+                    try {
                         mPlayer.stop();
-                    } catch (IllegalStateException e)
-                    {
+                    } catch (IllegalStateException e) {
                         Log.e(TAG, "IllegalStateException " + e.getMessage());
                     }
                     mPlayer = null;
@@ -341,33 +325,26 @@ public class ActivityAudioCollection extends AppCompatActivity
             }
             mPlayer.start();
 
-        } catch (IOException ex)
-        {
+        } catch (IOException ex) {
             Log.e("mPlayer", "IOException: " + ex.getMessage());
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             Log.e("mPlayer", "Exception: " + e.getMessage());
         }
     }
 
-    public boolean isPlaying()
-    {
+    public boolean isPlaying() {
         return mPlayer.isPlaying();
     }
 
-    private void deleteMarkedAudio()
-    {
-        if (!adaptorAudio.checkAnyAudioIsSelected())
-        {
+    private void deleteMarkedAudio() {
+        if (!adaptorAudio.checkAnyAudioIsSelected()) {
             return;
         }
 
         List<GanjoorAudioInfo> ganjoorAudioInfoList2 = new ArrayList<>();
 
-        for (int i = 0; i < adaptorAudio.getItemCount(); i++)
-        {
-            if (adaptorAudio.isSelected(i) && adaptorAudio.getAudioExist(i))
-            {
+        for (int i = 0; i < adaptorAudio.getItemCount(); i++) {
+            if (adaptorAudio.isSelected(i) && adaptorAudio.getAudioExist(i)) {
                 GanjoorAudioInfo ganjoorAudioInfo = adaptorAudio.getGanjoorAudioInfo(i);
                 ganjoorAudioInfoList2.add(ganjoorAudioInfo);
             }
@@ -395,19 +372,16 @@ public class ActivityAudioCollection extends AppCompatActivity
 
     int sumDownloaded = 0;
 
-    public void downloadAudios(List<ScheduleAudio> scheduleAudioList1)
-    {
+    public void downloadAudios(List<ScheduleAudio> scheduleAudioList1) {
         int total_downloads = scheduleAudioList1.size();
-        if (total_downloads > 0)
-        {
+        if (total_downloads > 0) {
             progress_bar.setProgress(0);
             progress_text.setText("0");
             progress_description.setText(R.string.starting_download);
             progress_text1.setText("...");
             progress_text2.setText("...");
 
-            if (download_RelativeLayout.getVisibility() != View.VISIBLE)
-            {
+            if (download_RelativeLayout.getVisibility() != View.VISIBLE) {
                 download_RelativeLayout.setVisibility(View.VISIBLE);
             }
 
@@ -417,8 +391,7 @@ public class ActivityAudioCollection extends AppCompatActivity
                 download_RelativeLayout.setVisibility(View.GONE);
             });
 
-            if (total_downloads > sumDownloaded)
-            {
+            if (total_downloads > sumDownloaded) {
                 ScheduleAudio scheduleAudio = scheduleAudioList1.get(sumDownloaded);
                 sumDownloaded++;
 
@@ -431,37 +404,32 @@ public class ActivityAudioCollection extends AppCompatActivity
                 DownloadRequest downloadRequest = downloadRequestBuilder.build();
                 downloadRequest.setDownloadId(scheduleAudio._Pos);
                 downloadRequest.setOnProgressListener(progress ->
-                {
-                    int percent = (int) Math.round(((double) progress.currentBytes / (double) progress.totalBytes) * 100);
-                    if (percent > 0)
-                    {
-                        String formatBytesCopied = getString(R.string.file_received) + " " + android.text.format.Formatter.formatFileSize(ActivityAudioCollection.this, progress.currentBytes);
-                        String formatFileLength = getString(R.string.file_size) + " " + android.text.format.Formatter.formatFileSize(ActivityAudioCollection.this, progress.totalBytes);
-                        String progressText = formatBytesCopied + " / " + formatFileLength;
-
-                        progress_bar.setProgress(percent);
-                        String percentStr = String.format(Locale.getDefault(), "%d", percent) + " %";
-                        progress_text.setText(percentStr);
-                        progress_description.setText(des);
-                        progress_text1.setText(formatBytesCopied);
-                        progress_text2.setText(formatFileLength);
-                    }
-                })
-                        .start(new OnDownloadListener()
                         {
+                            int percent = (int) Math.round(((double) progress.currentBytes / (double) progress.totalBytes) * 100);
+                            if (percent > 0) {
+                                String formatBytesCopied = getString(R.string.file_received) + " " + android.text.format.Formatter.formatFileSize(ActivityAudioCollection.this, progress.currentBytes);
+                                String formatFileLength = getString(R.string.file_size) + " " + android.text.format.Formatter.formatFileSize(ActivityAudioCollection.this, progress.totalBytes);
+                                String progressText = formatBytesCopied + " / " + formatFileLength;
+
+                                progress_bar.setProgress(percent);
+                                String percentStr = String.format(Locale.getDefault(), "%d", percent) + " %";
+                                progress_text.setText(percentStr);
+                                progress_description.setText(des);
+                                progress_text1.setText(formatBytesCopied);
+                                progress_text2.setText(formatFileLength);
+                            }
+                        })
+                        .start(new OnDownloadListener() {
 
                             @Override
-                            public void onDownloadComplete()
-                            {
+                            public void onDownloadComplete() {
                                 File file = new File(dl_path + "/" + fileName);
-                                if (file.exists())
-                                {
+                                if (file.exists()) {
                                     adaptorAudio.notifyNewDownloaded(scheduleAudio._Pos);
                                     downloadAudios(scheduleAudioList);
                                 }
 
-                                if (finalSum >= total_downloads)
-                                {
+                                if (finalSum >= total_downloads) {
                                     adaptorAudio.notifyDataSetChanged();
                                     ShowSuccessToast();
                                     download_RelativeLayout.setVisibility(View.GONE);
@@ -469,8 +437,7 @@ public class ActivityAudioCollection extends AppCompatActivity
                             }
 
                             @Override
-                            public void onError(Error error)
-                            {
+                            public void onError(Error error) {
                                 error.getConnectionException().printStackTrace();
                                 Log.e("DownloadAudioTask", "ResponseCode: " +
                                         error.getResponseCode() + ", get ServerError Message: " + error.getServerErrorMessage() +
@@ -488,138 +455,84 @@ public class ActivityAudioCollection extends AppCompatActivity
     }
 
     @Override
-    protected void attachBaseContext(Context newBase)
-    {
+    protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(SetLanguage.wrap(newBase));
     }
 
-    @Override
-    public void onBackPressed()
-    {
-        super.onBackPressed();
-        Bungee.slideDown(this); //fire the slide left animation
-    }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        return super.onCreateOptionsMenu(menu);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.audio_collection_menu, menu);
+        return true;
+
     }
 
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item)
-    {
-        int id = item.getItemId();
-        if (id == android.R.id.home)
-        {
-            finish();
-            Bungee.slideDown(this);
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_select_all:
+                if (adaptorAudio != null) {
+                    if (adaptorAudio.checkAnyAudioIsSelected()) {
+                        adaptorAudio.selectAllItem(false);
+                        item.setIcon(R.drawable.ic_outline_library_add_check_24);
+                    } else {
+                        adaptorAudio.selectAllItem(true);
+                        item.setIcon(R.drawable.ic_baseline_library_add_check_24_fill);
+                    }
+
+                }
+                return true;
+            case R.id.action_dl:
+                if (UtilFunctions.isWriteStoragePermissionGranted(ActivityAudioCollection.this, PermissionMediaType.AUDIO)) {
+                    downloadMarkedAudio();
+                }
+                return true;
+
+            case R.id.action_delete:
+                deleteMarkedAudio();
+                return true;
+            case android.R.id.home:
+                if (isActionMode) {
+                    setActionbarTitle(getString(R.string.download_declaim));
+                    setIsActionMode(false);
+                } else {
+                    finish();
+                    Bungee.slideDown(this);
+                }
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
-    {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 2)
-        {
+        if (requestCode == 2) {
             Log.d(TAG, "Write  External storage");
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Log.v(TAG, "Permission: " + permissions[0] + " was " + grantResults[0]);
                 downloadMarkedAudio();
             }
         }
     }
 
-    public void showActionbar()
-    {
-        if (actionMode == null)
-        {
-            actionMode = startActionMode(callback);
-        }
 
+    public void setActionbarTitle(String title) {
+        toolbar.setTitle(title);
     }
 
-    public void setActionbarTitle(String title)
-    {
-        if (actionMode != null)
-        {
-            actionMode.setTitle(title);
-        }
-
+    public void setIsActionMode(Boolean mode) {
+        isActionMode = mode;
     }
 
-    private ActionMode.Callback callback = new ActionMode.Callback()
-    {
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu)
-        {
-            mode.getMenuInflater().inflate(R.menu.audio_collection_menu, menu);
-            return true;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item)
-        {
-            switch (item.getItemId())
-            {
-                case R.id.action_select_all:
-                    if (adaptorAudio != null)
-                    {
-                        if (adaptorAudio.checkAnyAudioIsSelected())
-                        {
-                            adaptorAudio.selectAllItem(false);
-                            item.setIcon(R.drawable.ic_outline_library_add_check_24);
-                        }
-                        else
-                        {
-                            adaptorAudio.selectAllItem(true);
-                            item.setIcon(R.drawable.ic_baseline_library_add_check_24_fill);
-                        }
-
-                    }
-                    return true;
-                case R.id.action_dl:
-                    if (UtilFunctions.isWriteStoragePermissionGranted(ActivityAudioCollection.this, PermissionMediaType.AUDIO))
-                    {
-                        downloadMarkedAudio();
-                    }
-                    return true;
-
-                case R.id.action_delete:
-                    deleteMarkedAudio();
-                    return true;
-                default:
-                    return false;
-            }
-
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu)
-        {
-            return false;
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode)
-        {
-            actionMode = null;
-
-        }
-    };
 
     @Override
-    protected void onDestroy()
-    {
+    protected void onDestroy() {
         super.onDestroy();
-        if (mPlayer != null)
-        {
-            if (mPlayer.isPlaying())
-            {
+        if (mPlayer != null) {
+            if (mPlayer.isPlaying()) {
                 mPlayer.stop();
             }
             mPlayer.release();
@@ -627,11 +540,9 @@ public class ActivityAudioCollection extends AppCompatActivity
         mPlayer = null;
     }
 
-    public String getAudioListUrl(int type)
-    {
+    public String getAudioListUrl(int type) {
         String url = "";
-        switch (type)
-        {
+        switch (type) {
             case GanjoorAudioInfo.DOWNLOAD_POEM:
                 url = "https://ganjgah.ir/api/ganjoor/poem/" + this.poem_id + "/recitations";
                 break;
@@ -648,11 +559,9 @@ public class ActivityAudioCollection extends AppCompatActivity
     }
 
 
-    public void loadItems()
-    {
+    public void loadItems() {
 
-        if (dl_type == GanjoorAudioInfo.DOWNLOAD_POEM)
-        {
+        if (dl_type == GanjoorAudioInfo.DOWNLOAD_POEM) {
             existAudioList = _DbBrowser.getPoemAudios(poem_id);
         }
 
@@ -661,22 +570,17 @@ public class ActivityAudioCollection extends AppCompatActivity
         downloadJsonPoemAudios(getAudioListUrl(dl_type));
     }
 
-    private int calc_page_num()
-    {
-        if (can_load_new_page())
-        {
+    private int calc_page_num() {
+        if (can_load_new_page()) {
             double newPage = ((double) listXmlItems.size() / page_size) + 1;
             int newPage2 = (int) Math.ceil(newPage);
             return newPage2;
-        }
-        else
-        {
+        } else {
             return 1;
         }
     }
 
-    private boolean can_load_new_page()
-    {
+    private boolean can_load_new_page() {
         return (listXmlItems != null && listXmlItems.size() >= page_size);
     }
 
@@ -686,29 +590,21 @@ public class ActivityAudioCollection extends AppCompatActivity
      * @param ganjoorAudioInfo ganjoorAudioInfo
      * @return boolean
      */
-    private boolean checkExistAudio(GanjoorAudioInfo ganjoorAudioInfo)
-    {
+    private boolean checkExistAudio(GanjoorAudioInfo ganjoorAudioInfo) {
         boolean result = false;
         boolean existInDatabase = _DbBrowser.IsSoundExist(ganjoorAudioInfo.audio_fchecksum);
         boolean fileExist = _DbBrowser.checkAudioFileExist(ganjoorAudioInfo.audio_fchecksum, dl_path);
 
-        if (existInDatabase)
-        {
-            if (fileExist)
-            {
+        if (existInDatabase) {
+            if (fileExist) {
                 result = true;
-            }
-            else
-            {
+            } else {
                 _DbBrowser.deleteSound(ganjoorAudioInfo.audio_fchecksum);
                 result = false;
             }
 
-        }
-        else
-        {
-            if (fileExist)
-            {
+        } else {
+            if (fileExist) {
                 reAddSoundData(ganjoorAudioInfo);
                 result = true;
             }
@@ -718,20 +614,16 @@ public class ActivityAudioCollection extends AppCompatActivity
     }
 
 
-    private void reAddSoundData(GanjoorAudioInfo ganjoorAudioInfo)
-    {
-        if (!_DbBrowser.IsSoundExist(ganjoorAudioInfo.audio_fchecksum))
-        {
+    private void reAddSoundData(GanjoorAudioInfo ganjoorAudioInfo) {
+        if (!_DbBrowser.IsSoundExist(ganjoorAudioInfo.audio_fchecksum)) {
             _DbBrowser.addToSound(ganjoorAudioInfo);
         }
     }
 
 
-    private void downloadJsonPoemAudios(String jsonUrl)
-    {
+    private void downloadJsonPoemAudios(String jsonUrl) {
 
-        if (!simpleSwipeRefreshLayout.isRefreshing())
-        {
+        if (!simpleSwipeRefreshLayout.isRefreshing()) {
             simpleSwipeRefreshLayout.setRefreshing(true);
         }
 
@@ -741,8 +633,7 @@ public class ActivityAudioCollection extends AppCompatActivity
             completedJsonDownload(1);
         }, volleyError -> {
             //dialog.dismiss();
-            if (simpleSwipeRefreshLayout.isRefreshing())
-            {
+            if (simpleSwipeRefreshLayout.isRefreshing()) {
                 simpleSwipeRefreshLayout.setRefreshing(false);
             }
             Toast.makeText(getBaseContext(), getString(R.string.err_list_audio), Toast.LENGTH_SHORT).show();
@@ -753,22 +644,17 @@ public class ActivityAudioCollection extends AppCompatActivity
         rQueue.add(request);
     }
 
-    private void parseAudioListJsonData(String JsonString)
-    {
-        try
-        {
+    private void parseAudioListJsonData(String JsonString) {
+        try {
             JSONArray jsonArray = new JSONArray(JsonString);
-            if (jsonArray.length() > 0)
-            {
+            if (jsonArray.length() > 0) {
                 List<GanjoorAudioInfo> ganjoorAudioInfos1 = new ArrayList<>();
                 int new_index = 0;
-                if (listXmlItems != null)
-                {
+                if (listXmlItems != null) {
                     new_index = listXmlItems.size();
                 }
 
-                for (int i = 0; i < jsonArray.length(); i++)
-                {
+                for (int i = 0; i < jsonArray.length(); i++) {
                     int audio_post_ID = jsonArray.getJSONObject(i).getInt("poemId");
                     int audio_order = jsonArray.getJSONObject(i).getInt("id");
 
@@ -790,11 +676,9 @@ public class ActivityAudioCollection extends AppCompatActivity
 
                     String audio_date_str = jsonArray.getJSONObject(i).getString("publishDate");
                     SimpleDateFormat sfd = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-                    try
-                    {
+                    try {
                         audio_date = sfd.parse(audio_date_str);
-                    } catch (ParseException e)
-                    {
+                    } catch (ParseException e) {
                         e.printStackTrace();
                     }
 
@@ -807,12 +691,10 @@ public class ActivityAudioCollection extends AppCompatActivity
 
                     int get_poet_id, get_cate_id;
 
-                    switch (dl_type)
-                    {
+                    switch (dl_type) {
                         case GanjoorAudioInfo.DOWNLOAD_POET_POEMS:
                             get_poet_id = _DbBrowser.getPoemPoetId(audio_post_ID);
-                            if (get_poet_id == poet_id)
-                            {
+                            if (get_poet_id == poet_id) {
                                 ganjoorAudioInfo1.exist = checkExistAudio(ganjoorAudioInfo1);
                                 ganjoorAudioInfos1.add(ganjoorAudioInfo1);
                             }
@@ -820,8 +702,7 @@ public class ActivityAudioCollection extends AppCompatActivity
 
                         case GanjoorAudioInfo.DOWNLOAD_CATE_POEMS:
                             get_cate_id = _DbBrowser.getPoemCateId(audio_post_ID);
-                            if (get_cate_id == cate_id)
-                            {
+                            if (get_cate_id == cate_id) {
                                 ganjoorAudioInfo1.exist = checkExistAudio(ganjoorAudioInfo1);
                                 ganjoorAudioInfos1.add(ganjoorAudioInfo1);
                             }
@@ -836,36 +717,29 @@ public class ActivityAudioCollection extends AppCompatActivity
 
                 no_item_textview.setVisibility(View.GONE);
 
-                if (listXmlItems == null)
-                {
+                if (listXmlItems == null) {
                     Log.e(TAG, "parseAudioListJsonData: listXmlItems is null");
                     listXmlItems = ganjoorAudioInfos1;
                     GanjoorPoet ganjoorPoet = null;
-                    if (dl_type == GanjoorAudioInfo.DOWNLOAD_POET_POEMS)
-                    {
+                    if (dl_type == GanjoorAudioInfo.DOWNLOAD_POET_POEMS) {
                         ganjoorPoet = _DbBrowser.getPoet(poet_id);
                     }
                     adaptorAudio = new AdaptorAudio(listXmlItems, this, dl_type, ganjoorPoet);
                     recycler_audio.setAdapter(adaptorAudio);
                     recycler_audio.scrollToPosition(0);
-                }
-                else
-                {
+                } else {
                     Log.e(TAG, "parseAudioListJsonData: listXmlItems is not null");
                     listXmlItems.addAll(ganjoorAudioInfos1);
                     this.adaptorAudio.notifyItemRangeInserted(this.listXmlItems.size(), this.listXmlItems.size() - 1);
                 }
 
 
-            }
-            else
-            {
+            } else {
                 Toast.makeText(this, getString(R.string.nothing_found), Toast.LENGTH_SHORT).show();
             }
 
 
-        } catch (JSONException e)
-        {
+        } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(getBaseContext(), getString(R.string.err_list_audio), Toast.LENGTH_SHORT).show();
 
@@ -875,37 +749,31 @@ public class ActivityAudioCollection extends AppCompatActivity
 
     }
 
-    protected void completedJsonDownload(Integer result)
-    {
+    protected void completedJsonDownload(Integer result) {
         Log.e(TAG, "completedJsonDownload: " + result);
-        if (simpleSwipeRefreshLayout.isRefreshing())
-        {
+        if (simpleSwipeRefreshLayout.isRefreshing()) {
             simpleSwipeRefreshLayout.setRefreshing(false);
         }
 
     }
 
 
-    public void ShowSuccessToast()
-    {
+    public void ShowSuccessToast() {
         Toast.makeText(this, getString(R.string.download_success), Toast.LENGTH_SHORT).show();
     }
 
-    public void DownloadFailToast()
-    {
+    public void DownloadFailToast() {
         Toast.makeText(this, getString(R.string.download_failed), Toast.LENGTH_SHORT).show();
     }
 
 
-    private class DeleteAudioFilesTask
-    {
+    private class DeleteAudioFilesTask {
 
         GanjoorAudioInfo[] ganjoorAudioInfos;
         Thread deleteThread;
         Handler mainHandler = new Handler(Looper.getMainLooper());
 
-        public DeleteAudioFilesTask(GanjoorAudioInfo[] ganjoorAudioInfos1)
-        {
+        public DeleteAudioFilesTask(GanjoorAudioInfo[] ganjoorAudioInfos1) {
             ganjoorAudioInfos = ganjoorAudioInfos1;
             cancel_downloads.setOnClickListener(v -> {
                 this.deleteThread.interrupt();
@@ -913,8 +781,7 @@ public class ActivityAudioCollection extends AppCompatActivity
         }
 
 
-        protected void execute()
-        {
+        protected void execute() {
             download_RelativeLayout.setVisibility(View.VISIBLE);
             progress_bar.setProgress(0);
             progress_text.setText("");
@@ -928,37 +795,30 @@ public class ActivityAudioCollection extends AppCompatActivity
         }
 
 
-        protected void doInBackground(GanjoorAudioInfo... ganjoorAudioInfos1)
-        {
-            try
-            {
+        protected void doInBackground(GanjoorAudioInfo... ganjoorAudioInfos1) {
+            try {
                 int count = ganjoorAudioInfos1.length;
-                for (int i = 0; i < count; i++)
-                {
+                for (int i = 0; i < count; i++) {
                     GanjoorAudioInfo scheduleAudio = ganjoorAudioInfos1[i];
                     adaptorAudio.deleteItemMarked(scheduleAudio);
                     publishProgress(i, count);
                 }
                 completed();
 
-            } catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 ex.printStackTrace();
                 Log.e("xml_Dl", "doInBackground: " + ex.getMessage());
             }
         }
 
 
-        protected void publishProgress(int total, int current)
-        {
+        protected void publishProgress(int total, int current) {
             //super.onProgressUpdate(values);
 
             mainHandler.post(() -> {
-                if (progress_bar != null)
-                {
+                if (progress_bar != null) {
                     int percent = (int) Math.round(((double) current / (double) total) * 100);
-                    if (percent > 0)
-                    {
+                    if (percent > 0) {
                         progress_bar.setProgress(percent);
                     }
 
@@ -974,8 +834,7 @@ public class ActivityAudioCollection extends AppCompatActivity
         }
 
 
-        protected void completed()
-        {
+        protected void completed() {
             runOnUiThread(() -> {
                 download_RelativeLayout.setVisibility(View.GONE);
                 adaptorAudio.notifyDataSetChanged();

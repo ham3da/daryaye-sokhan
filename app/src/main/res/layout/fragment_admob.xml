@@ -1,147 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:padding="16dp"
+    android:background="?android:attr/windowBackground">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <RelativeLayout
-            android:id="@+id/main_layer_admob"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp">
+        <!-- کارت محصولات -->
 
-            <TextView
-                android:id="@+id/join_dev"
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:lineSpacingExtra="8sp"
-                android:text="@string/join_dev_team"
-                android:textColor="@color/textColor"
-                android:textSize="16sp" />
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/card_bg"
+                android:orientation="vertical"
+                android:padding="16dp">
 
+                <TextView
+                    android:id="@+id/admob_des"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/OurProducts"
+                    android:textColor="@color/textColor"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:lineSpacingExtra="8sp" />
 
-            <Button
-                android:id="@+id/btn_donate_github"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/join_dev"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="15dp"
-                android:backgroundTint="@color/btnColor"
-                android:drawableEnd="@drawable/ic_baseline_android_24"
-                android:drawablePadding="5dp"
-                android:minWidth="200dp"
-                android:padding="15dp"
-                android:text="@string/github"
-                android:textAllCaps="false"
-                android:textColor="@color/primaryTextColor"
-                android:textSize="16sp" />
-
-
-            <TextView
-                android:id="@+id/join_collections"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/btn_donate_github"
-                android:layout_marginTop="10dp"
-                android:lineSpacingExtra="8sp"
-                android:text="@string/in_collections"
-                android:textColor="@color/textColor"
-                android:textSize="16sp" />
-
-            <Button
-                android:id="@+id/btn_donate_collections"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/join_collections"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="15dp"
-                android:backgroundTint="@color/btnColor"
-                android:drawableEnd="@drawable/ic_folder_black_24dp"
-                android:drawablePadding="5dp"
-                android:minWidth="200dp"
-                android:padding="15dp"
-                android:text="@string/new_collection"
-                android:textAllCaps="false"
-                android:textColor="@color/primaryTextColor"
-                android:textSize="16sp"
-                app:drawableTint="@color/white" />
-
-            <TextView
-                android:id="@+id/admob_des"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/btn_donate_collections"
-                android:layout_marginTop="10dp"
-                android:lineSpacingExtra="8sp"
-                android:text="@string/our_products"
-                android:textColor="@color/textColor"
-                android:textSize="16sp" />
-
-            <RelativeLayout
-                android:id="@+id/rv_pay"
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/admob_des">
-
+                <TextView
+                    android:id="@+id/admob_des_des"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/CheckOurProducts"
+                    android:textColor="@color/textColor"
+                    android:textSize="16sp"
+                    android:lineSpacingExtra="6sp" />
 
                 <Button
-                    android:id="@+id/btn_donate_crypto"
-                    android:layout_width="200dp"
+                    android:id="@+id/btn_view_ad"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="12dp"
+                    android:minWidth="200dp"
+                    android:padding="12dp"
+                    android:drawableEnd="@drawable/ic_baseline_apps_24"
+                    android:drawablePadding="6dp"
                     android:backgroundTint="@color/btnColor"
-                    android:drawableEnd="@drawable/ic_btc"
-                    android:drawablePadding="5dp"
-                    android:minWidth="150dp"
-                    android:padding="15dp"
-                    android:text="@string/cryptocurrencies"
-                    android:textAllCaps="false"
+                    android:text="@string/view_admob"
                     android:textColor="@color/primaryTextColor"
                     android:textSize="16sp"
+                    android:textAllCaps="false"
                     app:drawableTint="@color/white" />
+            </LinearLayout>
 
-            </RelativeLayout>
 
-            <Button
-                android:id="@+id/btn_view_ad"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/rv_pay"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="15dp"
-                android:backgroundTint="@color/btnColor"
-                android:drawableEnd="@drawable/ic_baseline_apps_24"
-                android:drawablePadding="0dp"
-                android:minWidth="200dp"
-                android:padding="15dp"
-                android:text="@string/view_our_products"
-                android:textAllCaps="false"
-                android:textColor="@color/primaryTextColor"
-                android:textSize="16sp" />
+        <!-- کارت همکاری -->
 
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/btn_view_ad"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="0dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="0dp"
-                android:indeterminateOnly="true"
-                android:visibility="invisible" />
-        </RelativeLayout>
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/card_bg"
+                android:orientation="vertical"
+                android:padding="16dp">
 
-    </ScrollView>
-</LinearLayout>
+                <TextView
+                    android:id="@+id/join_dev"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/JoinOurTeam"
+                    android:textColor="@color/textColor"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:lineSpacingExtra="8sp" />
+
+                <TextView
+                    android:id="@+id/join_dev_des"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/WereOpenSource"
+                    android:textColor="@color/textColor"
+                    android:textSize="16sp"
+                    android:lineSpacingExtra="6sp" />
+
+                <Button
+                    android:id="@+id/btn_donate_github"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:minWidth="200dp"
+                    android:padding="12dp"
+                    android:drawableEnd="@drawable/ic_baseline_android_24"
+                    android:drawablePadding="6dp"
+                    android:backgroundTint="@color/btnColor"
+                    android:text="@string/ViewOnGitHub"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="16sp"
+                    android:textAllCaps="false"
+                    app:drawableTint="@color/white" />
+            </LinearLayout>
+
+        <!-- کارت مجموعه‌ها -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/card_bg"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/join_collections"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/HelpCollection"
+                    android:textColor="@color/textColor"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:lineSpacingExtra="8sp" />
+
+                <TextView
+                    android:id="@+id/join_collections_des"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/HelpCollectionDes"
+                    android:textColor="@color/textColor"
+                    android:textSize="16sp"
+                    android:lineSpacingExtra="6sp" />
+
+                <Button
+                    android:id="@+id/btn_donate_collections"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:minWidth="200dp"
+                    android:padding="12dp"
+                    android:drawableEnd="@drawable/ic_folder_black_24dp"
+                    android:drawablePadding="6dp"
+                    android:backgroundTint="@color/btnColor"
+                    android:text="@string/Contribute"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="16sp"
+                    android:textAllCaps="false"
+                    app:drawableTint="@color/white" />
+            </LinearLayout>
+
+
+    </LinearLayout>
+</ScrollView>

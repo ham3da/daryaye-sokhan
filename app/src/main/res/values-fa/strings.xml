@@ -200,19 +200,23 @@
     <string name="easy_donating">همیاری</string>
     <string name="admob_not_load">در حال حاضر تبلیغی در دسترس نیست. لطفاً بعداً دوباره سعی کنید.</string>
     <string name="admob_des">کاربر گرامی، از شما تقاضا داریم به پاس حمایت از این نرم‌افزار ارزشمند، گاهی اوقات روی دکمه "مشاهدۀ" آگهی لمس کنید و پس از مشاهده آگهی، آن را نیز لمس نمایید. با این کار کمک بزرگی به توسعه این نرم‌‌افزار خواهید نمود.</string>
-    <string name="view_admob">مشاهدۀ محصولات</string>
+
     <string name="thanks_a_lot">سپاسگزاریم</string>
     <string name="declaimer">گوینده</string>
     <string name="err_list_audio">دریافت لیست فایل‌های صوتی با خطا مواجه شد! لطفاً دوباره سعی کنید.</string>
     <string name="err_list_file">دریافت لیست فایل‌ها با خطا مواجه شد! لطفاً دوباره سعی کنید.</string>
     <string name="ad_attribution">تبلیغات</string>
-    <string name="ad_exit_text">کاربر گرامی، از شما تقاضا داریم به پاس حمایت از این نرم افزار ارزشمند، قبل از بستن برنامه، سایر محصولات ما را نیز مشاهده کنید.</string>
+    <string name="ad_exit_text">با دیدن محصولات دیگر ما، به ادامه توسعه این برنامه کمک می‌کنید. مایلید ببینید؟</string>
     <string name="select_bg">یک پس زمینه انتخاب کنید</string>
     <string name="starting_download">در حال شروع دریافت</string>
     <string name="update_app_des">نسخه جدید دریای سخن آماده دریافت است. لطفاً دریافت کنید.</string>
 
     <string name="daily_poem">شعر روز</string>
     <string name="daily_poem_switch">هر روز یک بیت شعر به صورت اعلان نمایش داده شود.</string>
+    <string name="GeneralNotifications">اعلان‌های عمومی</string>
+    <string name="GeneralNotsDes">دریافت به‌روزرسانی‌های عمومی، اطلاعیه‌ها و هشدارهای مهم.</string>
+
+
     <string name="set_value">تائید</string>
     <string name="set_the_time">تنظیم زمان</string>
     <string name="show_every_day">هر روز نمایش داده شود</string>
@@ -229,6 +233,19 @@
     <string name="cryptocurrencies">رمز ارزها</string>
     <string name="online_payment">پرداخت آنلاین</string>
     <string name="new_collection">مجموعه اشعار</string>
+
+    <string name="JoinOurTeam">به تیم ما بپیوندید!</string>
+    <string name="WereOpenSource">کدباز هستیم؛ با هم قوی‌تر می‌شویم.</string>
+    <string name="ViewOnGitHub">مشاهده در GitHub</string>
+
+    <string name="HelpCollection">مجموعه اشعار را کامل‌تر کنید</string>
+    <string name="HelpCollectionDes">اگر شعرهای ناب دارید، به این گنجینه اضافه کنید.</string>
+    <string name="Contribute">همکاری کنید</string>
+
+    <string name="OurProducts">محصولات ویژه برای شما</string>
+    <string name="CheckOurProducts">ابزارها و افزونه‌های کاربردی ما را ببینید.</string>
+    <string name="view_admob">مشاهدۀ محصولات</string>
+
     <string name="btc_address_copied">آدرس بیت کوین کپی شد.</string>
     <string name="eth_address_copied">آدرس اتریوم کپی شد.</string>
     <string name="account_copied">شماره حساب پرفکت مانی کپی شد.</string>
@@ -244,5 +261,7 @@
     <string name="google_sign_ok">ورود با حساب گوگل با موفقیت انجام شد!</string>
     <string name="profile">نمایه</string>
     <string name="perm_msg">برای استفاده از برخی ویژگی‌های برنامه، مانند دانلود فایل‌های صوتی، نمایش شعر در اعلان‌ها و اشتراک شعر به صورت عکس، لطفاً به برنامه اجازه دهید تا به مجوزهای لازم دسترسی داشته باشد.</string>
+    <string name="selected_items_count">تعداد</string>
+    <string name="empty_favorites">هنوز هیچ شعر یا نثری را به عنوان گزیده علامتگذاری نکرده‌اید.</string>
 
 </resources>

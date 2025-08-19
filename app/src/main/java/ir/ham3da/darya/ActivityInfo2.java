@@ -1,6 +1,7 @@
 package ir.ham3da.darya;
 
 import android.content.Context;
+import android.graphics.text.LineBreaker;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -47,11 +48,11 @@ public class ActivityInfo2 extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
         AppSettings.Init(this);
         textSize = AppSettings.getTextSize();
-
         UtilFunctions1 = new UtilFunctions(this);
+        UtilFunctions1.setBackBackPressed(ActivityInfo2.this);
+
         String title1 = getIntent().getStringExtra("title1");
         String title2 = getIntent().getStringExtra("title2");
         final String text = getIntent().getStringExtra("text");
@@ -61,18 +62,19 @@ public class ActivityInfo2 extends AppCompatActivity {
         TextView title2_box1  = this.findViewById(R.id.title2);
         ImageView info_avatar1 =  this.findViewById(R.id.info_avatar1);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 
-        if(Build.VERSION.SDK_INT >=  Build.VERSION_CODES.O) {
+            text_box_long.setJustificationMode(LineBreaker.JUSTIFICATION_MODE_INTER_WORD);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
             text_box_long.setJustificationMode(Layout.JUSTIFICATION_MODE_INTER_WORD);
         }
-
 
         if (!text.isEmpty()) {
             text_box_long.setText( UtilFunctions.fromHtml(text), TextView.BufferType.SPANNABLE);
         }
 
         text_box_long.setTextSize(textSize);
-
 
         if(title2.isEmpty())
         {
@@ -93,7 +95,6 @@ public class ActivityInfo2 extends AppCompatActivity {
 
         toolbarLayout = findViewById(R.id.toolbar_layout);
         UtilFunctions1.setupToolbarLayout(toolbarLayout, false);
-
         toolbarLayout.setTitle(title1);
     }
 
@@ -102,11 +103,6 @@ public class ActivityInfo2 extends AppCompatActivity {
         super.attachBaseContext(SetLanguage.wrap(newBase));
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Bungee.slideDown(this); //fire the slide left animation
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

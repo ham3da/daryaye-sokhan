@@ -9,11 +9,11 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 
+import ir.ham3da.darya.notification.NotificationChannels;
 import ir.ham3da.darya.utility.AppSettings;
 import ir.ham3da.darya.utility.SetLanguage;
 
-public class App extends Application
-{
+public class App extends Application {
 
 
     private boolean updatePoetList, updateFavList, Adviewd = false, updateRandPoemNotify;
@@ -21,75 +21,64 @@ public class App extends Application
 
     /**
      * get Login Method
+     *
      * @return int 1 => Login as Guest, 2 => login with google , 0 => not set
      */
-    public int getLoginMethod()
-    {
+    public int getLoginMethod() {
         return this.loginMethod;
     }
 
     /**
      * set Login Method
+     *
      * @param loginMethodParam int 1 => Login as Guest, 2 => login with google
      */
-    public void setLoginMethod(int loginMethodParam)
-    {
+    public void setLoginMethod(int loginMethodParam) {
         this.loginMethod = loginMethodParam;
     }
 
-    public boolean getUpdateRandPoemNotify()
-    {
+    public boolean getUpdateRandPoemNotify() {
         return updateRandPoemNotify;
     }
 
-    public void setUpdateRandPoemNotify(boolean updateRandPoemNotify)
-    {
+    public void setUpdateRandPoemNotify(boolean updateRandPoemNotify) {
         this.updateRandPoemNotify = updateRandPoemNotify;
     }
 
 
-
-    public boolean getUpdatePoetList()
-    {
+    public boolean getUpdatePoetList() {
         return updatePoetList;
     }
 
-    public void setUpdatePoetList(boolean status)
-    {
+    public void setUpdatePoetList(boolean status) {
         updatePoetList = status;
     }
 
-    public boolean getUpdateFavList()
-    {
+    public boolean getUpdateFavList() {
         return updateFavList;
     }
 
-    public void setUpdateFavList(boolean status)
-    {
+    public void setUpdateFavList(boolean status) {
         updateFavList = status;
     }
 
-    public void setAdviewd(boolean adviewd)
-    {
+    public void setAdviewd(boolean adviewd) {
         Adviewd = adviewd;
     }
-    public boolean getAdviewd()
-    {
-        return  Adviewd;
+
+    public boolean getAdviewd() {
+        return Adviewd;
     }
 
     static {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
     }
 
     @Override
     public void onCreate() {
-        //SetLanguage.wrap(this);
         super.onCreate();
         AppSettings.Init(this);
         FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
-
-
+        NotificationChannels.createAllChannels(getApplicationContext());
     }
 }

@@ -13,7 +13,7 @@
         android:id="@+id/action_play"
         android:orderInCategory="99"
         android:title="@string/declaim"
-        android:icon="@drawable/ic_record_voice_over_white_24dp"
+        android:icon="@drawable/baseline_audio_file_24"
         app:showAsAction="ifRoom"
         />
 </menu>

@@ -107,8 +107,6 @@ public class AdaptorAudio extends RecyclerView.Adapter<AdaptorAudio.ViewHolder>
             audioInfo.Selected = isChecked;
 
             int index = mainAudioList.indexOf(audioInfo);
-           // mainAudioList.get(index).Selected  = isChecked;
-            activityAudioCollection.showActionbar();
             setCheckedCount();
         });
 
@@ -172,7 +170,15 @@ public class AdaptorAudio extends RecyclerView.Adapter<AdaptorAudio.ViewHolder>
     {
         int count = getCheckedCount();
         String selectedCount = String.format(Locale.getDefault(), "%d", count);
-        activityAudioCollection.setActionbarTitle(selectedCount);
+        if(count > 0) {
+            activityAudioCollection.setActionbarTitle(selectedCount);
+            activityAudioCollection.setIsActionMode(true);
+        }
+        else
+        {
+            activityAudioCollection.setActionbarTitle(context1.getString(R.string.download_declaim));
+            activityAudioCollection.setIsActionMode(false);
+        }
     }
 
 
@@ -209,7 +215,9 @@ public class AdaptorAudio extends RecyclerView.Adapter<AdaptorAudio.ViewHolder>
             }
             else
             {
-                activityAudioCollection.setActionbarTitle(String.format(Locale.getDefault(), "%d", 0));
+                activityAudioCollection.setActionbarTitle(context1.getString(R.string.download_declaim));
+
+               // activityAudioCollection.setActionbarTitle(String.format(Locale.getDefault(), "%d", 0));
             }
 
 

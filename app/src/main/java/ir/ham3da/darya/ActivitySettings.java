@@ -1,6 +1,5 @@
 package ir.ham3da.darya;
 
-import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -22,20 +21,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
 import com.dr1009.app.chronodialogpreference.ChronoPreferenceFragment;
 import com.dr1009.app.chronodialogpreference.TimeDialogPreference;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 import ir.ham3da.darya.adaptors.AdapterSocialList;
 import ir.ham3da.darya.ganjoor.GanjoorDbBrowser;
@@ -116,11 +113,14 @@ public class ActivitySettings extends AppCompatActivity
         super.applyOverrideConfiguration(overrideConfiguration);
     }
 
+    private Toolbar toolbar;
+    UtilFunctions UtilFunctions1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        UtilFunctions.changeTheme(this, true);
+        UtilFunctions.changeTheme(this);
         AppSettings.Init(this);
         nightTheme = AppSettings.checkThemeIsDark();
 
@@ -130,7 +130,19 @@ public class ActivitySettings extends AppCompatActivity
             SetLanguage.wrap(this);
         }
 
-        setContentView(R.layout.settings_activity);
+        setContentView(R.layout.activity_settings);
+
+        UtilFunctions1 = new UtilFunctions(this);
+        UtilFunctions1.setBackBackPressed(ActivitySettings.this);
+
+        toolbar = findViewById(R.id.settings_toolbar);
+        setSupportActionBar(toolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(R.string.action_settings);
+        }
+
 
         AppSettings.Init(this);
         LangSettingList langSetting = AppSettings.getLangSettingList(this);
@@ -141,14 +153,6 @@ public class ActivitySettings extends AppCompatActivity
                 .beginTransaction()
                 .replace(R.id.settings, new SettingsFragment())
                 .commit();
-
-
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null)
-        {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-        setTitle(R.string.action_settings);
     }
 
     public static class SettingsFragment extends ChronoPreferenceFragment
@@ -408,13 +412,6 @@ public class ActivitySettings extends AppCompatActivity
     {
         super.onResume();
 
-    }
-
-    @Override
-    public void onBackPressed()
-    {
-        super.onBackPressed();
-        Bungee.slideDown(this);
     }
 
     @Override

@@ -15,6 +15,7 @@ public class FavoritesPoem  extends GanjoorPoem
         _Index = Index;
     }
 
+    public boolean isEmptyItem = false;
     /**
      * Index from 1 to result count
      */

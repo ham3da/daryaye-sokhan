@@ -267,7 +267,7 @@ public class GDBListAdaptor extends RecyclerView.Adapter<GDBListAdaptor.ViewHold
 
     public void deleteItemMarked(GDBInfo gdbInfo)
     {
-       // String dl_path = AppSettings.getAudioDownloadPath(context1);
+        // String dl_path = AppSettings.getAudioDownloadPath(context1);
         if (gdbInfo.Selected)
         {
             GanjoorPoet ganjoorPoet = GanjoorDbBrowser1.getPoet(gdbInfo._PoetID);

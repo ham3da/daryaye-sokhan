@@ -29,8 +29,6 @@ import ir.ham3da.darya.utility.UtilFunctions;
 public class AppSettings
 {
 
-    public static final String NOTIFICATION_CHANNEL_ID_DAILY = "darya_1";
-    public final static String default_notification_channel_id = "darya";
 
     /**
      * Class Initialization:
@@ -285,6 +283,43 @@ public class AppSettings
 
         return PreferenceManager1.getKey("dwnldpath", defaultDLDir);
     }
+
+
+    public static void increaseLaunchCount()
+    {
+        if (PreferenceManager1 == null) {
+            return;
+        }
+        int newCount = getLaunchCount()+1;
+        PreferenceManager1.setKey("launch_count", newCount);
+
+    }
+
+
+    public static void resetLaunchCount()
+    {
+        if (PreferenceManager1 == null) {
+            return;
+        }
+
+        PreferenceManager1.setKey("launch_count", 0);
+    }
+
+    public static int getLaunchCount()
+    {
+        if (PreferenceManager1 == null) {
+            return 0;
+        }
+        return PreferenceManager1.getKey("launch_count", 0);
+    }
+
+
+
+    public static boolean canViewAdRequest()
+    {
+        return (getLaunchCount() >= 3);
+    }
+
 
     /**
      * Database Download Path

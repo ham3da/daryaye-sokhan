@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -29,29 +30,39 @@ public class ActivityWeb extends AppCompatActivity {
 
     WebView webView2;
     ProgressBar progress_bar_dlg;
+
+    private Toolbar toolbar;
+    UtilFunctions UtilFunctions1;
+
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UtilFunctions.changeTheme(this, true);
+        UtilFunctions.changeTheme(this);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             SetLanguage.wrap(this);
         }
         setContentView(R.layout.activity_web);
-        App globalVariable = (App) getApplicationContext();
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
+        String title1 = getIntent().getStringExtra("title");
+        UtilFunctions1 = new UtilFunctions(this);
+        UtilFunctions1.setBackBackPressed(ActivityWeb.this);
+
+        toolbar = findViewById(R.id.web_toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(title1);
         }
+        App globalVariable = (App) getApplicationContext();
         progress_bar_dlg = findViewById(R.id.progressBar_loader);
         webView2 = findViewById(R.id.webView2);
 
-        String title1 = getIntent().getStringExtra("title");
+
         String text = getIntent().getStringExtra("text");
 
         boolean fromUrl = getIntent().getBooleanExtra("fromUrl", false);
 
-        setTitle(title1);
+        //setTitle(title1);
         if(fromUrl )
         {
             webView2.setWebViewClient(new WebViewClient(){
@@ -107,12 +118,6 @@ public class ActivityWeb extends AppCompatActivity {
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         SetLanguage.wrap(this);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Bungee.slideDown(this); //fire the slide left animation
     }
 
     @Override

@@ -41,10 +41,12 @@ public class AlarmNotificationReceiver extends BroadcastReceiver
     @Override
     public void onReceive(Context context, Intent intent)
     {
+        NotificationChannels.createAllChannels(context);
+
 
         NotificationCompat.Builder builder;
 
-        builder = new NotificationCompat.Builder(context, AppSettings.NOTIFICATION_CHANNEL_ID_DAILY);
+        builder = new NotificationCompat.Builder(context, NotificationChannels.CHANNEL_ID_DAILY_POEM);
 
         GanjoorDbBrowser ganjoorDbBrowser = new GanjoorDbBrowser(context.getApplicationContext());
         List<GanjoorVerse> ganjoorVerseList = ganjoorDbBrowser.getRandomPoemNotify();
@@ -90,7 +92,7 @@ public class AlarmNotificationReceiver extends BroadcastReceiver
             }
 
             builder.setAutoCancel(false)
-                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setSmallIcon(R.drawable.ic_artboard1)
                     .setContentTitle(context.getString(R.string.app_name))
                     .setContentText(ganjoorVerseList.get(0)._Text + "...")
                     .setContentIntent(pendingIntent)
@@ -98,15 +100,6 @@ public class AlarmNotificationReceiver extends BroadcastReceiver
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(rnd_poem_text));
 
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context.getApplicationContext());
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            {
-
-                NotificationChannel channel = new NotificationChannel(AppSettings.NOTIFICATION_CHANNEL_ID_DAILY,
-                        context.getString(R.string.daily_poem),
-                        NotificationManager.IMPORTANCE_DEFAULT);
-                notificationManager.createNotificationChannel(channel);
-            }
 
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED)
             {

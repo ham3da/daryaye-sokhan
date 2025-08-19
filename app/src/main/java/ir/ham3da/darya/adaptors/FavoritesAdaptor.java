@@ -3,6 +3,7 @@ package ir.ham3da.darya.adaptors;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,18 +61,24 @@ public class FavoritesAdaptor extends RecyclerView.Adapter<FavoritesAdaptor.View
     @Override
     public void onBindViewHolder(@NonNull final FavoritesAdaptor.ViewHolder holder, int position) {
         final FavoritesPoem favoriteList1 = favoriteList.get(position);
-        final int finalPosition = position;
+        final int finalPosition = position+1;
 
-        String title = String.format(Locale.getDefault(), "%d. ", favoriteList1._Index) + favoriteList1._Title;
+        if(!favoriteList1.isEmptyItem) {
+            String title = String.format(Locale.getDefault(), "%d. ", finalPosition) + favoriteList1._Title;
+            holder.fav_title.setText(title);
+            String referenceText = favoriteList1._CatTree;
+            holder.fav_reference.setText(referenceText);
+            holder.favCardView.setOnClickListener(v -> browsePoem(v.getContext(), favoriteList1._ID));
+            holder.moreOptions.setOnClickListener(v -> showMenu(v, favoriteList1._ID, position));
+            holder.moreOptions.setVisibility(View.VISIBLE);
+            holder.fav_reference.setVisibility(View.VISIBLE);
+        }
+        else {
+            holder.fav_title.setText(favoriteList1._Title);
+            holder.moreOptions.setVisibility(View.GONE);
+            holder.fav_reference.setVisibility(View.GONE);
+        }
 
-        holder.fav_title.setText(title);
-
-        String referenceText = favoriteList1._CatTree;
-        holder.fav_reference.setText(referenceText);
-
-        holder.favCardView.setOnClickListener(v -> browsePoem(v.getContext(), favoriteList1._ID));
-
-        holder.moreOptions.setOnClickListener(v -> showMenu(v, favoriteList1._ID, finalPosition));
     }
 
     public void browsePoem(Context context, int poemId) {
@@ -92,7 +99,6 @@ public class FavoritesAdaptor extends RecyclerView.Adapter<FavoritesAdaptor.View
 
     @Override
     public int getItemCount() {
-
         return favoriteList.size();
     }
 
@@ -100,24 +106,29 @@ public class FavoritesAdaptor extends RecyclerView.Adapter<FavoritesAdaptor.View
 
         MyDialogs MyDialogs1 = new MyDialogs(context1);
 
-        FavoritesPoem favoriteList1 = favoriteList.get(position);
-        String ques = String.format(context1.getString(R.string.fav_delete_ques), "<b>" + favoriteList1._Title + "</b>");
+        if (position >= 0 && position < favoriteList.size()) {
+            FavoritesPoem favoriteList1 = favoriteList.get(position);
+            String ques = String.format(context1.getString(R.string.fav_delete_ques), "<b>" + favoriteList1._Title + "</b>");
 
-        final Dialog yesNoDialog = MyDialogs1.YesNoDialog(ques, context1.getDrawable(R.drawable.ic_delete_white_24dp), true);
+            final Dialog yesNoDialog = MyDialogs1.YesNoDialog(ques, context1.getDrawable(R.drawable.ic_delete_white_24dp), true);
 
-        Button noBtn = yesNoDialog.findViewById(R.id.noBtn);
-        noBtn.setOnClickListener(v -> yesNoDialog.dismiss());
+            Button noBtn = yesNoDialog.findViewById(R.id.noBtn);
+            noBtn.setOnClickListener(v -> yesNoDialog.dismiss());
 
-        Button yesBtn = yesNoDialog.findViewById(R.id.yesBtn);
-        yesBtn.setOnClickListener(v -> {
+            Button yesBtn = yesNoDialog.findViewById(R.id.yesBtn);
+            yesBtn.setOnClickListener(v -> {
 
-            yesNoDialog.dismiss();
-            GanjoorDbBrowser1.removeFromFavorites(favPoemId);
-            favoriteList.remove(position);
-            reIndexItems();
-            notifyDataSetChanged();
-        });
-        yesNoDialog.show();
+                yesNoDialog.dismiss();
+                GanjoorDbBrowser1.removeFromFavorites(favPoemId);
+                favoriteList.remove(position);
+                reIndexItems();
+                notifyDataSetChanged();
+            });
+            yesNoDialog.show();
+        }
+        else {
+            Log.e("FavoritesAdaptor", "Attempted to delete item at invalid position: "+ position+", list size: "+favoriteList.size());
+        }
     }
 
     public void showMenu(final View view, final int favPoemId, final int position) {

@@ -34,6 +34,10 @@
         <item name="android:itemBackground">@color/itemBackground</item>
         <item name="colorPrimaryBG">@color/colorPrimaryBG</item>
         <item name="actionModeBackground">@color/colorPrimary</item>
+
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
+
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -42,6 +46,7 @@
         <item name="fontFamily">@font/iran_sans_mobile_light</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="ListTextColor">@color/textColor</item>
         <item name="ListBookTextColor">@color/poet_title_color</item>
@@ -70,6 +75,15 @@
         <item name="ListDivider">@color/divider</item>
         <item name="android:itemBackground">@color/itemBackground</item>
         <item name="colorPrimaryBG">@color/colorPrimaryBG</item>
+
+    </style>
+    <style name="MyActionModeStyle" parent="Widget.AppCompat.ActionMode">
+
+        <item name="titleTextStyle">@style/MyActionModeTitleTextStyle</item>
+    </style>
+
+    <style name="MyActionModeTitleTextStyle" parent="TextAppearance.AppCompat.Widget.ActionMode.Title">
+
     </style>
 
     <style name="AppTheme.ActionBar">
@@ -107,6 +121,7 @@
         <item name="android:itemBackground">@color/itemBackground</item>
         <item name="colorPrimaryBG">@color/colorPrimaryBG</item>
     </style>
+
 
     <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">
         <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
@@ -167,6 +182,4 @@
         <item name="android:width">15dp</item>
         <item name="android:height">15dp</item>
     </style>
-
-
 </resources>

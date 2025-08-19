@@ -1,80 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ActivityPuzzle">
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimaryDark"
+        android:fitsSystemWindows="true"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/pz_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:id="@+id/linearLayout1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:orientation="vertical"
+            android:paddingStart="10dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="10dp">
 
             <RelativeLayout
                 android:id="@+id/relativeLayout1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp">
+                android:layout_height="wrap_content">
+
 
                 <RelativeLayout
                     android:id="@+id/relativeLayoutRadtes"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:id="@+id/reward2"
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline_center_rate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginEnd="5dp"
-                        android:src="@drawable/ic_reward"
-                        app:tint="@color/darkGreen" />
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.5" />
 
-                    <TextView
-                        android:id="@+id/textview_plus_rate"
-                        android:layout_width="96dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="2dp"
-                        android:layout_marginTop="0dp"
-                        android:layout_marginEnd="2dp"
-                        android:layout_toStartOf="@+id/reward2"
-                        android:gravity="center_vertical|end"
-                        android:padding="2dp"
-                        android:text="0"
-                        android:textColor="@color/darkGreen"
-                        android:textSize="14sp" />
-
+                    <!-- بخش امتیاز منفی -->
                     <ImageView
                         android:id="@+id/reward1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
-                        android:layout_marginStart="5dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="0dp"
                         android:src="@drawable/ic_reward"
                         app:tint="?attr/PuzzleIncorrectColor" />
 
                     <TextView
                         android:id="@+id/textview_negative_rate"
-                        android:layout_width="96dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
                         android:layout_marginStart="2dp"
-                        android:layout_marginTop="0dp"
-                        android:layout_marginEnd="2dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_toStartOf="@+id/textview_plus_rate"
                         android:layout_toEndOf="@+id/reward1"
                         android:gravity="start|center_vertical"
                         android:padding="2dp"
                         android:text="0"
                         android:textColor="?attr/PuzzleIncorrectColor"
                         android:textSize="14sp" />
+
+                    <!-- بخش امتیاز مثبت -->
+                    <TextView
+                        android:id="@+id/textview_plus_rate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="2dp"
+                        android:layout_toStartOf="@+id/reward2"
+                        android:gravity="end|center_vertical"
+                        android:minWidth="48dp"
+                        android:padding="2dp"
+                        android:text="0"
+                        android:textColor="@color/darkGreen"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/reward2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="0dp"
+                        android:src="@drawable/ic_reward"
+                        app:tint="@color/darkGreen" />
 
                 </RelativeLayout>
 
@@ -83,9 +115,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/relativeLayoutRadtes"
-                    android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
                     android:background="@drawable/border_view_3"
                     android:gravity="center"
                     android:padding="10dp"
@@ -100,15 +130,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/textViewVerse"
-                    android:layout_marginStart="10dp"
                     android:layout_marginTop="0dp"
-                    android:layout_marginEnd="10dp"
                     android:layout_marginBottom="0dp"
                     android:max="100"
                     android:progress="0"
-                    android:visibility="invisible"
-
-                    />
+                    android:visibility="invisible" />
 
 
                 <EditText
@@ -116,12 +142,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/progress_bar"
-                    android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginEnd="10dp"
                     android:layout_marginBottom="10dp"
+                    android:autofillHints=""
                     android:background="@drawable/border_view_2"
-                    android:hint="@string/enter_missing"
+                    android:inputType="text"
                     android:padding="10dp"
                     android:singleLine="true"
                     android:textColor="?attr/ListTextColor"
@@ -141,6 +166,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/my_ripple"
+                        android:contentDescription="@string/source"
                         app:srcCompat="@drawable/ic_info_outline_black_24dp" />
 
                     <ImageButton
@@ -150,6 +176,7 @@
                         android:layout_marginStart="5dp"
                         android:layout_toEndOf="@+id/puzzle_info"
                         android:background="@drawable/my_ripple"
+                        android:contentDescription="@string/new1"
                         app:srcCompat="@drawable/ic_sync_black_24dp" />
 
                     <ImageButton
@@ -159,10 +186,9 @@
                         android:layout_marginStart="5dp"
                         android:layout_toEndOf="@+id/puzzle_new"
                         android:background="@drawable/my_ripple"
-                        android:tint="@color/black"
-                        app:srcCompat="@drawable/ic_check_black_24dp" />
-
-
+                        android:contentDescription="@string/check_answer"
+                        app:srcCompat="@drawable/ic_check_black_24dp"
+                        app:tint="@color/black" />
                 </RelativeLayout>
 
                 <TextView
@@ -177,7 +203,5 @@
 
             </RelativeLayout>
         </LinearLayout>
-
     </ScrollView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

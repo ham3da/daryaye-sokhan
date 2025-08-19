@@ -20,6 +20,8 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.Uri;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.res.ResourcesCompat;
@@ -56,6 +58,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import ir.ham3da.darya.ActivityPuzzle;
 import ir.ham3da.darya.ActivityWeb;
 import ir.ham3da.darya.BuildConfig;
 import ir.ham3da.darya.Bungee;
@@ -72,7 +75,7 @@ public class UtilFunctions
 
     //      google play => 0 , cafebazaar => 1 , myket => 2,
 
-    private static final int Store = 2;
+    private static final int Store = 1;
 
     public UtilFunctions(Context mCtx)
     {
@@ -95,15 +98,22 @@ public class UtilFunctions
     }
 
 
+    public void setBackBackPressed(AppCompatActivity activity)
+    {
+        activity.getOnBackPressedDispatcher().addCallback(activity, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Bungee.slideDown(activity);
+                setEnabled(false);
+                activity.getOnBackPressedDispatcher().onBackPressed();
+            }
+        });
+    }
+
+
 
     public static void requestAllPermissions(Activity activity)
     {
-
-        if ( Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
-        {
-            return;
-        }
-
 
         List<String> stringListPerm = new ArrayList<>();
         String[] prms;
@@ -146,11 +156,6 @@ public class UtilFunctions
     public static void requestPermissions(Activity activity, List<PermissionType> permissionTypes)
     {
 
-        if ( Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
-        {
-            Log.v("requestPermission", "POST_NOTIFICATIONS Permission is granted.");
-            return;
-        }
         for (PermissionType permissionType: permissionTypes)
         {
             if (activity.checkSelfPermission(permissionType.getPermission()) != PackageManager.PERMISSION_GRANTED)
@@ -204,11 +209,6 @@ public class UtilFunctions
 
     public static boolean permissionsIsGranted(Activity activity, List<PermissionType> permissionTypes)
     {
-
-        if ( Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
-        {
-            return true;
-        }
 
         boolean result = true;
         for (PermissionType permission: permissionTypes)
@@ -834,19 +834,6 @@ public class UtilFunctions
 
 
     public static void changeTheme(Context context)
-    {
-        AppSettings.Init(context);
-        if (AppSettings.checkThemeIsDark())
-        {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        }
-        else
-        {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        }
-    }
-
-    public static void changeTheme(Context context, boolean WithActionBar)
     {
         AppSettings.Init(context);
         if (AppSettings.checkThemeIsDark())

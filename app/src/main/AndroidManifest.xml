@@ -6,12 +6,13 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
+        android:maxSdkVersion="28" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
 
 
     <application
@@ -37,15 +38,15 @@
         <activity
             android:name=".ActivityPuzzle"
             android:label="@string/dont_forget_poetry"
-            android:theme="@style/AppTheme.ActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ActivityWeb"
             android:label="@string/about"
-            android:theme="@style/AppTheme.ActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ActivityImageEdit"
             android:label="@string/share_as_img"
-            android:theme="@style/AppTheme.ActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ActivityInfo2"
             android:label="@string/app_name"
@@ -53,15 +54,15 @@
         <activity
             android:name=".ActivityAudioCollection"
             android:label="@string/download_declaim"
-            android:theme="@style/AppTheme.ActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ActivityCollection"
             android:label="@string/collections"
-            android:theme="@style/AppTheme.ActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ActivitySettings"
             android:label="@string/action_settings"
-            android:theme="@style/AppTheme.ActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ActivityMain"
             android:exported="true"

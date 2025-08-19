@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context=".ActivityCate">
-
     <include layout="@layout/cate_header" />
 
     <androidx.recyclerview.widget.RecyclerView
