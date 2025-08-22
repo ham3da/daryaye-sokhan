@@ -20,14 +20,14 @@ android {
         applicationId "ir.ham3da.darya"
         minSdkVersion 23
         setTargetSdkVersion(35)
-        versionCode 53
-        versionName "2.9.5"
+        versionCode 54
+        versionName "3.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
 
         debug {
-           // minifyEnabled true
+            // minifyEnabled true
         }
         release {
             minifyEnabled true
@@ -74,6 +74,9 @@ dependencies {
 
     implementation 'com.google.android.play:integrity:1.4.0'
 
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
+    implementation "androidx.exifinterface:exifinterface:1.4.1"
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.16.0'
 
     //implementation group: 'commons-io', name: 'commons-io', version: '20030203.000550'
     testImplementation 'junit:junit:4.13.2'

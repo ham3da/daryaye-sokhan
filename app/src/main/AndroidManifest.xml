@@ -31,9 +31,6 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="s"
         android:dataExtractionRules="@xml/data_extraction_rules">
-        <activity
-            android:name=".ActivityDonateCrypto"
-            android:label="@string/donate" />
 
         <activity
             android:name=".ActivityPuzzle"
@@ -55,10 +52,22 @@
             android:name=".ActivityAudioCollection"
             android:label="@string/download_declaim"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".ActivitySongCollection"
+            android:label="@string/songs"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".ActivityCollection"
             android:label="@string/collections"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".ActivityPoemImages"
+            android:label="@string/Manuscripts"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".ActivitySettings"
             android:label="@string/action_settings"

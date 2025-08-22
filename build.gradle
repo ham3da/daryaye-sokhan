@@ -3,6 +3,7 @@ buildscript {
         google()
         mavenCentral()
         maven { url 'https://jitpack.io' }
+        mavenLocal()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:8.12.0'
@@ -12,10 +13,10 @@ buildscript {
 
 allprojects {
     repositories {
-
         google()
         mavenCentral()
         maven { url 'https://jitpack.io' }
+        mavenLocal()
     }
     tasks.withType(JavaCompile).tap {
         configureEach {

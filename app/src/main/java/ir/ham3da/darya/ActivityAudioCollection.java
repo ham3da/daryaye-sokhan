@@ -544,15 +544,15 @@ public class ActivityAudioCollection extends AppCompatActivity {
         String url = "";
         switch (type) {
             case GanjoorAudioInfo.DOWNLOAD_POEM:
-                url = "https://ganjgah.ir/api/ganjoor/poem/" + this.poem_id + "/recitations";
+                url = "https://api.ganjoor.net/api/ganjoor/poem/" + this.poem_id + "/recitations";
                 break;
             case GanjoorAudioInfo.DOWNLOAD_POET_POEMS:
 
-                url = "https://ganjgah.ir/api/audio/published?PageNumber=" + this.page_number + "&PageSize=" + this.page_size + "&poetId=" + this.poet_id + "&catId=0";
+                url = "https://api.ganjoor.net/api/audio/published?PageNumber=" + this.page_number + "&PageSize=" + this.page_size + "&poetId=" + this.poet_id + "&catId=0";
                 break;
 
             case GanjoorAudioInfo.DOWNLOAD_CATE_POEMS:
-                url = "https://ganjgah.ir/api/audio/published?PageNumber=" + this.page_number + "&PageSize=" + this.page_size + "&poetId=0&catId=" + this.cate_id;
+                url = "https://api.ganjoor.net/api/audio/published?PageNumber=" + this.page_number + "&PageSize=" + this.page_size + "&poetId=0&catId=" + this.cate_id;
                 break;
         }
         return url;

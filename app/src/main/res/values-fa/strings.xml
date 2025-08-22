@@ -21,6 +21,7 @@
     <string name="no">نخیر</string>
     <string name="yes">بله</string>
     <string name="share">اشتراک‌گذاری</string>
+    <string name="share_via">اشتراک‌گذاری با…</string>
     <string name="share_friend">اشتراک‌گذاری با دوستان</string>
     <string name="help">راهنما</string>
     <string name="about">درباره نر‌م‌افزار</string>
@@ -131,6 +132,7 @@
     <string name="select_an_item">لطفاً یک مرود را انتخاب نمایید:</string>
     <string name="please_select">لطفاً انتخاب کنید</string>
     <string name="no_audio_this_item">تاکنون خوانشی برای این مورد افزوده نشده است!</string>
+    <string name="no_song_this_item">تاکنون ترانه‌ای برای این مورد افزوده نشده است!</string>
     <string name="no_donload_this_item">تاکنون هیچ خوانشی برای این مورد دریافت نشده است آیا می خواهید دریافت کنید؟</string>
     <string name="last_read">آخرین مطالعه</string>
     <string name="signature">امضا</string>
@@ -169,6 +171,9 @@
     <string name="opacity">شفافیت</string>
     <string name="rotation">چرخش</string>
     <string name="error_occurred">متاسفانه، یک خطای ناخواسته رخ داده است!</string>
+    <string name="get_song_error">خطا در دریافت ترانه‌ها</string>
+    <string name="get_images_error">خطا در دریافت تصاویر</string>
+
     <string name="change_poem_font">فونت اشعار</string>
     <string name="change_poem_font_des">قلم نمایش شعرها را تغییر دهید</string>
     <string name="poetry_collection">مجموعه اشعار</string>
@@ -246,6 +251,9 @@
     <string name="CheckOurProducts">ابزارها و افزونه‌های کاربردی ما را ببینید.</string>
     <string name="view_admob">مشاهدۀ محصولات</string>
 
+    <string name="view_on">مشاهده در</string>
+    <string name="open_in_browser">باز کردن در مرورگر</string>
+
     <string name="btc_address_copied">آدرس بیت کوین کپی شد.</string>
     <string name="eth_address_copied">آدرس اتریوم کپی شد.</string>
     <string name="account_copied">شماره حساب پرفکت مانی کپی شد.</string>
@@ -263,5 +271,10 @@
     <string name="perm_msg">برای استفاده از برخی ویژگی‌های برنامه، مانند دانلود فایل‌های صوتی، نمایش شعر در اعلان‌ها و اشتراک شعر به صورت عکس، لطفاً به برنامه اجازه دهید تا به مجوزهای لازم دسترسی داشته باشد.</string>
     <string name="selected_items_count">تعداد</string>
     <string name="empty_favorites">هنوز هیچ شعر یا نثری را به عنوان گزیده علامتگذاری نکرده‌اید.</string>
-
+    <string name="songs">ترانه‌ها</string>
+    <string name="opening_play_link">در حال باز کردن لینک پخش…</string>
+    <string name="description">شرح</string>
+    <string name="Manuscripts">نسخ خطی</string>
+    <string name="Manuscript">نسخه خطی</string>
+    <string name="no_item">موردی برای نمایش یافت نشد.</string>
 </resources>

@@ -2,7 +2,6 @@ package ir.ham3da.darya.admob;
 
 
 import android.content.Context;
-import android.content.Intent;
 
 import android.os.Bundle;
 
@@ -11,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ProgressBar;
 
 
 import androidx.annotation.NonNull;
@@ -20,11 +18,6 @@ import androidx.fragment.app.Fragment;
 
 import java.util.Locale;
 
-import ir.ham3da.darya.ActivityDonateCrypto;
-import ir.ham3da.darya.ActivityMain;
-import ir.ham3da.darya.ActivityWeb;
-import ir.ham3da.darya.App;
-import ir.ham3da.darya.Bungee;
 import ir.ham3da.darya.MainActivityUtil;
 import ir.ham3da.darya.R;
 

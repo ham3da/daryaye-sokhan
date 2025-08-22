@@ -1,0 +1,74 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/poemImageView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scaleType="fitCenter"
+        android:background="@drawable/image_border"
+        android:contentDescription="@string/description" />
+
+    <TextView
+        android:id="@+id/imageCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/des_color"
+        android:text="0"
+        android:textSize="12sp"
+        android:layout_marginTop="4dp"
+        android:textAlignment="center"
+        android:layout_gravity="center" />
+
+
+    <TextView
+        android:id="@+id/imageTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/textColor"
+        android:text="@string/title"
+        android:textSize="14sp"
+        android:paddingTop="8dp"
+        android:textAlignment="center"
+        android:maxLines="3"
+        android:ellipsize="end" />
+
+    <LinearLayout
+        android:id="@+id/buttonRow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="center">
+    <ImageButton
+        android:id="@+id/shareButton"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:src="@drawable/ic_share_black_24dp"
+        app:tint="?attr/ListMoreBtnBGColor"
+        android:contentDescription="@string/share"
+        android:background="?attr/selectableItemBackgroundBorderless"
+         />
+
+    <ImageButton
+        android:id="@+id/urlButton"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:src="@drawable/baseline_open_in_browser_24"
+        app:tint="?attr/ListMoreBtnBGColor"
+        android:contentDescription="@string/open_in_browser"
+        android:background="?attr/selectableItemBackgroundBorderless"
+
+         />
+    </LinearLayout>
+
+
+</LinearLayout>

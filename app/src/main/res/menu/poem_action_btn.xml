@@ -37,8 +37,16 @@
         android:title="@string/previous_poem" />
 
     <item android:id="@+id/verse_declaim"
-        android:icon="@drawable/baseline_audio_file_24"
+        android:icon="@drawable/ic_record_voice_over_white_24dp"
         android:title="@string/download_declaim" />
+
+    <item android:id="@+id/get_songs"
+        android:icon="@drawable/baseline_music_note_24"
+        android:title="@string/songs" />
+
+    <item android:id="@+id/get_manuscripts"
+        android:icon="@drawable/baseline_draw_24"
+        android:title="@string/Manuscripts" />
 
     <item android:id="@+id/action_view_ganjoor"
         android:icon="@drawable/ic_language_black_24dp"

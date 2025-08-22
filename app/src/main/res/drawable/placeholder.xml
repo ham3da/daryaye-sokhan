@@ -1,0 +1,29 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+
+    <!-- پس‌زمینه خاکستری روشن -->
+    <path
+        android:fillColor="#F0F0F0"
+        android:pathData="M0,0h100v100h-100z" />
+
+    <!-- کوه‌ها -->
+    <path
+        android:fillColor="#A0A0A0"
+        android:pathData="M20,70l15,-25l15,25z" />
+    <path
+        android:fillColor="#A0A0A0"
+        android:pathData="M50,70l20,-35l20,35z" />
+
+    <!-- خورشید -->
+    <path
+        android:fillColor="#A0A0A0"
+        android:pathData="M75,25a5,5 0 1,0 10,0a5,5 0 1,0 -10,0" />
+
+    <!-- متن به صورت مستطیل نمادین -->
+    <path
+        android:fillColor="#A0A0A0"
+        android:pathData="M30,80h40v5h-40z" />
+</vector>

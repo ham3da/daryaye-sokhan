@@ -75,7 +75,7 @@ public class UtilFunctions
 
     //      google play => 0 , cafebazaar => 1 , myket => 2,
 
-    private static final int Store = 1;
+    private static final int Store = 2;
 
     public UtilFunctions(Context mCtx)
     {
@@ -316,13 +316,13 @@ public class UtilFunctions
         context1.startActivity(Intent.createChooser(txtIntent, context1.getString(R.string.share)));
     }
 
-    public void shareText(String subject, String body)
+
+    public static void shareText(Context context, String subject)
     {
         Intent txtIntent = new Intent(android.content.Intent.ACTION_SEND);
         txtIntent.setType("text/plain");
         txtIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
-        txtIntent.putExtra(android.content.Intent.EXTRA_TEXT, body);
-        context1.startActivity(Intent.createChooser(txtIntent, context1.getString(R.string.share)));
+        context.startActivity(Intent.createChooser(txtIntent, context.getString(R.string.share_via)));
     }
 
     public void gotoAppPage()
@@ -410,6 +410,13 @@ public class UtilFunctions
         Intent intent1 = new Intent(Intent.ACTION_VIEW);
         intent1.setData(Uri.parse(url));
         context1.startActivity(intent1);
+    }
+
+    public static void openUrl(Context context, String url)
+    {
+        Intent intent1 = new Intent(Intent.ACTION_VIEW);
+        intent1.setData(Uri.parse(url));
+        context.startActivity(intent1);
     }
 
     public void copyText(String text)

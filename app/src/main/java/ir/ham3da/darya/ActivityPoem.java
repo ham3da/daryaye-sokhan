@@ -350,6 +350,13 @@ public class ActivityPoem extends AppCompatActivity {
                     startActivity(intent);
                     Bungee.slideUp(mContext);
                     break;
+
+                case R.id.get_songs:
+                    showSongs(poem_id);
+                    break;
+                case R.id.get_manuscripts:
+                    showImages(poem_id);
+                    break;
                 case R.id.action_view_ganjoor:
                     openPoemURL();
                     break;
@@ -659,6 +666,10 @@ public class ActivityPoem extends AppCompatActivity {
             case R.id.action_play:
                 showAudioBar();
                 break;
+            case R.id.action_get_songs:
+                showSongs(poem_id);
+                break;
+
 
 
         }
@@ -699,6 +710,23 @@ public class ActivityPoem extends AppCompatActivity {
         }
     }
 
+    private void showImages(int poem_id_var)
+    {
+        Intent intent = new Intent(mContext, ActivityPoemImages.class);
+        intent.putExtra("poem_id", poem_id_var);
+        intent.putExtra("poem_title", GanjoorPoem1._Title);
+        startActivity(intent);
+        Bungee.slideUp(mContext);
+    }
+
+    private void showSongs(int poem_id_var)
+    {
+        Intent intent = new Intent(mContext, ActivitySongCollection.class);
+        intent.putExtra("poem_id", poem_id_var);
+        intent.putExtra("poem_title", GanjoorPoem1._Title);
+        startActivity(intent);
+        Bungee.slideUp(mContext);
+    }
 
     private void ShowAudioCollection() {
 
