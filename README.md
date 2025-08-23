@@ -50,7 +50,7 @@ This project is licensed under the **GPL v3**, in accordance with the Ganjoor da
 
 ## Donation with cryptocurrencies
 
-* <b>Address:</b> 0xD6735B2457c3c1E25122220Cf3067C614Cf18Bc4 (Available on Ethereum, Binance Smart, Ethereum Classic and Polygon (Matic) networks)
+* [Donate](https://pay.oxapay.com/13564354)
 
 ---
 
@@ -66,17 +66,7 @@ This project is licensed under the **GPL v3**, in accordance with the Ganjoor da
 
 ---
 
-##  Screenshots
-
-<p>
-<img width="320" src="screen-02.png"><br>
-<img width="320" src="screen-03.png"><br>
-<img width="320" src="screen-04.png">
-</p>
-
----
-
-## 🇮🇷 معرفی فارسی
+## معرفی فارسی - 🇮🇷
 
 **دریای سخن**، کتابخانه‌ای بزرگ از اشعار ناب شاعران فارسی است؛ هدیه‌ای ارزشمند برای دوستداران شعر و ادب.  
 این اپلیکیشن رایگان و متن‌باز، امکاناتی بی‌نظیر برای عاشقان شعر فراهم می‌کند:
@@ -103,3 +93,14 @@ This project is licensed under the **GPL v3**, in accordance with the Ganjoor da
 این پروژه به صورت متن‌باز و رایگان توسعه داده شده است.
 برای ادامه این مسیر و افزودن قابلیت‌های جدید، لطفاً با مشاهده و خرید سایر محصولاتمان، از ما حمایت کنید:
 * 👉 [مشاهده محصولات](https://ads.daryaye-sokhan.ir/)
+* 👉 [حمایت با ارزهای دیجیتال](https://pay.oxapay.com/13564354)
+
+---
+
+##  Screenshots
+
+<p>
+<img width="320" src="screen-02.png"><br>
+<img width="320" src="screen-03.png"><br>
+<img width="320" src="screen-04.png">
+</p>
