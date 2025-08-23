@@ -58,6 +58,8 @@ This project is licensed under the **GPL v3**, in accordance with the Ganjoor da
 * IDE: Android Studio
 * Programming language: Java
 
+---
+
 ## Used repositories:
 * [ganjooroid](https://github.com/ganjoor/ganjooroid)
 * [ganjoor](https://github.com/ganjoor/ganjoor)
