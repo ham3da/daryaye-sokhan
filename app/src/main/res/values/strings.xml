@@ -37,6 +37,7 @@
     <string name="close">Close</string>
     <string name="communicate">Communicate</string>
     <string name="cancel">Cancel</string>
+    <string name="later">Later</string>
     <string name="copy1">Copy</string>
     <string name="copied_to_clipboard">Copied to Clipboard</string>
     <string name="application">Application</string>
@@ -155,6 +156,7 @@
     <string name="app_telegram_channel">Join the telegram channel</string>
     <string name="app_instagram">Follow on Instagram</string>
     <string name="update">Update</string>
+    <string name="update_title">Update Ready</string>
     <string name="app_share_des">The %s app is a valuable library of great Persian poetry</string>
     <string name="optimize">Optimize</string>
     <string name="optimizing">Optimizing</string>
@@ -215,14 +217,15 @@
     <string name="check_answer">Check answer</string>
     <string name="new1">New</string>
     <string name="source">Source</string>
+    <string name="changes">Changes:</string>
     <string name="is_correct">Well, your answer is correct.</string>
     <string name="is_incorrect">Sorry, your answer is incorrect.</string>
     <string name="loadingVers">Loading verse</string>
     <string name="night_theme">Night mode</string>
 
     <string name="easy_donating">Easy donating</string>
-    <string name="admob_not_load">No ads are currently available. Please try again later.</string>
-    <string name="admob_des">Dear user, in order to support this valuable application, touch the "View ads" button And after displaying the ad, touch it as well.</string>
+    <string name="ad_not_load">No ads are currently available. Please try again later.</string>
+    <string name="ad_des">Dear user, in order to support this valuable application, touch the "View ads" button And after displaying the ad, touch it as well.</string>
 
     <string name="thanks_a_lot">Thanks a lot</string>
     <string name="declaimer">Declaimer</string>
@@ -269,14 +272,9 @@
 
     <string name="OurProducts">Our Special Products for You</string>
     <string name="CheckOurProducts">Check out our useful tools and plugins.</string>
-    <string name="view_admob">View products</string>
+    <string name="view_products">View products</string>
     <string name="view_on">View on</string>
     <string name="open_in_browser">Open in browser</string>
-
-    <string name="btc_address_copied">Bitcoin address copied.</string>
-    <string name="eth_address_copied">Ethereum address copied.</string>
-    <string name="account_copied">Perfect Money account number copied.</string>
-    <string name="bank_transfer">Bank Transfer</string>
     <string name="in_collections">Collaboration in collections:</string>
     <string name="our_products">Our products:</string>
     <string name="our_products_url" translatable="false">https://ads.daryaye-sokhan.ir/</string>
@@ -297,5 +295,18 @@
     <string name="Manuscripts">Manuscripts</string>
     <string name="Manuscript">Manuscript</string>
     <string name="no_item">No items found!</string>
+    <string name="take_photo_with_camera">Take photo with camera</string>
+    <string name="choose_image_from_gallery">Choose image from gallery</string>
+    <string name="redo_action">Redo action</string>
+    <string name="undo_last_action">Undo last action</string>
+    <string name="cam_permission_denied">Camera permission denied!</string>
+    <string name="poetry_in_image">Poetry in Image</string>
+    <string name="permission_denied">Permission denied!</string>
+    <string name="error_loading_image">Error loading image!</string>
+    <string name="uri_error">Error creating URI to save image</string>
+    <string name="error_output_read">Error opening image output.</string>
+    <string name="notify_permission_msg">Stay inspired! Get Poem of the Day and key updates by enabling notifications.</string>
+    <string name="enable">Enable</string>
+
 
 </resources>

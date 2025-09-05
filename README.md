@@ -23,7 +23,7 @@ Designed for lovers of literature, poetry, and Persian culture, this app offers 
 
 ## 🛠️ Technical Notes
 
-- Built entirely by [Javad](https://github.com/ham3da), with icon design by **Ali Alimardani**
+- Built entirely by [Javad Ehteshami](https://github.com/ham3da), with icon design by **Ali Alimardani**
 - Uses the **Ganjoor open database** (licensed under GPL)
 - Source code available on GitHub: [github.com/ham3da/daryaye-sokhan](https://github.com/ham3da/daryaye-sokhan)
 - Winner of the **14th Iran Web and Mobile Festival**

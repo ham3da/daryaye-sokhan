@@ -1,22 +1,14 @@
 package ir.ham3da.darya.utility;
-
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.util.Log;
-
-
 import androidx.appcompat.app.AlertDialog;
-
-import com.google.android.gms.tasks.Task;
-import com.google.android.play.core.appupdate.AppUpdateInfo;
-import com.google.android.play.core.appupdate.AppUpdateManager;
-import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
-
-import com.google.android.play.core.install.model.AppUpdateType;
-import com.google.android.play.core.install.model.UpdateAvailability;
-
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import org.json.JSONArray;
+import org.json.JSONException;
+import ir.ham3da.darya.BuildConfig;
 
 import ir.ham3da.darya.R;
 
@@ -30,43 +22,53 @@ public class UpdateApp
 
     public void initUpdate()
     {
-
-        if(UtilFunctions.isGooglePlayVersion())
-        {
-            checkGooglePlayForUpdate();
-        }
+           checkGithubForUpdate();
     }
 
-    private void checkGooglePlayForUpdate()
+    private void showUpdateDialog(String versionName, String changelog, String downloadUrl) {
+        new AlertDialog.Builder(mContext)
+                .setTitle(R.string.update_title)
+                .setMessage(mContext.getString(R.string.changes)+"\n\n" + changelog)
+                .setPositiveButton(R.string.update, (dialog, which) -> {
+                    UtilFunctions.openUrl(mContext, downloadUrl);
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+
+    private void checkGithubForUpdate()
     {
 
-        AppUpdateManager appUpdateManager = AppUpdateManagerFactory.create(mContext);
-        Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+        String url = "https://raw.githubusercontent.com/ham3da/daryaye-sokhan/refs/heads/master/version.json";
 
-        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo ->
-        {
-            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE))
-            {
-                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                builder.setTitle(R.string.update);
-                builder.setMessage(R.string.update_app_des);
-                builder.setPositiveButton(
-                        R.string.update, (dialog, which) -> {
-                            final String appPackageName = mContext.getPackageName();
-                            try
-                            {
-                                mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
-                            } catch (ActivityNotFoundException anfe)
-                            {
-                                mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+        RequestQueue queue = Volley.newRequestQueue(mContext);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        int latestCode = response.getInt("versionCode");
+                        String latestName = response.getString("versionName");
+                        JSONArray changelogArray = response.getJSONArray("changelog");
+                        String downloadUrl = response.getString("downloadUrl");
+
+                        int currentCode = BuildConfig.VERSION_CODE;
+                        Log.i(TAG, "latestCode: "+latestCode);
+                        if (latestCode > currentCode) {
+                            StringBuilder changelogBuilder = new StringBuilder();
+                            for (int i = 0; i < changelogArray.length(); i++) {
+                                changelogBuilder.append("• ").append(changelogArray.getString(i)).append("\n");
                             }
-                        });
-                builder.setNegativeButton(R.string.cancel, (dialog, which) -> {dialog.dismiss();} );
-                builder.setCancelable(false);
-                builder.show();
-            }
-        });
-        appUpdateInfoTask.addOnFailureListener(e -> Log.e(TAG, "onFailure: "+e.getMessage() ));
+                            showUpdateDialog(latestName, changelogBuilder.toString(), downloadUrl);
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> Log.e(TAG, "Error checking new version", error)
+        );
+
+        queue.add(request);
 
     }
 }

@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
@@ -809,13 +810,13 @@ public class PhotoEditor implements BrushViewChangeListener
      * Save the edited image on given path
      *
      * @param imagePath      path on which image to be saved
+     * @param fileName      file name
      * @param onSaveListener callback for saving image
      * @see OnSaveListener
      */
-    @RequiresPermission(allOf = {Manifest.permission.WRITE_EXTERNAL_STORAGE})
-    public void saveAsFile(@NonNull final String imagePath, @NonNull final OnSaveListener onSaveListener)
+    public void saveAsFile(@NonNull final String imagePath, @NonNull String fileName, @NonNull final OnSaveListener onSaveListener)
     {
-        saveAsFile(imagePath, new SaveSettings.Builder().build(), onSaveListener);
+        saveAsFile(imagePath, fileName, new SaveSettings.Builder().build(), onSaveListener);
     }
 
 
@@ -830,17 +831,10 @@ public class PhotoEditor implements BrushViewChangeListener
         }
         else
         {
-            canvas.drawColor(Color.WHITE);
+           canvas.drawColor(Color.WHITE);
         }
         view.draw(canvas);
         return returnedBitmap;
-    }
-
-    public static Bitmap getBitmapFromView2(View view)
-    {
-        view.setDrawingCacheEnabled(true);
-        view.buildDrawingCache();
-        return view.getDrawingCache();
     }
 
 
@@ -848,100 +842,70 @@ public class PhotoEditor implements BrushViewChangeListener
      * Save the edited image on given path
      *
      * @param fileFullName      file Full Name
+     * @param fileName      file Name
      * @param saveSettings   builder for multiple save options {@link SaveSettings}
      * @param onSaveListener callback for saving image
      * @see OnSaveListener
      */
     @SuppressLint("StaticFieldLeak")
-    public void saveAsFile(String fileFullName,   SaveSettings saveSettings, OnSaveListener onSaveListener)
-    {
-
+    public void saveAsFile(String fileFullName, String fileName, SaveSettings saveSettings, OnSaveListener onSaveListener) {
         Log.d(TAG, "fileFullName : " + fileFullName);
-        parentView.saveFilter(new OnSaveBitmap()
-        {
+
+        parentView.saveFilter(new OnSaveBitmap() {
             @Override
-            public void onBitmapReady(Bitmap saveBitmap)
-            {
-                class AsyncTask1
-                {
-                    public void execute()
-                    {
+            public void onBitmapReady(Bitmap saveBitmap) {
+                ActivityImageEdit activity = (ActivityImageEdit) context;
+
+                activity.runOnUiThread(() -> {
+                    try {
                         clearHelperBox();
-                        parentView.setDrawingCacheEnabled(false);
-                        Thread saveThread = new Thread(this::doInBackground);
-                        saveThread.start();
-                    }
 
-
-                    private void doInBackground()
-                    {
-                        // Create a media file name
-                       // File file = new File(imagePath);
-                        try
-                        {
-
-                           // Log.e(TAG, "imagePath: " + imagePath);
-                           // FileOutputStream out = new FileOutputStream(file, false);
-                            if (parentView != null)
-                            {
-                                parentView.setDrawingCacheEnabled(true);
-                                parentView.buildDrawingCache();
-
-                                Bitmap drawingCache = saveSettings.isTransparencyEnabled() ? BitmapUtil.removeTransparency(parentView.getDrawingCache()) : parentView.getDrawingCache();
-
-                               String savedImagePath = UtilFunctions.saveImageToStorage(context, drawingCache, fileFullName);
-
-                               // drawingCache.compress(saveSettings.getCompressFormat(), saveSettings.getCompressQuality(), out);
-                                complete(null, savedImagePath);
-                                Log.d(TAG, "Filed Saved Successfully");
-
+                        if (parentView != null) {
+                            if (saveSettings.isTransparencyEnabled()) {
+                                parentView.setBackgroundColor(Color.TRANSPARENT);
                             }
-                            else
-                            {
-                                Exception exception =   new Exception("parentView in saveAsFile method is null!");
-                                complete(exception, null);
-                            }
-                           // out.flush();
-                           // out.close();
+                            Bitmap bitmap = getBitmapFromView(parentView);
 
-                        } catch (Exception e)
-                        {
-                            e.printStackTrace();
-                            Log.d(TAG, "Failed to save File");
-                            complete(e, null);
+                           Uri savedImageUri = UtilFunctions.saveImageToStorage(context, bitmap, fileName);
+
+                            Log.d(TAG, "File Saved Successfully: " + savedImageUri);
+
+                            complete(null, savedImageUri);
+                        } else {
+                            Exception exception = new Exception("parentView in saveAsFile method is null!");
+                            complete(exception, null);
                         }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.d(TAG, "Failed to save File");
+                        complete(e, null);
                     }
-
-                    private void complete(Exception e, String savedImagePath1)
-                    {
-                        if (e == null)
-                        {
-                            //Clear all views if its enabled in save settings
-                            ActivityImageEdit activity = (ActivityImageEdit) context;
-
-                            activity.runOnUiThread(() -> {
-                                if (saveSettings.isClearViewsEnabled()) clearAllViews();
-                                onSaveListener.onSuccess(savedImagePath1);
-                            });
-                        }
-                        else
-                        {
-                            onSaveListener.onFailure(e);
-                        }
-                    }
-                }
-                AsyncTask1 asyncTask1 = new AsyncTask1();
-                asyncTask1.execute();
-
+                });
             }
 
             @Override
-            public void onFailure(Exception e)
-            {
+            public void onFailure(Exception e) {
                 onSaveListener.onFailure(e);
+            }
+
+            private void complete(Exception e, Uri savedImageUri) {
+                ActivityImageEdit activity = (ActivityImageEdit) context;
+
+                activity.runOnUiThread(() -> {
+                    if (e == null) {
+                        if (saveSettings.isClearViewsEnabled()) {
+                            clearAllViews();
+                        }
+                        onSaveListener.onSuccess(savedImageUri.toString());
+                    } else {
+                        onSaveListener.onFailure(e);
+                    }
+                });
             }
         });
     }
+
 
     /**
      * Save the edited image as bitmap
@@ -954,6 +918,7 @@ public class PhotoEditor implements BrushViewChangeListener
     {
         saveAsBitmap(new SaveSettings.Builder().build(), onSaveBitmap);
     }
+
 
     /**
      * Save the edited image as bitmap
@@ -976,21 +941,17 @@ public class PhotoEditor implements BrushViewChangeListener
                     public void execute()
                     {
                         clearHelperBox();
-                        parentView.setDrawingCacheEnabled(false);
+//
 
                         Thread saveThread = new Thread(this::doInBackground);
                         saveThread.start();
                     }
 
-                    @SuppressLint("MissingPermission")
                     private void doInBackground()
                     {
                         if (parentView != null)
                         {
-                            parentView.setDrawingCacheEnabled(true);
-                            Bitmap bitmap = saveSettings.isTransparencyEnabled() ?
-                                    BitmapUtil.removeTransparency(parentView.getDrawingCache())
-                                    : parentView.getDrawingCache();
+                            Bitmap bitmap = getBitmapFromView(parentView);
 
                             complete(bitmap);
 

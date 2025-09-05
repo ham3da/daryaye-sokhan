@@ -31,6 +31,7 @@
     <string name="close">بستن</string>
     <string name="communicate">برقراری ارتباط</string>
     <string name="cancel">انصراف</string>
+    <string name="later">بعداً</string>
     <string name="copy1">رونوشت</string>
     <string name="copied_to_clipboard">رونوشت برداشته شد</string>
     <string name="application">نرم‌افزار</string>
@@ -145,6 +146,7 @@
     <string name="app_telegram_channel">پیوستن به کانال تلگرامی</string>
     <string name="app_instagram">دنبال کردن در اینستاگرام</string>
     <string name="update">به‌روزرسانی</string>
+    <string name="update_title">نسخه جدید</string>
     <string name="app_share_des">نرم‌افزار %s، کتابخانه‌ای ارزشمند از اشعار شاعران بزرگ ادب پارسی</string>
     <string name="optimize">بهینه‌سازی</string>
     <string name="optimizing">در حال بهینه‌سازی</string>
@@ -197,14 +199,15 @@
     <string name="check_answer">بررسی پاسخ</string>
     <string name="new1">جدید</string>
     <string name="source">منبع</string>
+    <string name="changes">تغییرات:</string>
     <string name="is_correct">آفرین، درست پاسخ دادید.</string>
     <string name="is_incorrect">متأسفانه پاسخ شما نادرست است.</string>
     <string name="loadingVers">در حال فراخوانی شعر</string>
     <string name="night_theme">حالت شب</string>
 
     <string name="easy_donating">همیاری</string>
-    <string name="admob_not_load">در حال حاضر تبلیغی در دسترس نیست. لطفاً بعداً دوباره سعی کنید.</string>
-    <string name="admob_des">کاربر گرامی، از شما تقاضا داریم به پاس حمایت از این نرم‌افزار ارزشمند، گاهی اوقات روی دکمه "مشاهدۀ" آگهی لمس کنید و پس از مشاهده آگهی، آن را نیز لمس نمایید. با این کار کمک بزرگی به توسعه این نرم‌‌افزار خواهید نمود.</string>
+    <string name="ad_not_load">در حال حاضر تبلیغی در دسترس نیست. لطفاً بعداً دوباره سعی کنید.</string>
+    <string name="ad_des">کاربر گرامی، از شما تقاضا داریم به پاس حمایت از این نرم‌افزار ارزشمند، گاهی اوقات روی دکمه "مشاهدۀ" آگهی لمس کنید و پس از مشاهده آگهی، آن را نیز لمس نمایید. با این کار کمک بزرگی به توسعه این نرم‌‌افزار خواهید نمود.</string>
 
     <string name="thanks_a_lot">سپاسگزاریم</string>
     <string name="declaimer">گوینده</string>
@@ -249,15 +252,10 @@
 
     <string name="OurProducts">محصولات ویژه برای شما</string>
     <string name="CheckOurProducts">ابزارها و افزونه‌های کاربردی ما را ببینید.</string>
-    <string name="view_admob">مشاهدۀ محصولات</string>
+    <string name="view_products">مشاهدۀ محصولات</string>
 
     <string name="view_on">مشاهده در</string>
     <string name="open_in_browser">باز کردن در مرورگر</string>
-
-    <string name="btc_address_copied">آدرس بیت کوین کپی شد.</string>
-    <string name="eth_address_copied">آدرس اتریوم کپی شد.</string>
-    <string name="account_copied">شماره حساب پرفکت مانی کپی شد.</string>
-    <string name="bank_transfer">حواله بانکی</string>
     <string name="in_collections">همکاری در مجموعه‌ها:</string>
     <string name="our_products">محصولات ما:</string>
     <string name="view_our_products">مشاهده محصولات ما</string>
@@ -277,4 +275,18 @@
     <string name="Manuscripts">نسخ خطی</string>
     <string name="Manuscript">نسخه خطی</string>
     <string name="no_item">موردی برای نمایش یافت نشد.</string>
+    <string name="take_photo_with_camera">گرفتن عکس با دوربین</string>
+    <string name="choose_image_from_gallery">انتخاب تصویر از گالری</string>
+    <string name="redo_action">انجام دوباره</string>
+    <string name="undo_last_action">لغو آخرین تغییر</string>
+    <string name="cam_permission_denied">مجوز دوربین رد شد!</string>
+    <string name="poetry_in_image">شعر در تصویر</string>
+    <string name="permission_denied">مجوز رد شد!</string>
+    <string name="error_loading_image">خطا در بارگذاری تصویر!</string>
+    <string name="uri_error">خطا در ایجاد URI برای ذخیره تصویر</string>
+    <string name="error_output_read">خطا در باز کردن خروجی تصویر</string>
+    <string name="notify_permission_msg">اعلان‌ها را روشن کنید تا «شعر روز» و اطلاعیه‌های مهم را از دست ندهید.</string>
+    <string name="enable">فعال‌سازی</string>
+
+
 </resources>

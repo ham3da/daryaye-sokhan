@@ -30,14 +30,17 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
+
 import ir.ham3da.darya.ganjoor.GanjoorDbBrowser;
 import ir.ham3da.darya.ganjoor.GanjoorPoem;
-import ir.ham3da.darya.admob.MainAdMobFragment;
+import ir.ham3da.darya.ad.MainAdFragment;
 import ir.ham3da.darya.notification.PoemService;
 import ir.ham3da.darya.ui.main.MainFavoritesFragment;
 import ir.ham3da.darya.ui.main.MainPoetsFragment;
@@ -199,10 +202,9 @@ public class ActivityMain extends AppCompatActivity
         progress_bar_dlg = findViewById(R.id.progressBar_loader);
 
         UpdateApp update = new UpdateApp(this);
-        update.initUpdate();
+        new Handler(Looper.getMainLooper()).postDelayed(update::initUpdate, 3000);
 
-
-        AppSettings.increaseLaunchCount();
+         AppSettings.increaseLaunchCount();
 
     }
 
@@ -245,7 +247,7 @@ public class ActivityMain extends AppCompatActivity
                     case 1:
                         return new MainFavoritesFragment();
                     case 2:
-                        return new MainAdMobFragment();
+                        return new MainAdFragment();
                 }
             }
         });
@@ -594,7 +596,7 @@ public class ActivityMain extends AppCompatActivity
         dialog.setCancelable(false);
         dialog.setTitle(R.string.easy_donating);
         dialog.setMessage(R.string.ad_exit_text);
-        dialog.setPositiveButton(R.string.view_admob, (dialog1, id) ->
+        dialog.setPositiveButton(R.string.view_products, (dialog1, id) ->
         {
             App globalVariable = (App) getApplicationContext();
             globalVariable.setAdviewd(true);
@@ -609,12 +611,15 @@ public class ActivityMain extends AppCompatActivity
 
     public void checkPermissions()
     {
+        View parentView = findViewById(android.R.id.content);
+
+
         List<PermissionType> permissionTypes = new ArrayList<>();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
         {
             permissionTypes.add(new PermissionType(Manifest.permission.POST_NOTIFICATIONS, 33));
-            permissionTypes.add(new PermissionType(Manifest.permission.READ_MEDIA_AUDIO, 2));
-            permissionTypes.add( new PermissionType(Manifest.permission.READ_MEDIA_IMAGES, 2) );
+            //permissionTypes.add(new PermissionType(Manifest.permission.READ_MEDIA_AUDIO, 2));
+            //permissionTypes.add( new PermissionType(Manifest.permission.READ_MEDIA_IMAGES, 2) );
         }
         else {
             permissionTypes.add( new PermissionType(Manifest.permission.WRITE_EXTERNAL_STORAGE, 2) );
@@ -623,8 +628,15 @@ public class ActivityMain extends AppCompatActivity
         boolean pmGranted =  UtilFunctions.permissionsIsGranted(this, permissionTypes);
         if(!pmGranted)
         {
-            MyDialogs1.ShowPermissionMessage(this, getString(R.string.perm_msg), R.drawable.ic_security_black_24dp);
+            Snackbar.make(parentView, R.string.notify_permission_msg, Snackbar.LENGTH_INDEFINITE)
+                    .setAction(R.string.enable, v -> {
+                        UtilFunctions.requestPermissions(this, permissionTypes);
+                    })
+                    .show();
+
+            //MyDialogs1.ShowPermissionMessage(this, getString(R.string.perm_msg), R.drawable.ic_security_black_24dp);
         }
+
 
 
     }

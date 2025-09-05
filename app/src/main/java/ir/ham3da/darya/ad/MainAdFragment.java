@@ -1,4 +1,4 @@
-package ir.ham3da.darya.admob;
+package ir.ham3da.darya.ad;
 
 
 import android.content.Context;
@@ -24,19 +24,17 @@ import ir.ham3da.darya.R;
 import ir.ham3da.darya.utility.AppSettings;
 import ir.ham3da.darya.utility.UtilFunctions;
 
-public class MainAdMobFragment extends Fragment
+public class MainAdFragment extends Fragment
 {
 
     private MainActivityUtil mainActivityUtil1;
     Context mContext;
     Button btn_view_ad;
 
-    //    InterstitialAd mInterstitialAd;
-    //ProgressBar progress_bar;
-    String TAG = "MainAdMobFragment";
+    String TAG = "MainAdFragment";
     UtilFunctions UtilFunctions1;
 
-    public MainAdMobFragment()
+    public MainAdFragment()
     {
 
     }
@@ -58,7 +56,7 @@ public class MainAdMobFragment extends Fragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View root = inflater.inflate(R.layout.fragment_admob, container, false);
+        View root = inflater.inflate(R.layout.fragment_ad, container, false);
 
         mContext = getContext();
         AppSettings.Init(mContext);
@@ -95,13 +93,6 @@ public class MainAdMobFragment extends Fragment
     public void displayCustomAdWeb()
     {
         UtilFunctions1.openUrl(getString(R.string.our_products_url));
-//        Intent intent = new Intent(mContext, ActivityWeb.class);
-//        intent.putExtra("title", getString(R.string.our_products));
-//        intent.putExtra("fromUrl", true);
-//        intent.putExtra("url",  getString(R.string.our_products_url));
-//
-//        startActivity(intent);
-//        Bungee.card(mContext);
     }
 
 

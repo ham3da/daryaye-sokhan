@@ -462,7 +462,7 @@ public class ActivityPoem extends AppCompatActivity {
 
     private void PlayFirsAudio() {
         existAudioList = GanjoorDbBrowser1.getPoemAudios(poem_id);
-        if (existAudioList.size() > 0) {
+        if (!existAudioList.isEmpty()) {
             PoemAudio poemAudio = existAudioList.get(0);
             mPlayer = new MediaPlayer();
             mPlayer.setOnCompletionListener(mediaPlayer -> play_audio.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_play_arrow_black_24dp)));
@@ -514,7 +514,7 @@ public class ActivityPoem extends AppCompatActivity {
     private void showAudioList(View view) {
         existAudioList = GanjoorDbBrowser1.getPoemAudios(poem_id);
 
-        if (existAudioList.size() > 0) {
+        if (!existAudioList.isEmpty()) {
 // setup the alert builder
             AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
             builder.setTitle(R.string.declaims);

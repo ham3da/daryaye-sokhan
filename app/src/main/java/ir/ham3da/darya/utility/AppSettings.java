@@ -255,6 +255,8 @@ public class AppSettings
         {
             boolean mkdir = dir.mkdir();
         }
+
+
         return dir.getAbsolutePath();
     }
 

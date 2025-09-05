@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ImageDecoder;
@@ -18,9 +19,11 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 
 import android.transition.ChangeBounds;
+import android.transition.Transition;
 import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.Menu;
@@ -37,6 +40,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,15 +49,19 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
 
+import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.io.IOException;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -73,6 +81,7 @@ import ir.ham3da.darya.tools.ToolType;
 import ir.ham3da.darya.utility.AppFontManager;
 import ir.ham3da.darya.utility.AppSettings;
 import ir.ham3da.darya.utility.CustomProgress;
+import ir.ham3da.darya.utility.PermissionHelper;
 import ir.ham3da.darya.utility.SetLanguage;
 import ir.ham3da.darya.utility.UtilFunctions;
 import ja.burhanrashid52.photoeditor.OnPhotoEditorListener;
@@ -90,8 +99,7 @@ public class ActivityImageEdit extends AppCompatActivity implements
         EmojiBSFragment.EmojiListener,
         StickerBSFragment.StickerListener,
         EditingToolsAdapter.OnItemSelected,
-        FilterListener
-{
+        FilterListener {
 
     String poemText;
     int fontId;
@@ -117,18 +125,23 @@ public class ActivityImageEdit extends AppCompatActivity implements
     private Uri imagSevePath;
     private Typeface mTextIranSansTf;
 
+    private File photoFile;
+
     List<BackGroundItem> resListBackGroundItem;
     BackGroundAdapter backGroundAdapter;
+    private ActivityResultLauncher<Uri> takePictureLauncher;
+    private Uri photoUri;
+
+    private ActivityResultLauncher<String> saveImagePermissionLauncher;
+
 
     @Override
-    protected void attachBaseContext(Context newBase)
-    {
+    protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(SetLanguage.wrap(newBase));
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.share_image_menu, menu);
         return true;
     }
@@ -136,12 +149,10 @@ public class ActivityImageEdit extends AppCompatActivity implements
 
     @SuppressLint("NonConstantResourceId")
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item)
-    {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         int id = item.getItemId();
-        switch (id)
-        {
+        switch (id) {
             case android.R.id.home:
                 getOnBackPressedDispatcher().onBackPressed();
                 break;
@@ -157,23 +168,19 @@ public class ActivityImageEdit extends AppCompatActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-    protected void shareImage()
-    {
-        if (imagSevePath != null)
-        {
+    protected void shareImage() {
+        if (imagSevePath != null) {
             UtilFunctions.shareImage(ActivityImageEdit.this, imagSevePath);
-        }
-        else
-        {
+        } else {
             saveImage(true);
         }
 
     }
 
     private Toolbar toolbar;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         UtilFunctions.changeTheme(this);
@@ -183,30 +190,23 @@ public class ActivityImageEdit extends AppCompatActivity implements
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.share_as_img);
+            getSupportActionBar().setTitle(R.string.poetry_in_image);
         }
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
 
-                if (mIsFilterVisible || mIsBackgroundVisible)
-                {
-                    if(mIsFilterVisible)
-                    {
+                if (mIsFilterVisible || mIsBackgroundVisible) {
+                    if (mIsFilterVisible) {
                         showFilter(false);
                     }
-                    if(mIsBackgroundVisible)
-                    {
+                    if (mIsBackgroundVisible) {
                         showBackgrounds(false);
                     }
-                }
-                else if (!mPhotoEditor.isCacheEmpty())
-                {
+                } else if (!mPhotoEditor.isCacheEmpty()) {
                     showSaveDialog();
-                }
-                else
-                {
+                } else {
                     setEnabled(false);
                     getOnBackPressedDispatcher().onBackPressed();
                 }
@@ -221,7 +221,7 @@ public class ActivityImageEdit extends AppCompatActivity implements
 
         EditingToolsAdapter mEditingToolsAdapter = new EditingToolsAdapter(ActivityImageEdit.this, this);
 
-       poemText = getIntent().getStringExtra("poemText");
+        poemText = getIntent().getStringExtra("poemText");
         String poetName = getIntent().getStringExtra("poetName");
         PhotoEditorView mPhotoEditorView = findViewById(R.id.photoEditorView);
         fontId = AppSettings.getPoemsFont();
@@ -255,8 +255,7 @@ public class ActivityImageEdit extends AppCompatActivity implements
 
         poemText += System.lineSeparator() + poetName;
 
-        if (!signature.isEmpty())
-        {
+        if (!signature.isEmpty()) {
             signature = "«" + signature + "»";
         }
 
@@ -264,54 +263,88 @@ public class ActivityImageEdit extends AppCompatActivity implements
         mPhotoEditor.setOnPhotoEditorListener(this);
 
 
-        cameraActivityResultLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
+
+        takePictureLauncher = registerForActivityResult(
+                new ActivityResultContracts.TakePicture(),
                 result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        Intent data = result.getData();
-                        Bitmap photo = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
-                        Drawable drawable = new BitmapDrawable(getResources(), photo);
-                        mPhotoEditorView.getSource().setImageDrawable(drawable);
+                    if (result) {
+
+
+
+                        Glide.with(this)
+                                .asBitmap()
+                                .load(photoUri)
+                                .override(1024, 1024)
+                                .centerInside()
+                                .into(new CustomTarget<Bitmap>() {
+                                   @Override
+                                    public void onResourceReady(@NonNull Bitmap resource,
+                                                                @Nullable @org.jetbrains.annotations.Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+
+
+                                        Drawable drawable = new BitmapDrawable(getResources(), resource);
+                                        mPhotoEditorView.getSource().setImageDrawable(drawable);
+                                    }
+
+                                    @Override
+                                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                                        // اینجا اگر لازم شد منابع را آزاد کن
+                                    }
+                                });
 
                     }
-                });
+                }
+        );
 
         galleryActivityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK)
-                    {
-                        try{
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+
                         Intent data = result.getData();
                         Uri selectedImageURI = data.getData();
 
-                        Bitmap bitmap;
+                        Glide.with(this)
+                                .asBitmap()
+                                .load(selectedImageURI)
+                                .override(1024, 1024)
+                                .centerInside()
+                                .into(new CustomTarget<Bitmap>() {
+                                    @Override
+                                    public void onResourceReady(@NonNull Bitmap resource,
+                                                                @Nullable @org.jetbrains.annotations.Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
 
-                        if (Build.VERSION.SDK_INT >= 28)
-                        {
-                            ImageDecoder.Source source = ImageDecoder.createSource(this.getContentResolver(), selectedImageURI);
-                            bitmap = ImageDecoder.decodeBitmap(source);
-                        }
-                        else
-                        {
-                            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageURI);
-                        }
 
-                        Drawable drawable = new BitmapDrawable(getResources(), bitmap);
-                        mPhotoEditorView.getSource().setImageDrawable(drawable);
-                    } catch (IOException e)
-                    {
-                        e.printStackTrace();
-                    }
+                                        Drawable drawable = new BitmapDrawable(getResources(), resource);
+                                        mPhotoEditorView.getSource().setImageDrawable(drawable);
+                                    }
+
+                                    @Override
+                                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                                        // اینجا اگر لازم شد منابع را آزاد کن
+                                    }
+                                });
                     }
                 });
+
+        saveImagePermissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                isGranted -> {
+                    if (isGranted) {
+                        doSaveImage(shareRequest);
+                    } else {
+                        Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+
     }
 
-    ActivityResultLauncher<Intent> cameraActivityResultLauncher, galleryActivityResultLauncher;
+    //    ActivityResultLauncher<String> cameraPermissionLauncher;
+    ActivityResultLauncher<Intent> galleryActivityResultLauncher;
 
-
-    private void initViews()
-    {
+    private void initViews() {
         ImageView imgUndo;
         ImageView imgRedo;
         ImageView imgCamera;
@@ -331,20 +364,19 @@ public class ActivityImageEdit extends AppCompatActivity implements
         imgRedo.setOnClickListener(this);
 
         imgCamera = findViewById(R.id.imgCamera);
-        //imgCamera.setOnClickListener(this);
-        imgCamera.setVisibility(View.GONE);
+        imgCamera.setOnClickListener(this);
+        imgCamera.setVisibility(View.VISIBLE);
 
         imgGallery = findViewById(R.id.imgGallery);
-        //imgGallery.setOnClickListener(this);
-        imgGallery.setVisibility(View.GONE);
+        imgGallery.setOnClickListener(this);
+        imgGallery.setVisibility(View.VISIBLE);
 
         mRvFilters.setVisibility(View.GONE);
         rvBackground.setVisibility(View.GONE);
 
 
         resListBackGroundItem = new ArrayList<>();
-        for (int i = 1; i <= 15; i++)
-        {
+        for (int i = 1; i <= 15; i++) {
             BackGroundItem backGroundItem = new BackGroundItem(this);
             backGroundItem.setId(i);
             resListBackGroundItem.add(backGroundItem);
@@ -358,8 +390,7 @@ public class ActivityImageEdit extends AppCompatActivity implements
 
         backGroundAdapter.setItemClickListener((position, view) -> {
             int bgID = resListBackGroundItem.get(position).getResIDBig();
-            if (view.getId() == R.id.card_view_top )
-            {
+            if (view.getId() == R.id.card_view_top) {
                 mPhotoEditorView.getSource().setImageResource(bgID);
             }
         });
@@ -367,25 +398,70 @@ public class ActivityImageEdit extends AppCompatActivity implements
     }
 
 
-    public static Bitmap drawableToBitmap(Drawable drawable, int width, int height)
-    {
-        if (drawable instanceof BitmapDrawable)
-        {
-            return ((BitmapDrawable) drawable).getBitmap();
+    public static Bitmap loadOptimizedBitmapFromUri(Context context, Uri uri, int maxSize) {
+        if (context == null || uri == null) {
+            return null;
         }
 
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, width, height);
-        drawable.draw(canvas);
+        try {
+            if (Build.VERSION.SDK_INT >= 28) {
+                // استفاده از ImageDecoder برای API 28+
+                ImageDecoder.Source source = ImageDecoder.createSource(context.getContentResolver(), uri);
+                return ImageDecoder.decodeBitmap(source, (decoder, info, src) -> {
+                    int width = info.getSize().getWidth();
+                    int height = info.getSize().getHeight();
 
-        return bitmap;
+                    if (width > maxSize || height > maxSize) {
+                        float scale = Math.min((float) maxSize / width, (float) maxSize / height);
+                        decoder.setTargetSize((int) (width * scale), (int) (height * scale));
+                    }
+                    decoder.setAllocator(ImageDecoder.ALLOCATOR_SOFTWARE); // جلوگیری از OOM در بعضی دستگاه‌ها
+                });
+            } else {
+                // استفاده از BitmapFactory برای API پایین‌تر
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+
+                try (InputStream input = context.getContentResolver().openInputStream(uri)) {
+                    BitmapFactory.decodeStream(input, null, options);
+                }
+
+                options.inSampleSize = calculateInSampleSize(options, maxSize, maxSize);
+                options.inJustDecodeBounds = false;
+
+                try (InputStream input = context.getContentResolver().openInputStream(uri)) {
+                    return BitmapFactory.decodeStream(input, null, options);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
+     * محاسبه inSampleSize برای کاهش ابعاد تصویر
+     */
+    private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        int height = options.outHeight;
+        int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+            int halfHeight = height / 2;
+            int halfWidth = width / 2;
+
+            while ((halfHeight / inSampleSize) >= reqHeight && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+        return inSampleSize;
     }
 
 
     @Override
-    public void onEditTextChangeListener(final View rootView, String text, int colorCode)
-    {
+    public void onEditTextChangeListener(final View rootView, String text, int colorCode) {
         TextEditorDialogFragment textEditorDialogFragment =
                 TextEditorDialogFragment.show(this, text, colorCode);
         textEditorDialogFragment.setOnTextEditorListener((inputText, colorCode1) -> {
@@ -400,8 +476,7 @@ public class ActivityImageEdit extends AppCompatActivity implements
 
 
     @Override
-    public void onShadowColorChangeListener(View rootView, int colorCode, float shadowDx, float shadowDy, float shadowRadius)
-    {
+    public void onShadowColorChangeListener(View rootView, int colorCode, float shadowDx, float shadowDy, float shadowRadius) {
         ShadowColorDialogFragment shadowColorDialogFragment =
                 ShadowColorDialogFragment.show(this, shadowDx, shadowDy, shadowRadius, colorCode);
 
@@ -411,35 +486,29 @@ public class ActivityImageEdit extends AppCompatActivity implements
 
 
     @Override
-    public void onAddViewListener(ViewType viewType, int numberOfAddedViews, View rootView)
-    {
+    public void onAddViewListener(ViewType viewType, int numberOfAddedViews, View rootView) {
         Log.d(TAG, "onAddViewListener() called with: viewType = [" + viewType + "], numberOfAddedViews = [" + numberOfAddedViews + "]");
     }
 
     @Override
-    public void onRemoveViewListener(ViewType viewType, int numberOfAddedViews)
-    {
+    public void onRemoveViewListener(ViewType viewType, int numberOfAddedViews) {
         Log.d(TAG, "onRemoveViewListener() called with: viewType = [" + viewType + "], numberOfAddedViews = [" + numberOfAddedViews + "]");
     }
 
     @Override
-    public void onStartViewChangeListener(ViewType viewType)
-    {
+    public void onStartViewChangeListener(ViewType viewType) {
         Log.d(TAG, "onStartViewChangeListener() called with: viewType = [" + viewType + "]");
     }
 
     @Override
-    public void onStopViewChangeListener(ViewType viewType)
-    {
+    public void onStopViewChangeListener(ViewType viewType) {
         Log.d(TAG, "onStopViewChangeListener() called with: viewType = [" + viewType + "]");
     }
 
     @SuppressLint("NonConstantResourceId")
     @Override
-    public void onClick(View view)
-    {
-        switch (view.getId())
-        {
+    public void onClick(View view) {
+        switch (view.getId()) {
 
             case R.id.imgUndo:
                 mPhotoEditor.undo();
@@ -450,9 +519,7 @@ public class ActivityImageEdit extends AppCompatActivity implements
                 break;
 
             case R.id.imgCamera:
-                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                cameraActivityResultLauncher.launch(cameraIntent);
-
+                takePhoto();
                 break;
 
             case R.id.imgGallery:
@@ -461,8 +528,13 @@ public class ActivityImageEdit extends AppCompatActivity implements
         }
     }
 
-    private void pickFromGallery()
-    {
+    private void takePhoto() {
+        File photoFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "photo_" + System.currentTimeMillis() + ".jpg");
+        photoUri = FileProvider.getUriForFile(this, getPackageName() + ".provider", photoFile);
+        takePictureLauncher.launch(photoUri);
+    }
+
+    private void pickFromGallery() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
@@ -473,108 +545,99 @@ public class ActivityImageEdit extends AppCompatActivity implements
 
     }
 
-    protected void doSaveImage(final boolean share)
-    {
+    protected void doSaveImage(final boolean share) {
         final CustomProgress customProgressDlg = new CustomProgress(this);
         customProgressDlg.showProgress(getString(R.string.saving), getString(R.string.please_wait2), false, false, true);
 
-        try
-        {
-
-          //  boolean newFile = file.createNewFile();
+        try {
             SaveSettings saveSettings = new SaveSettings.Builder()
-                    .setClearViewsEnabled(true)
+                    .setClearViewsEnabled(false)
                     .setTransparencyEnabled(true)
                     .build();
 
-            String imgFullName = System.currentTimeMillis() + ".jpg";
-            mPhotoEditor.saveAsFile(imgFullName, saveSettings, new PhotoEditor.OnSaveListener()
-            {
-                @Override
-                public void onSuccess(@NonNull String imagePath)
-                {
-                    showSnackbar(getString(R.string.saved));
+            String fileName = "darya_" + System.currentTimeMillis() + ".png";
+            String imgFullName = getExternalFilesDir(null).getAbsolutePath() + "/" + fileName;
 
-                    Uri imageUri = Uri.fromFile(new File(imagePath));
+            new Thread(() -> {
+                mPhotoEditor.saveAsFile(imgFullName, fileName, saveSettings, new PhotoEditor.OnSaveListener() {
+                    @Override
+                    public void onSuccess(@NonNull String imagePath) {
+                        showSnackbar(getString(R.string.saved));
+                        customProgressDlg.dismiss();
+                        Log.e(TAG, "onSuccess: imagePath" + imagePath);
+                        imagSevePath = Uri.parse(imagePath);
 
-                    mPhotoEditorView.getSource().setImageURI(imageUri);
-                    customProgressDlg.dismiss();
-
-                    imagSevePath = imageUri;
-
-                    if( android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.Q )
-                    {
-                        UtilFunctions.addPicToGallery(getBaseContext(), imagePath);
+                        if (share) {
+                            shareImage();
+                        }
                     }
 
-                    if (share)
-                    {
-                        shareImage();
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        Log.e(TAG, "onFailure saveImage: " + exception.getMessage());
+                        exception.printStackTrace();
+                        showSnackbar(getString(R.string.failed_save));
+                        customProgressDlg.dismiss();
                     }
-                }
+                });
+            }).start();
 
-                @Override
-                public void onFailure(@NonNull Exception exception)
-                {
-                    Log.e(TAG, "saveImage: " + exception.getMessage());
-                    exception.printStackTrace();
-                    showSnackbar(getString(R.string.failed_save));
-                    customProgressDlg.dismiss();
-                }
-            });
-        } catch (Exception e)
-        {
+
+        } catch (Exception e) {
             Log.e(TAG, "saveImage: " + e.getMessage());
             showSnackbar(Objects.requireNonNull(e.getMessage()));
             customProgressDlg.dismiss();
         }
-
-
     }
 
 
-    private void saveImage(boolean share)
-    {
+    private void saveImage(boolean share) {
         shareRequest = share;
-        if (UtilFunctions.isWriteStoragePermissionGranted(this, PermissionMediaType.IMAGES))
-        {
-            doSaveImage(share);
-        }
+        PermissionHelper.requestMediaPermission(
+                this,
+                PermissionMediaType.IMAGES,
+                saveImagePermissionLauncher,
+                new PermissionHelper.PermissionCallback() {
+                    @Override
+                    public void onPermissionGranted() {
+                        doSaveImage(share);
+                    }
+
+                    @Override
+                    public void onPermissionDenied() {
+                        Toast.makeText(getApplicationContext(), R.string.permission_denied, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
     }
 
     @Override
-    public void onColorChanged(int colorCode)
-    {
+    public void onColorChanged(int colorCode) {
         mPhotoEditor.setBrushColor(colorCode);
     }
 
     @Override
-    public void onOpacityChanged(int opacity)
-    {
+    public void onOpacityChanged(int opacity) {
         mPhotoEditor.setOpacity(opacity);
     }
 
     @Override
-    public void onBrushSizeChanged(int brushSize)
-    {
+    public void onBrushSizeChanged(int brushSize) {
         mPhotoEditor.setBrushSize(brushSize);
     }
 
     @Override
-    public void onEmojiClick(String emojiUnicode)
-    {
+    public void onEmojiClick(String emojiUnicode) {
         mPhotoEditor.addEmoji(emojiUnicode);
     }
 
     @Override
-    public void onStickerClick(Bitmap bitmap)
-    {
+    public void onStickerClick(Bitmap bitmap) {
         mPhotoEditor.addImage(bitmap);
     }
 
 
-    private void showSaveDialog()
-    {
+    private void showSaveDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.alret_save);
 
@@ -589,16 +652,13 @@ public class ActivityImageEdit extends AppCompatActivity implements
     }
 
     @Override
-    public void onFilterSelected(PhotoFilter photoFilter)
-    {
+    public void onFilterSelected(PhotoFilter photoFilter) {
         mPhotoEditor.setFilterEffect(photoFilter);
     }
 
     @Override
-    public void onToolSelected(ToolType toolType)
-    {
-        switch (toolType)
-        {
+    public void onToolSelected(ToolType toolType) {
+        switch (toolType) {
             case BRUSH:
                 mPhotoEditor.setBrushDrawingMode(true);
                 //mTxtCurrentTool.setText(R.string.label_brush);
@@ -638,17 +698,13 @@ public class ActivityImageEdit extends AppCompatActivity implements
     }
 
 
-    protected void showBackgrounds(boolean isVisible)
-    {
+    protected void showBackgrounds(boolean isVisible) {
         mIsBackgroundVisible = isVisible;
         mConstraintSet.clone(mRootView);
         Log.e(TAG, "showBackgrounds: " + isVisible);
-        if (isVisible)
-        {
+        if (isVisible) {
             rvBackground.setVisibility(View.VISIBLE);
-        }
-        else
-        {
+        } else {
             rvBackground.setVisibility(View.GONE);
 
         }
@@ -661,19 +717,15 @@ public class ActivityImageEdit extends AppCompatActivity implements
         mConstraintSet.applyTo(mRootView);
     }
 
-    protected void showFilter(boolean isVisible)
-    {
+    protected void showFilter(boolean isVisible) {
         mIsFilterVisible = isVisible;
         mConstraintSet.clone(mRootView);
         Log.e(TAG, "showFilter: " + isVisible);
-        if (isVisible)
-        {
+        if (isVisible) {
 
             mRvFilters.setVisibility(View.VISIBLE);
 
-        }
-        else
-        {
+        } else {
             mRvFilters.setVisibility(View.GONE);
 
         }
@@ -686,33 +738,11 @@ public class ActivityImageEdit extends AppCompatActivity implements
         mConstraintSet.applyTo(mRootView);
     }
 
-
-
-    //Permission
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
-    {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 2)
-        {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            {
-                Log.v(TAG, "Permission: " + permissions[0] + " was " + grantResults[0]);
-                saveImage(shareRequest);
-            }
-        }
-    }
-
-    protected void showSnackbar(@NonNull String message)
-    {
+    protected void showSnackbar(@NonNull String message) {
         View view = findViewById(android.R.id.content);
-        if (view != null)
-        {
+        if (view != null) {
             Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show();
-        }
-        else
-        {
+        } else {
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         }
     }

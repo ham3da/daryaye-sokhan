@@ -23,7 +23,7 @@
                 android:padding="16dp">
 
                 <TextView
-                    android:id="@+id/admob_des"
+                    android:id="@+id/ad_des"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/OurProducts"
@@ -33,7 +33,7 @@
                     android:lineSpacingExtra="8sp" />
 
                 <TextView
-                    android:id="@+id/admob_des_des"
+                    android:id="@+id/ad_des_des"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -52,7 +52,7 @@
                     android:drawableEnd="@drawable/ic_baseline_apps_24"
                     android:drawablePadding="6dp"
                     android:backgroundTint="@color/btnColor"
-                    android:text="@string/view_admob"
+                    android:text="@string/view_products"
                     android:textColor="@color/primaryTextColor"
                     android:textSize="16sp"
                     android:textAllCaps="false"

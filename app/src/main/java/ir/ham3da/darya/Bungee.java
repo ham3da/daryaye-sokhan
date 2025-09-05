@@ -1,68 +1,82 @@
 package ir.ham3da.darya;
 
 import android.content.Context;
+import android.os.Build;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class Bungee {
 
+    private static void applyTransition(Context context, int enterAnim, int exitAnim) {
+        AppCompatActivity activity = (AppCompatActivity) context;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) { // API 34
+            activity.overrideActivityTransition(
+                    AppCompatActivity.OVERRIDE_TRANSITION_OPEN,
+                    enterAnim,
+                    exitAnim
+            );
+        } else {
+            activity.overridePendingTransition(enterAnim, exitAnim);
+        }
+    }
+
     public static void slideLeft(Context context) {
-        ((AppCompatActivity) context).overridePendingTransition(R.anim.slide_left_enter, R.anim.slide_left_exit);
+        applyTransition(context, R.anim.slide_left_enter, R.anim.slide_left_exit);
     }
 
     public static void slideRight(Context context) {
-        ((AppCompatActivity) context).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        applyTransition(context, R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
     public static void slideDown(Context context) {
-        ((AppCompatActivity) context).overridePendingTransition(R.anim.slide_down_enter, R.anim.slide_down_exit);
+        applyTransition(context, R.anim.slide_down_enter, R.anim.slide_down_exit);
     }
 
     public static void slideUp(Context context) {
-        ((AppCompatActivity) context).overridePendingTransition(R.anim.slide_up_enter, R.anim.slide_up_exit);
+        applyTransition(context, R.anim.slide_up_enter, R.anim.slide_up_exit);
     }
 
     public static void zoom(Context context) {
-        ((AppCompatActivity) context).overridePendingTransition(R.anim.zoom_enter, R.anim.zoom_exit);
+        applyTransition(context, R.anim.zoom_enter, R.anim.zoom_exit);
     }
 
     public static void fade(Context context) {
-        ((AppCompatActivity) context).overridePendingTransition(R.anim.fade_enter, R.anim.fade_exit);
+        applyTransition(context, R.anim.fade_enter, R.anim.fade_exit);
     }
 
     public static void windmill(Context context) {
-        ((AppCompatActivity) context).overridePendingTransition(R.anim.windmill_enter, R.anim.windmill_exit);
+        applyTransition(context, R.anim.windmill_enter, R.anim.windmill_exit);
     }
 
     public static void spin(Context context) {
-        ((AppCompatActivity) context).overridePendingTransition(R.anim.spin_enter, R.anim.spin_exit);
+        applyTransition(context, R.anim.spin_enter, R.anim.spin_exit);
     }
 
     public static void diagonal(Context context) {
-        ((AppCompatActivity) context).overridePendingTransition(R.anim.diagonal_right_enter, R.anim.diagonal_right_exit);
+        applyTransition(context, R.anim.diagonal_right_enter, R.anim.diagonal_right_exit);
     }
 
-    public static void split(Context context){
-        ((AppCompatActivity) context).overridePendingTransition(R.anim.split_enter, R.anim.split_exit);
+    public static void split(Context context) {
+        applyTransition(context, R.anim.split_enter, R.anim.split_exit);
     }
 
     public static void shrink(Context context) {
-        ((AppCompatActivity) context).overridePendingTransition(R.anim.shrink_enter, R.anim.shrink_exit);
+        applyTransition(context, R.anim.shrink_enter, R.anim.shrink_exit);
     }
 
     public static void card(Context context) {
-        ((AppCompatActivity) context).overridePendingTransition(R.anim.card_enter, R.anim.card_exit);
+        applyTransition(context, R.anim.card_enter, R.anim.card_exit);
     }
 
     public static void inAndOut(Context context) {
-        ((AppCompatActivity) context).overridePendingTransition(R.anim.in_out_enter, R.anim.in_out_exit);
+        applyTransition(context, R.anim.in_out_enter, R.anim.in_out_exit);
     }
 
     public static void swipeLeft(Context context) {
-        ((AppCompatActivity) context).overridePendingTransition(R.anim.swipe_left_enter, R.anim.swipe_left_exit);
+        applyTransition(context, R.anim.swipe_left_enter, R.anim.swipe_left_exit);
     }
 
     public static void swipeRight(Context context) {
-        ((AppCompatActivity) context).overridePendingTransition(R.anim.swipe_right_enter, R.anim.swipe_right_exit);
+        applyTransition(context, R.anim.swipe_right_enter, R.anim.swipe_right_exit);
     }
 }

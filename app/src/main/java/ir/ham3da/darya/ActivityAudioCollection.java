@@ -1,6 +1,8 @@
 package ir.ham3da.darya;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -61,6 +63,7 @@ import ir.ham3da.darya.utility.AppSettings;
 
 import ir.ham3da.darya.ganjoor.GanjoorAudioInfo;
 import ir.ham3da.darya.utility.MyDialogs;
+import ir.ham3da.darya.utility.PermissionHelper;
 import ir.ham3da.darya.utility.PoemAudio;
 import ir.ham3da.darya.utility.SetLanguage;
 import ir.ham3da.darya.utility.UtilFunctions;
@@ -113,6 +116,9 @@ public class ActivityAudioCollection extends AppCompatActivity {
     private Toolbar toolbar;
     private EndlessRecyclerViewScrollListener scrollListener;
     boolean isActionMode = false;
+
+    private ActivityResultLauncher<String> saveAudioPermissionLauncher;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,6 +204,17 @@ public class ActivityAudioCollection extends AppCompatActivity {
                 .setDatabaseEnabled(true)
                 .build();
         PRDownloader.initialize(getApplicationContext(), config);
+
+        saveAudioPermissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                isGranted -> {
+                    if (isGranted) {
+                        downloadMarkedAudio();
+                    } else {
+                        Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
     }
 
     private void reloadItems() {
@@ -485,9 +502,29 @@ public class ActivityAudioCollection extends AppCompatActivity {
                 }
                 return true;
             case R.id.action_dl:
-                if (UtilFunctions.isWriteStoragePermissionGranted(ActivityAudioCollection.this, PermissionMediaType.AUDIO)) {
+
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                    PermissionHelper.requestMediaPermission(
+                            this,
+                            PermissionMediaType.AUDIO,
+                            saveAudioPermissionLauncher,
+                            new PermissionHelper.PermissionCallback() {
+                                @Override
+                                public void onPermissionGranted() {
+                                    downloadMarkedAudio();
+                                }
+
+                                @Override
+                                public void onPermissionDenied() {
+                                    Toast.makeText(getApplicationContext(), R.string.permission_denied, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                    );
+                }
+                else {
                     downloadMarkedAudio();
                 }
+
                 return true;
 
             case R.id.action_delete:
@@ -505,19 +542,6 @@ public class ActivityAudioCollection extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 2) {
-            Log.d(TAG, "Write  External storage");
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.v(TAG, "Permission: " + permissions[0] + " was " + grantResults[0]);
-                downloadMarkedAudio();
-            }
-        }
-    }
-
 
     public void setActionbarTitle(String title) {
         toolbar.setTitle(title);
@@ -743,10 +767,7 @@ public class ActivityAudioCollection extends AppCompatActivity {
             e.printStackTrace();
             Toast.makeText(getBaseContext(), getString(R.string.err_list_audio), Toast.LENGTH_SHORT).show();
 
-
         }
-
-
     }
 
     protected void completedJsonDownload(Integer result) {
@@ -756,7 +777,6 @@ public class ActivityAudioCollection extends AppCompatActivity {
         }
 
     }
-
 
     public void ShowSuccessToast() {
         Toast.makeText(this, getString(R.string.download_success), Toast.LENGTH_SHORT).show();

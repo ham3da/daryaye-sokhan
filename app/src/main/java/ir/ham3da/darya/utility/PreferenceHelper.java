@@ -9,69 +9,49 @@ import java.util.Map;
 
 public class PreferenceHelper
 {
+    private static final String PREF_NAME = "ir.ham3da.darya_preferences";
+
     private final SharedPreferences mPrefs;
 
     public PreferenceHelper(Context context) {
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        mPrefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
-    public  Map<String, ?> getAllItems()
-    {
-        Map<String, ?> map = mPrefs.getAll();
-        return map;
+    public Map<String, ?> getAllItems() {
+        return mPrefs.getAll();
     }
 
     public String getKey(String key, String def) {
-        String str = mPrefs.getString(key, def);
-        return str;
+        return mPrefs.getString(key, def);
     }
 
-    public Boolean getKey(String key, Boolean def ) {
-        Boolean res = mPrefs.getBoolean(key, def);
-        return res;
+    public Boolean getKey(String key, Boolean def) {
+        return mPrefs.getBoolean(key, def);
     }
 
-    public int getKey(String key, int def ) {
-        int res = mPrefs.getInt(key, def);
-        return res;
+    public int getKey(String key, int def) {
+        return mPrefs.getInt(key, def);
     }
 
-    public float getKey(String key, float def ) {
-        float res = mPrefs.getFloat(key, def);
-        return res;
+    public float getKey(String key, float def) {
+        return mPrefs.getFloat(key, def);
     }
 
-    public void setKey(String key, String value)
-    {
-        SharedPreferences.Editor mEditor = mPrefs.edit();
-        mEditor.putString(key, value);
-        mEditor.apply();
-        mEditor.commit();
+    public void setKey(String key, String value) {
+        mPrefs.edit().putString(key, value).apply();
     }
 
-    public void setKey(String key, Boolean value)
-    {
-        SharedPreferences.Editor mEditor = mPrefs.edit();
-        mEditor.putBoolean(key, value);
-        mEditor.apply();
-        mEditor.commit();
+    public void setKey(String key, Boolean value) {
+        mPrefs.edit().putBoolean(key, value).apply();
     }
 
-    public void setKey(String key, int value)
-    {
-        SharedPreferences.Editor mEditor = mPrefs.edit();
-        mEditor.putInt(key, value);
-        mEditor.apply();
-        mEditor.commit();
+    public void setKey(String key, int value) {
+        mPrefs.edit().putInt(key, value).apply();
     }
 
-
-    public void setKey(String key, float value)
-    {
-        SharedPreferences.Editor mEditor = mPrefs.edit();
-        mEditor.putFloat(key, value);
-        mEditor.apply();
-        mEditor.commit();
+    public void setKey(String key, float value) {
+        mPrefs.edit().putFloat(key, value).apply();
     }
+
 
 }

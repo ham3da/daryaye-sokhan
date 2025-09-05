@@ -20,8 +20,8 @@ android {
         applicationId "ir.ham3da.darya"
         minSdkVersion 23
         setTargetSdkVersion(35)
-        versionCode 54
-        versionName "3.0.0"
+        versionCode 56
+        versionName "3.2.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -72,8 +72,6 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.9.2'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.2'
 
-    implementation 'com.google.android.play:integrity:1.4.0'
-
     implementation 'com.github.bumptech.glide:glide:4.16.0'
     implementation "androidx.exifinterface:exifinterface:1.4.1"
     annotationProcessor 'com.github.bumptech.glide:compiler:4.16.0'
@@ -84,7 +82,8 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.7.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
     implementation 'com.github.koji-1009:ChronoDialogPreference:2.1.0'
-    implementation 'com.google.android.play:app-update:2.1.0'
+
+
     implementation 'com.android.volley:volley:1.2.1'
     implementation 'androidx.preference:preference:1.2.1'
     implementation(platform('org.jetbrains.kotlin:kotlin-bom:1.9.0'))

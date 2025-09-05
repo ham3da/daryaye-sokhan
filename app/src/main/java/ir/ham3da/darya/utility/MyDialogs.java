@@ -292,7 +292,7 @@ public class MyDialogs {
         okBtn.setText(R.string.ok);
         okBtn.setOnClickListener(v ->
         {
-            UtilFunctions.requestAllPermissions(activity);
+            UtilFunctions.checkPostNotificationPermission(activity);
             dialog.dismiss();
         });
 

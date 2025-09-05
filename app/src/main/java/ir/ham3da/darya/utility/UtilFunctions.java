@@ -21,9 +21,11 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import android.os.Build;
@@ -73,7 +75,7 @@ public class UtilFunctions
 {
     private final Context context1;
 
-    //      google play => 0 , cafebazaar => 1 , myket => 2,
+    //      google play => 0 , cafebazaar => 1 , myket => 2
 
     private static final int Store = 2;
 
@@ -123,7 +125,8 @@ public class UtilFunctions
             prms = new String[]{
                     Manifest.permission.POST_NOTIFICATIONS,
                     Manifest.permission.READ_MEDIA_AUDIO,
-                    Manifest.permission.READ_MEDIA_IMAGES};
+                    Manifest.permission.READ_MEDIA_IMAGES
+            };
         }
         else {
             prms = new String[]{
@@ -144,7 +147,7 @@ public class UtilFunctions
 
     public static void checkPostNotificationPermission(Activity activity)
     {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU && activity.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED)
         {
             List<PermissionType> listPm = new ArrayList<>();
             listPm.add( new PermissionType(Manifest.permission.POST_NOTIFICATIONS, 33));
@@ -175,13 +178,13 @@ public class UtilFunctions
             {
                 perm =  Manifest.permission.READ_MEDIA_IMAGES;
             }
-            else if(permissionMediaType == PermissionMediaType.AUDIO)
-            {
-                perm =  Manifest.permission.READ_MEDIA_AUDIO;
-            }
             else if(permissionMediaType == PermissionMediaType.VIDEO)
             {
                 perm =  Manifest.permission.READ_MEDIA_VIDEO;
+            }
+            else if(permissionMediaType == PermissionMediaType.AUDIO)
+            {
+                perm =  Manifest.permission.READ_MEDIA_AUDIO;
             }
         }
 
@@ -197,19 +200,15 @@ public class UtilFunctions
         }
     }
 
+
+
     public static boolean permissionIsGranted(Activity activity, String permisson)
     {
-
-        if ( Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
-        {
-              return true;
-        }
         return activity.checkSelfPermission(permisson) == PackageManager.PERMISSION_GRANTED;
     }
 
     public static boolean permissionsIsGranted(Activity activity, List<PermissionType> permissionTypes)
     {
-
         boolean result = true;
         for (PermissionType permission: permissionTypes)
         {
@@ -221,7 +220,7 @@ public class UtilFunctions
             }
         }
 
-         return result;
+        return result;
     }
 
     public static boolean isGooglePlayVersion()
@@ -853,39 +852,53 @@ public class UtilFunctions
         }
     }
 
-    public static String saveImageToStorage(Context context, Bitmap bitmap, String fileFullName) throws IOException
-    {
+    public static Uri saveImageToStorage(Context context, Bitmap bitmap, String fileName) throws IOException {
+        if (bitmap == null || bitmap.getWidth() == 0 || bitmap.getHeight() == 0) {
+            throw new IOException("Bitmap is empty or invalid");
+        }
+
         OutputStream imageOutStream;
-        String imagesDir = AppSettings.getImageFolderPath();
+        Uri imageUri;
 
-        String imagePath;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-        {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            // Android 10+
             ContentValues values = new ContentValues();
-            values.put(MediaStore.Images.Media.DISPLAY_NAME, fileFullName);
-            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+            values.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
+            values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
             values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/Darya");
-            Uri uri = context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 
-            imageOutStream = context.getContentResolver().openOutputStream(uri);
+            imageUri = context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            if (imageUri == null) throw new IOException("خطا در ایجاد URI برای ذخیره تصویر");
 
-            imagePath = imagesDir + "/" + fileFullName;
+            imageOutStream = context.getContentResolver().openOutputStream(imageUri);
+        } else {
+            // Android 6 تا 9
+            File imageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES + "/Darya");
+            if (!imageDir.exists()) imageDir.mkdirs();
+
+            File imageFile = new File(imageDir, fileName);
+            imageUri = Uri.fromFile(imageFile);
+            imageOutStream = new FileOutputStream(imageFile);
         }
-        else
-        {
-            File image = new File(imagesDir, fileFullName);
-            imageOutStream = new FileOutputStream(image);
-            imagePath = image.getAbsolutePath();
-        }
 
+        if (imageOutStream == null) throw new IOException("خطا در باز کردن خروجی تصویر");
 
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, imageOutStream);
-
-        Log.e("imagePath", "saveImageToStorage: " + imagePath);
-        assert imageOutStream != null;
+        boolean success = bitmap.compress(Bitmap.CompressFormat.PNG, 100, imageOutStream);
+        imageOutStream.flush();
         imageOutStream.close();
-        return imagePath;
+
+        if (!success) throw new IOException("فشرده‌سازی تصویر با شکست مواجه شد");
+
+        // افزودن به گالری در Android 6 تا 9
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            mediaScanIntent.setData(imageUri);
+            context.sendBroadcast(mediaScanIntent);
+        }
+
+        return imageUri;
     }
+
 
     public static void addPicToGallery(Context context, String photoPath)
     {
@@ -895,6 +908,34 @@ public class UtilFunctions
                 new String[]{f.toString()},
                 null, null);
 
+    }
+
+    public static Uri copyFileToMediaStore(Context context, File sourceFile, String fileName) {
+        try {
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
+            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+            values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/Darya");
+
+            Uri uri = context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            if (uri == null) return null;
+
+            try (OutputStream out = context.getContentResolver().openOutputStream(uri);
+                 InputStream in = new FileInputStream(sourceFile)) {
+
+                byte[] buffer = new byte[4096];
+                int len;
+                while ((len = in.read(buffer)) != -1) {
+                    out.write(buffer, 0, len);
+                }
+                out.flush();
+            }
+
+            return uri;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static int getResID(Context context, String imageName)
