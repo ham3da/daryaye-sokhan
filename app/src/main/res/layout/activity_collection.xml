@@ -134,9 +134,9 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:clipToPadding="false"
+                android:paddingBottom="16dp"
                 android:background="?attr/colorPrimaryBG"
-                android:clipToPadding="true"
-                android:paddingBottom="5dip"
                 android:scrollbars="vertical"
                 tools:listitem="@layout/item_collection" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

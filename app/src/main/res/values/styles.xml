@@ -13,6 +13,8 @@
         <item name="ListMoreBtnBGColor">@color/moreColor</item>
         <item name="android:windowBackground">@color/windowBackground</item>
         <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="android:navigationBarColor">@color/windowBackground</item>
+        <item name="android:windowLightNavigationBar">true</item>
         <item name="ListPoetIconBGColor">@color/ListPoetIconBGColor</item>
         <item name="ListPoetIconBorderColor">@color/ListPoetIconBorderColor</item>
         <item name="PuzzleIncorrectColor">@color/PuzzleIncorrectColor</item>
@@ -55,6 +57,8 @@
         <item name="ListMoreBtnBGColor">@color/moreColor</item>
         <item name="android:windowBackground">@color/windowBackground</item>
         <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="android:navigationBarColor">@color/windowBackground</item>
+        <item name="android:windowLightNavigationBar">true</item>
         <item name="ListPoetIconBGColor">@color/ListPoetIconBGColor</item>
         <item name="ListPoetIconBorderColor">@color/ListPoetIconBorderColor</item>
         <item name="PuzzleIncorrectColor">@color/PuzzleIncorrectColor</item>
@@ -100,6 +104,8 @@
         <item name="ListMoreBtnBGColor">@color/moreColor</item>
         <item name="android:windowBackground">@color/windowBackground</item>
         <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="android:navigationBarColor">@color/windowBackground</item>
+        <item name="android:windowLightNavigationBar">true</item>
         <item name="ListPoetIconBGColor">@color/ListPoetIconBGColor</item>
         <item name="ListPoetIconBorderColor">@color/ListPoetIconBorderColor</item>
         <item name="PuzzleIncorrectColor">@color/PuzzleIncorrectColor</item>

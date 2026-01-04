@@ -27,6 +27,7 @@ public class PermissionHelper {
 
         String permission = "";
 
+        // Android 13+ (TIRAMISU) - استفاده از READ_MEDIA_*
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             switch (mediaType) {
                 case IMAGES:
@@ -39,6 +40,10 @@ public class PermissionHelper {
                     permission = Manifest.permission.READ_MEDIA_VIDEO;
                     break;
             }
+        }
+        // Android 6-12 - استفاده از READ_EXTERNAL_STORAGE
+        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            permission = Manifest.permission.READ_EXTERNAL_STORAGE;
         } else {
             permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
         }

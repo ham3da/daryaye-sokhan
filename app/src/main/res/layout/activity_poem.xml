@@ -45,6 +45,8 @@
                 android:layoutAnimation="@anim/layout_animation_fall_down"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 tools:listitem="@layout/item_verse"
+                android:clipToPadding="false"
+                android:paddingBottom="16dp"
                />
         </RelativeLayout>
 

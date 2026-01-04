@@ -111,8 +111,8 @@
                 android:layout_height="92dp"
                 android:background="@color/tool_bg"
                 android:orientation="horizontal"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
+                android:clipToPadding="false"
+                android:paddingBottom="16dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/row_editing_tools" />
 

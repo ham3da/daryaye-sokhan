@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -62,6 +63,8 @@ public class ActivityCate extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+
         UtilFunctions.changeTheme(this);
         setContentView(R.layout.activity_cate);
         Toolbar toolbar = findViewById(R.id.toolbar_cate);

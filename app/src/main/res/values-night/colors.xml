@@ -109,4 +109,7 @@
 
     <color name="colorSurface">#1C2A32</color>
     <color name="colorOnSurface">#FFFFFF</color>
+
+    <color name="navigationBarColor">#222e35</color>
+
 </resources>

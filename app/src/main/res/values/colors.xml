@@ -109,5 +109,5 @@
 
     <color name="colorSurface">#FFFFFF</color>
     <color name="colorOnSurface">#212121</color>
-
+    <color name="navigationBarColor">#1F1F1F</color>
 </resources>

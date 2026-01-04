@@ -18,6 +18,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
+import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -176,6 +177,8 @@ public class ActivityPoem extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+
         UtilFunctions.changeTheme(this);
         setContentView(R.layout.activity_poem);
 
@@ -262,19 +265,22 @@ public class ActivityPoem extends AppCompatActivity {
 
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(linearLayoutManager);
-            recyclerView.addOnItemTouchListener(new SwipeGestureListener(this, recyclerView, new SwipeGestureListener.OnSwipeListener() {
-                @Override
-                public void onSwipeLeft(int position) {
-                    // شعر بعدی
-                    loadNextPreviousPoem(false);
-                }
+            boolean swipeNavigationEnabled = AppSettings.getSwipeNavigationEnabled();
+            if (swipeNavigationEnabled) {
+                recyclerView.addOnItemTouchListener(new SwipeGestureListener(this, recyclerView, new SwipeGestureListener.OnSwipeListener() {
+                    @Override
+                    public void onSwipeLeft(int position) {
+                        // شعر بعدی
+                        loadNextPreviousPoem(false);
+                    }
 
-                @Override
-                public void onSwipeRight(int position) {
-                    // شعر قبلی
-                    loadNextPreviousPoem(true);
-                }
-            }));
+                    @Override
+                    public void onSwipeRight(int position) {
+                        // شعر قبلی
+                        loadNextPreviousPoem(true);
+                    }
+                }));
+            }
 
             if (!findStr.isEmpty())
             {

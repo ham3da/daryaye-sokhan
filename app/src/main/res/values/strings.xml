@@ -306,7 +306,10 @@
     <string name="uri_error">Error creating URI to save image</string>
     <string name="error_output_read">Error opening image output.</string>
     <string name="notify_permission_msg">Stay inspired! Get Poem of the Day and key updates by enabling notifications.</string>
+    <string name="notify_permission_enabled">Notifications enabled.</string>
+    <string name="notify_permission_denied">Notifications remain disabled. Enable them from Settings.</string>
     <string name="enable">Enable</string>
-
+    <string name="swipe_navigation">Swipe to change poem</string>
+    <string name="swipe_navigation_des">Enable changing poems by swiping the verses list.</string>
 
 </resources>

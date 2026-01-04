@@ -287,6 +287,8 @@
     <string name="error_output_read">خطا در باز کردن خروجی تصویر</string>
     <string name="notify_permission_msg">اعلان‌ها را روشن کنید تا «شعر روز» و اطلاعیه‌های مهم را از دست ندهید.</string>
     <string name="enable">فعال‌سازی</string>
-
-
+    <string name="notify_permission_enabled">اعلان‌ها فعال شد.</string>
+    <string name="notify_permission_denied">اعلان‌ها غیرفعال هستند. می‌توانید آن‌ها را از تنظیمات فعال کنید.</string>
+    <string name="swipe_navigation">جابجایی با کشیدن</string>
+    <string name="swipe_navigation_des">با کشیدن انگشت روی متن شعر، بین شعرها جابه‌جا شوید.</string>
 </resources>

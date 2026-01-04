@@ -1,5 +1,6 @@
 package ir.ham3da.darya;
 
+import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -270,7 +271,7 @@ public class ActivityCollection extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        EdgeToEdge.enable(this);
         UtilFunctions.changeTheme(this);
 
         setContentView(R.layout.activity_collection);

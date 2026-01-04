@@ -405,6 +405,29 @@ public class AppSettings
 
 
     /**
+     * Allow navigating poems by swiping the poem list
+     */
+    public static boolean getSwipeNavigationEnabled()
+    {
+        if (PreferenceManager1 == null)
+        {
+            return true;
+        }
+        return PreferenceManager1.getKey("swipe_navigation", true);
+    }
+
+
+    public static void setSwipeNavigationEnabled(boolean enabled)
+    {
+        if (PreferenceManager1 == null)
+        {
+            return;
+        }
+        PreferenceManager1.setKey("swipe_navigation", enabled);
+    }
+
+
+    /**
      * Set Category List Index Status
      *
      * @param Value Boolean value

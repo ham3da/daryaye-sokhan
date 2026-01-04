@@ -10,6 +10,7 @@ import android.os.Bundle;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 
+import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -81,6 +82,8 @@ public class ActivitySearch extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+
         UtilFunctions.changeTheme(this);
         setContentView(R.layout.activity_search);
         progressBar_loader = findViewById(R.id.progressBar_loader);

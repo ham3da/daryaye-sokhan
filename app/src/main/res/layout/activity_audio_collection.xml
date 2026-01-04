@@ -156,8 +156,8 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:background="?attr/colorPrimaryBG"
-                android:clipToPadding="true"
-                android:paddingBottom="5dip"
+                android:clipToPadding="false"
+                android:paddingBottom="16dp"
                 android:scrollbars="vertical"
                 tools:listitem="@layout/item_audio"
                 />

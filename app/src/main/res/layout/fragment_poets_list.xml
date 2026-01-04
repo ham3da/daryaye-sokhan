@@ -17,6 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fadeScrollbars="true"
+            android:clipToPadding="false"
+            android:paddingBottom="16dp"
             android:layoutAnimation="@anim/layout_animation_fall_down"
             android:scrollbars="vertical"
             tools:listitem="@layout/item_poet"

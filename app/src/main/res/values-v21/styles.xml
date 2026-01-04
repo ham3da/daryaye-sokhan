@@ -4,5 +4,8 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@color/navigationBarColor</item>
+
+        <item name="android:windowLightNavigationBar">false</item>
     </style>
 </resources>

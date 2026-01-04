@@ -2,13 +2,17 @@ package ir.ham3da.darya;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,12 +22,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -71,6 +78,7 @@ public class ActivityMain extends AppCompatActivity
     int rnd_poem_id;
     String findStr;
     int vOrder;
+    private ActivityResultLauncher<String> notificationPermissionLauncher;
 
 
 
@@ -138,6 +146,8 @@ public class ActivityMain extends AppCompatActivity
 
         // setTheme(R.style.LightTheme);
         setContentView(R.layout.activity_main);
+
+        initNotificationPermissionLauncher();
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -552,6 +562,90 @@ public class ActivityMain extends AppCompatActivity
 
     }
 
+    private void initNotificationPermissionLauncher()
+    {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
+        {
+            notificationPermissionLauncher = null;
+            return;
+        }
+
+        notificationPermissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                isGranted ->
+                {
+                    if (isGranted)
+                    {
+                        handleNotificationPermissionGranted();
+                    }
+                    else
+                    {
+                        handleNotificationPermissionDenied();
+                    }
+                }
+        );
+    }
+
+    private void requestNotificationPermission()
+    {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || notificationPermissionLauncher == null)
+        {
+            return;
+        }
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED)
+        {
+            handleNotificationPermissionGranted();
+            return;
+        }
+
+        notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+    }
+
+    private void handleNotificationPermissionGranted()
+    {
+        View parentView = findViewById(android.R.id.content);
+        if (parentView != null)
+        {
+            Snackbar.make(parentView, R.string.notify_permission_enabled, Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    private void handleNotificationPermissionDenied()
+    {
+        View parentView = findViewById(android.R.id.content);
+        if (parentView != null)
+        {
+            Snackbar.make(parentView, R.string.notify_permission_denied, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.action_settings, v -> openNotificationSettings())
+                    .show();
+        }
+    }
+
+    private void openNotificationSettings()
+    {
+        Intent intent;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            intent = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+            intent.putExtra(Settings.EXTRA_APP_PACKAGE, getPackageName());
+        }
+        else
+        {
+            intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            intent.setData(Uri.fromParts("package", getPackageName(), null));
+        }
+
+        try
+        {
+            startActivity(intent);
+        }
+        catch (ActivityNotFoundException e)
+        {
+            Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     @Override
     protected void onResume()
@@ -615,26 +709,41 @@ public class ActivityMain extends AppCompatActivity
 
 
         List<PermissionType> permissionTypes = new ArrayList<>();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+        boolean isTiramisuOrAbove = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU;
+        int messageRes = R.string.notify_permission_msg;
+
+        if (isTiramisuOrAbove)
         {
             permissionTypes.add(new PermissionType(Manifest.permission.POST_NOTIFICATIONS, 33));
-            //permissionTypes.add(new PermissionType(Manifest.permission.READ_MEDIA_AUDIO, 2));
-            //permissionTypes.add( new PermissionType(Manifest.permission.READ_MEDIA_IMAGES, 2) );
         }
-        else {
-            permissionTypes.add( new PermissionType(Manifest.permission.WRITE_EXTERNAL_STORAGE, 2) );
-        }
-
-        boolean pmGranted =  UtilFunctions.permissionsIsGranted(this, permissionTypes);
-        if(!pmGranted)
+        else
         {
-            Snackbar.make(parentView, R.string.notify_permission_msg, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(R.string.enable, v -> {
-                        UtilFunctions.requestPermissions(this, permissionTypes);
-                    })
-                    .show();
+            String storagePermission;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+            {
+                storagePermission = Manifest.permission.READ_EXTERNAL_STORAGE;
+            }
+            else
+            {
+                storagePermission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+            }
+            permissionTypes.add(new PermissionType(storagePermission, 2));
+            messageRes = R.string.perm_msg;
+        }
 
-            //MyDialogs1.ShowPermissionMessage(this, getString(R.string.perm_msg), R.drawable.ic_security_black_24dp);
+        boolean pmGranted = UtilFunctions.permissionsIsGranted(this, permissionTypes);
+        if (!pmGranted)
+        {
+            Snackbar snackbar = Snackbar.make(parentView, messageRes, Snackbar.LENGTH_INDEFINITE);
+            if (isTiramisuOrAbove)
+            {
+                snackbar.setAction(R.string.enable, v -> requestNotificationPermission());
+            }
+            else
+            {
+                snackbar.setAction(R.string.enable, v -> UtilFunctions.requestPermissions(this, permissionTypes));
+            }
+            snackbar.show();
         }
 
 

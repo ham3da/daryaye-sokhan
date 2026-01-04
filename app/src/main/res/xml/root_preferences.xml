@@ -10,6 +10,13 @@
             app:key="night_theme"
             app:title="@string/night_theme" />
 
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:icon="@drawable/ic_baseline_code_gray_24"
+            app:key="swipe_navigation"
+            app:summary="@string/swipe_navigation_des"
+            app:title="@string/swipe_navigation" />
+
         <EditTextPreference
             app:icon="@drawable/ic_signature"
             app:key="signature"
