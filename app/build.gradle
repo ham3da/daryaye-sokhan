@@ -1,27 +1,27 @@
 plugins {
-    id 'com.android.application'
-    id 'com.google.gms.google-services'
+    id('com.android.application')
+    id('com.google.gms.google-services')
 }
 
 
 android {
-    namespace 'ir.ham3da.darya'
+    namespace('ir.ham3da.darya')
     setCompileSdk(36)
 
     signingConfigs {
         darya_sign_confing {
-            storeFile file('D:/Android/Android_B4a/keystore_android_studio/android_studio_darya.jks')
-            keyAlias 'darya'
+            storeFile(file('D:/Android/Android_B4a/keystore_android_studio/android_studio_darya.jks'))
+            keyAlias('darya')
         }
     }
 
     defaultConfig {
-        applicationId "ir.ham3da.darya"
-        minSdk 24
-        targetSdk 36
-        versionCode 57
-        versionName "3.3.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        applicationId("ir.ham3da.darya")
+        minSdk(24)
+        targetSdk(36)
+        versionCode(58)
+        versionName("3.3.0")
+        testInstrumentationRunner( "androidx.test.runner.AndroidJUnitRunner")
     }
     buildTypes {
 
@@ -29,18 +29,18 @@ android {
             // minifyEnabled true
         }
         release {
-            minifyEnabled true
+            minifyEnabled(true)
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_21
-        targetCompatibility JavaVersion.VERSION_21
+        sourceCompatibility(JavaVersion.VERSION_21)
+        targetCompatibility(JavaVersion.VERSION_21)
     }
     buildFeatures {
-        viewBinding true
-        compose true
-        buildConfig true
+        viewBinding(true)
+        compose(true)
+        buildConfig(true)
     }
 
 
