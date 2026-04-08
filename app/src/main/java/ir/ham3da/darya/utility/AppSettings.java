@@ -199,6 +199,24 @@ public class AppSettings
         return PreferenceManager1.getKey("poemFont", 0);
     }
 
+    public static void setCustomFontPath(String path)
+    {
+        if (PreferenceManager1 == null)
+        {
+            return;
+        }
+        PreferenceManager1.setKey("customFontPath", path);
+    }
+
+    public static String getCustomFontPath()
+    {
+        if (PreferenceManager1 == null)
+        {
+            return "";
+        }
+        return PreferenceManager1.getKey("customFontPath", "");
+    }
+
 
     /**
      * ذخیرۀ شناسۀ رکورد آخرین شعری که کاربر داشته آن را می دیده
@@ -771,7 +789,7 @@ public class AppSettings
     /**
      * Folder to save image by Photo editor
      *
-     * @return
+     * @return String
      */
     public static String getImageFolderPath()
     {

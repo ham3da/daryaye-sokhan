@@ -19,8 +19,8 @@ android {
         applicationId("ir.ham3da.darya")
         minSdk(24)
         targetSdk(36)
-        versionCode(58)
-        versionName("3.3.0")
+        versionCode(60)
+        versionName("3.4.5")
         testInstrumentationRunner( "androidx.test.runner.AndroidJUnitRunner")
     }
     buildTypes {
@@ -60,7 +60,7 @@ dependencies {
     implementation 'androidx.viewpager2:viewpager2:1.1.0'
 
 
-    implementation platform('com.google.firebase:firebase-bom:34.7.0')
+    implementation platform('com.google.firebase:firebase-bom:34.10.0')
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.firebase:firebase-analytics'
 

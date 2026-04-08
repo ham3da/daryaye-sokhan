@@ -17,6 +17,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import android.net.Uri;
+import java.io.InputStream;
+import java.io.FileOutputStream;
+import java.io.File;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -58,6 +64,8 @@ public class ActivitySettings extends AppCompatActivity
     //    static Preference  pref_rand_poem;
     int currentLocalIndex;
     GanjoorDbBrowser GanjoorDbBrowser1;
+    private ActivityResultLauncher<Intent> customFontPickerLauncher;
+    private Preference prefToUpdateFont;
 
 
     public void setRandomPoemText()
@@ -153,6 +161,43 @@ public class ActivitySettings extends AppCompatActivity
         LangSettingList langSetting = AppSettings.getLangSettingList(this);
         currentLocalIndex = langSetting.getId();
         GanjoorDbBrowser1 = new GanjoorDbBrowser(this);
+
+        customFontPickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        Uri uri = result.getData().getData();
+                        if (uri != null) {
+                            try {
+                                InputStream is = getContentResolver().openInputStream(uri);
+                                File fontDir = new File(getFilesDir(), "custom_fonts");
+                                if (!fontDir.exists()) fontDir.mkdirs();
+                                File fontFile = new File(fontDir, "custom_font.ttf");
+                                FileOutputStream fos = new FileOutputStream(fontFile);
+                                byte[] buffer = new byte[1024];
+                                int len;
+                                while ((len = is.read(buffer)) > 0) {
+                                    fos.write(buffer, 0, len);
+                                }
+                                fos.close();
+                                is.close();
+
+                                AppSettings.setCustomFontPath(fontFile.getAbsolutePath());
+                                AppSettings.setPoemsFont(6);
+                                App globalVariable = (App) getApplicationContext();
+                                globalVariable.setUpdatePoetList(true);
+                                globalVariable.setUpdateFavList(true);
+
+                                if (prefToUpdateFont != null) {
+                                    String fontName = AppFontManager.getFontName(getBaseContext(), 6);
+                                    prefToUpdateFont.setTitle(getString(R.string.change_poem_font) + " (" + fontName + ")");
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -345,14 +390,24 @@ public class ActivitySettings extends AppCompatActivity
         listView.setOnItemClickListener((parent, view, position, id) -> {
 
             dialog.dismiss();
-            AppSettings.setPoemsFont(position);
-            App globalVariable = (App) getApplicationContext();
-            globalVariable.setUpdatePoetList(true);
-            globalVariable.setUpdateFavList(true);
+            if (position == 6) {
+                prefToUpdateFont = preference;
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                // The intent filters to open TTF or OTF format files.
+                intent.setType("*/*");
+                String[] mimeTypes = {"font/ttf", "font/otf", "application/x-font-ttf", "application/x-font-truetype", "application/x-font-opentype"};
+                intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+                customFontPickerLauncher.launch(Intent.createChooser(intent, getString(R.string.change_poem_font)));
+            } else {
+                AppSettings.setPoemsFont(position);
+                App globalVariable = (App) getApplicationContext();
+                globalVariable.setUpdatePoetList(true);
+                globalVariable.setUpdateFavList(true);
 
-            String fontName = AppFontManager.getFontName(getBaseContext(), position);
+                String fontName = AppFontManager.getFontName(getBaseContext(), position);
 
-            preference.setTitle(getString(R.string.change_poem_font) + " (" + fontName + ")");
+                preference.setTitle(getString(R.string.change_poem_font) + " (" + fontName + ")");
+            }
 
         });
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Daryaye Shokhan</string>
+    <string name="app_name">Daryaye Sokhan</string>
     <string name="git_url" translatable="false">https://github.com/ham3da/daryaye-sokhan</string>
     <string name="new_collection_url" translatable="false">https://daryaye-sokhan.ir/add-new-collection/</string>
 
@@ -193,6 +193,7 @@
     <string name="vazir" translatable="false">قلم وزیر</string>
     <string name="droid_naskh" translatable="false">قلم نسخ</string>
     <string name="faraz" translatable="false">قلم تحریری فراز</string>
+    <string name="custom_font" translatable="false">Custom Font(File)</string>
     <string name="change_poem_font">Fonts of Poems</string>
     <string name="change_poem_font_des">Change the font of the poems.</string>
     <string name="poetry_collection">Poetry Collection</string>

@@ -177,6 +177,7 @@
     <string name="get_images_error">خطا در دریافت تصاویر</string>
 
     <string name="change_poem_font">فونت اشعار</string>
+    <string name="custom_font" translatable="false">فونت سفارشی(فایل)</string>
     <string name="change_poem_font_des">قلم نمایش شعرها را تغییر دهید</string>
     <string name="poetry_collection">مجموعه اشعار</string>
     <string name="open">باز کردن</string>

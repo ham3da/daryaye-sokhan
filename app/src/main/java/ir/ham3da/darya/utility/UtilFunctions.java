@@ -58,6 +58,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Random;
 
 import ir.ham3da.darya.ActivityPuzzle;
@@ -406,16 +407,27 @@ public class UtilFunctions
 
     public void openUrl(String url)
     {
+        try {
         Intent intent1 = new Intent(Intent.ACTION_VIEW);
         intent1.setData(Uri.parse(url));
         context1.startActivity(intent1);
+        } catch (Exception e) {
+            Toast.makeText(context1, R.string.error_occurred, Toast.LENGTH_SHORT).show();
+            Log.e("UtilFunctions.openUrl", Objects.requireNonNull(e.getMessage()));
+        }
     }
 
     public static void openUrl(Context context, String url)
     {
-        Intent intent1 = new Intent(Intent.ACTION_VIEW);
-        intent1.setData(Uri.parse(url));
-        context.startActivity(intent1);
+        try {
+            Intent intent1 = new Intent(Intent.ACTION_VIEW);
+            intent1.setData(Uri.parse(url));
+            context.startActivity(intent1);
+        } catch (Exception e) {
+            Toast.makeText(context, R.string.error_occurred, Toast.LENGTH_SHORT).show();
+            Log.e("UtilFunctions.openUrl", Objects.requireNonNull(e.getMessage()));
+        }
+
     }
 
     public void copyText(String text)

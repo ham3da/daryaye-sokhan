@@ -19,6 +19,7 @@ public class AppFontManager {
     private static final int TANHA_APP_FONT = 3;
     private static final int VAZIR_APP_FONT = 4;
     private static final int NASKH_APP_FONT = 5;
+    private static final int CUSTOM_APP_FONT = 6;
 
     public AppFontManager() {
 
@@ -34,6 +35,7 @@ public class AppFontManager {
         links.add(new LinkItem(3, context.getString(R.string.tanha), "", R.drawable.ic_text_fields_black_24dp));
         links.add(new LinkItem(4, context.getString(R.string.vazir), "", R.drawable.ic_text_fields_black_24dp));
         links.add(new LinkItem(5, context.getString(R.string.droid_naskh), "", R.drawable.ic_text_fields_black_24dp));
+        links.add(new LinkItem(6, context.getString(R.string.custom_font), "", R.drawable.ic_text_fields_black_24dp));
         return links;
     }
 
@@ -74,6 +76,21 @@ public class AppFontManager {
 
             case NASKH_APP_FONT:
                 font = ResourcesCompat.getFont(context, R.font.droid_naskh_regular);
+                break;
+            case CUSTOM_APP_FONT:
+                try {
+                    String customFontPath = AppSettings.getCustomFontPath();
+                    if (customFontPath != null && !customFontPath.isEmpty()) {
+                        java.io.File fontFile = new java.io.File(customFontPath);
+                        if (fontFile.exists() && fontFile.canRead()) {
+                            font = Typeface.createFromFile(fontFile);
+                            return font;
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                font = ResourcesCompat.getFont(context, R.font.iran_sans_mobile_light_fa);
                 break;
             default:
                 font = ResourcesCompat.getFont(context, R.font.iran_sans_mobile_light_fa);
@@ -123,6 +140,25 @@ public class AppFontManager {
                 break;
             case NASKH_APP_FONT:
                 font = ResourcesCompat.getFont(context, R.font.droid_naskh_regular);
+                Typeface.create(font, Typeface.NORMAL);
+                textView.setTypeface(font);
+                break;
+            case CUSTOM_APP_FONT:
+                try {
+                    String customFontPath = AppSettings.getCustomFontPath();
+                    if (customFontPath != null && !customFontPath.isEmpty()) {
+                        java.io.File fontFile = new java.io.File(customFontPath);
+                        if (fontFile.exists() && fontFile.canRead()) {
+                            font = Typeface.createFromFile(fontFile);
+                            Typeface.create(font, Typeface.NORMAL);
+                            textView.setTypeface(font);
+                            return;
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                font = ResourcesCompat.getFont(context, R.font.iran_sans_mobile_light_fa);
                 Typeface.create(font, Typeface.NORMAL);
                 textView.setTypeface(font);
                 break;
