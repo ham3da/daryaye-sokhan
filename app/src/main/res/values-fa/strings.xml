@@ -292,4 +292,6 @@
     <string name="notify_permission_denied">اعلان‌ها غیرفعال هستند. می‌توانید آن‌ها را از تنظیمات فعال کنید.</string>
     <string name="swipe_navigation">جابجایی با کشیدن</string>
     <string name="swipe_navigation_des">با کشیدن انگشت روی متن شعر، بین شعرها جابه‌جا شوید.</string>
+    <string name="install">نصب</string>
+    <string name="beytas_tab">بیتاس</string>
 </resources>

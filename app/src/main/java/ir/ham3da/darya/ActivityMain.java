@@ -36,6 +36,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
+
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -43,8 +44,8 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
+import ir.ham3da.darya.ad.BeytasAdFragment;
 import ir.ham3da.darya.ganjoor.GanjoorDbBrowser;
 import ir.ham3da.darya.ganjoor.GanjoorPoem;
 import ir.ham3da.darya.ad.MainAdFragment;
@@ -63,10 +64,8 @@ import ir.ham3da.darya.utility.UpdateApp;
 import ir.ham3da.darya.utility.UtilFunctions;
 
 
-
 public class ActivityMain extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener
-{
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     public int booksCount = 0;
     MainActivityUtil mainActivityUtil1;
@@ -81,21 +80,16 @@ public class ActivityMain extends AppCompatActivity
     private ActivityResultLauncher<String> notificationPermissionLauncher;
 
 
-
-
     @Override
-    protected void attachBaseContext(Context newBase)
-    {
+    protected void attachBaseContext(Context newBase) {
         Context newContext = SetLanguage.wrap(newBase);
         super.attachBaseContext(newContext);
     }
 
 
     @Override
-    public void applyOverrideConfiguration(Configuration overrideConfiguration)
-    {
-        if (overrideConfiguration != null)
-        {
+    public void applyOverrideConfiguration(Configuration overrideConfiguration) {
+        if (overrideConfiguration != null) {
             int uiMode = overrideConfiguration.uiMode;
             overrideConfiguration.setTo(getBaseContext().getResources().getConfiguration());
             overrideConfiguration.uiMode = uiMode;
@@ -105,22 +99,17 @@ public class ActivityMain extends AppCompatActivity
 
 
     @Override
-    protected void onNewIntent(Intent intent)
-    {
+    protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
         Bundle extras = intent.getExtras();
-        if (extras != null)
-        {
-            if (extras.containsKey("serializableNotifyVerse"))
-            {
+        if (extras != null) {
+            if (extras.containsKey("serializableNotifyVerse")) {
                 SerializableNotify serializableNotify;
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-                {
-                     serializableNotify = extras.getSerializable("serializableNotifyVerse", SerializableNotify.class);
-                }
-                else {
-                     serializableNotify = (SerializableNotify) extras.getSerializable("serializableNotifyVerse");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    serializableNotify = extras.getSerializable("serializableNotifyVerse", SerializableNotify.class);
+                } else {
+                    serializableNotify = (SerializableNotify) extras.getSerializable("serializableNotifyVerse");
                 }
                 assert serializableNotify != null;
                 rnd_poem_id = serializableNotify.getRnd_poem_id();
@@ -134,13 +123,11 @@ public class ActivityMain extends AppCompatActivity
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         UtilFunctions.changeTheme(this);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
-        {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             SetLanguage.wrap(this);
         }
 
@@ -162,7 +149,7 @@ public class ActivityMain extends AppCompatActivity
                     } else {
                         App globalVariable = (App) getApplicationContext();
 
-                        if (globalVariable.getAdviewd() || !AppSettings.canViewAdRequest() ) {
+                        if (globalVariable.getAdviewd() || !AppSettings.canViewAdRequest()) {
                             globalVariable.setAdviewd(false);
                             setEnabled(false);
                             getOnBackPressedDispatcher().onBackPressed();
@@ -173,7 +160,6 @@ public class ActivityMain extends AppCompatActivity
                 }
             }
         });
-
 
 
         LangSettingList langSetting = AppSettings.getLangSettingList(this);
@@ -200,12 +186,9 @@ public class ActivityMain extends AppCompatActivity
         String DB_PATH = AppSettings.getDatabasePath(this);
         Log.e(TAG, "DB_PATH1: " + DB_PATH);
         boolean exist_db = MainActivityUtil.checkExists(DB_PATH);
-        if (exist_db)
-        {
+        if (exist_db) {
             loadPager();
-        }
-        else
-        {
+        } else {
             mainActivityUtil1.extractGangoorDB(DB_PATH);
         }
         Log.e(TAG, "DB_PATH2: " + AppSettings.getAppFolderPath());
@@ -214,15 +197,12 @@ public class ActivityMain extends AppCompatActivity
         UpdateApp update = new UpdateApp(this);
         new Handler(Looper.getMainLooper()).postDelayed(update::initUpdate, 3000);
 
-         AppSettings.increaseLaunchCount();
+        AppSettings.increaseLaunchCount();
 
     }
 
 
-
-
-    public void LoadDBFirstTime(CustomProgress dlg1)
-    {
+    public void LoadDBFirstTime(CustomProgress dlg1) {
         GanjoorDbBrowser GanjoorDbBrowser1 = new GanjoorDbBrowser(this);
         GanjoorDbBrowser1.AutoVacuum();
         dlg1.dismiss();
@@ -230,34 +210,46 @@ public class ActivityMain extends AppCompatActivity
     }
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.tab_poets, R.string.tab_favorites, R.string.easy_donating};
+    private static int[] TAB_TITLES ;
 
 
-    public void loadPager()
-    {
+    public void loadPager() {
+        if(UtilFunctions.isBazaarVersion()) {
+            TAB_TITLES = new int[]
+                    {R.string.tab_poets, R.string.tab_favorites, R.string.beytas_tab, R.string.easy_donating};
+        }
+        else {
+            TAB_TITLES = new int[]
+                    {R.string.tab_poets, R.string.tab_favorites, R.string.easy_donating};
+        }
+
+
         ViewPager2 viewPager = findViewById(R.id.view_pager);
-        viewPager.setAdapter(new FragmentStateAdapter(this)
-        {
+        viewPager.setAdapter(new FragmentStateAdapter(this) {
             @Override
-            public int getItemCount()
-            {
+            public int getItemCount() {
                 return TAB_TITLES.length;
             }
 
             @NonNull
             @Override
-            public Fragment createFragment(int position)
-            {
+            public Fragment createFragment(int position) {
                 Log.e(TAG, "createFragment2: " + position);
-                switch (position)
+                if(UtilFunctions.isBazaarVersion()) {
+                    return switch (position) {
+                        case 1 -> new MainFavoritesFragment();
+                        case 2 -> new BeytasAdFragment();
+                        case 3 -> new MainAdFragment();
+                        default -> new MainPoetsFragment();
+                    };
+                }
+                else
                 {
-                    case 0:
-                    default:
-                        return new MainPoetsFragment();
-                    case 1:
-                        return new MainFavoritesFragment();
-                    case 2:
-                        return new MainAdFragment();
+                    return switch (position) {
+                        case 1 -> new MainFavoritesFragment();
+                        case 2 -> new MainAdFragment();
+                        default -> new MainPoetsFragment();
+                    };
                 }
             }
         });
@@ -266,8 +258,7 @@ public class ActivityMain extends AppCompatActivity
 
 
         Bundle extras = getIntent().getExtras();
-        if (extras != null)
-        {
+        if (extras != null) {
 
             SerializableNotify serializableNotify;
 
@@ -287,32 +278,23 @@ public class ActivityMain extends AppCompatActivity
             Log.e(TAG, "getExtras: ok " + findStr);
         }
 
-        if (rnd_poem_id > 0)
-        {
+        if (rnd_poem_id > 0) {
             showPoem(rnd_poem_id, findStr, vOrder);
-        }
-        else
-        {
+        } else {
             showNotify();
         }
 
 
-
-
-
-
     }
 
-    public void showNotify()
-    {
+    public void showNotify() {
 
         boolean notifyed = false;
         String notify_title, notify_url, notify_url_text, notify_text;
         PreferenceHelper preferenceHelper = new PreferenceHelper(getApplicationContext());
         notify_text = preferenceHelper.getKey("notify_text", "");
 
-        if (!notify_text.isEmpty())
-        {
+        if (!notify_text.isEmpty()) {
 
             notify_title = preferenceHelper.getKey("notify_title", "");
             notify_url = preferenceHelper.getKey("notify_url", "");
@@ -323,12 +305,9 @@ public class ActivityMain extends AppCompatActivity
         }
 
 
-        if (!notifyed)
-        {
-            if (getIntent().getExtras() != null)
-            {
-                if (getIntent().getExtras().containsKey("Package") && getIntent().getExtras().getString("Package", "").equals(getPackageName()))
-                {
+        if (!notifyed) {
+            if (getIntent().getExtras() != null) {
+                if (getIntent().getExtras().containsKey("Package") && getIntent().getExtras().getString("Package", "").equals(getPackageName())) {
 
                     notify_text = getIntent().getExtras().getString("Text", "");
                     notify_title = getIntent().getExtras().getString("Title", "");
@@ -345,190 +324,138 @@ public class ActivityMain extends AppCompatActivity
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
 
-    @SuppressLint("NonConstantResourceId")
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         GanjoorDbBrowser GanjoorDbBrowser1 = new GanjoorDbBrowser(this);
         Intent intent;
         int id = item.getItemId();
-        switch (id)
-        {
-            case R.id.action_search:
-                intent = new Intent(this, ActivitySearch.class);
-                this.startActivity(intent);
-                Bungee.card(this);
-                break;
-            case R.id.action_add_colection:
-                ShowCollectionAct();
-                break;
+        if (id == R.id.action_search) {
+            intent = new Intent(this, ActivitySearch.class);
+            this.startActivity(intent);
+            Bungee.card(this);
+        } else if (id == R.id.action_add_colection) {
+            ShowCollectionAct();
+        } else if (id == R.id.action_random_poem) {
+            try {
+                String randomSelectedCategories = AppSettings.getRandomSelectedCategories();
+                GanjoorPoem poem = GanjoorDbBrowser1.getPoemRandom(randomSelectedCategories);
 
-            case R.id.action_random_poem:
-                try
-                {
-
-                    String randomSelectedCategories = AppSettings.getRandomSelectedCategories();
-
-                    GanjoorPoem poem = GanjoorDbBrowser1.getPoemRandom(randomSelectedCategories);
-
-                    if (poem != null)
-                    {
-
-                        intent = new Intent(ActivityMain.this, ActivityPoem.class);
-                        intent.putExtra("poem_id", poem._ID);
-                        startActivity(intent);
-                        Bungee.spin(this);
-                    }
-                    else
-                    {
-                        Toast.makeText(this, R.string.nothing_found, Toast.LENGTH_SHORT).show();
-                    }
-                } catch (Exception ex)
-                {
-                    Log.e(TAG, "getPoemRandom: " + ex.getMessage());
+                if (poem != null) {
+                    intent = new Intent(ActivityMain.this, ActivityPoem.class);
+                    intent.putExtra("poem_id", poem._ID);
+                    startActivity(intent);
+                    Bungee.spin(this);
+                } else {
+                    Toast.makeText(this, R.string.nothing_found, Toast.LENGTH_SHORT).show();
                 }
-
-
-                break;
+            } catch (Exception ex) {
+                Log.e(TAG, "getPoemRandom: " + ex.getMessage());
+            }
         }
         return super.onOptionsItemSelected(item);
     }
 
 
-    public void ShowCollectionAct()
-    {
+    public void ShowCollectionAct() {
 
-        if (UtilFunctions.isNetworkConnected(this))
-        {
-            Intent intent = new Intent(this, ActivityCollection.class);
-            this.startActivity(intent);
-            Bungee.card(this);
-        }
-        else
-        {
+        if (UtilFunctions.isNetworkConnected(this)) {
+            try {
+                Intent intent = new Intent(this, ActivityCollection.class);
+                this.startActivity(intent);
+                Bungee.card(this);
+            } catch (Exception e) {
+                Toast.makeText(this, getString(R.string.error_occurred), Toast.LENGTH_SHORT).show();
+            }
+
+        } else {
             MyDialogs1.ShowWarningMessage(getString(R.string.internet_failed));
         }
     }
 
 
-    private void showPoem(int poem_id)
-    {
-        Log.e(TAG, "rnd_poem_id: " + poem_id);
-        Intent intent = new Intent(ActivityMain.this, ActivityPoem.class);
-        intent.putExtra("poem_id", poem_id);
-        startActivity(intent);
-        Bungee.card(ActivityMain.this);
+    private void showPoem(int poem_id) {
+        try {
+            Log.e(TAG, "rnd_poem_id: " + poem_id);
+            Intent intent = new Intent(ActivityMain.this, ActivityPoem.class);
+            intent.putExtra("poem_id", poem_id);
+            startActivity(intent);
+            Bungee.card(ActivityMain.this);
+        } catch (Exception e) {
+            Toast.makeText(this, getString(R.string.error_occurred), Toast.LENGTH_SHORT).show();
+        }
     }
 
 
-    private void showPoem(int poem_id, String findStr, int vOrder)
-    {
+    private void showPoem(int poem_id, String findStr, int vOrder) {
+        try {
         Intent intent = new Intent(ActivityMain.this, ActivityPoem.class);
         intent.putExtra("poem_id", poem_id);
         intent.putExtra("from_search", true);
         intent.putExtra("findStr", findStr);
         intent.putExtra("vOrder", vOrder);
 
-
         startActivity(intent);
         Bungee.card(ActivityMain.this);
+
+        } catch (Exception e) {
+            Toast.makeText(this, getString(R.string.error_occurred), Toast.LENGTH_SHORT).show();
+        }
     }
 
 
-    @SuppressLint("NonConstantResourceId")
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem)
-    {
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         final int id = menuItem.getItemId();
         Handler handler = new Handler(Looper.getMainLooper());
 
         handler.postDelayed(() -> {
             Intent intent;
-            switch (id)
-            {
-                case R.id.collections:
-                    ShowCollectionAct();
-                    break;
-
-                case R.id.nav_last_read:
-
-                    int getLastPoemIdVisited = AppSettings.getLastPoemIdVisited();
-                    if (getLastPoemIdVisited > 0)
-                    {
-                        showPoem(getLastPoemIdVisited);
-                    }
-                    else
-                    {
-                        Toast.makeText(ActivityMain.this, R.string.nothing_found, Toast.LENGTH_LONG).show();
-                    }
-
-                    break;
-
-                case R.id.nav_social_networks:
-                    MyDialogs1.socialNetworks();
-                    break;
-
-
-                case R.id.nav_help:
-                    MyDialogs1.showHelp();
-                    break;
-
-                case R.id.nav_setting:
-
-                    intent = new Intent(ActivityMain.this, ActivitySettings.class);
-                    startActivity(intent);
-                    Bungee.card(ActivityMain.this);
-
-                    break;
-                case R.id.nav_about:
-
-                    MyDialogs1.showAbout();
-
-                    break;
-                case R.id.nav_rating:
-                    UtilFunctions1.gotoRating();
-
-                    break;
-                case R.id.nav_contact_us:
-
-                    MyDialogs1.ShowContactUs();
-
-                    break;
-                case R.id.nav_share:
-
-                    UtilFunctions1.shareApp();
-
-                    break;
-                case R.id.nav_policy:
-
-                    MyDialogs1.showPolicy();
-                    break;
-
-
-                case R.id.nav_poem_game:
-                    intent = new Intent(ActivityMain.this, ActivityPuzzle.class);
-                    intent.putExtra("parentCate", 0);
-                    startActivity(intent);
-                    Bungee.card(ActivityMain.this);
-                    break;
-
-
+            if (id == R.id.collections) {
+                ShowCollectionAct();
+            } else if (id == R.id.nav_last_read) {
+                int getLastPoemIdVisited = AppSettings.getLastPoemIdVisited();
+                if (getLastPoemIdVisited > 0) {
+                    showPoem(getLastPoemIdVisited);
+                } else {
+                    Toast.makeText(ActivityMain.this, R.string.nothing_found, Toast.LENGTH_LONG).show();
+                }
+            } else if (id == R.id.nav_social_networks) {
+                MyDialogs1.socialNetworks();
+            } else if (id == R.id.nav_help) {
+                MyDialogs1.showHelp();
+            } else if (id == R.id.nav_setting) {
+                intent = new Intent(ActivityMain.this, ActivitySettings.class);
+                startActivity(intent);
+                Bungee.card(ActivityMain.this);
+            } else if (id == R.id.nav_about) {
+                MyDialogs1.showAbout();
+            } else if (id == R.id.nav_rating) {
+                UtilFunctions1.gotoRating();
+            } else if (id == R.id.nav_contact_us) {
+                MyDialogs1.ShowContactUs();
+            } else if (id == R.id.nav_share) {
+                UtilFunctions1.shareApp();
+            } else if (id == R.id.nav_policy) {
+                MyDialogs1.showPolicy();
+            } else if (id == R.id.nav_poem_game) {
+                intent = new Intent(ActivityMain.this, ActivityPuzzle.class);
+                intent.putExtra("parentCate", 0);
+                startActivity(intent);
+                Bungee.card(ActivityMain.this);
             }
         }, 300);
 
 
         // Handle navigation view item clicks here.
 
-        if (drawer.isDrawerOpen(GravityCompat.START))
-        {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
 
             drawer.closeDrawer(GravityCompat.START);
         }
@@ -540,10 +467,8 @@ public class ActivityMain extends AppCompatActivity
     /**
      * Set Count of Poets And Books in textview
      */
-    public void setCountPoetsAndBooks()
-    {
-        try
-        {
+    public void setCountPoetsAndBooks() {
+        try {
             GanjoorDbBrowser GanjoorDbBrowser1 = new GanjoorDbBrowser(this);
             int getPoetsCount = GanjoorDbBrowser1.getPoetsCount();
             int getBooksCount = booksCount;
@@ -554,18 +479,15 @@ public class ActivityMain extends AppCompatActivity
             String str_count_all_word = String.format(Locale.getDefault(), getString(R.string.nav_header_subtitle), getBooksCount, getPoetsCount);
             textView_all_count.setText(str_count_all_word);
 
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             Log.e(TAG, "setCountPoetsAndBooks: " + ex.getMessage());
         }
 
 
     }
 
-    private void initNotificationPermissionLauncher()
-    {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
-        {
+    private void initNotificationPermissionLauncher() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             notificationPermissionLauncher = null;
             return;
         }
@@ -574,27 +496,21 @@ public class ActivityMain extends AppCompatActivity
                 new ActivityResultContracts.RequestPermission(),
                 isGranted ->
                 {
-                    if (isGranted)
-                    {
+                    if (isGranted) {
                         handleNotificationPermissionGranted();
-                    }
-                    else
-                    {
+                    } else {
                         handleNotificationPermissionDenied();
                     }
                 }
         );
     }
 
-    private void requestNotificationPermission()
-    {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || notificationPermissionLauncher == null)
-        {
+    private void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || notificationPermissionLauncher == null) {
             return;
         }
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED)
-        {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
             handleNotificationPermissionGranted();
             return;
         }
@@ -602,60 +518,47 @@ public class ActivityMain extends AppCompatActivity
         notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
     }
 
-    private void handleNotificationPermissionGranted()
-    {
+    private void handleNotificationPermissionGranted() {
         View parentView = findViewById(android.R.id.content);
-        if (parentView != null)
-        {
+        if (parentView != null) {
             Snackbar.make(parentView, R.string.notify_permission_enabled, Snackbar.LENGTH_SHORT).show();
         }
     }
 
-    private void handleNotificationPermissionDenied()
-    {
+    private void handleNotificationPermissionDenied() {
         View parentView = findViewById(android.R.id.content);
-        if (parentView != null)
-        {
+        if (parentView != null) {
             Snackbar.make(parentView, R.string.notify_permission_denied, Snackbar.LENGTH_LONG)
                     .setAction(R.string.action_settings, v -> openNotificationSettings())
                     .show();
         }
     }
 
-    private void openNotificationSettings()
-    {
+    private void openNotificationSettings() {
         Intent intent;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-        {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             intent = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
             intent.putExtra(Settings.EXTRA_APP_PACKAGE, getPackageName());
-        }
-        else
-        {
+        } else {
             intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
             intent.setData(Uri.fromParts("package", getPackageName(), null));
         }
 
-        try
-        {
+        try {
             startActivity(intent);
-        }
-        catch (ActivityNotFoundException e)
-        {
+        } catch (ActivityNotFoundException e) {
             Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_SHORT).show();
         }
     }
 
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
 
         LangSettingList langSetting = AppSettings.getLangSettingList(this);
 
-        if (currentLocalIndex != langSetting.getId())
-        {
+        if (currentLocalIndex != langSetting.getId()) {
             currentLocalIndex = langSetting.getId();
             recreate();
         }
@@ -663,13 +566,11 @@ public class ActivityMain extends AppCompatActivity
     }
 
     @Override
-    protected void onStart()
-    {
+    protected void onStart() {
         super.onStart();
     }
 
-    public void displayCustomAdWeb()
-    {
+    public void displayCustomAdWeb() {
         Intent intent = new Intent(this, ActivityWeb.class);
         intent.putExtra("title", getString(R.string.our_products));
         intent.putExtra("fromUrl", true);
@@ -682,8 +583,7 @@ public class ActivityMain extends AppCompatActivity
 
     ProgressBar progress_bar_dlg;
 
-    private void askExitAd()
-    {
+    private void askExitAd() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setIcon(R.drawable.ic_baseline_favorite_border_24);
 
@@ -700,11 +600,10 @@ public class ActivityMain extends AppCompatActivity
 
         final AlertDialog alert = dialog.create();
         alert.show();
-       AppSettings.resetLaunchCount();
+        AppSettings.resetLaunchCount();
     }
 
-    public void checkPermissions()
-    {
+    public void checkPermissions() {
         View parentView = findViewById(android.R.id.content);
 
 
@@ -712,19 +611,13 @@ public class ActivityMain extends AppCompatActivity
         boolean isTiramisuOrAbove = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU;
         int messageRes = R.string.notify_permission_msg;
 
-        if (isTiramisuOrAbove)
-        {
+        if (isTiramisuOrAbove) {
             permissionTypes.add(new PermissionType(Manifest.permission.POST_NOTIFICATIONS, 33));
-        }
-        else
-        {
+        } else {
             String storagePermission;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-            {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 storagePermission = Manifest.permission.READ_EXTERNAL_STORAGE;
-            }
-            else
-            {
+            } else {
                 storagePermission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
             }
             permissionTypes.add(new PermissionType(storagePermission, 2));
@@ -732,30 +625,22 @@ public class ActivityMain extends AppCompatActivity
         }
 
         boolean pmGranted = UtilFunctions.permissionsIsGranted(this, permissionTypes);
-        if (!pmGranted)
-        {
+        if (!pmGranted) {
             Snackbar snackbar = Snackbar.make(parentView, messageRes, Snackbar.LENGTH_INDEFINITE);
-            if (isTiramisuOrAbove)
-            {
+            if (isTiramisuOrAbove) {
                 snackbar.setAction(R.string.enable, v -> requestNotificationPermission());
-            }
-            else
-            {
+            } else {
                 snackbar.setAction(R.string.enable, v -> UtilFunctions.requestPermissions(this, permissionTypes));
             }
             snackbar.show();
         }
 
 
-
     }
 
-    public void startPoemAlarm()
-    {
-        if (AppSettings.checkRandomNotifyIsActive())
-        {
-            if (!PoemService.getIsRunning())
-            {
+    public void startPoemAlarm() {
+        if (AppSettings.checkRandomNotifyIsActive()) {
+            if (!PoemService.getIsRunning()) {
                 Intent i = new Intent(this, PoemService.class);
                 startService(i);
             }

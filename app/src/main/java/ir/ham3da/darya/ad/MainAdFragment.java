@@ -49,7 +49,6 @@ public class MainAdFragment extends Fragment
     public void onPause()
     {
         super.onPause();
-
     }
 
     @Nullable

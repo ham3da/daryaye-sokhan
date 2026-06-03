@@ -139,7 +139,7 @@ public class ActivityCate extends AppCompatActivity {
             }
 
             poemList = GanjoorDbBrowser1.getPoems(cate_id, true);
-            if(poemList.size() > 0)
+            if(!poemList.isEmpty())
             {
                 for (GanjoorPoem poem1: poemList)
                 {
@@ -177,14 +177,7 @@ public class ActivityCate extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.cate_menu, menu);
 
         MenuItem item = menu.findItem(R.id.action_download_declaim);
-        if(poemList != null && poemList.size() > 0)
-        {
-            item.setVisible(true);
-        }
-        else
-        {
-            item.setVisible(false);
-        }
+        item.setVisible(poemList != null && !poemList.isEmpty());
 
         return true;
     }
@@ -192,37 +185,24 @@ public class ActivityCate extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
         Intent intent ;
         int id = item.getItemId();
-        switch (id) {
-            case android.R.id.home:
-                finish();
-                Bungee.slideDown(this);
-                break;
-            case R.id.action_search:
+        if (id == android.R.id.home) {
+            finish();
+            Bungee.slideDown(this);
+        } else if (id == R.id.action_search) {
+            intent = new Intent(this, ActivitySearch.class);
+            ActivityCate.this.startActivity(intent);
+            Bungee.card(ActivityCate.this);
+        } else if (id == R.id.action_download_declaim) {
+            intent = new Intent(this, ActivityAudioCollection.class);
+            intent.putExtra("poem_id", 0);
+            intent.putExtra("dl_type", GanjoorAudioInfo.DOWNLOAD_CATE_POEMS);
+            intent.putExtra("poet_id", poet_id);
+            intent.putExtra("cate_id", cate_id);
 
-                intent = new Intent(this, ActivitySearch.class);
-                ActivityCate.this.startActivity(intent);
-                Bungee.card(ActivityCate.this);
-                break;
-            case R.id.action_download_declaim:
-
-                intent = new Intent(this, ActivityAudioCollection.class);
-                intent.putExtra("poem_id", 0);
-                intent.putExtra("dl_type", GanjoorAudioInfo.DOWNLOAD_CATE_POEMS);
-                intent.putExtra("poet_id", poet_id);
-                intent.putExtra("cate_id", cate_id);
-
-                startActivity(intent);
-                Bungee.slideUp(this);
-                break;
-
-
-
+            startActivity(intent);
+            Bungee.slideUp(this);
         }
         return super.onOptionsItemSelected(item);
     }

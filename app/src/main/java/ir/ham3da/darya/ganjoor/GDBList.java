@@ -67,6 +67,10 @@ public class GDBList {
             if (ganjoorPoet._ID == poetID) {
 
                 String currentDateAndSize = ganjoorPoet._Update_info;
+                if(currentDateAndSize == null)
+                {
+                    continue;
+                }
 
                 if (!currentDateAndSize.equals(dateAndSize)) {
                     res = true;
@@ -81,7 +85,7 @@ public class GDBList {
 
     /**
      * متد پردازش و ساخت نمونه
-     * @param nListId به لیستهای ورودی یک شناسۀ یکتا نسبت می دهیم تا بعدا بتوانیم در صورت مخلوط کردن آنها آنها را ردگیری و فیلتر کنیم
+     * @param nListId به لیستهای ورودی یک شناسۀ یکتا نسبت می دهیم تا بعدا بتوانیم در صورت مخلوط کردن آنها را ردگیری و فیلتر کنیم
      * @param inputStream فایل ورودی
      * @param db یک نمونه از دیتابیس جهت حذف شاعران موجود
      * @return نمونه ایجاد شده

@@ -31,17 +31,9 @@ public class SetLanguage extends ContextWrapper {
         config.setLayoutDirection(locale);
         DisplayMetrics dm = resources.getDisplayMetrics();
 
-        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.N){
-            config.setLocale(locale);
-           Context context2 = context.createConfigurationContext(config);
-            return new SetLanguage(context2);
-        }
-        else
-        {
-          config.locale = new Locale(language, country);
-          resources.updateConfiguration(config, dm);
-            return new SetLanguage(context);
-        }
+        config.setLocale(locale);
+        Context context2 = context.createConfigurationContext(config);
+        return new SetLanguage(context2);
 
 
     }

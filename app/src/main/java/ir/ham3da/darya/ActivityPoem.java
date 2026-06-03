@@ -312,61 +312,43 @@ public class ActivityPoem extends AppCompatActivity {
 
         popup.setOnMenuItemClickListener(item -> {
             Intent intent;
-            switch (item.getItemId()) {
+            int id = item.getItemId();
 
-                case R.id.next_poem:
-                    loadNextPreviousPoem(true);
-                    break;
-                case R.id.previous_poem:
-                    loadNextPreviousPoem(false);
-                    break;
-                case R.id.verse_select_all:
-                    adapter.selectAllItem(true);
-                    break;
-                case R.id.verse_un_select_all:
-                    adapter.selectAllItem(false);
-                    break;
-                case R.id.verse_share:
-                    adapter.shareVerses();
-                    break;
+            if (id == R.id.next_poem) {
+                loadNextPreviousPoem(true);
+            } else if (id == R.id.previous_poem) {
+                loadNextPreviousPoem(false);
+            } else if (id == R.id.verse_select_all) {
+                adapter.selectAllItem(true);
+            } else if (id == R.id.verse_un_select_all) {
+                adapter.selectAllItem(false);
+            } else if (id == R.id.verse_share) {
+                adapter.shareVerses();
+            } else if (id == R.id.verse_share_as_img) {
+                sharePoemAsImage();
+            } else if (id == R.id.verse_copy) {
+                adapter.copyVerses();
+            } else if (id == R.id.verse_declaim) {
+                if (MEDIA_IS_LOADED) {
+                    if (mPlayer.isPlaying()) {
+                        mPlayer.pause();
+                        mPlayer.stop();
+                        MEDIA_IS_LOADED = false;
 
-                case R.id.verse_share_as_img:
-                    sharePoemAsImage();
-                    break;
-
-
-                case R.id.verse_copy:
-                    adapter.copyVerses();
-                    break;
-
-                case R.id.verse_declaim:
-
-                    if (MEDIA_IS_LOADED) {
-                        if (mPlayer.isPlaying()) {
-                            mPlayer.pause();
-                            mPlayer.stop();
-                            MEDIA_IS_LOADED = false;
-
-                            play_audio.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_black_24dp));
-                        }
+                        play_audio.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_black_24dp));
                     }
-                    AUDIO_DOWNLOAD_SHOW = true;
-                    intent = new Intent(mContext, ActivityAudioCollection.class);
-                    intent.putExtra("poem_id", poem_id);
-                    startActivity(intent);
-                    Bungee.slideUp(mContext);
-                    break;
-
-                case R.id.get_songs:
-                    showSongs(poem_id);
-                    break;
-                case R.id.get_manuscripts:
-                    showImages(poem_id);
-                    break;
-                case R.id.action_view_ganjoor:
-                    openPoemURL();
-                    break;
-
+                }
+                AUDIO_DOWNLOAD_SHOW = true;
+                intent = new Intent(mContext, ActivityAudioCollection.class);
+                intent.putExtra("poem_id", poem_id);
+                startActivity(intent);
+                Bungee.slideUp(mContext);
+            } else if (id == R.id.get_songs) {
+                showSongs(poem_id);
+            } else if (id == R.id.get_manuscripts) {
+                showImages(poem_id);
+            } else if (id == R.id.action_view_ganjoor) {
+                openPoemURL();
             }
             return false;
         });
@@ -654,31 +636,21 @@ public class ActivityPoem extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
-        Intent intent;
-
         int id = item.getItemId();
-        switch (id) {
-            case android.R.id.home:
+
+            if( id == android.R.id.home) {
                 finish();
-                Bungee.slideDown(this); //fire the slide left animation
-                break;
-            case R.id.action_share:
+                Bungee.slideDown(this);
+            }
+            else if( id ==R.id.action_share) {
                 adapter.shareVerses();
-                break;
-            case R.id.action_play:
+            }
+            else if( id == R.id.action_play) {
                 showAudioBar();
-                break;
-            case R.id.action_get_songs:
+            }
+            else if( id == R.id.action_get_songs) {
                 showSongs(poem_id);
-                break;
-
-
-
-        }
+            }
         return super.onOptionsItemSelected(item);
     }
 
@@ -686,7 +658,7 @@ public class ActivityPoem extends AppCompatActivity {
         if (audio_player_bar.getVisibility() != View.VISIBLE) {
             existAudioList = GanjoorDbBrowser1.getPoemAudios(poem_id);
             if (!MEDIA_IS_LOADED) {
-                if (existAudioList.size() > 0) {
+                if (!existAudioList.isEmpty()) {
                     audio_player_bar.setVisibility(View.VISIBLE);
 
                     PoemAudio poemAudio = existAudioList.get(0);

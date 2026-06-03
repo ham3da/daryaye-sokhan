@@ -74,9 +74,9 @@ import com.downloader.PRDownloaderConfig;
 import com.downloader.Progress;
 import com.downloader.request.DownloadRequest;
 import com.downloader.request.DownloadRequestBuilder;
+
 import androidx.core.content.res.ResourcesCompat;
 import androidx.appcompat.widget.SearchView;
-
 
 
 public class ActivityCollection extends AppCompatActivity {
@@ -89,7 +89,7 @@ public class ActivityCollection extends AppCompatActivity {
     String dlPath;
     SearchView searchView;
     boolean searchViewHasFocus = false;
-    String TAG = "ir.ham3da.darya.ActivityCollection";
+    String TAG = "ActivityCollection";
     private GDBList _MixedList = null;
     public int DlIndex = 0;
     public int sumDownloaded = 0;
@@ -105,7 +105,7 @@ public class ActivityCollection extends AppCompatActivity {
     /**
      * نام فایلهای مجموعه های پیش فرض
      */
-    private final String[] _Lists_Url = {"http://i.ganjoor.net/android/androidgdbs.xml"};
+    private final String[] _Lists_Url = {"https://i.ganjoor.net/android/androidgdbs.xml"};
     boolean isActionMode = false;
 
     private void enableActionMode() {
@@ -121,7 +121,7 @@ public class ActivityCollection extends AppCompatActivity {
         isActionMode = false;
         toolbar.getMenu().clear();
         toolbar.inflateMenu(R.menu.collection_menu);
-        toolbar.setTitle(R.string.app_name);
+        toolbar.setTitle(R.string.add_new_collection);
 
         MenuItem searchItem = toolbar.getMenu().findItem(R.id.action_search_collection);
         SearchView searchView = (SearchView) searchItem.getActionView();
@@ -178,7 +178,7 @@ public class ActivityCollection extends AppCompatActivity {
 
         toolbar.setOnMenuItemClickListener(item -> {
 
-             if (item.getItemId() == R.id.reload_all_collection) {
+            if (item.getItemId() == R.id.reload_all_collection) {
                 reloadRecycleView();
             } else if (item.getItemId() == android.R.id.home) {
                 if (searchViewHasFocus) {
@@ -200,30 +200,27 @@ public class ActivityCollection extends AppCompatActivity {
         enableActionMode();
         toolbar.setOnMenuItemClickListener(item -> {
 
-            switch (item.getItemId()) {
-                case R.id.action_select_all:
-                    if (GDBListAdaptor1 != null) {
-                        if (GDBListAdaptor1.checkAnyBookIsSelected()) {
-                            GDBListAdaptor1.selectAllItem(false);
-                            item.setIcon(R.drawable.ic_outline_library_add_check_24);
-                        } else {
-                            GDBListAdaptor1.selectAllItem(true);
-                            item.setIcon(R.drawable.ic_baseline_library_add_check_24_fill);
-                        }
+            int id = item.getItemId();
 
+            if (id == R.id.action_select_all) {
+                if (GDBListAdaptor1 != null) {
+                    if (GDBListAdaptor1.checkAnyBookIsSelected()) {
+                        GDBListAdaptor1.selectAllItem(false);
+                        item.setIcon(R.drawable.ic_outline_library_add_check_24);
+                    } else {
+                        GDBListAdaptor1.selectAllItem(true);
+                        item.setIcon(R.drawable.ic_baseline_library_add_check_24_fill);
                     }
-                    return true;
-                case R.id.action_dl:
-
-                    downloadMarkedBook();
-
-                    return true;
-
-                case R.id.action_delete:
-                    deleteMarkedBook();
-                    return true;
-                default:
-                    return false;
+                }
+                return true;
+            } else if (id == R.id.action_dl) {
+                downloadMarkedBook();
+                return true;
+            } else if (id == R.id.action_delete) {
+                deleteMarkedBook();
+                return true;
+            } else {
+                return false;
             }
         });
     }
@@ -278,14 +275,14 @@ public class ActivityCollection extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar_collection);
         toolbar.setNavigationIcon(R.drawable.baseline_arrow_back_24);
-        toolbar.setTitle(R.string.dont_forget_poetry);
+        toolbar.setTitle(R.string.add_new_collection);
 
         toolbar.setNavigationOnClickListener(v -> {
             if (isActionMode) {
-                disableActionMode(); // خروج از حالت انتخاب
+                disableActionMode();
             } else {
 
-                Log.e(TAG, "back1: 1" );
+                Log.e(TAG, "back1: 1");
                 getOnBackPressedDispatcher().onBackPressed();
             }
         });

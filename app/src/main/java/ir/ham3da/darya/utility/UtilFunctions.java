@@ -227,7 +227,17 @@ public class UtilFunctions
     public static boolean isGooglePlayVersion()
     {
         return (getAppStoreCode() == VarTypes.GOOGLE_PLAY_VER);
-}
+    }
+
+    public static boolean isMyketVersion()
+    {
+        return (getAppStoreCode() == VarTypes.MYKET_VER);
+    }
+
+    public static boolean isBazaarVersion()
+    {
+        return (getAppStoreCode() == VarTypes.CAFEBAZAAR_VER);
+    }
 
     /**
      * get AppStore Code
@@ -242,29 +252,24 @@ public class UtilFunctions
     public String getAppLink()
     {
         String packageName = context1.getPackageName();
-        String app_link = "https://play.google.com/store/apps/details?id=" + packageName;//google play
-        switch (Store)
-        {
-            case VarTypes.GOOGLE_PLAY_VER:
-                app_link = "https://play.google.com/store/apps/details?id=" + packageName;//google play
-                break;
-            case VarTypes.CAFEBAZAAR_VER:
-                app_link = "https://cafebazaar.ir/app/" + packageName + "/";//cafebazaar
-                break;
-            case VarTypes.MYKET_VER:
-                app_link = "https://myket.ir/app/" + packageName + "/";//myket
-                break;
-
-        }
+        String app_link = "https://cafebazaar.ir/app/" + packageName;//google play
+        //myket
+        app_link = switch (Store) {
+            case VarTypes.GOOGLE_PLAY_VER ->
+                    "https://play.google.com/store/apps/details?id=" + packageName;//google play
+            case VarTypes.CAFEBAZAAR_VER ->
+                    "https://cafebazaar.ir/app/" + packageName + "/";//cafebazaar
+            case VarTypes.MYKET_VER -> "https://myket.ir/app/" + packageName + "/";
+            default -> app_link;
+        };
         return app_link;
     }
 
     public void openWhatsApp()
     {
-        String smsNumber = "989118833904"; //without '+'
         try
         {
-            Uri mUri = Uri.parse("smsto:+9118833904");
+            Uri mUri = Uri.parse("smsto:+989118833904");
             Intent mIntent = new Intent(Intent.ACTION_SENDTO, mUri);
             mIntent.setPackage("com.whatsapp");
             mIntent.putExtra("chat", true);
@@ -712,7 +717,7 @@ public class UtilFunctions
         try
         {
             Typeface typeface = ResourcesCompat.getFont(context1, R.font.iran_sans_mobile_light);
-            toolbarLayout.setCollapsedTitleTextAppearance(R.style.TextAppearance_AppCompat_Title);
+            toolbarLayout.setCollapsedTitleTextAppearance(androidx.appcompat.R.style.TextAppearance_AppCompat_Title);
             toolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedTitleTextAppearance);
             toolbarLayout.setCollapsedTitleTypeface(typeface);
             toolbarLayout.setExpandedTitleTypeface(typeface);

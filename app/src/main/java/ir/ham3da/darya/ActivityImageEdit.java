@@ -152,18 +152,12 @@ public class ActivityImageEdit extends AppCompatActivity implements
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         int id = item.getItemId();
-        switch (id) {
-            case android.R.id.home:
-                getOnBackPressedDispatcher().onBackPressed();
-                break;
-            case R.id.action_save:
-                saveImage(false);
-                break;
-            case R.id.action_share:
-                shareImage();
-                break;
-
-
+        if (id == android.R.id.home) {
+            getOnBackPressedDispatcher().onBackPressed();
+        } else if (id == R.id.action_save) {
+            saveImage(false);
+        } else if (id == R.id.action_share) {
+            shareImage();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -508,23 +502,16 @@ public class ActivityImageEdit extends AppCompatActivity implements
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
+        int id = view.getId();
 
-            case R.id.imgUndo:
-                mPhotoEditor.undo();
-                break;
-
-            case R.id.imgRedo:
-                mPhotoEditor.redo();
-                break;
-
-            case R.id.imgCamera:
-                takePhoto();
-                break;
-
-            case R.id.imgGallery:
-                pickFromGallery(); //has problem with api >= 29
-                break;
+        if (id == R.id.imgUndo) {
+            mPhotoEditor.undo();
+        } else if (id == R.id.imgRedo) {
+            mPhotoEditor.redo();
+        } else if (id == R.id.imgCamera) {
+            takePhoto();
+        } else if (id == R.id.imgGallery) {
+            pickFromGallery(); //has problem with api >= 29
         }
     }
 

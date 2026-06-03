@@ -14,6 +14,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -110,7 +111,7 @@ public class FavoritesAdaptor extends RecyclerView.Adapter<FavoritesAdaptor.View
             FavoritesPoem favoriteList1 = favoriteList.get(position);
             String ques = String.format(context1.getString(R.string.fav_delete_ques), "<b>" + favoriteList1._Title + "</b>");
 
-            final Dialog yesNoDialog = MyDialogs1.YesNoDialog(ques, context1.getDrawable(R.drawable.ic_delete_white_24dp), true);
+            final Dialog yesNoDialog = MyDialogs1.YesNoDialog(ques, AppCompatResources.getDrawable(context1, R.drawable.ic_delete_white_24dp), true);
 
             Button noBtn = yesNoDialog.findViewById(R.id.noBtn);
             noBtn.setOnClickListener(v -> yesNoDialog.dismiss());
@@ -139,15 +140,13 @@ public class FavoritesAdaptor extends RecyclerView.Adapter<FavoritesAdaptor.View
 
         //adding click listener
         popup.setOnMenuItemClickListener(item -> {
-            switch (item.getItemId()) {
+            int id = item.getItemId();
 
-                case R.id.fav_delete:
-                    //handle menu2 click
-                    deleteItem(favPoemId, position);
-                    break;
-                case R.id.fav_view:
-                    browsePoem(view.getContext(), favPoemId);
-                    break;
+            if (id == R.id.fav_delete) {
+                //handle menu2 click
+                deleteItem(favPoemId, position);
+            } else if (id == R.id.fav_view) {
+                browsePoem(view.getContext(), favPoemId);
             }
             return false;
         });

@@ -394,27 +394,22 @@ public class ActivityPuzzle extends AppCompatActivity {
 
         int id = item.getItemId();
 
-        switch (id) {
-            case android.R.id.home:
+        if (id == android.R.id.home) {
 
-                finish();
-                Bungee.slideDown(this);
+            finish();
+            Bungee.slideDown(this);
 
-                break;
-            case R.id.action_refresh:
-                puzzle_new.performClick();
+        } else if (id == R.id.action_refresh) {
+            puzzle_new.performClick();
+        } else if (id == R.id.audio_mute) {
+            if (AppSettings.getGameSoundMute()) {
+                AppSettings.setGameSoundMute(false);
+                item.setIcon(R.drawable.ic_volume_up_withe_24dp);
+            } else {
+                AppSettings.setGameSoundMute(true);
+                item.setIcon(R.drawable.ic_volume_off_wihte_24dp);
+            }
 
-                break;
-
-            case R.id.audio_mute:
-                if (AppSettings.getGameSoundMute()) {
-                    AppSettings.setGameSoundMute(false);
-                    item.setIcon(R.drawable.ic_volume_up_withe_24dp);
-                } else {
-                    AppSettings.setGameSoundMute(true);
-                    item.setIcon(R.drawable.ic_volume_off_wihte_24dp);
-                }
-                break;
         }
         return super.onOptionsItemSelected(item);
     }

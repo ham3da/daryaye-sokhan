@@ -71,17 +71,16 @@ public class PropertiesBSFragment extends BottomSheetDialogFragment implements S
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-        switch (seekBar.getId()) {
-            case R.id.sbOpacity:
-                if (mProperties != null) {
-                    mProperties.onOpacityChanged(i);
-                }
-                break;
-            case R.id.sbSize:
-                if (mProperties != null) {
-                    mProperties.onBrushSizeChanged(i);
-                }
-                break;
+        int id = seekBar.getId();
+
+        if (id == R.id.sbOpacity) {
+            if (mProperties != null) {
+                mProperties.onOpacityChanged(i);
+            }
+        } else if (id == R.id.sbSize) {
+            if (mProperties != null) {
+                mProperties.onBrushSizeChanged(i);
+            }
         }
     }
 

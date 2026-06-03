@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 
 import android.util.TypedValue;
 import android.view.View;
@@ -41,8 +42,8 @@ import ir.ham3da.darya.utility.MyDialogs;
 public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.PoetsAndCateItem> {
     public static final int TYPE_CHILD = 1001;
 
-    private float textSize;
-    private MainPoetsFragment mainPoetsFragment;
+    private final float textSize;
+    private final MainPoetsFragment mainPoetsFragment;
     int fontId;
 
     public AdapterPoetsExpand(Context context, MainPoetsFragment mainPoetsFragment1) {
@@ -173,22 +174,20 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
 
         //adding click listener
         popup.setOnMenuItemClickListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.poem_delete:
-                    deleteItem(poetId, position);
-                    break;
-                case R.id.poet_open:
-                    parentLayer.performClick();
-                    break;
-                case R.id.download_declaim:
-                    Intent intent = new Intent(mContext, ActivityAudioCollection.class);
-                    intent.putExtra("poem_id", 0);
-                    intent.putExtra("dl_type", 2);
-                    intent.putExtra("poet_id", poetId);
+            int id = item.getItemId();
 
-                    mContext.startActivity(intent);
-                    Bungee.slideUp(mContext);
-                    break;
+            if (id == R.id.poem_delete) {
+                deleteItem(poetId, position);
+            } else if (id == R.id.poet_open) {
+                parentLayer.performClick();
+            } else if (id == R.id.download_declaim) {
+                Intent intent = new Intent(mContext, ActivityAudioCollection.class);
+                intent.putExtra("poem_id", 0);
+                intent.putExtra("dl_type", 2);
+                intent.putExtra("poet_id", poetId);
+
+                mContext.startActivity(intent);
+                Bungee.slideUp(mContext);
             }
             return false;
         });
@@ -206,7 +205,7 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
                 visibleItems.get(position);
         String ques = String.format(mContext.getString(R.string.poet_delete_ques), "<b>" + poetsAndCateItem.Text + "</b>");
 
-        final Dialog yesNoDialog = MyDialogs1.YesNoDialog(ques, mContext.getDrawable(R.drawable.ic_delete_white_24dp), true);
+        final Dialog yesNoDialog = MyDialogs1.YesNoDialog(ques, AppCompatResources.getDrawable(mContext, R.drawable.ic_delete_white_24dp), true);
 
         Button noBtn = yesNoDialog.findViewById(R.id.noBtn);
         noBtn.setOnClickListener(view -> yesNoDialog.dismiss());
@@ -315,22 +314,14 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
     }
 
 
-    /**
-     * @param parent
-     * @param viewType
-     * @return
-     */
-    @SuppressWarnings("unchecked")
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         if (viewType == TYPE_HEADER) {
-
-            PoetsViewHolder PoetsViewHolder1 = new PoetsViewHolder(inflate(R.layout.item_poet, parent));
-            return PoetsViewHolder1;
+            return new PoetsViewHolder(inflate(R.layout.item_poet, parent));
         } else {
-            BooksViewHolder BooksViewHolder2 = new BooksViewHolder(inflate(R.layout.item_child_books, parent));
-            return BooksViewHolder2;
+            return new BooksViewHolder(inflate(R.layout.item_child_books, parent));
         }
 
     }
@@ -363,7 +354,7 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
         int poet_index = 0;
         int booksCount = 0;
 
-        if (poets.size() > 0) {
+        if (!poets.isEmpty()) {
             for (GanjoorPoet Poet : poets) {
 
                 List<GanjoorCat> categories = GanjoorDbBrowser1.getSubCats(Poet._CatID);
@@ -371,7 +362,7 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
 
                 poet_index++;
 
-                if (categories.size() > 0) {
+                if (!categories.isEmpty()) {
                     items.add(new PoetsAndCateItem(Poet._Name, Poet._ID, categories.size(), poet_index));
                     items.add(new PoetsAndCateItem(mContext.getString(R.string.short_introduction), 0, 0, 0, Poet._ID, 3));
                     for (GanjoorCat SubCat : categories) {
@@ -381,14 +372,14 @@ public class AdapterPoetsExpand extends PoetAndBooksAdapter<AdapterPoetsExpand.P
 
                 int poemsCount = GanjoorDbBrowser1.getPoemsCount(Poet._CatID);
                 if (poemsCount > 0) {
-                    if (categories.size() == 0) {
+                    if (categories.isEmpty()) {
                         items.add(new PoetsAndCateItem(Poet._Name, Poet._ID, 1, poet_index));
                         items.add(new PoetsAndCateItem(mContext.getString(R.string.short_introduction), 0, 0, 0, Poet._ID, 3));
                     }
                     items.add(new PoetsAndCateItem(mContext.getString(R.string.nocategory), Poet._CatID, 0, 0, Poet._ID, 2));
                     booksCount++;
                 } else {
-                    if (categories.size() == 0) {
+                    if (categories.isEmpty()) {
                         items.add(new PoetsAndCateItem(Poet._Name, Poet._ID, 0, poet_index));
                         items.add(new PoetsAndCateItem(mContext.getString(R.string.short_introduction), 0, 0, 0, Poet._ID, 3));
                     }

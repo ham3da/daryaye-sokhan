@@ -2,6 +2,7 @@
     <string name="app_name">Daryaye Sokhan</string>
     <string name="git_url" translatable="false">https://github.com/ham3da/daryaye-sokhan</string>
     <string name="new_collection_url" translatable="false">https://daryaye-sokhan.ir/add-new-collection/</string>
+    <string name="beytas_url" translatable="false">https://cafebazaar.ir/app/ir.ham3da.beyteshekasteh</string>
 
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -108,7 +109,7 @@
     <string name="verse_indexing">Numbering lines of poems</string>
     <string name="language">Language</string>
     <string name="select_language">Select Language</string>
-    <string name="Language_des">It requires re-run the application.</string>
+    <string name="Language_des">It requires to be re-run the application.</string>
     <string name="Text_options">Text options</string>
     <string name="Text_size">Text size</string>
     <string name="Text_size_des">This size applies to the text of the list of poets, categories, poems and favorites.</string>
@@ -312,5 +313,10 @@
     <string name="enable">Enable</string>
     <string name="swipe_navigation">Swipe to change poem</string>
     <string name="swipe_navigation_des">Enable changing poems by swiping the verses list.</string>
-
+    <string name="beytas_tab">Beytas</string>
+    <string name="beytas" translatable="false">🎲 بِیتاس — بازی شعر و ذوق فارسی\nبِیتاس پلی‌است میان لذت بازی و احساس زیبای شعر.\nبیتی از شاعران فارسی پیش رویت قرار می‌گیرد و تو باید واژۀ درست را از میان گزینه‌ها انتخاب کنی تا شعر کامل شود و امتیاز بگیری.\n✅ امکانات کلیدی:\n- 🔸بانک اطلاعاتی قوی و سرشار از شعر\n- 🔸رقابت با سایر بازیکنان \n- 🔸مسابقه دو نفره\n- 🔸دارای مراحل و نشان‌های ادبی مختلف\n- 🔸محفل بیتاس(برای ارسال دلنوشته‌ها)\n- 🔸تاریخچه چالش‌ها\n- 🔸جدول رده‌بندی(لیدربرد)\n- 🔸گردونه شانس \n- 🔸همراهی برخی از شاعران و اساتید ادبیات\n- 🔸دارای کتابخانه ادبی آنلاین \n- 🔸امکان انتشار اشعار شاعران معاصر\n
+- 🔸گفتگو با سایر بازیکنان
+\n🔸و ...
+</string>
+    <string name="install">Install</string>
 </resources>

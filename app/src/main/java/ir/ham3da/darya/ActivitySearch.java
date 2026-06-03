@@ -47,8 +47,7 @@ import ir.ham3da.darya.utility.EndlessRecyclerViewScrollListener;
 import ir.ham3da.darya.utility.SetLanguage;
 import ir.ham3da.darya.utility.UtilFunctions;
 
-public class ActivitySearch extends AppCompatActivity
-{
+public class ActivitySearch extends AppCompatActivity {
     private static final String TAG = "ActivitySearch";
     UtilFunctions UtilFunctions1;
     CollapsingToolbarLayout toolbarLayout;
@@ -72,15 +71,14 @@ public class ActivitySearch extends AppCompatActivity
 
     private EndlessRecyclerViewScrollListener scrollListener;
     InputMethodManager inputManager;
-//    private static final int REQUEST_CODE = 1001;
+    //    private static final int REQUEST_CODE = 1001;
     boolean new_status;
     String findStr;
 
     ActivityResultLauncher<Intent> spActivityResultLauncher;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
@@ -103,8 +101,7 @@ public class ActivitySearch extends AppCompatActivity
         UtilFunctions1.setupToolbarLayout(toolbarLayout, false);
 
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null)
-        {
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
@@ -128,14 +125,12 @@ public class ActivitySearch extends AppCompatActivity
         search_recycler_view.setLayoutManager(linearLayoutManager);
 
 
-        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager)
-        {
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
-            public void onLoadMore(final int page, int totalItemsCount, RecyclerView view)
-            {
+            public void onLoadMore(final int page, int totalItemsCount, RecyclerView view) {
                 //Log.e("onLoadMore", "getResCount err: " + resCount);
                 //if (resCount > searchResults1.size()) {
-                Log.e(TAG, "Search: onLoadMore" );
+                Log.e(TAG, "Search: onLoadMore");
                 searchForPhraseInDB(strToFind, false);
                 // }
             }
@@ -146,25 +141,21 @@ public class ActivitySearch extends AppCompatActivity
         Intent intent = getIntent();
         String action = intent.getAction();
         String type = intent.getType();
-        if (Intent.ACTION_SEND.equals(action) && type != null)
-        {
-            if ("text/plain".equals(type))
-            {
-                Log.e("getExtras", "getExtras" );
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if ("text/plain".equals(type)) {
+                Log.e("getExtras", "getExtras");
                 String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
 
-                if (sharedText != null)
-                {
-                   // Log.e(TAG, "Search: ACTION_SEND" + String.valueOf(intent.getExtras()));
+                if (sharedText != null) {
+                    // Log.e(TAG, "Search: ACTION_SEND" + String.valueOf(intent.getExtras()));
                     editTextSearch.setText(sharedText);
                     onClickFindBtn(editTextSearch);
                 }
             }
         }
         editTextSearch.setOnKeyListener((v, keyCode, event) -> {
-            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER))
-            {
-                Log.e(TAG, "Search: editTextSearch click" );
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                Log.e(TAG, "Search: editTextSearch click");
                 onClickFindBtn(v);
                 return true;
             }
@@ -172,54 +163,46 @@ public class ActivitySearch extends AppCompatActivity
         });
 
         spActivityResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         // There are no request codes
                         Intent data = result.getData();
 
-                            if (null != data)
-                            {
-                                ArrayList<String> result2 = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                                assert result2 != null;
-                                String resStr = result2.get(0);
-                                if (!resStr.trim().isEmpty())
-                                {
-                                    strToFind = resStr.trim();
-                                    editTextSearch.setText(strToFind);
-                                    searchForPhraseInDB(strToFind.trim(), true);
-                                    Log.e(TAG, "onActivityResult: search For Phrase" );
-                                }
-
+                        if (null != data) {
+                            ArrayList<String> result2 = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                            assert result2 != null;
+                            String resStr = result2.get(0);
+                            if (!resStr.trim().isEmpty()) {
+                                strToFind = resStr.trim();
+                                editTextSearch.setText(strToFind);
+                                searchForPhraseInDB(strToFind.trim(), true);
+                                Log.e(TAG, "onActivityResult: search For Phrase");
                             }
+
+                        }
 
                     }
                 });
 
 
-
     }
-
 
 
     @Override
-    protected void attachBaseContext(Context newBase)
-    {
+    protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(SetLanguage.wrap(newBase));
     }
 
-    public void setSearchLimitsText()
-    {
+    public void setSearchLimitsText() {
         TextView search_limits_text = findViewById(R.id.search_limits_text);
         String poetName = getString(R.string.all_poets);
         String srcLimit = getString(R.string.search_in);
 
         int searchSelectedPoetId = AppSettings.getSearchSelectedPoet();
-        if (searchSelectedPoetId > 0)
-        {
+        if (searchSelectedPoetId > 0) {
             GanjoorPoet poet = GanjoorDbBrowser1.getPoet(searchSelectedPoetId);
-            if (poet != null)
-            {
+            if (poet != null) {
                 poetName = poet._Name;
             }
         }
@@ -231,8 +214,7 @@ public class ActivitySearch extends AppCompatActivity
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search, menu);
         return true;
@@ -241,50 +223,35 @@ public class ActivitySearch extends AppCompatActivity
 
     @SuppressLint("NonConstantResourceId")
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item)
-    {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        switch (id)
-        {
-            case android.R.id.home:
-                finish();
-                Bungee.slideDown(this);
-                break;
-            case R.id.action_setting:
-                searchLimitsDialog.ShowLimitsDialog(true);
-                break;
-
+        if (id == android.R.id.home) {
+            finish();
+            Bungee.slideDown(this);
+        } else if (id == R.id.action_setting) {
+            searchLimitsDialog.ShowLimitsDialog(true);
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void onClickSettingBtn(final View vobj)
-    {
+    public void onClickSettingBtn(final View vobj) {
         searchLimitsDialog.ShowLimitsDialog(true);
     }
 
-    public void onClickFindBtn(final View vobj)
-    {
+    public void onClickFindBtn(final View vobj) {
         strToFind = editTextSearch.getText().toString();
         searchForPhraseInDB(strToFind.trim(), true);
 
     }
 
 
-    public void voiceButton(View view)
-    {
+    public void voiceButton(View view) {
         //Trigger the RecognizerIntent intent//
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        try
-        {
+        try {
             spActivityResultLauncher.launch(intent);
-        } catch (ActivityNotFoundException ex)
-        {
-            Log.d(TAG, "voiceButton: "+ ex.getMessage());
+        } catch (ActivityNotFoundException ex) {
+            Log.d(TAG, "voiceButton: " + ex.getMessage());
         }
     }
 
@@ -292,11 +259,9 @@ public class ActivitySearch extends AppCompatActivity
      * @param findSTR2    searching phrase
      * @param new_status2 boolean new search or Continue the previous search
      */
-    protected void searchForPhraseInDB(String findSTR2, boolean new_status2)
-    {
+    protected void searchForPhraseInDB(String findSTR2, boolean new_status2) {
 
-        if (findSTR2.trim().isEmpty())
-        {
+        if (findSTR2.trim().isEmpty()) {
             return;
         }
         inputManager.hideSoftInputFromWindow(editTextSearch.getWindowToken(), 0);
@@ -304,24 +269,21 @@ public class ActivitySearch extends AppCompatActivity
         int poet_id = AppSettings.getSearchSelectedPoet();
         String bookIds = AppSettings.getSearchBooksAsString();
 
-        if (new_status2)
-        {
+        if (new_status2) {
             offset = 0;
             this.searchResults1.clear();
             adapter.notifyDataSetChanged(); // or notifyItemRangeRemoved
             scrollListener.resetState();
-        }
-        else
-        {
+        } else {
             offset = this.searchResults1.size();
         }
 
-        Log.e(TAG, "searchForPhraseInDB offset: "+ offset);
+        Log.e(TAG, "searchForPhraseInDB offset: " + offset);
         this.new_status = new_status2;
         this.findStr = findSTR2;
 
 
-       SearchWordAsyncTask searchWordAsyncTask1 = new SearchWordAsyncTask(
+        SearchWordAsyncTask searchWordAsyncTask1 = new SearchWordAsyncTask(
                 findSTR2,
                 offset,
                 offset,
@@ -335,10 +297,8 @@ public class ActivitySearch extends AppCompatActivity
     }
 
 
-
     @Override
-    protected void onDestroy()
-    {
+    protected void onDestroy() {
         super.onDestroy();
 
     }

@@ -488,57 +488,53 @@ public class ActivityAudioCollection extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        switch (item.getItemId()) {
-            case R.id.action_select_all:
-                if (adaptorAudio != null) {
-                    if (adaptorAudio.checkAnyAudioIsSelected()) {
-                        adaptorAudio.selectAllItem(false);
-                        item.setIcon(R.drawable.ic_outline_library_add_check_24);
-                    } else {
-                        adaptorAudio.selectAllItem(true);
-                        item.setIcon(R.drawable.ic_baseline_library_add_check_24_fill);
-                    }
+        int id = item.getItemId();
 
-                }
-                return true;
-            case R.id.action_dl:
-
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                    PermissionHelper.requestMediaPermission(
-                            this,
-                            PermissionMediaType.AUDIO,
-                            saveAudioPermissionLauncher,
-                            new PermissionHelper.PermissionCallback() {
-                                @Override
-                                public void onPermissionGranted() {
-                                    downloadMarkedAudio();
-                                }
-
-                                @Override
-                                public void onPermissionDenied() {
-                                    Toast.makeText(getApplicationContext(), R.string.permission_denied, Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                    );
-                }
-                else {
-                    downloadMarkedAudio();
-                }
-
-                return true;
-
-            case R.id.action_delete:
-                deleteMarkedAudio();
-                return true;
-            case android.R.id.home:
-                if (isActionMode) {
-                    setActionbarTitle(getString(R.string.download_declaim));
-                    setIsActionMode(false);
+        if (id == R.id.action_select_all) {
+            if (adaptorAudio != null) {
+                if (adaptorAudio.checkAnyAudioIsSelected()) {
+                    adaptorAudio.selectAllItem(false);
+                    item.setIcon(R.drawable.ic_outline_library_add_check_24);
                 } else {
-                    finish();
-                    Bungee.slideDown(this);
+                    adaptorAudio.selectAllItem(true);
+                    item.setIcon(R.drawable.ic_baseline_library_add_check_24_fill);
                 }
-                return true;
+            }
+            return true;
+        } else if (id == R.id.action_dl) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                PermissionHelper.requestMediaPermission(
+                        this,
+                        PermissionMediaType.AUDIO,
+                        saveAudioPermissionLauncher,
+                        new PermissionHelper.PermissionCallback() {
+                            @Override
+                            public void onPermissionGranted() {
+                                downloadMarkedAudio();
+                            }
+
+                            @Override
+                            public void onPermissionDenied() {
+                                Toast.makeText(getApplicationContext(), R.string.permission_denied, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                );
+            } else {
+                downloadMarkedAudio();
+            }
+            return true;
+        } else if (id == R.id.action_delete) {
+            deleteMarkedAudio();
+            return true;
+        } else if (id == android.R.id.home) {
+            if (isActionMode) {
+                setActionbarTitle(getString(R.string.download_declaim));
+                setIsActionMode(false);
+            } else {
+                finish();
+                Bungee.slideDown(this);
+            }
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
