@@ -27,12 +27,13 @@ public class PermissionHelper {
 
         String permission = "";
 
-        // Android 13+ (TIRAMISU) - استفاده از READ_MEDIA_*
+        // Android 13+ (TIRAMISU) - Photo Picker برای تصاویر استفاده می‌شه، نیازی به permission نیست
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             switch (mediaType) {
                 case IMAGES:
-                    permission = Manifest.permission.READ_MEDIA_IMAGES;
-                    break;
+                    // Photo Picker نیاز به permission نداره
+                    callback.onPermissionGranted();
+                    return;
                 case AUDIO:
                     permission = Manifest.permission.READ_MEDIA_AUDIO;
                     break;

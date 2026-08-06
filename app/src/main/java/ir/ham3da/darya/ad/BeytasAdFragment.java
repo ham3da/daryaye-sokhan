@@ -62,7 +62,13 @@ public class BeytasAdFragment extends Fragment
 
         btn_view_ad.setOnClickListener(v ->
         {
-            UtilFunctions1.openUrl(getString(R.string.beytas_url));
+            if(UtilFunctions.isBazaarVersion()) {
+                UtilFunctions1.openUrl(getString(R.string.beytas_url));
+            }
+            else
+            {
+                UtilFunctions1.openUrl(getString(R.string.beytas_play_url));
+            }
         });
        return root;
     }

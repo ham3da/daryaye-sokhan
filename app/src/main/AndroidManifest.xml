@@ -11,10 +11,9 @@
     <!-- Android 6-11 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
-    <!-- Android 12+ -->
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <!-- Android 13+ برای عکس‌ها -->
-    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
+    <!-- Android 13+ برای عکس‌ها (Photo Picker استفاده می‌شه، نیازی به permission نیست) -->
+    <!-- <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" /> -->
+    <!-- <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" /> -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application

@@ -1,12 +1,9 @@
 package ir.ham3da.darya;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -38,6 +35,7 @@ import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -47,10 +45,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.core.app.ActivityCompat;
+
 
 import androidx.core.content.FileProvider;
-import androidx.core.view.GravityCompat;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -291,16 +289,12 @@ public class ActivityImageEdit extends AppCompatActivity implements
         );
 
         galleryActivityResultLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-
-                        Intent data = result.getData();
-                        Uri selectedImageURI = data.getData();
-
+                new ActivityResultContracts.PickVisualMedia(),
+                uri -> {
+                    if (uri != null) {
                         Glide.with(this)
                                 .asBitmap()
-                                .load(selectedImageURI)
+                                .load(uri)
                                 .override(1024, 1024)
                                 .centerInside()
                                 .into(new CustomTarget<Bitmap>() {
@@ -336,7 +330,7 @@ public class ActivityImageEdit extends AppCompatActivity implements
     }
 
     //    ActivityResultLauncher<String> cameraPermissionLauncher;
-    ActivityResultLauncher<Intent> galleryActivityResultLauncher;
+    ActivityResultLauncher<PickVisualMediaRequest> galleryActivityResultLauncher;
 
     private void initViews() {
         ImageView imgUndo;
@@ -511,7 +505,7 @@ public class ActivityImageEdit extends AppCompatActivity implements
         } else if (id == R.id.imgCamera) {
             takePhoto();
         } else if (id == R.id.imgGallery) {
-            pickFromGallery(); //has problem with api >= 29
+            pickFromGallery();
         }
     }
 
@@ -522,14 +516,9 @@ public class ActivityImageEdit extends AppCompatActivity implements
     }
 
     private void pickFromGallery() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-
-        //startActivityForResult(Intent.createChooser(intent, this.getString(R.string.select_picture)), PICK_REQUEST);
-        galleryActivityResultLauncher.launch(Intent.createChooser(intent, this.getString(R.string.select_picture)));
-
+        galleryActivityResultLauncher.launch(new PickVisualMediaRequest.Builder()
+                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                .build());
     }
 
     protected void doSaveImage(final boolean share) {

@@ -3,6 +3,8 @@
     <string name="git_url" translatable="false">https://github.com/ham3da/daryaye-sokhan</string>
     <string name="new_collection_url" translatable="false">https://daryaye-sokhan.ir/add-new-collection/</string>
     <string name="beytas_url" translatable="false">https://cafebazaar.ir/app/ir.ham3da.beyteshekasteh</string>
+    <string name="beytas_play_url" translatable="false">https://play.google.com/store/apps/details?id=ir.ham3da.beyteshekasteh</string>
+
 
 
     <string name="navigation_drawer_open">Open navigation drawer</string>

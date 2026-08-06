@@ -214,7 +214,7 @@ public class ActivityMain extends AppCompatActivity
 
 
     public void loadPager() {
-        if(UtilFunctions.isBazaarVersion()) {
+        if(UtilFunctions.isBazaarVersion() || UtilFunctions.isGooglePlayVersion()) {
             TAB_TITLES = new int[]
                     {R.string.tab_poets, R.string.tab_favorites, R.string.beytas_tab, R.string.easy_donating};
         }
@@ -235,7 +235,7 @@ public class ActivityMain extends AppCompatActivity
             @Override
             public Fragment createFragment(int position) {
                 Log.e(TAG, "createFragment2: " + position);
-                if(UtilFunctions.isBazaarVersion()) {
+                if(UtilFunctions.isBazaarVersion() || UtilFunctions.isGooglePlayVersion()) {
                     return switch (position) {
                         case 1 -> new MainFavoritesFragment();
                         case 2 -> new BeytasAdFragment();

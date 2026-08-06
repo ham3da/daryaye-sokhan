@@ -7,7 +7,7 @@ buildscript {
     }
     dependencies {
         classpath('com.android.tools.build:gradle:9.2.1')
-        classpath( 'com.google.gms:google-services:4.4.4')
+        classpath( 'com.google.gms:google-services:4.5.0')
         classpath 'org.jetbrains.kotlin:compose-compiler-gradle-plugin:2.2.20'
         classpath( "org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.20")
     }
@@ -17,7 +17,9 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://jitpack.io' }
+        maven {
+            url('https://jitpack.io')
+        }
         mavenLocal()
     }
     tasks.withType(JavaCompile).tap {

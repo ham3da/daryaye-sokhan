@@ -3,7 +3,7 @@
     "project_number": "848431671364",
     "firebase_url": "https://sea-of-poetry.firebaseio.com",
     "project_id": "sea-of-poetry",
-    "storage_bucket": "sea-of-poetry.appspot.com"
+    "storage_bucket": "sea-of-poetry.firebasestorage.app"
   },
   "client": [
     {
@@ -14,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "848431671364-eko7594puhgqme1enpl71o4k2ftfvv0h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ir.ham3da.darya",
+            "certificate_hash": "e62a023f76bf3788f027cbb5432f3b00fcdd021f"
+          }
+        },
         {
           "client_id": "848431671364-kto0mntl237f6lkbrcfta2gvnh6hnnjm.apps.googleusercontent.com",
           "client_type": 1,
@@ -29,10 +37,6 @@
             "package_name": "ir.ham3da.darya",
             "certificate_hash": "b2e718d0521aa41236b4d1a99634428f5ad6dca7"
           }
-        },
-        {
-          "client_id": "848431671364-t4ss0m0agka3ch6i6q2n3cf6uj9t5t5j.apps.googleusercontent.com",
-          "client_type": 3
         }
       ],
       "api_key": [
@@ -42,12 +46,7 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "848431671364-t4ss0m0agka3ch6i6q2n3cf6uj9t5t5j.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

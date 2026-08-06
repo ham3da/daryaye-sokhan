@@ -78,7 +78,7 @@ public class UtilFunctions
 
     //      google play => 0 , cafebazaar => 1 , myket => 2
 
-    private static final int Store = 2;
+    private static final int Store = 1;
 
     public UtilFunctions(Context mCtx)
     {
@@ -125,8 +125,7 @@ public class UtilFunctions
         {
             prms = new String[]{
                     Manifest.permission.POST_NOTIFICATIONS,
-                    Manifest.permission.READ_MEDIA_AUDIO,
-                    Manifest.permission.READ_MEDIA_IMAGES
+                    Manifest.permission.READ_MEDIA_AUDIO
             };
         }
         else {
@@ -177,7 +176,8 @@ public class UtilFunctions
         {
             if(permissionMediaType == PermissionMediaType.IMAGES)
             {
-                perm =  Manifest.permission.READ_MEDIA_IMAGES;
+                // Photo Picker استفاده می‌شه، نیازی به permission نیست
+                return true;
             }
             else if(permissionMediaType == PermissionMediaType.VIDEO)
             {
